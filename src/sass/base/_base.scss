@@ -1,0 +1,204 @@
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+
+    font-size: 62.5%; // 1rem == 10px
+
+    @include respond(tab-port) {
+        font-size: 50%; // 1rem == 8px
+    }
+
+    @include respond(tab-land) {
+        font-size: 56.25%; // 1rem == 9px
+    }
+
+    @include respond(big-desk) {
+        font-size: 75%; // 1rem == 12px, 12/16
+    }
+
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    color: $color-text;
+    line-height: 1.2;
+}
+
+html, body {
+    width: 100vw;
+    overflow-x: hidden;
+}
+
+img {
+    max-width: 100%;
+}
+
+button, select, option {
+    font-family: 'Montserrat', sans-serif;
+}
+
+h1 {
+    font-size: 4.2rem;
+}
+
+
+h2 {
+    font-size: 3.5rem;
+}
+
+
+h3 {
+    font-size: 3rem;
+}
+
+h5 {
+    font-size: 1.8rem;
+}
+
+p,
+li {
+    font-size: 1.3rem;
+}
+
+
+
+textarea {
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+.btn,
+button {
+    color: $color-text;
+    text-transform: uppercase;
+    font-weight: 200;
+    max-width: 95%;
+    border: 1px solid white;
+    padding: 1rem 2.5rem;
+    transition: .3s all ease-in-out;
+    text-align: center;
+
+
+    &-ghost {
+        color: white;
+
+        &:hover {
+            background-color: white;
+            color: black;
+        }
+    }
+
+}
+
+.sep {
+    height: 7px;
+    width: 50px;
+    background-color: $color-primary;
+    margin-bottom: 3rem;
+}
+
+a {
+    text-decoration: none;
+    color: $color-text;
+    font-size: 16px;
+}
+
+@for $i from 1 through 5 {
+    $measure: #{$i}rem;
+
+    .m-#{$i} {
+        margin: $measure;
+    }
+
+    .mt-#{$i} {
+        margin-top: $measure;
+    }
+
+    .mb-#{$i} {
+        margin-bottom: $measure;
+    }
+
+    .ml-#{$i} {
+        margin-left: $measure;
+    }
+
+    .mr-#{$i} {
+        margin-right: $measure;
+    }
+
+    .my-#{$i} {
+        margin-top: $measure;
+        margin-bottom: $measure;
+    }
+
+    .mx-#{$i} {
+        margin-left: $measure;
+        margin-right: $measure;
+    }
+
+    .p-#{$i} {
+        padding: $measure;
+    }
+
+    .pt-#{$i} {
+        padding-top: $measure;
+    }
+
+    .pb-#{$i} {
+        padding-bottom: $measure;
+    }
+
+    .pl-#{$i} {
+        padding-left: $measure;
+    }
+
+    .pr-#{$i} {
+        padding-right: $measure;
+    }
+
+    .py-#{$i} {
+        padding-top: $measure;
+        padding-bottom: $measure;
+    }
+
+    .px-#{$i} {
+        padding-left: $measure;
+        padding-right: $measure;
+    }
+}
+
+.text-white {
+    color: white;
+
+    & p,
+    a,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+        color: white;
+    }
+}
+
+.app {
+    height: 100vh;
+    width: 100vw;
+    padding: 0 0 3rem 5rem;
+    transition: .2s all linear;
+}
+
+.app.minimize {
+    padding:  0 0 0 20rem;
+}
+
+input {
+    color: $color-text-light;
+}

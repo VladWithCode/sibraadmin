@@ -1,0 +1,26 @@
+.breadcrumbs {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+
+    &__item {
+        color: $color-text-light;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 2rem 3rem;
+        @include transition;
+
+        & i {
+            margin-right: .5rem;
+        }
+
+        &:hover {
+
+            & span {
+                color: $color-ok;
+            }
+
+        }
+    }
+}

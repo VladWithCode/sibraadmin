@@ -1,0 +1,52 @@
+
+
+.lot-list {
+    width: 100%;
+
+    & tr {
+        margin-bottom: 4rem;
+    }
+
+    & tr, & .item {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        text-align: center;
+        align-items: center;
+
+        & th {
+            font-size: 2.3rem;
+        }
+    }
+
+    & .item {
+        padding: 2rem 0;
+        border-bottom: 1px solid $color-text;
+        opacity: .6;
+
+        &:last-child {
+            border: none;
+        }
+
+        & td {
+            font-weight: 400;
+
+            &.available {
+                color: $color-ok;
+            }
+            &.sold {
+                color: $color-success;
+            }
+            &.pending {
+                color: $color-warning;
+            }
+        }
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+}
+
+.lot-list-container {
+    padding-bottom: 6rem;
+}

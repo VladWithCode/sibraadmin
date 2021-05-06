@@ -1,0 +1,94 @@
+.app-screen {
+    padding: 0 2rem 5rem 0;
+
+    &__title {
+        margin: 4rem 2rem;
+        font-weight: 400;
+        width: 100%;
+    }
+
+}
+
+.projects-screen-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 95%;
+
+    & .search {
+        display: flex;
+        align-items: center;
+        border-radius: 10rem;
+        @include shadow-light;
+        padding: 1rem 2rem;
+
+        & svg {
+            height: 2rem;
+            width: 2rem;
+            margin-right: 1rem;
+            cursor: pointer;
+        }
+
+        & input {
+            border: none;
+            outline: none;
+            height: 3rem;
+            font-size: 1.8rem;
+        }
+    }
+}
+
+.projects {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 300px;
+    grid-gap: 2rem;
+    justify-content: start;
+    padding: 0 3rem 0 4rem;
+
+    @include respond(tab-land) {
+        grid-auto-rows: 220px;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    &__card {
+        grid-column: span 1;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        @include shadow-light;
+        @include transition;
+        animation: .5s appear;
+
+        &__img {
+            overflow: hidden;
+            height: 80%;
+           
+            & img {
+                object-fit: cover;
+                height: 100%;
+                width: 100%;
+                @include transition;
+            }
+        }
+
+        &__title {
+            height: 20%;
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            font-weight: 700;
+        }
+
+        &:hover {
+
+            @include shadow;
+
+            .projects__card__img img {
+                transform: scale(1.1);
+            }
+
+        }
+    }
+}

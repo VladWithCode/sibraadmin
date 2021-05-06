@@ -1,0 +1,78 @@
+
+
+
+@mixin respond($breakpoint) {
+    @if $breakpoint==phone {
+        @media (max-width: 37.5em) {
+            @content
+        }
+
+        ; // 600px
+    }
+
+    @if $breakpoint==tab-port {
+        @media (max-width: 56.25em) {
+            @content
+        }
+
+        ; // 900px
+    }
+
+    @if $breakpoint==from-tab-land {
+        @media (min-width: 56.25em) {
+            @content
+        }
+
+        ; // 900px
+    }
+
+    @if $breakpoint==google {
+        @media (max-width: 71.37em) {
+            @content
+        }
+
+        ; // 900px
+    }
+
+    @if $breakpoint==tab-land {
+        @media (max-width: 75em) {
+            @content
+        }
+
+        ; //1200px
+    }
+
+    @if $breakpoint==big-desk {
+        @media (min-width: 112.5em) {
+            @content
+        }
+
+        ; //1800px
+    }
+}
+
+@mixin animation($duration, $name, $delay) {
+    &.aos-animate {
+        opacity: 1;
+        animation: $name $duration ease-in-out $delay;
+        backface-visibility: hidden;
+        animation-fill-mode: backwards;
+    }
+}
+
+@mixin shadow {
+    box-shadow: 5px 5px 10px $color-shadow;
+}
+
+@mixin shadow-light {
+    box-shadow: 3px 3px 5px $color-shadow-light;
+}
+
+@mixin shadow-nav {
+    box-shadow: 2px 2px 5px $color-shadow;
+}
+
+@mixin transition {
+    transition: .3s all ease-in-out;
+}
+

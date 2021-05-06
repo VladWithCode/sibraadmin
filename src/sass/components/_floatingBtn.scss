@@ -1,0 +1,31 @@
+.floating-btn {
+    position: fixed;
+    right: 2.5rem;
+    bottom: 2.5rem;
+    background-color: $color-success;
+    color: white;
+    padding: 1.6rem;
+    border-radius: 50%;
+    @include shadow-light;
+    @include transition;
+    @include animation(.4s, moveInBottom, .3s);
+    cursor: pointer;
+
+    & svg {
+        height: 3rem;
+        width: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        @include transition;
+    }
+
+    &:hover {
+        @include shadow;
+
+        svg {
+            transform: scale(1.1);
+        }
+    }
+
+}
