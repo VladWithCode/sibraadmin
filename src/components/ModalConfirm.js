@@ -1,43 +1,22 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { AppContext } from '../AppContext';
-import { types } from '../types';
+import { modalDisable } from '../actions/modal';
+// import { AppContext } from '../AppContext';
+// import { types } from '../types';
 
 export const ModalConfirm = () => {
 
-    const { appData, appData: { modalActive, modalType }, setAppData } = useContext(AppContext);
+    const { active, beenClosed, title, text, link, okMsg, closeMsg, input, input2 } = useSelector(state => state.modal);
 
-    const [modalInfo, setModalInfo] = useState({
-        title: '',
-        text: '',
-        link: '',
-        okMsg: '',
-        closeMsg: '',
-        isClosed: false
-    })
-
-    useEffect(() => {
-        if (modalType === types.projects) {
-            setModalInfo({
-                title: '¿Agregar nuevo proyecto?',
-                text: '',
-                link: '/',
-                okMsg: 'Sí',
-                closeMsg: 'No',
-                beenClosed: false
-            });
-        }
-    }, [modalType])
-
-    const { title, text, link, okMsg, closeMsg, beenClosed } = modalInfo;
+    const dispatch = useDispatch();
 
     const handleClose = () => {
-        setAppData({ ...appData, modalActive: !modalActive })
-        setModalInfo({...modalInfo, beenClosed: true})
+        dispatch(modalDisable());
     }
 
     return (
-        <div onClick={handleClose} className={` ${!modalActive ? 'modal-hidden' : 'modal-bc'} ${beenClosed && !modalActive ? 'modal-bc modal-animate-hide' : ''}`} >
+        <div onClick={handleClose} className={` ${!active ? 'modal-hidden' : 'modal-bc'} ${beenClosed && !active ? 'modal-bc modal-animate-hide' : ''}`} >
             <div className="modal">
                 <h3 className="modal__title">
                     {title}
@@ -45,16 +24,27 @@ export const ModalConfirm = () => {
                 <div className="modal__text">
                     {text}
                 </div>
+                {
+                    input && (
+                        <div className="modal__input">
+                            <input type="text" placeholder="Input 1" />
+                            {
+                                input2 && (
+                                    <input type="text" placeholder="Input 2" />
+                                )
+                            }
+                        </div>
+                    )
+                }
                 <div className="modal__btns">
-                    <p onClick={handleClose} className="modal__btns__link btn-err">
+                    <p onClick={handleClose} className="modal__btns__link btn btn-err">
                         {closeMsg}
                     </p>
-                    <Link to={link} className="modal__btns__link btn-ok">
+                    <Link to={link} className="modal__btns__link btn btn-ok">
                         {okMsg}
                     </Link>
                 </div>
             </div>
         </div>
     )
-
 }

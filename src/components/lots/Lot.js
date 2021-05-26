@@ -4,12 +4,16 @@ import { usePushBreadcrumbs } from '../../hooks/usePushBreadcrumbs';
 import { types } from '../../types';
 import { BreadCrumbs } from '../BreadCrumbs';
 import { FloatingButton } from '../FloatingButton';
+import { FloatingButtonSecondary } from '../FloatingButtonSecondary';
 
 export const Lot = ({ history: { location: { pathname } } }) => {
 
     const { lotId } = useParams();
 
     usePushBreadcrumbs(types.projects, `Lot: ${lotId}`, pathname);
+
+    // Temp
+    const status = 'sold';
 
 
     return (
@@ -42,12 +46,38 @@ export const Lot = ({ history: { location: { pathname } } }) => {
                                 <li>Pista</li>
                             </ul>
                         </div>
+                        {
+                            (status === 'pending' || status === 'sold') && (
+                                <>
+                                    <h2>Información del Cliente</h2>
+                                    <div className="item">
+                                        <p>Número: <span>{'Jairo Bladimir Rangel Cabrera'}</span></p>
+                                        <p>Número de contácto: <span>{6181234567}</span></p>
+                                    </div>
+                                    <h2 className="docs">Documentos</h2>
+                                    <div className="project__body__docs lot__body__docs">
+                                        <div className="doc">Escrituras</div>
+                                        <div className="doc">Contrato de servicio de agua y drenaje</div>
+                                        <div className="doc">Contrato de servicio de electricidad</div>
+                                        <div className="doc">Planos</div>
+                                    </div>
+                                </>
+                            )
+                        }
                     </div>
                     <div className="lot__body__resume">
-                        <p className="status available">Disponible</p>
-                        <div className="stats item">
+                        <p className={`status ${status === 'sold' ? 'sold' : status === 'pending' ? 'pending' : 'available'}`}>{status === 'sold' ? 'Liquidado' : status === 'pending' ? 'Vendido' : 'Disponible'}</p>
+                        <div className="item">
                             <p>Área: <span>96m<sup>2</sup></span></p>
                             <p className="price">Precio: <span>$140,000.00</span></p>
+                            {
+                                status === 'pending' && (
+                                    <>
+                                        <p className="paid">Pagado: <span>$95,000.00</span></p>
+                                        <p className="remaining">Restante: <span>$45,000.00</span></p>
+                                    </>
+                                )
+                            }
                         </div>
                     </div>
 
@@ -55,7 +85,7 @@ export const Lot = ({ history: { location: { pathname } } }) => {
             </div>
 
             <FloatingButton type='lotAvailable' />
-            {/* <FloatingButtonSecondary type='lotAvailable' /> */}
+            <FloatingButtonSecondary type='lotAvailable' />
         </>
     )
 }

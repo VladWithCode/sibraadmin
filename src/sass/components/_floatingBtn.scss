@@ -10,6 +10,10 @@
     @include transition;
     @include animation(.4s, moveInBottom, .3s);
     cursor: pointer;
+    z-index: 2;
+
+    animation: appear .5s;
+    animation-fill-mode: backwards;
 
     & svg {
         height: 3rem;
@@ -26,6 +30,12 @@
         svg {
             transform: scale(1.1);
         }
+    }
+
+    &-secondary {
+        background-color: white;
+        color: $color-success;
+        bottom: 11rem;
     }
 
 }

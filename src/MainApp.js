@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { AppContext } from './AppContext';
 import { AppRouter } from './router/AppRouter';
-
+import { Provider } from 'react-redux';
+import { store } from './store/store';
 
 export const MainApp = () => {
 
@@ -15,8 +16,12 @@ export const MainApp = () => {
     })
 
     return (
-        <AppContext.Provider value={{appData, setAppData}}  >
-            <AppRouter />
-        </AppContext.Provider >
+        <Provider store={ store }>
+            <AppContext.Provider value={{ appData, setAppData }}  >
+
+                <AppRouter />
+
+            </AppContext.Provider >
+        </Provider>
     )
 }

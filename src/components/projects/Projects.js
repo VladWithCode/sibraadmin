@@ -1,23 +1,44 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, Redirect } from 'react-router-dom';
-import { AppContext } from '../../AppContext';
-import { FloatingButton } from '../FloatingButton';
-import { usePushBreadcrumbs } from '../../hooks/usePushBreadcrumbs';
-import { types } from '../../types';
+import { useForm } from '../../hooks/useForm';
+import { modalUpdate } from '../../actions/modal';
+import { breadcrumbsUpdate } from '../../actions/breadcrumbs';
+import { redTypes } from '../../types/reduxTypes';
 
-export const Projects = ({history:{location:{pathname}}}) => {
+export const Projects = ({ history: { location: { pathname } } }) => {
 
-    const { appData: { projectsBreadcrumbs } } = useContext(AppContext);
+    const { projects } = useSelector(state => state.redirect);
 
-    usePushBreadcrumbs(types.projects, `proyectos`, pathname);
+    const dispatch = useDispatch();
 
-    const lastLinkVisited = projectsBreadcrumbs.length - 1;
+    useEffect(() => {
+
+        dispatch(modalUpdate('Crear nuevo proyecto', '¿Desea crear un proyecto nuevo?', './proyectos/nuevo', 'Sí', 'No', null, null));
+
+        const breadcrumbs = [
+            {
+                dispName: 'proyectos',
+                link: '/proyectos'
+            }
+        ]
+
+        dispatch(breadcrumbsUpdate(redTypes.projects, breadcrumbs));
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const number = 8;
 
+    const [formFields, handleOnChange, reset] = useForm({ inputSearch: '' });
+
+    const { inputSearch } = formFields;
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('sent');
+        console.log(inputSearch);
+        reset();
     }
 
     return (
@@ -28,12 +49,12 @@ export const Projects = ({history:{location:{pathname}}}) => {
                 <h1 className="app-screen__title" >Proyectos</h1>
                 <form onSubmit={handleSubmit} className="search">
                     <svg onClick={handleSubmit} ><use href="../assets/svg/search.svg#search" ></use></svg>
-                    <input type="text" />
+                    <input type="text" name="inputSearch" value={inputSearch} onChange={handleOnChange} />
                 </form>
             </div>
 
             <div className="projects">
-                <NavLink className='projects__card' to={`./proyectos/${number}`} >
+                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
                     <div className="projects__card__img">
                         <img src="../assets/img/1.jpg" alt="" />
                     </div>
@@ -41,15 +62,7 @@ export const Projects = ({history:{location:{pathname}}}) => {
                         Colinas del Mar
                     </div>
                 </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/${number}`} >
-                    <div className="projects__card__img">
-                        <img src="../assets/img/2.jpg" alt="" />
-                    </div>
-                    <div className="projects__card__title">
-                        Colinas del Mar
-                    </div>
-                </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/${number}`} >
+                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
                     <div className="projects__card__img">
                         <img src="../assets/img/3.jpg" alt="" />
                     </div>
@@ -57,7 +70,7 @@ export const Projects = ({history:{location:{pathname}}}) => {
                         Colinas del Mar
                     </div>
                 </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/${number}`} >
+                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
                     <div className="projects__card__img">
                         <img src="../assets/img/1.jpg" alt="" />
                     </div>
@@ -65,7 +78,7 @@ export const Projects = ({history:{location:{pathname}}}) => {
                         Colinas del Mar
                     </div>
                 </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/${number}`} >
+                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
                     <div className="projects__card__img">
                         <img src="../assets/img/2.jpg" alt="" />
                     </div>
@@ -73,7 +86,7 @@ export const Projects = ({history:{location:{pathname}}}) => {
                         Colinas del Mar
                     </div>
                 </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/${number}`} >
+                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
                     <div className="projects__card__img">
                         <img src="../assets/img/3.jpg" alt="" />
                     </div>
@@ -81,7 +94,7 @@ export const Projects = ({history:{location:{pathname}}}) => {
                         Colinas del Mar
                     </div>
                 </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/${number}`} >
+                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
                     <div className="projects__card__img">
                         <img src="../assets/img/1.jpg" alt="" />
                     </div>
@@ -89,7 +102,7 @@ export const Projects = ({history:{location:{pathname}}}) => {
                         Colinas del Mar
                     </div>
                 </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/${number}`} >
+                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
                     <div className="projects__card__img">
                         <img src="../assets/img/2.jpg" alt="" />
                     </div>
@@ -97,7 +110,7 @@ export const Projects = ({history:{location:{pathname}}}) => {
                         Colinas del Mar
                     </div>
                 </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/${number}`} >
+                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
                     <div className="projects__card__img">
                         <img src="../assets/img/3.jpg" alt="" />
                     </div>
@@ -105,7 +118,7 @@ export const Projects = ({history:{location:{pathname}}}) => {
                         Colinas del Mar
                     </div>
                 </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/${number}`} >
+                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
                     <div className="projects__card__img">
                         <img src="../assets/img/1.jpg" alt="" />
                     </div>
@@ -113,7 +126,7 @@ export const Projects = ({history:{location:{pathname}}}) => {
                         Colinas del Mar
                     </div>
                 </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/${number}`} >
+                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
                     <div className="projects__card__img">
                         <img src="../assets/img/2.jpg" alt="" />
                     </div>
@@ -121,7 +134,7 @@ export const Projects = ({history:{location:{pathname}}}) => {
                         Colinas del Mar
                     </div>
                 </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/${number}`} >
+                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
                     <div className="projects__card__img">
                         <img src="../assets/img/3.jpg" alt="" />
                     </div>
@@ -129,7 +142,7 @@ export const Projects = ({history:{location:{pathname}}}) => {
                         Colinas del Mar
                     </div>
                 </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/${number}`} >
+                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
                     <div className="projects__card__img">
                         <img src="../assets/img/2.jpg" alt="" />
                     </div>
@@ -137,7 +150,7 @@ export const Projects = ({history:{location:{pathname}}}) => {
                         Colinas del Mar
                     </div>
                 </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/${number}`} >
+                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
                     <div className="projects__card__img">
                         <img src="../assets/img/3.jpg" alt="" />
                     </div>
@@ -148,13 +161,11 @@ export const Projects = ({history:{location:{pathname}}}) => {
 
             </div>
 
-            <FloatingButton type='projects' />
 
             {
-                lastLinkVisited >= 0 && (
-                    <Redirect to={projectsBreadcrumbs[lastLinkVisited]?.link} />
-                )
+                projects && <Redirect to={projects} />
             }
+
 
         </div>
     )

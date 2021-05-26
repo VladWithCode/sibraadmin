@@ -1,4 +1,6 @@
 .project {
+    animation: appear .5s;
+    animation-fill-mode: backwards;
 
     &__header {
         position: relative;
@@ -65,6 +67,7 @@
         & .item p {
             font-weight: 700;
             font-size: 2rem;
+            line-height: 3rem;
 
             & span,
             & li {

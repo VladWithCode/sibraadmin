@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { usePushBreadcrumbs } from '../../hooks/usePushBreadcrumbs';
-import { types } from '../../types';
+import { breadcrumbsUpdate } from '../../actions/breadcrumbs';
+import { modalUpdate } from '../../actions/modal';
+import { redirectSet } from '../../actions/redirect';
+import { redTypes } from '../../types/reduxTypes';
 import { BreadCrumbs } from '../BreadCrumbs';
 import { FloatingButton } from '../FloatingButton';
 import { LotsList } from '../lots/LotsList';
@@ -10,11 +13,31 @@ export const Project = ({ history: { location: { pathname } } }) => {
 
     const { projectId } = useParams();
 
-    usePushBreadcrumbs(types.projects, `Project: ${projectId}`, pathname);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+
+        dispatch(modalUpdate('Editar proyecto', '¿Desea editar el proyecto {name}?', `./proyectos/editar/${projectId}`, 'Sí', 'No', null, null));
+
+        const breadcrumbs = [
+            {
+                dispName: 'proyectos',
+                link: '/proyectos'
+            },
+            {
+                dispName: `Proyecto ${projectId}`,
+                link: `/proyectos/ver/${projectId}`
+            }
+        ]
+
+        dispatch(breadcrumbsUpdate(redTypes.projects, breadcrumbs));
+        dispatch(redirectSet(redTypes.projects,`/proyectos/ver/${projectId}`));
+
+    }, [dispatch, projectId]);
 
     return (
         <>
-            <BreadCrumbs nav={types.projects} />
+            <BreadCrumbs type={redTypes.projects} />
             {/* <h1>
                 Proyecto número {projectId}
             </h1> */}
@@ -101,7 +124,7 @@ export const Project = ({ history: { location: { pathname } } }) => {
             
             {/* Change 2nd projectId for e.lotId */}
 
-            <FloatingButton type='project' />
+            <FloatingButton type='project' projectId={projectId} />
 
         </>
     )

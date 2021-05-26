@@ -6,6 +6,8 @@
     & .modal {
         visibility: hidden;
     }
+
+    display: none;
 }
 
 .modal-bc {
@@ -21,6 +23,7 @@
     align-items: center;
     animation: appear .3s;
     animation-fill-mode: backwards;
+    z-index: 2;
 
     & .modal {
         background-color: white;
@@ -41,7 +44,9 @@
             text-align: center;
         }
 
-        &__text {}
+        &__text {
+            font-size: 1.5rem;
+        }
 
         &__btns {
             display: flex;
@@ -49,11 +54,22 @@
             justify-content: center;
 
             &__link {
-                padding: 1.5rem 3rem;
                 color: white;
                 border: 1px solid;
                 cursor: pointer;
                 @include transition;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 4rem;
+                min-width: 10rem;
+                max-height: 4rem;
+                max-width: 15rem;
+
+                &.btn {
+                    font-size: 1.5rem;
+                    font-weight: 400;
+                }
 
                 &.btn-err {
                     // background-color: $color-danger;

@@ -1,5 +1,8 @@
 export const types = {
     projects: 'projects',
     clients: 'clients',
-    history: 'history'
+    history: 'history',
+    project: 'project',
+    lot: 'lot',
+    lotType: 'lotType'
 };

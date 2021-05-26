@@ -17,8 +17,8 @@ export const FloatingButtonSecondary = ({type}) => {
     return (
 
         <>
-            <div className="floating-btn" onClick={() => setAppData({...appData, modalActive: !modalActive})} >
-                <svg><use href="/../assets/svg/plus.svg#plus" ></use></svg>
+            <div className="floating-btn floating-btn-secondary" onClick={() => setAppData({...appData, modalActive: !modalActive})} >
+                <svg><use href="/../assets/svg/bill.svg#bill" ></use></svg>
             </div>
 
             <ModalConfirm  />            

@@ -1,29 +1,26 @@
-import React, { useContext, useEffect } from 'react';
-import { AppContext } from '../AppContext';
-import { ModalConfirm } from './ModalConfirm';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { modalEnable } from '../actions/modal';
 
-export const FloatingButton = ({type}) => {
+export const FloatingButton = () => {
 
-    const { appData, appData:{modalActive}, setAppData } = useContext(AppContext);
+    // const icon = type === types.projects ? 'plus' : type === types.project || type === types.lot ? 'pencil' : 'bill';
 
-    useEffect(() => {
-        
-        setAppData({...appData, modalType: type});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    const { iconName } = useSelector(state => state.floatingButton)
 
-    const icon = type;
+    const dispatch = useDispatch();
 
-    console.log(icon);
+    const handleOpenModal = () => {
+        dispatch(modalEnable());
+    }
+
 
     return (
 
         <>
-            <div className="floating-btn" onClick={() => setAppData({...appData, modalActive: !modalActive})} >
-                <svg><use href="/../assets/svg/plus.svg#plus" ></use></svg>
-            </div>
-
-            <ModalConfirm />            
+            <div className="floating-btn" onClick={handleOpenModal} >
+                <svg><use href={`/../assets/svg/${iconName}.svg#${iconName}`} ></use></svg>
+            </div>           
         </>
 
     )

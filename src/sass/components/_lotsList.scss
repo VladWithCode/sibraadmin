@@ -3,18 +3,19 @@
 .lot-list {
     width: 100%;
 
-    & tr {
-        margin-bottom: 4rem;
+    & .headers {
+        margin: 4rem 0;
     }
 
-    & tr, & .item {
+    & .headers, & .item {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
         text-align: center;
         align-items: center;
 
-        & th {
+        & span {
             font-size: 2.3rem;
+            text-transform: capitalize;
         }
     }
 
@@ -27,7 +28,7 @@
             border: none;
         }
 
-        & td {
+        & span {
             font-weight: 400;
 
             &.available {

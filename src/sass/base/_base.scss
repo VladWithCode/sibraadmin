@@ -7,7 +7,7 @@
 }
 
 html {
-    scroll-behavior: smooth;
+    // scroll-behavior: auto;
 
     font-size: 62.5%; // 1rem == 10px
 
@@ -29,10 +29,11 @@ body {
     font-family: 'Montserrat', sans-serif;
     color: $color-text;
     line-height: 1.2;
+    font-size: 1.3rem;
 }
 
-html, body {
-    width: 100vw;
+html {
+    // width: 100vw;
     overflow-x: hidden;
 }
 
@@ -199,6 +200,9 @@ a {
     padding:  0 0 0 20rem;
 }
 
-input {
+input, textarea {
     color: $color-text-light;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.7rem;
 }
+
