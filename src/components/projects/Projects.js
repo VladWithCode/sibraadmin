@@ -15,7 +15,15 @@ export const Projects = ({ history: { location: { pathname } } }) => {
 
     useEffect(() => {
 
-        dispatch(modalUpdate('Crear nuevo proyecto', '¿Desea crear un proyecto nuevo?', './proyectos/nuevo', 'Sí', 'No', null, null));
+        const modalInfo = {
+            title: 'Crear nuevo proyecto',
+            text: '¿Desea crear un proyecto nuevo?',
+            link: '/proyectos/nuevo',
+            okMsg: 'Sí',
+            closeMsg: 'No',
+        }
+
+        dispatch(modalUpdate(modalInfo));
 
         const breadcrumbs = [
             {

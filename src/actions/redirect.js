@@ -13,7 +13,7 @@ export const redirectSet = (type, link) => {
 
         case redTypes.clients:
             return {
-                type: redTypes.redirectProjects,
+                type: redTypes.redirectClients,
                 payload: {
                     cients: link
                 }
@@ -21,7 +21,7 @@ export const redirectSet = (type, link) => {
 
         case redTypes.history:
             return {
-                type: redTypes.redirectProjects,
+                type: redTypes.redirectHistory,
                 payload: {
                     history: link
                 }
@@ -29,7 +29,7 @@ export const redirectSet = (type, link) => {
 
         case redTypes.settings:
             return {
-                type: redTypes.redirectProjects,
+                type: redTypes.redirectSettings,
                 payload: {
                     settings: link
                 }

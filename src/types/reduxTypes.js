@@ -3,12 +3,18 @@
 export const redTypes = {
     projectCreate: '[Project] Create',
     projectEdit: '[Project] Edit',
+    projectAddService: '[Project] AddService',
+    projectDeleteService: '[Project] DeleteService',
+    projectAddType: '[Project] AddType',
+    projectDeleteType: '[Project] DeleteType', 
 
     lotCreate: '[Lot] Create',
     lotEdit: '[Lot] Edit',
 
-    startLoading: '[ui] StartLoading',
-    stopLoading: '[ui] StopLoaging',
+    startLoading: '[UI] StartLoading',
+    stopLoading: '[UI] StopLoaging',
+    editPageSet: '[UI] SetEditPage',
+    inputModal: '[UI] InputModal',
 
     clientCreate: '[Client] Create',
     clientEdit: '[Client] Edit',

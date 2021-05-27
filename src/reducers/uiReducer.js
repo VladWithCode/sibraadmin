@@ -2,7 +2,14 @@ import { redTypes } from "../types/reduxTypes";
 
 const initialState = {
     loading: false,
-    msgError: null
+    msgError: null,
+    editPage: 1,
+    inputModal: {
+        active: false,
+        beenClosed: false,
+        name: '',
+        doc: ''
+    }
 }
 
 export const uiReducer = (state = initialState, action) => {
@@ -30,6 +37,12 @@ export const uiReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false
+            }
+
+        case redTypes.editPageSet:
+            return {
+                ...state,
+                editPage: action.payload.editPage
             }
 
         default:

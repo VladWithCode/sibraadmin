@@ -1,24 +1,51 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { usePushBreadcrumbs } from '../../hooks/usePushBreadcrumbs';
-import { types } from '../../types';
+import { breadcrumbsUpdate } from '../../actions/breadcrumbs';
+import { modalUpdate } from '../../actions/modal';
+import { redirectSet } from '../../actions/redirect';
+import { redTypes } from '../../types/reduxTypes';
 import { BreadCrumbs } from '../BreadCrumbs';
 import { FloatingButton } from '../FloatingButton';
 import { FloatingButtonSecondary } from '../FloatingButtonSecondary';
 
 export const Lot = ({ history: { location: { pathname } } }) => {
 
-    const { lotId } = useParams();
-
-    usePushBreadcrumbs(types.projects, `Lot: ${lotId}`, pathname);
+    const { lotId, projectId } = useParams();
 
     // Temp
     const status = 'sold';
 
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+
+        dispatch(modalUpdate('Editar proyecto', '¿Desea editar el proyecto {name}?', `/proyectos/editar/${projectId}`, 'Sí', 'No', null, null));
+
+        const breadcrumbs = [
+            {
+                dispName: 'proyectos',
+                link: '/proyectos'
+            },
+            {
+                dispName: `Proyecto ${projectId}`,
+                link: `/proyectos/ver/${projectId}`
+            },
+            {
+                dispName: `Proyecto ${projectId} || Lote ${lotId}`,
+                link: `proyectos/ver/ ${projectId}/lote/${lotId}`
+            }
+        ]
+
+        dispatch(breadcrumbsUpdate(redTypes.projects, breadcrumbs));
+        dispatch(redirectSet(redTypes.projects, `proyectos/ver/ ${projectId}/lote/${lotId}`));
+
+    }, [dispatch, projectId, lotId]);
+
 
     return (
         <>
-            <BreadCrumbs nav={types.projects} />
+            <BreadCrumbs type={redTypes.projects} />
 
             <div className="project lot">
                 <div className="project__header">

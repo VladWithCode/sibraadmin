@@ -1,15 +1,15 @@
 import { redTypes } from "../types/reduxTypes";
 
-export const modalUpdate = (title, text, link, okMsg, closeMsg, input, input2) => ({
+export const modalUpdate = (modal) => ({
     type: redTypes.modalUpdate,
     payload: {
-        title,
-        text,
-        link,
-        okMsg,
-        closeMsg,
-        input,
-        input2
+        title: modal.title,
+        text: modal.text,
+        link: modal.link? modal.link : '' ,
+        okMsg: modal.okMsg,
+        closeMsg: modal.closeMsg,
+        input: modal.input,
+        inputValue: modal.inputValue
     }
 });
 

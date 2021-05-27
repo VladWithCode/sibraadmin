@@ -17,3 +17,10 @@ export const uiStartLoading = () => ({
 export const uiFinishLoading = () => ({
     type: redTypes.stopLoading
 })
+
+export const editPageSet = editPage => ({
+    type: redTypes.editPageSet,
+    payload: {
+        editPage
+    }
+})

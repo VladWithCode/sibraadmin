@@ -23,7 +23,7 @@
     align-items: center;
     animation: appear .3s;
     animation-fill-mode: backwards;
-    z-index: 2;
+    z-index: 5;
 
     & .modal {
         background-color: white;
@@ -46,6 +46,32 @@
 
         &__text {
             font-size: 1.5rem;
+        }
+
+        & form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        &__input {
+            margin-bottom: 6rem;
+
+            &__field {
+
+                & span {
+                    font-size: 1.5rem
+                }
+
+                & input {
+                    margin-left: 2rem;
+                    padding: 1rem;
+                    outline: none;
+                    border: none;
+                    border-bottom: 1px solid $color-text;
+                }
+            }
         }
 
         &__btns {

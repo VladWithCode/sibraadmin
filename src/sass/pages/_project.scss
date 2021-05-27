@@ -96,6 +96,7 @@
                 width: 80%;
                 display: grid;
                 grid-template-columns: repeat(3, 1fr);
+                text-transform: capitalize;
 
                 & li {
                     margin-top: 2rem;

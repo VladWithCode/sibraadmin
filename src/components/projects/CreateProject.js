@@ -1,95 +1,91 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { createProject } from '../../actions/project';
+import React from 'react';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { floatingButtonSet } from '../../actions/floatingButton';
+import { modalDisable, modalEnable, modalUpdate } from '../../actions/modal';
+import { projectAddService, projectCreate, projectDeleteService } from '../../actions/project';
+import { redirectSet } from '../../actions/redirect';
 import { useForm } from '../../hooks/useForm';
+import { redTypes } from '../../types/reduxTypes';
 
 export const CreateProject = () => {
 
-    const [modal, setModal] = useState({
-        active: false,
-        name: '',
-        input: false
-    });
-
-    const project = {
-        name: 'Colinas del Mar',
-        description: 'Proyecto en Mazatlán ubicado a 15 minutos del malecón y a 10 del aeropuerto',
-        manzanas: 12,
-        lots: 440,
-        services: [
-            'Pavimento',
-            'Servicio de luz',
-            'Agua y drenaje',
-            'Banqueta',
-            'Vigilancia',
-            'Alberca común'
-        ],
-        docs: [
-            {
-                path: '',
-                name: 'Contrato de servicio de Agua',
-            },
-            {
-                path: '',
-                name: 'Contrato de servicio de Luz',
-            },
-            {
-                path: '',
-                name: 'Escrituras',
-            },
-        ],
-        pricePerSqM: 1200,
-        priceCorner: 1500,
-        types: [
-            {
-                type: 'a',
-                sameArea: true,
-                size: 96,
-                isCorner: false,
-            },
-            {
-                type: 'b',
-                sameArea: true,
-                size: 150,
-                isCorner: false,
-            },
-            {
-                type: 'c',
-                sameArea: false,
-                size: 0,
-                isCorner: false,
-            }
-        ]
-    }
-
-    const [formValues, handleInputChange, setValue] = useForm(project);
-
-
-    const { name, description, manzanas, lots, services, docs, pricePerSqM, priceCorner, input, docName } = formValues;
-
-    const handleDelete = () => {
-
-        const newArray = modal.type === 'svc' ? services.filter(service => service !== modal.name) : docs.filter(doc => doc.name !== modal.name);
-
-        setValue(modal.type === 'svc' ? 'services' : 'docs', newArray);
-
-        setModal({ ...modal, active: false });
-    }
-
-
     const dispatch = useDispatch();
 
-    const handleAdd = (type) => {
+    const currentProject = useSelector(state => state.project);
 
-        dispatch(createProject(name, description, manzanas, lots, services, docs, pricePerSqM, priceCorner));
+    const [formValues, handleInputChange] = useForm(currentProject);
 
-        setModal({ ...modal, type, active: true, input: true })
+    const [serviceValue, handleServiceChange, setServiceValue] = useForm({ serviceName: '' });
+
+    const { serviceName } = serviceValue;
+
+    const { name, description, manzanas, lots, pricePerSqM, priceCorner } = formValues;
+
+    const { docs, services } = currentProject;
+
+    const { modal: { active, beenClosed, input, title, text, okMsg, closeMsg } } = useSelector(state => state);
+
+    const [service, setService] = useState('');
+
+    useEffect(() => {
+
+        dispatch(redirectSet(redTypes.projects, '/proyectos/nuevo'));
+        dispatch(floatingButtonSet('pencil', redTypes.projectCreate));
+        
+    }, [dispatch]);
+
+    const handleClose = () => {
+        dispatch(modalDisable());
+    }
+
+    const saveChanges = () => {
+        dispatch(projectCreate(formValues))
+    }
+
+    const handleDeleteService = (service) => {
+        const modalInfo = {
+            title: 'Eliminar servicio',
+            text: `Desea eliminar el servicio: ${service}`,
+            okMsg: 'Eliminar',
+            closeMsg: 'Cancelar',
+            input: null
+        }
+
+        setService(service);
+
+        dispatch(modalUpdate(modalInfo));
+        dispatch(modalEnable());
+    }
+
+    const handleDeleteSvc = (e) => {
+        e?.preventDefault();
+        dispatch(projectDeleteService(service))
+        dispatch(modalDisable());
 
     }
 
-    const addService = (e) => {
-        e.preventDefault();
-        console.log(docName);
+    const handleAdd = () => {
+
+        const modalInfo = {
+            title: 'Agregar servicio',
+            text: ``,
+            input: true,
+            okMsg: 'Agregar',
+            closeMsg: 'Cancelar'
+        }
+
+        dispatch(modalUpdate(modalInfo));
+        dispatch(modalEnable());
+
+    }
+
+    const handleAddSvc = (e) => {
+        e?.preventDefault();
+        dispatch(projectAddService(serviceName));
+        setServiceValue('serviceName', '');
+        dispatch(modalDisable());
     }
 
 
@@ -104,27 +100,27 @@ export const CreateProject = () => {
                 <h2 className="section-title">Información General</h2>
                 <div className="form-field">
                     <label htmlFor="name">Nombre del Proyecto:</label>
-                    <input type="text" name="name" value={name} onChange={handleInputChange} />
+                    <input type="text" name="name" value={name} onChange={(e) => {handleInputChange(e); saveChanges();}} />
                 </div>
                 <div className="form-field desc">
                     <label htmlFor="description">Descripción del Proyecto:</label>
-                    <textarea name="description" value={description} onChange={handleInputChange} ></textarea>
+                    <textarea name="description" value={description} onChange={(e) => {handleInputChange(e); saveChanges();}} ></textarea>
                 </div>
                 <div className="form-field">
                     <label htmlFor="manzanas">Manzanas:</label>
-                    <input type="number" name="manzanas" value={manzanas} onChange={handleInputChange} />
+                    <input type="number" name="manzanas" value={manzanas} onChange={(e) => {handleInputChange(e); saveChanges();}} />
                 </div>
                 <div className="form-field">
                     <label htmlFor="lots">Cantidad de Lotes:</label>
-                    <input type="number" name="lots" value={lots} onChange={handleInputChange} />
+                    <input type="number" name="lots" value={lots} onChange={(e) => {handleInputChange(e); saveChanges();}} />
                 </div>
                 <div className="form-field">
                     <label htmlFor="pricePerSqM">Precio por metro cuadrado:</label>
-                    <input type="number" name="pricePerSqM" value={pricePerSqM} onChange={handleInputChange} />
+                    <input type="number" name="pricePerSqM" value={pricePerSqM} onChange={(e) => {handleInputChange(e); saveChanges();}} />
                 </div>
                 <div className="form-field">
                     <label htmlFor="priceCorner">Precio por metro cuadrado de esquinas:</label>
-                    <input type="number" name="priceCorner" value={priceCorner} onChange={handleInputChange} />
+                    <input type="number" name="priceCorner" value={priceCorner} onChange={(e) => {handleInputChange(e); saveChanges();}} />
                 </div>
                 <h2 className="section-title">Servicios</h2>
                 <div className="form-field svcs">
@@ -135,7 +131,7 @@ export const CreateProject = () => {
                         <ul>
                             {
                                 services.map(service => (
-                                    <li onClick={() => setModal({ name: service, active: true, type: 'svc', input: false })} key={service} >{service}</li>
+                                    <li onClick={() => handleDeleteService(service)} key={service} >{service}</li>
                                 ))
                             }
                         </ul>
@@ -151,7 +147,6 @@ export const CreateProject = () => {
                         {
                             docs.map(doc => (
                                 <div
-                                    onClick={() => setModal({ ...modal, active: true, type: 'doc', input: false })}
                                     key={doc.name}
                                     className="doc" >
                                     {doc.name}
@@ -164,54 +159,50 @@ export const CreateProject = () => {
 
 
             {
-                (modal.active && !modal.input) && (
-                    <div className={`${!modal.active ? 'modal-hidden' : 'modal-bc'}`}>
-                        <div className="modal">
-                            <h3 className="modal__title">
-                                Desea eliminar {modal.name}
-                            </h3>
+                <div className={` ${!active ? 'modal-hidden' : 'modal-bc'} ${beenClosed && !active ? 'modal-bc modal-animate-hide' : ''}`} >
+                    <div className="modal">
+                        <h3 className="modal__title">
+                            {title}
+                        </h3>
+
+                        <p className="modal__text">
+                            {text}
+                        </p>
+
+                        <form
+                            onSubmit={(e) => {
+                                input ? handleAddSvc(e) : handleDeleteSvc(e);
+                            }}
+                            className="modal__form">
+
+                            {
+                                input && (
+                                    <div className="modal__input">
+                                        <div className="modal__input__field">
+                                            <span>Nombre del Servicio:</span>
+                                            <input autoFocus={true} type="text" name="serviceName" value={serviceName} onChange={handleServiceChange} />
+                                        </div>
+                                    </div>
+                                )
+                            }
+
                             <div className="modal__btns">
-                                <p className="modal__btns__link btn-err" onClick={handleDelete}>
-                                    Sí
+                                <p onClick={handleClose} className="modal__btns__link btn btn-err">
+                                    {closeMsg}
                                 </p>
-                                <p onClick={() => setModal({ ...modal, active: false })} className="modal__btns__link btn-ok">
-                                    No
+
+                                <p
+                                    onClick={() => {
+                                        input ? handleAddSvc() : handleDeleteSvc();
+                                    }}
+                                    className="modal__btns__link btn btn-ok">
+                                    {okMsg}
                                 </p>
                             </div>
-                        </div>
+                        </form>
                     </div>
-                )
+                </div>
             }
-
-            {
-                (modal.active && modal.input) && (
-                    <div className={`${!modal.active ? 'modal-hidden' : 'modal-bc'}`}>
-                        <div className="modal">
-                            <h3 className="modal__title">
-                                Nombre de {modal.type === 'svc' ? 'Servicio' : 'Documento'}
-                            </h3>
-                            <form onSubmit={addService}>
-                                <input
-                                    type="text"
-                                    name="docName"
-                                    value={docName} 
-                                    onChange={handleInputChange}
-                                />
-                                <div className="modal__btns">
-                                    <button className="modal__btns__link btn-ok">
-                                        Agregar
-                                    </button>
-                                    <p onClick={() => setModal({ ...modal, active: false })} className="modal__btns__link btn-err">
-                                        Cancelar
-                                    </p>
-                                </div>
-                            </form>
-
-                        </div>
-                    </div>
-                )
-            }
-
 
         </div>
     )
