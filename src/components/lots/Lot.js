@@ -9,7 +9,7 @@ import { BreadCrumbs } from '../BreadCrumbs';
 import { FloatingButton } from '../FloatingButton';
 import { FloatingButtonSecondary } from '../FloatingButtonSecondary';
 
-export const Lot = ({ history: { location: { pathname } } }) => {
+export const Lot = () => {
 
     const { lotId, projectId } = useParams();
 
@@ -20,7 +20,15 @@ export const Lot = ({ history: { location: { pathname } } }) => {
 
     useEffect(() => {
 
-        dispatch(modalUpdate('Editar proyecto', '¿Desea editar el proyecto {name}?', `/proyectos/editar/${projectId}`, 'Sí', 'No', null, null));
+        const modalInfo = {
+            title: 'Editarproyecto',
+            text: '¿Desea editar el proyecto {name}?',
+            link: `/proyectos/editar/${projectId}`,
+            okMsg: 'Sí',
+            closeMsg: 'No',
+        }
+
+        dispatch(modalUpdate(modalInfo));
 
         const breadcrumbs = [
             {

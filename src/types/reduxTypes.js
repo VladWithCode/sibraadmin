@@ -7,6 +7,13 @@ export const redTypes = {
     projectDeleteService: '[Project] DeleteService',
     projectAddType: '[Project] AddType',
     projectDeleteType: '[Project] DeleteType', 
+    projectEnableSvcModal: '[ProjectModal] EnableSvcModal',
+    projectEnableDocModal: '[ProjectModal] EnableDocModal',
+    projectDisableSvcModal: '[ProjectModal] DisableSvcModal',
+    projectDisableDocModal: '[ProjectModal] DisableDocModal',
+    projectUpdateSvcModal: '[ProjectModal] UpdateSvcModal',
+    projectUpdateDocModal: '[ProjectModal] UpdateDocModal',
+    projectSetPage: 'ProjectCRUD SetEditPage',
 
     lotCreate: '[Lot] Create',
     lotEdit: '[Lot] Edit',
@@ -15,6 +22,8 @@ export const redTypes = {
     stopLoading: '[UI] StopLoaging',
     editPageSet: '[UI] SetEditPage',
     inputModal: '[UI] InputModal',
+    uiSetError: '[UI] SetError',
+    uiUnSetError: '[UI] UnSetError',
 
     clientCreate: '[Client] Create',
     clientEdit: '[Client] Edit',
@@ -42,8 +51,19 @@ export const redTypes = {
 
     floatingButtonSet: '[FloatingButton] Set',
 
+    lotTypesCreate: '[LotTypes] CreateType',
+    lotTypesEdit: '[LotTypes] EditType',
+    lotTypesDelete: '[LotTypes] DeleteType',
+    lotTypesModalEnable: '[LotTypesModal] Enable',
+    lotTypesModalDisable: '[LotTypesModal] Disable',
+    lotTypesModalConfirmUpdate: '[LotTypesModalConfirm] Update',
+    lotTypesModalConfirmEnable: '[LotTypesModalConfirm] Enable',
+    lotTypesModalConfirmDisable: '[LotTypesModalConfirm] Disable',
+
     projects: 'projects',
     clients: 'clients',
     history: 'history',
-    settings: 'settings'
+    settings: 'settings',
+    edit: 'edit',
+    delete: 'delete'
 }

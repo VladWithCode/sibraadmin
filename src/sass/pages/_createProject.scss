@@ -127,4 +127,43 @@
 
     }
 
+    &-btns {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 2rem;
+
+
+        & .btn {
+            cursor: pointer;
+            padding: 1rem 2rem;
+            border: 1px solid transparent;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 400;
+
+            &-cancel {
+                background-color: $color-danger;
+                margin-right: 2rem;
+
+                &:hover {
+                    background-color: darken($color-danger, 10);
+                }
+            }
+
+            &-next {
+                background-color: $color-ok;
+
+                &:hover {
+                    background-color: darken($color-ok, 10);
+                }
+            }
+
+
+
+        }
+
+
+    }
+
+
 }

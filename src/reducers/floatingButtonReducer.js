@@ -1,7 +1,7 @@
 import { redTypes } from "../types/reduxTypes";
 
 const initialState = {
-    iconName: 'pencil',
+    iconName: 'plus',
     type: null
 };
 

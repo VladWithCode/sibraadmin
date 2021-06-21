@@ -16,7 +16,6 @@ export const ModalInput = () => {
         dispatch(modalDisable());
     }
 
-    console.log('Soy el modal de UI');
 
 
     return (

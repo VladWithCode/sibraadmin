@@ -2,8 +2,6 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { modalDisable } from '../actions/modal';
-// import { AppContext } from '../AppContext';
-// import { types } from '../types';
 
 export const ModalConfirm = () => {
 

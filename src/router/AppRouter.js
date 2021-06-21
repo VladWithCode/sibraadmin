@@ -17,6 +17,7 @@ import { CreateProject } from "../components/projects/CreateProject";
 import { EditProject } from "../components/projects/EditProject";
 import { ModalConfirm } from "../components/ModalConfirm";
 import { FloatingButton } from "../components/FloatingButton";
+import { UiError } from "../components/UiError";
 export const AppRouter = () => {
 
     return (
@@ -26,6 +27,7 @@ export const AppRouter = () => {
                     <NavBar />
                         <FloatingButton />
                         <ModalConfirm />
+                        <UiError />
                 </>
 
                 <div className="app">

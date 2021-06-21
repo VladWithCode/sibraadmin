@@ -1,0 +1,36 @@
+
+
+
+.uiError {
+    position: fixed;
+    bottom: 7rem;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 2rem 5rem;
+    background-color: $color-danger;
+    color: white;    
+    pointer-events: none;
+    animation: uiError 4s;
+    animation-fill-mode: forwards;
+    opacity: 0;
+    font-weight: bold;
+    font-size: 1.6rem;
+    border-radius: .5rem;
+    z-index: 6;
+}
+
+@keyframes uiError {
+    0% {
+        opacity: 0;
+
+    }
+    15% {
+        opacity: 1;
+    }
+    85% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}

@@ -15,17 +15,17 @@ const initialState = {
 export const uiReducer = (state = initialState, action) => {
 
     switch (action.type) {
-        // case redTypes.uiSetError:
-        //     return {
-        //         ...state,
-        //         msgError: action.payload
-        //     }
+        case redTypes.uiSetError:
+            return {
+                ...state,
+                msgError: action.payload
+            }
 
-        // case redTypes.uiUnSetError:
-        //     return {
-        //         ...state,
-        //         msgError: null
-        //     }
+        case redTypes.uiUnSetError:
+            return {
+                ...state,
+                msgError: null
+            }
 
         case redTypes.startLoading:
             return {

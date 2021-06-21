@@ -15,6 +15,8 @@ export const Project = ({ history: { location: { pathname } } }) => {
 
     const dispatch = useDispatch();
 
+    console.log(projectId)
+
     useEffect(() => {
 
         const modalInfo = {
