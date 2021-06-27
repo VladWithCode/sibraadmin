@@ -23,7 +23,9 @@ export const Projects = ({ history: { location: { pathname } } }) => {
             closeMsg: 'No',
         }
 
-        dispatch(modalUpdate(modalInfo));
+        setTimeout(() => {
+            dispatch(modalUpdate(modalInfo));
+        }, 1000);
 
         const breadcrumbs = [
             {

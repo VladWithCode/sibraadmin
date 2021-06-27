@@ -2,10 +2,10 @@ import { redTypes } from "../types/reduxTypes";
 
 const initialState = {
     page: 1,
-    name: '',
-    description: '',
-    manzanas: '',
-    lots: '',
+    name: 'Ricardo',
+    description: 'Esta es una descripcion ejemplo',
+    manzanas: '1',
+    lots: '40',
     services: [
         'Pavimento',
         'Servicio de luz',
@@ -23,24 +23,6 @@ const initialState = {
     pricePerSqM: '',
     priceCorner: '',
     types: [
-        {
-            type: 'a',
-            sameArea: true,
-            size: 96,
-            isCorner: false,
-        },
-        {
-            type: 'b',
-            sameArea: true,
-            size: 150,
-            isCorner: false,
-        },
-        {
-            type: 'c',
-            sameArea: false,
-            size: 0,
-            isCorner: false,
-        }
     ],
     modalServices: {
         active: false,

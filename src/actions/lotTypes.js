@@ -77,4 +77,8 @@ export const lotTypesModalConfirmDisable = () => {
     }
 }
 
+export const lotTypesModalConfirmReset = () => ({
+    type: redTypes.lotTypesModalConfirmReset
+})
+
 

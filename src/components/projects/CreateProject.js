@@ -1,15 +1,10 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { floatingButtonSet } from '../../actions/floatingButton';
-// import { projectSetPage } from '../../actions/project';
-import { redirectSet } from '../../actions/redirect';
-import { redTypes } from '../../types/reduxTypes';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { Create1 } from './Create1';
 import { Create2 } from './Create2';
+import { Create3 } from './Create3';
 
 export const CreateProject = () => {
-
-    const dispatch = useDispatch();
 
     const { page } = useSelector(state => state.project);
 
@@ -18,26 +13,19 @@ export const CreateProject = () => {
     
 
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        dispatch(redirectSet(redTypes.projects, '/proyectos/nuevo'));
-        dispatch(floatingButtonSet('pencil', redTypes.projectCreate));
+    //     dispatch(redirectSet(redTypes.projects, '/proyectos/nuevo'));
+    //     dispatch(floatingButtonSet('pencil', redTypes.projectCreate));
 
-    }, [dispatch]);
-
-    // const handleNextPage = () => {
-    //     dispatch(projectSetPage(page + 1))
-    //     // isFormValid();
-    // }
-
-
+    // }, [dispatch]);
 
     return (
 
         <div className="project-create">
 
             {
-                (page === 1) ? <Create1 /> : <Create2 />
+                (page === 1) ? <Create1 /> : page === 2 ? <Create2 /> : page === 3 ? <Create3 /> : <h1>404</h1>
             }
 
         </div>

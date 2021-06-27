@@ -18,7 +18,7 @@ export const setTempError = (err) => {
 
         setTimeout(() => {
             dispatch(unSetError());
-        }, 5001);
+        }, 4001);
 
     }
 }

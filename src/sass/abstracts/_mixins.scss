@@ -61,11 +61,11 @@
 }
 
 @mixin shadow {
-    box-shadow: 5px 5px 10px $color-shadow;
+    box-shadow: 5px 5px 15px $color-shadow;
 }
 
 @mixin shadow-light {
-    box-shadow: 3px 3px 5px $color-shadow-light;
+    box-shadow: -3px -3px 5px -3px $color-shadow-light, 5px 5px 5px $color-shadow-light;
 }
 
 @mixin shadow-nav {
@@ -76,3 +76,11 @@
     transition: .3s all ease-in-out;
 }
 
+@mixin card {
+    @include shadow-light;
+    padding: 2rem;
+    border-radius: .5rem;
+
+    animation: .6s appear;
+
+}

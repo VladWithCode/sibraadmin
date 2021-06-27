@@ -1,13 +1,35 @@
 import { redTypes } from "../types/reduxTypes";
 
-const initialState = {
+// const initialState = {
+//     active: false,
+//     beenClosed: false,
+//     lotTypes: [],
+//     modalConfirm: {}
+// }
+
+const initialState1 = {
     active: false,
     beenClosed: false,
-    lotTypes: [],
+    lotTypes: [
+        {
+            type: 'a',
+            pricePerM: 200,
+            sameArea: false,
+            cornerPrice: 800
+        },
+        {
+            type: 'b',
+            pricePerM: 200,
+            sameArea: true,
+            cornerPrice: 800,
+            area: 96
+        }
+
+    ],
     modalConfirm: {}
 }
 
-export const lotTypesReducer = (state = initialState, action) => {
+export const lotTypesReducer = (state = initialState1, action) => {
 
     switch (action.type) {
         case redTypes.lotTypesCreate:
@@ -65,6 +87,16 @@ export const lotTypesReducer = (state = initialState, action) => {
                 ...state,
                 active: false,
                 beenClosed: true,
+            }
+
+        case redTypes.lotTypesModalConfirmReset:
+            return {
+                ...state,
+                modalConfirm: {
+                    ...state.modalConfirm,
+                    active: false,
+                    beenClosed: false
+                }
             }
 
         case redTypes.lotTypesModalConfirmUpdate:

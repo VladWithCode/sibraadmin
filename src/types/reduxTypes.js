@@ -59,6 +59,11 @@ export const redTypes = {
     lotTypesModalConfirmUpdate: '[LotTypesModalConfirm] Update',
     lotTypesModalConfirmEnable: '[LotTypesModalConfirm] Enable',
     lotTypesModalConfirmDisable: '[LotTypesModalConfirm] Disable',
+    lotTypesModalConfirmReset: '[LotTypesModalConfirm] Reset',
+
+    newLotsSet: '[NewLots] Set',
+
+    manzanasSet: '[Manzanas] Set',
 
     projects: 'projects',
     clients: 'clients',

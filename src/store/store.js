@@ -10,6 +10,8 @@ import { projectReducer } from '../reducers/projectReducer';
 import { redirectReducer } from '../reducers/redirectReducer';
 import { uiReducer } from '../reducers/uiReducer';
 import { lotTypesReducer } from '../reducers/lotTypeReducer';
+import { manzanasReducer } from '../reducers/manzanasReducer';
+import { newLotsReducer } from '../reducers/newLotsReducer';
 
 const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
@@ -22,7 +24,9 @@ const reducers = combineReducers({
     breadcrumbs: breadcrumbsReducer,
     floatingButton: floatingButtonReducer,
     redirect: redirectReducer,
-    types: lotTypesReducer
+    types: lotTypesReducer,
+    manzanas: manzanasReducer,
+    newLots: newLotsReducer
 })
 
 export const store = createStore(

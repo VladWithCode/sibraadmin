@@ -1,11 +1,10 @@
 import React from 'react';
-import { Link } from "react-router-dom";
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { floatingButtonSet } from '../../actions/floatingButton';
 // import { projectCreate, projectEnableSvcModal, projectSetPage, projectUpdateSvcModal } from '../../actions/project';
-import { projectEnableSvcModal, projectSetPage, projectUpdateSvcModal } from '../../actions/project';
+import { projectCreate, projectEnableSvcModal, projectSetPage, projectUpdateSvcModal } from '../../actions/project';
 import { redirectSet } from '../../actions/redirect';
 import { setTempError, unSetError } from '../../actions/ui';
 import { useForm } from '../../hooks/useForm';
@@ -14,6 +13,7 @@ import { LotTypesList } from './LotTypesList';
 import { ModalServices } from './ModalServices';
 import { ModalLotType } from './ModalLotType';
 import { ModalConfirmLotTypes } from './ModalConfirmLotTypes';
+import { modalEnable, modalUpdate } from '../../actions/modal';
 
 
 export const Create1 = () => {
@@ -44,6 +44,17 @@ export const Create1 = () => {
     const cancel = () => {
         dispatch(redirectSet(redTypes.projects, '/proyectos'));
         dispatch(floatingButtonSet('plus', redTypes.projects));
+
+        const modalInfo = {
+            title: 'Cancelar creación de proyecto',
+            text: null,
+            link: '/proyectos',
+            okMsg: 'Sí',
+            closeMsg: 'No',
+        }
+
+        dispatch(modalUpdate(modalInfo));
+        dispatch(modalEnable());
     }
 
     const isFormValid = () => {
@@ -118,7 +129,12 @@ export const Create1 = () => {
     }
 
     const handleNextPage = () => {
-        isFormValid() && dispatch(projectSetPage(page + 1));
+
+        if (isFormValid()){
+            dispatch(projectSetPage(page + 1));
+            dispatch(projectCreate(formValues));
+        }
+
     }
 
     const handleDeleteService = (service) => {
@@ -158,6 +174,7 @@ export const Create1 = () => {
 
 
     const inputChange = e => {
+        dispatch(projectCreate(formValues));
         handleInputChange(e);
     }
 
@@ -220,12 +237,12 @@ export const Create1 = () => {
 
 
             <div className="project-create-btns">
-                <Link to='/proyectos' onClick={cancel} className="btn btn-cancel">
+                <button onClick={cancel} className="btn btn-cancel">
                     Cancelar
-                </Link>
-                <span onClick={handleNextPage} className="btn btn-next">
+                </button>
+                <button onClick={handleNextPage} className="btn btn-next">
                     Siguiente
-                </span>
+                </button>
             </div>
 
         </>

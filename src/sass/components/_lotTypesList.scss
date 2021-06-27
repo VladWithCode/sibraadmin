@@ -18,6 +18,8 @@
         animation: .4s appear ease-in-out;
         display: flex;
         flex-direction: column;
+        
+        justify-content: space-between;
 
         &:hover {
             @include shadow;

@@ -38,7 +38,7 @@ export const ModalLotType = () => {
             setValues(initialForm);
             setsameArea(false);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [modalConfirm?.action, modalConfirm?.type, setValues, lotTypes])
 
     const addLotType = () => {
@@ -104,7 +104,13 @@ export const ModalLotType = () => {
         }
 
         if (sameArea) {
-            if (area.toString().trim().length === 0) {
+            if (area) {
+                if (area.toString().trim().length === 0) {
+                    dispatch(setTempError('Necesita agregar un área'));
+
+                    return false;
+                }
+            } else {
                 dispatch(setTempError('Necesita agregar un área'));
 
                 return false;
