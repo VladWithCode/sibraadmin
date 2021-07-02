@@ -56,7 +56,7 @@ export const Project = ({ history: { location: { pathname } } }) => {
                 <div className="project__header">
                     <img src="/../assets/img/3.jpg" alt="" />
                     <div className="project__header__info">
-                        <h1>Proyecto número {projectId}</h1>
+                        <h1>{projectId}</h1>
                         <div className="project__header__info__aside">
                             <p>Lotes: <span>448</span></p>
                             <p>Vendidos: <span>64</span></p>

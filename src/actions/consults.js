@@ -9,6 +9,8 @@ export const getProjects = () => {
 
     const url = 'http://189.155.253.90:3000/api/projects/';
 
+    console.log('obteniendo proyectos');
+
     return (dispatch) => {
         fetch(url)
             .then(resp => resp.json())

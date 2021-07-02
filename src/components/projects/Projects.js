@@ -66,21 +66,34 @@ export const Projects = ({ history: { location: { pathname } } }) => {
             <div className="projects">
 
                 {
-                    projects.map(({ name, _id }) => {
-
-                        const progress = ''
-
+                    projects?.map(({ name, _id, associationName, totalLots, description, reservedLots, liquidatedLots, deliveredLots }) => {
+                        
                         return (
 
                             <NavLink key={_id} className='projects__card' to={`./proyectos/ver/${name}`} >
-                                <div className="projects__card__img">
-                                    <img src="../assets/img/1.jpg" alt="" />
+                                <span className="available-lots">
+                                    {totalLots} lotes
+                                </span>
+                                <div className="lots-info">
+                                    <span><strong>{reservedLots}</strong> apartados</span>
+                                    <span><strong>{deliveredLots}</strong> vendidos</span>
+                                    <span><strong>{liquidatedLots}</strong> liquidados</span>
                                 </div>
-                                <div className="projects__card__title">
-                                    {name}
-                                    {/* <progress max="100" value="70"> 70% </progress> */}
+                                <div className="main-info">
+                                    <span className="association">
+                                        {associationName}
+                                    </span>
+                                    <h4>
+                                        {name}
+                                    </h4>
+                                    <p className="description">
+                                        {description} 
+                                    </p>
                                 </div>
+
                             </NavLink>
+
+
                         )
                     })
                 }

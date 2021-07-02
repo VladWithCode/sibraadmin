@@ -19,8 +19,9 @@
         display: flex;
         align-items: center;
         border-radius: 10rem;
-        @include shadow-light;
+        // @include shadow-nav;
         padding: 1rem 2rem;
+        background-color: $color-bc-2;
 
         & svg {
             height: 2rem;
@@ -34,6 +35,10 @@
             outline: none;
             height: 3rem;
             font-size: 1.8rem;
+            position: relative;
+
+
+
         }
     }
 }
@@ -42,53 +47,142 @@
     width: 100%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 300px;
+    grid-auto-rows: 28rem;
     grid-gap: 2rem;
     justify-content: start;
     padding: 0 3rem 0 4rem;
 
     @include respond(tab-land) {
-        grid-auto-rows: 220px;
         grid-template-columns: repeat(2, 1fr);
     }
 
     &__card {
+        background-color: $color-bc-2;
+        // @include gradient-ok;
         grid-column: span 1;
         overflow: hidden;
         width: 100%;
         height: 100%;
-        @include shadow-light;
+        // @include shadow-light;
         @include transition;
         animation: .5s appear;
+        border-radius: $border-radius;
+        padding: 3rem 2rem 3.8rem 2rem;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
 
-        &__img {
-            overflow: hidden;
-            height: 80%;
-           
-            & img {
-                object-fit: cover;
-                height: 100%;
-                width: 100%;
-                @include transition;
+        // &__img {
+        //     overflow: hidden;
+        //     height: 80%;
+
+        //     & img {
+        //         object-fit: cover;
+        //         height: 100%;
+        //         width: 100%;
+        //         @include transition;
+        //     }
+        // }
+
+        & .lots-info {
+            position: absolute;
+            left: 2.5rem;
+            top: 0;
+            height: 12rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            visibility: hidden;
+            @include transition;
+
+            & span {
+                pointer-events: none;
+                // font-weight: 700;
+                color: $white;
+                font-size: 1.5rem;
+
+                &:nth-child(2){
+                    margin: 1rem 0;
+                }
+
+                & strong {
+                    font-size: 1.8rem;
+                }
+
             }
         }
 
-        &__title {
-            height: 20%;
+        & .available-lots,
+        & .association {
+            color: $color-text-light;
+            font-weight: 400;
+        }
+
+        & .available-lots {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+
+        }
+
+        & .main-info {
             display: flex;
-            align-items: center;
-            padding: 0 2rem;
-            font-weight: 700;
+            flex-direction: column;
+            justify-content: flex-end;
+
+            & .association {
+                font-size: 1.5rem;
+            }
+
+            & h4 {
+                height: 20%;
+                display: flex;
+                align-items: center;
+                padding: 0 2rem;
+                font-weight: 700;
+                color: $black;
+                padding: 0;
+                font-size: 2.5rem;
+                margin: 1rem 0 2rem 0;
+            }
+
+            & .description {
+                color: $color-text-light;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+            }
+        }
+
+        &:before {
+            content: '';
+            position: absolute;
+            height: 12rem;
+            width: 50%;
+            border-radius: 0 0 50rem 0;
+            @include gradient-ok;
+            top: 0;
+            left: 0;
+            @include transition;
+            transform: translateX(-31rem);
         }
 
         &:hover {
 
-            @include shadow;
+            & .lots-info {
+                visibility: visible;
+            }
 
-            .projects__card__img img {
-                transform: scale(1.1);
+            &:before {
+                transform: translateX(0);
             }
 
         }
+
+        
     }
 }

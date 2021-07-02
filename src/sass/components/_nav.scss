@@ -6,15 +6,15 @@ nav {
     display: flex;
     align-items: flex-end;
     padding-bottom: 2rem;
-    box-shadow: 8px 0 8px rgba(0, 0, 0, 0.10);
+    box-shadow: 10px 0 8px rgba(0, 0, 0, 0.02);
     transition: .2s all linear;
+    background-color: $color-bc-2;
 
     overflow: hidden;
     // width: 20rem;
     width: 5rem;
 
     z-index: 10;
-
 
 
     & .icons-container {
@@ -104,7 +104,8 @@ nav.expand {
 
     & .expand-btn {
         left: 18rem;
-        @include shadow-light;
+        // @include shadow-light;
+        color: $color-ok;
        
 
         & svg {

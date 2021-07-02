@@ -1,15 +1,18 @@
 $color-text: #707070;
-$color-text-light: #727272;
+$color-text-light: #adadad;
 
 $color-primary: #14E95F;
 $color-primary-dark: darken($color-primary, 15);
-$color-primary-light: lighten($color-primary, 15);;
+$color-primary-light: lighten($color-primary, 15);
+;
 
 $color-secondary: #3e3e3e;
 
 $color-shadow: rgba(0, 0, 0, 0.3);
 $color-shadow-light: rgba(#3e3e3e, .2);
 
+$color-bc-2: white;
+$color-bc: #F5F5F7;
 
 $color-btn: white;
 $color-btn-secondary: #3e3e3e;
@@ -23,3 +26,6 @@ $color-danger: tomato;
 
 $white: #fff;
 $gray: #9b9b9b;
+$black: #000d24;
+
+$border-radius: 1rem;
