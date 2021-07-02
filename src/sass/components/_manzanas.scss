@@ -38,6 +38,17 @@
                     border-color: $color-danger;
                 }
             }
+
+            &.warning {
+                & label {
+                    color: $color-warning;
+                }
+
+                & input {
+                    color: $color-warning;
+                    border-color: $color-warning;
+                }
+            }
         }
 
     }

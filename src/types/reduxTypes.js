@@ -24,6 +24,8 @@ export const redTypes = {
     inputModal: '[UI] InputModal',
     uiSetError: '[UI] SetError',
     uiUnSetError: '[UI] UnSetError',
+    uiSetWarning: '[UI] SetWarning',
+    uiUnSetWarning: '[UI] UnSetWarning',
 
     clientCreate: '[Client] Create',
     clientEdit: '[Client] Edit',

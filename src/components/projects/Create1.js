@@ -20,13 +20,13 @@ export const Create1 = () => {
 
     const dispatch = useDispatch();
 
-    const { project: currentProject, types: { lotTypes } } = useSelector(state => state);
+    const { project: currentProject, types: { lotTypes }, services } = useSelector(state => state);
 
     const [formValues, handleInputChange] = useForm(currentProject);
 
     const { name, description, manzanas, lots } = formValues;
 
-    const { services, page } = currentProject;
+    const { page } = currentProject;
 
     const [service, setService] = useState('');
 
@@ -148,7 +148,6 @@ export const Create1 = () => {
         }
 
         setService(service);
-
 
         dispatch(projectEnableSvcModal());
         dispatch(projectUpdateSvcModal(modalInfo));

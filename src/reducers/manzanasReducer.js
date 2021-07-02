@@ -1,7 +1,7 @@
 import { redTypes } from "../types/reduxTypes";
 
 
-const initialState = {};
+const initialState = [];
 
 export const manzanasReducer = (state = initialState, action) => {
     switch (action.type) {

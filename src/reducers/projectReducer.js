@@ -2,17 +2,17 @@ import { redTypes } from "../types/reduxTypes";
 
 const initialState = {
     page: 1,
-    name: 'Ricardo',
-    description: 'Esta es una descripcion ejemplo',
-    manzanas: '1',
-    lots: '40',
+    name: '',
+    description: '',
+    manzanas: '',
+    lots: '',
     services: [
-        'Pavimento',
-        'Servicio de luz',
-        'Agua y drenaje',
-        'Banqueta',
-        'Vigilancia',
-        'Alberca común'
+        // 'Pavimento',
+        // 'Servicio de luz',
+        // 'Agua y drenaje',
+        // 'Banqueta',
+        // 'Vigilancia',
+        // 'Alberca común'
     ],
     docs: [
         // {
@@ -77,22 +77,6 @@ export const projectReducer = (state = initialState, action) => {
                 docs: action.payload.docs,
                 pricePerSqM: action.payload.pricePerSqM,
                 priceCorner: action.payload.priceCorner
-            }
-
-        case redTypes.projectAddService:
-            return {
-                ...state,
-                services: [...state.services, action.payload.service]
-            }
-
-        case redTypes.projectDeleteService:
-
-            const services = state.services;
-            const newServices = services.filter(service => service !== action.payload.service);
-
-            return {
-                ...state,
-                services: newServices
             }
 
         case redTypes.projectEnableSvcModal:

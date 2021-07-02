@@ -1,0 +1,202 @@
+.manzana-lots {
+    display: grid;
+    grid-template-columns: repeat(1, 70%);
+    grid-gap: 4rem;
+
+    &__card {
+        @include card;
+        @include transition;
+
+        &.error {
+            border: 2px solid $color-danger;
+        }
+
+        &:hover {
+            @include shadow;
+        }
+
+        & h3 {
+            color: $color-ok;
+            text-align: center;
+        }
+
+        &:first-child {
+            margin-top: 5rem;
+        }
+
+        &__content {
+            display: flex;
+            flex-direction: column;
+
+
+            & h4 {
+                font-size: 2rem;
+                margin: 4rem 0 1rem 0;
+            }
+
+        }
+
+        & .form-field.corners {
+
+            &:first-of-type {
+                margin-top: 5rem;
+            }
+
+            & label {
+                font-size: 1.6rem !important;
+
+            }
+
+            & input {
+                font-size: 1.6rem !important;
+                width: 7rem;
+                color: $color-text !important;
+            }
+
+            &.error {
+
+                & label {
+                    color: $color-danger !important;
+
+                }
+
+                & input {
+                    color: $color-danger !important;
+                    border-color: $color-danger !important;
+
+                }
+            }
+
+            &.warning {
+
+                & label {
+                    color: $color-warning !important;
+
+                }
+
+                & input {
+                    color: $color-warning !important;
+                    border-color: $color-warning !important;
+
+                }
+
+            }
+
+        }
+
+        &__inputs {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 1rem 1rem 0 1rem;
+            margin: 1rem 0;
+            border-bottom: .5px solid darken(#efefef, 20);
+            @include transition;
+
+
+            &:first-of-type {
+                // background-color: rgba($color-danger, .2) !important;
+
+                // border: .5px solid $color-danger;
+                // border-radius: .5rem;
+            }
+
+            & .btn {
+                width: 100%;
+                // background-color: red;
+                display: flex;
+                justify-content: flex-start;
+                padding: 0 !important;
+                border: none !important;
+                margin-bottom: 1rem;
+
+            }
+
+            & button.add-measure {
+                color: white;
+                font-weight: 700;
+                font-size: 1rem;
+                background-color: $color-success;
+                margin: 0 !important;
+                padding: 1rem 1.5rem;
+                @include transition;
+                outline-color: $color-text;
+                border: none !important;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: darken($color-success, 10);
+                }
+
+            }
+
+            & .form-field {
+
+                & label {
+                    font-size: 1.6rem !important;
+
+                }
+
+                & input {
+                    font-size: 1.6rem !important;
+                    width: 10rem;
+                    color: $color-text !important;
+                    background-color: transparent !important;
+                }
+
+                &.lot-num {}
+
+                &.lot-area {
+                    margin-left: 3rem;
+                }
+
+            }
+
+            & .lot-measure {
+                animation: .4s moveInBottom;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin: 0 auto 0 3rem;
+                border-bottom: .5px solid darken(#efefef, 20);
+                width: 90%;
+
+                &:last-child {
+                    border: none;
+                }
+
+                & .name {
+                    & input {
+                        width: 20rem;
+                    }
+                }
+
+                & .measure {}
+
+                & button.delete-measure {
+                    color: $color-danger;
+                    padding: 0 .5rem !important;
+                    line-height: 0;
+                    font-weight: 700;
+                    font-size: 2rem;
+                    cursor: pointer;
+                    @include transition;
+                    background-color: transparent;
+                    border: none;
+                    outline-color: $color-danger;
+
+                    &:hover {
+                        color: darken($color-danger, 10);
+                    }
+                }
+            }
+
+
+
+        }
+    }
+
+
+
+
+
+}

@@ -1,35 +1,35 @@
 import { redTypes } from "../types/reduxTypes";
 
-// const initialState = {
-//     active: false,
-//     beenClosed: false,
-//     lotTypes: [],
-//     modalConfirm: {}
-// }
-
-const initialState1 = {
+const initialState = {
     active: false,
     beenClosed: false,
-    lotTypes: [
-        {
-            type: 'a',
-            pricePerM: 200,
-            sameArea: false,
-            cornerPrice: 800
-        },
-        {
-            type: 'b',
-            pricePerM: 200,
-            sameArea: true,
-            cornerPrice: 800,
-            area: 96
-        }
-
-    ],
+    lotTypes: [],
     modalConfirm: {}
 }
 
-export const lotTypesReducer = (state = initialState1, action) => {
+// const initialState1 = {
+//     active: false,
+//     beenClosed: false,
+//     lotTypes: [
+//         {
+//             type: 'a',
+//             pricePerM: 200,
+//             sameArea: false,
+//             cornerPrice: 800
+//         },
+//         {
+//             type: 'b',
+//             pricePerM: 200,
+//             sameArea: true,
+//             cornerPrice: 800,
+//             area: 96
+//         }
+
+//     ],
+//     modalConfirm: {}
+// }
+
+export const lotTypesReducer = (state = initialState, action) => {
 
     switch (action.type) {
         case redTypes.lotTypesCreate:
@@ -67,7 +67,7 @@ export const lotTypesReducer = (state = initialState1, action) => {
             if (newLotTypes.length > 0) {
                 return {
                     ...state,
-                    lotTypes: [newLotTypes]
+                    lotTypes: newLotTypes
                 };
             }
 

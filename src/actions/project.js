@@ -1,4 +1,5 @@
 import { redTypes } from "../types/reduxTypes";
+import { uiStartLoading, uiFinishLoading } from "./ui";
 
 
 export const projectCreate = project => {
@@ -56,7 +57,7 @@ export const projectUpdateSvcModal = modal => {
 }
 
 export const projectSetPage = page => {
-    if (typeof page === 'number'){
+    if (typeof page === 'number') {
         return {
             type: redTypes.projectSetPage,
             payload: {
@@ -64,6 +65,42 @@ export const projectSetPage = page => {
             }
         }
     }
+}
+
+
+export const uploadProjectDocument = (projectDocument, lots) => {
+
+
+    return (dispatch) => {
+
+
+        const url = 'http://189.155.253.90:3000/api/proyect/';
+
+        const data = {
+            projectDocument,
+            lots
+        }
+
+        dispatch(uiStartLoading());
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                console.log(response.json());
+                dispatch(uiFinishLoading());
+            })
+            .catch(err => {
+                console.log(err);
+                dispatch(uiFinishLoading());
+            });
+
+    }
+
 }
 
 

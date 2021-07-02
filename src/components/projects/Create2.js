@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { lotTypesModalConfirmReset } from '../../actions/lotTypes';
 import { manzanasSet } from '../../actions/manzanas';
 import { projectSetPage } from '../../actions/project';
-import { setTempError, unSetError } from '../../actions/ui';
+import { setTempError, setTempWarning, unSetError, unSetWarning } from '../../actions/ui';
 
 export const Create2 = () => {
 
@@ -26,7 +26,10 @@ export const Create2 = () => {
 
     useEffect(() => {
 
-        if ((+project.manzanas === state.manzanas.length) && (state.manzanas.length >= 1)) {
+        const comparingLotTypes = state.manzanas[0]?.lotTypes.map(({ type, sameArea, pricePerM, cornerPrice }) => ({type, sameArea, pricePerM, cornerPrice}));
+
+
+        if ((+project.manzanas === state.manzanas.length) && (state.manzanas.length >= 1) && (JSON.stringify(comparingLotTypes)===JSON.stringify(lotTypes))) {
             setFormValues([...state.manzanas]);
             setManzanas([...state.manzanas]);
 
@@ -47,8 +50,9 @@ export const Create2 = () => {
 
             state.manzanas.forEach((manzana) => {
                 counter += Number(manzana.lots)
+
                 manzana.lotTypes.forEach(lotType => {
-                    counterTypes += lotType.quantity;
+                    counterTypes += (+lotType.quantity);
                 })
 
 
@@ -71,13 +75,26 @@ export const Create2 = () => {
                         })
                     )
                 }
-                
+
 
                 if (+counterTypes > +manzana.lots) {
                     setTypesErrors(
                         typesErrors.map(typeError => {
                             if (typeError?.manzana === manzana.num) {
                                 typeError.error = true
+                                typeError.completed = true
+                            }
+                            return typeError;
+                        })
+                    )
+                }
+
+                if (+counterTypes === +manzana.lots) {
+                    setTypesErrors(
+                        typesErrors.map(typeError => {
+                            if (typeError?.manzana === manzana.num) {
+                                typeError.error = false
+                                typeError.completed = true
                             }
                             return typeError;
                         })
@@ -87,6 +104,7 @@ export const Create2 = () => {
                         typesErrors.map(typeError => {
                             if (typeError?.manzana === manzana.num) {
                                 typeError.error = false
+                                typeError.completed = false
                             }
                             return typeError;
                         })
@@ -120,12 +138,15 @@ export const Create2 = () => {
             dispatch(manzanasSet(newArr));
 
             setTypesErrors(newArr.map(manzana => ({
-                manzana: manzana.num,
-                error: false
+                manzana:
+                    manzana.num,
+                error: false,
+                completed: true
             })));
 
             setCornersErrors(newArr.map(manzana => ({
-                manzana: manzana.num,
+                manzana:
+                    manzana.num,
                 error: false
             })));
         }
@@ -143,11 +164,10 @@ export const Create2 = () => {
         setFormValues(
             formValues.map((manzana) => {
 
-                manzana.lotTypes.forEach(lotType => {
-                    counterTypes += +lotType.quantity
-                })
-
                 if (manzana.num === num) {
+                    manzana.lotTypes.forEach(lotType => {
+                        counterTypes += +lotType.quantity
+                    })
                     manzana.lots = value;
                 }
 
@@ -167,21 +187,37 @@ export const Create2 = () => {
 
         dispatch(manzanasSet(formValues));
 
-        if (counterTypes > counter) {
+        if (+counterTypes > +counter) {
             setTypesErrors(
                 typesErrors.map(typeError => {
                     if (typeError?.manzana === num) {
                         typeError.error = true
+                        typeError.completed = true
                     }
                     return typeError;
                 })
             )
             dispatch(setTempError(`Has excedido el número de lotes de la manzana ${num} (${counter} lotes)`))
+        }
+
+        if (+counterTypes === +counter) {
+            setTypesErrors(
+                typesErrors.map(typeError => {
+                    if (typeError?.manzana === num) {
+                        typeError.error = false
+                        typeError.completed = true
+                    }
+                    return typeError;
+                })
+            )
+            dispatch(unSetError());
+            dispatch(unSetWarning());
         } else {
             setTypesErrors(
                 typesErrors.map(typeError => {
                     if (typeError?.manzana === num) {
                         typeError.error = false
+                        typeError.completed = false
                     }
                     return typeError;
                 })
@@ -217,27 +253,43 @@ export const Create2 = () => {
         );
 
 
-        if (counter > currentLots) {
+        if (+counter > +currentLots) {
             setTypesErrors(
                 typesErrors.map(typeError => {
                     if (typeError?.manzana === num) {
-                        typeError.error = true
+                        typeError.error = true;
+                        typeError.completed = true;
                     }
                     return typeError;
                 })
             )
             dispatch(setTempError(`Has excedido el número de lotes de la manzana ${num} (${currentLots} lotes)`))
-        } else {
+        } else if (+counter === +currentLots) {
             setTypesErrors(
                 typesErrors.map(typeError => {
                     if (typeError?.manzana === num) {
-                        typeError.error = false
+                        typeError.error = false;
+                        typeError.completed = true;
                     }
                     return typeError;
                 })
             )
             dispatch(unSetError());
+            dispatch(unSetWarning());
+        } else {
+            setTypesErrors(
+                typesErrors.map(typeError => {
+                    if (typeError?.manzana === num) {
+                        typeError.error = false;
+                        typeError.completed = false
+                    }
+                    return typeError;
+                })
+            )
+            dispatch(setTempWarning(`Faltan lotes por registrar (${+currentLots - counter} lotes)`))
         }
+
+
 
 
         dispatch(manzanasSet(formValues));
@@ -245,6 +297,20 @@ export const Create2 = () => {
     }
 
     const isFormValid = () => {
+
+        let counter = 0;
+
+        formValues.forEach(manzana => counter += Number(manzana.lots));
+
+        if (counter !== +lots) {
+            dispatch(setTempError(`Faltan ${Number(lots) - +counter} lotes por registrar`))
+            return 'error';
+        }
+
+        if (formValues.find(manzana => +manzana.lots === 0)) {
+            dispatch(setTempError(`No puede haber manzanas sin lotes`))
+            return 'error';
+        }
 
         if (error) {
             return false;
@@ -254,12 +320,9 @@ export const Create2 = () => {
             return false;
         }
 
-        let counter = 0;
 
-        formValues.forEach(manzana => counter+= Number(manzana.lots));
-
-        if(counter !== +lots){
-            dispatch(setTempError(`Faltan ${Number(lots) - +counter} lotes por registrar`))
+        if (typesErrors.find(typeError => !typeError.completed)) {
+            dispatch(setTempWarning(`Faltan lotes por registrar`))
             return 'error';
         }
 
@@ -270,6 +333,7 @@ export const Create2 = () => {
     const handleNextPage = () => {
         if (isFormValid()) {
             if (isFormValid() !== 'error') {
+                dispatch(manzanasSet(formValues))
                 dispatch(projectSetPage(page + 1));
             }
         } else {
@@ -290,9 +354,10 @@ export const Create2 = () => {
                 if (manzana.num === num) {
                     manzana.corners = value;
                     currentManzana = manzana;
+                    counter += Number(manzana.corners)
                 }
 
-                counter += Number(manzana.corners)
+                
                 return manzana;
             })
         )
@@ -344,16 +409,16 @@ export const Create2 = () => {
                                 }} type="number" name={`manzana${num}-lots`} value={lots} />
                             </div>
                             {
-                                manzanas[0].lotTypes?.length > 1 && (
-                                    manzanas[index].lotTypes.map(({ type, quantity }, index) => (
-                                        <div key={type} className={`${typesErrors?.find(typeError => typeError.manzana === num)?.error && 'error'} form-field`}>
-                                            <label htmlFor={`manzana${num}-type-${type}`}>
-                                                Número de lotes tipo "{type.toUpperCase()}":
-                                            </label>
-                                            <input onChange={(e) => handlelotTypeChange(e.target, type, num, index)} type="number" name={`manzana${num}-type-${type}`} value={quantity} />
-                                        </div>
-                                    ))
-                                )
+                                // manzanas[0].lotTypes?.length > 1 && (
+                                manzanas[index].lotTypes.map(({ type, quantity }, index) => (
+                                    <div key={type} className={`${typesErrors?.find(typeError => typeError.manzana === num)?.error && 'error'} ${typesErrors?.find(typeError => typeError.manzana === num)?.completed ? 'completed' : 'warning'} form-field`}>
+                                        <label htmlFor={`manzana${num}-type-${type}`}>
+                                            Número de lotes tipo "{type.toUpperCase()}":
+                                        </label>
+                                        <input onChange={(e) => handlelotTypeChange(e.target, type, num, index)} type="number" name={`manzana${num}-type-${type}`} value={quantity} />
+                                    </div>
+                                ))
+                                // )
                             }
                             <div className={`${cornersErrors?.find(cornerError => cornerError.manzana === num)?.error && 'error'} form-field`}>
                                 <label htmlFor={`manzana${num}-corners`}>

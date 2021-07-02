@@ -12,11 +12,13 @@ import { uiReducer } from '../reducers/uiReducer';
 import { lotTypesReducer } from '../reducers/lotTypeReducer';
 import { manzanasReducer } from '../reducers/manzanasReducer';
 import { newLotsReducer } from '../reducers/newLotsReducer';
+import { servicesReducer } from '../reducers/servicesReducer';
 
 const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
 const reducers = combineReducers({
     project: projectReducer,
+    services: servicesReducer,
     lot: lotReducer,
     ui: uiReducer,
     client: clientReducer,

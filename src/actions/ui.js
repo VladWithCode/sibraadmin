@@ -11,6 +11,7 @@ export const unSetError = () => ({
 })
 
 
+
 export const setTempError = (err) => {
     return(dispatch) => {
         
@@ -18,6 +19,27 @@ export const setTempError = (err) => {
 
         setTimeout(() => {
             dispatch(unSetError());
+        }, 4001);
+
+    }
+}
+
+export const setWarning = (err) => ({
+    type: redTypes.uiSetWarning,
+    payload: err
+})
+
+export const unSetWarning = () => ({
+    type: redTypes.uiUnSetWarning
+})
+
+export const setTempWarning = (warning) => {
+    return(dispatch) => {
+        
+        dispatch(setWarning(warning));
+
+        setTimeout(() => {
+            dispatch(unSetWarning());
         }, 4001);
 
     }
