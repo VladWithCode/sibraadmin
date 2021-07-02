@@ -15,6 +15,8 @@ export const redTypes = {
     projectUpdateDocModal: '[ProjectModal] UpdateDocModal',
     projectSetPage: 'ProjectCRUD SetEditPage',
 
+    getProjects: '[GET] Projects',
+
     lotCreate: '[Lot] Create',
     lotEdit: '[Lot] Edit',
 

@@ -5,15 +5,17 @@ import { NavLink, Redirect } from 'react-router-dom';
 import { useForm } from '../../hooks/useForm';
 import { modalUpdate } from '../../actions/modal';
 import { breadcrumbsUpdate } from '../../actions/breadcrumbs';
+import { getProjects } from '../../actions/consults';
 import { redTypes } from '../../types/reduxTypes';
 
 export const Projects = ({ history: { location: { pathname } } }) => {
 
-    const { projects } = useSelector(state => state.redirect);
+    const { redirect, projects } = useSelector(state => state);
 
     const dispatch = useDispatch();
 
     useEffect(() => {
+
 
         const modalInfo = {
             title: 'Crear nuevo proyecto',
@@ -25,7 +27,7 @@ export const Projects = ({ history: { location: { pathname } } }) => {
 
         setTimeout(() => {
             dispatch(modalUpdate(modalInfo));
-        }, 1000);
+        }, 1500);
 
         const breadcrumbs = [
             {
@@ -35,15 +37,13 @@ export const Projects = ({ history: { location: { pathname } } }) => {
         ]
 
         dispatch(breadcrumbsUpdate(redTypes.projects, breadcrumbs));
+        dispatch(getProjects());
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [dispatch]);
 
-    const number = 8;
+    const [searchInput, handleOnChange, reset] = useForm({ inputSearch: '' });
 
-    const [formFields, handleOnChange, reset] = useForm({ inputSearch: '' });
-
-    const { inputSearch } = formFields;
+    const { inputSearch } = searchInput;
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -64,116 +64,33 @@ export const Projects = ({ history: { location: { pathname } } }) => {
             </div>
 
             <div className="projects">
-                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
-                    <div className="projects__card__img">
-                        <img src="../assets/img/1.jpg" alt="" />
-                    </div>
-                    <div className="projects__card__title">
-                        Colinas del Mar
-                    </div>
-                </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
-                    <div className="projects__card__img">
-                        <img src="../assets/img/3.jpg" alt="" />
-                    </div>
-                    <div className="projects__card__title">
-                        Colinas del Mar
-                    </div>
-                </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
-                    <div className="projects__card__img">
-                        <img src="../assets/img/1.jpg" alt="" />
-                    </div>
-                    <div className="projects__card__title">
-                        Colinas del Mar
-                    </div>
-                </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
-                    <div className="projects__card__img">
-                        <img src="../assets/img/2.jpg" alt="" />
-                    </div>
-                    <div className="projects__card__title">
-                        Colinas del Mar
-                    </div>
-                </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
-                    <div className="projects__card__img">
-                        <img src="../assets/img/3.jpg" alt="" />
-                    </div>
-                    <div className="projects__card__title">
-                        Colinas del Mar
-                    </div>
-                </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
-                    <div className="projects__card__img">
-                        <img src="../assets/img/1.jpg" alt="" />
-                    </div>
-                    <div className="projects__card__title">
-                        Colinas del Mar
-                    </div>
-                </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
-                    <div className="projects__card__img">
-                        <img src="../assets/img/2.jpg" alt="" />
-                    </div>
-                    <div className="projects__card__title">
-                        Colinas del Mar
-                    </div>
-                </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
-                    <div className="projects__card__img">
-                        <img src="../assets/img/3.jpg" alt="" />
-                    </div>
-                    <div className="projects__card__title">
-                        Colinas del Mar
-                    </div>
-                </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
-                    <div className="projects__card__img">
-                        <img src="../assets/img/1.jpg" alt="" />
-                    </div>
-                    <div className="projects__card__title">
-                        Colinas del Mar
-                    </div>
-                </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
-                    <div className="projects__card__img">
-                        <img src="../assets/img/2.jpg" alt="" />
-                    </div>
-                    <div className="projects__card__title">
-                        Colinas del Mar
-                    </div>
-                </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
-                    <div className="projects__card__img">
-                        <img src="../assets/img/3.jpg" alt="" />
-                    </div>
-                    <div className="projects__card__title">
-                        Colinas del Mar
-                    </div>
-                </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
-                    <div className="projects__card__img">
-                        <img src="../assets/img/2.jpg" alt="" />
-                    </div>
-                    <div className="projects__card__title">
-                        Colinas del Mar
-                    </div>
-                </NavLink>
-                <NavLink className='projects__card' to={`./proyectos/ver/${number}`} >
-                    <div className="projects__card__img">
-                        <img src="../assets/img/3.jpg" alt="" />
-                    </div>
-                    <div className="projects__card__title">
-                        Colinas del Mar
-                    </div>
-                </NavLink>
+
+                {
+                    projects.map(({ name, _id }) => {
+
+                        const progress = ''
+
+                        return (
+
+                            <NavLink key={_id} className='projects__card' to={`./proyectos/ver/${name}`} >
+                                <div className="projects__card__img">
+                                    <img src="../assets/img/1.jpg" alt="" />
+                                </div>
+                                <div className="projects__card__title">
+                                    {name}
+                                    {/* <progress max="100" value="70"> 70% </progress> */}
+                                </div>
+                            </NavLink>
+                        )
+                    })
+                }
+
 
             </div>
 
 
             {
-                projects && <Redirect to={projects} />
+                redirect.projects && <Redirect to={redirect.projects} />
             }
 
 
