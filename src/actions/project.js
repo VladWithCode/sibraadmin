@@ -73,8 +73,9 @@ export const uploadProjectDocument = (projectDocument, lots) => {
 
     return (dispatch) => {
 
+        console.log('Subiendo Proyecto');
 
-        const url = 'http://189.155.253.90:3000/api/proyect/';
+        const url = 'http://192.168.1.66:3000/api/project/';
 
         const data = {
             projectDocument,

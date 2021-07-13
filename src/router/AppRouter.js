@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import { Clients } from "../components/clients/Clients";
 import { Client } from "../components/clients/Client";
+import { CreateClient } from "../components/clients/CreateClient";
 import { History } from "../components/history/History";
 import { Lot } from "../components/lots/Lot";
 import { NavBar } from "../components/NavBar";
@@ -18,17 +19,28 @@ import { EditProject } from "../components/projects/EditProject";
 import { ModalConfirm } from "../components/ModalConfirm";
 import { FloatingButton } from "../components/FloatingButton";
 import { UiError } from "../components/UiError";
+import { useSelector } from "react-redux";
+import { ClientAddDocuments } from "../components/clients/ClientAddDocuments";
+import { ClientEdit } from "../components/clients/ClientEdit";
+
+
+
+
+
 export const AppRouter = () => {
+
+    const { loading } = useSelector(state => state.ui);
 
     return (
         <Router>
             <>
                 <>
                     <NavBar />
-                        <FloatingButton />
-                        <ModalConfirm />
-                        <UiError />
+                    <FloatingButton />
+                    <ModalConfirm />
+                    <UiError />
                 </>
+
 
                 <div className="app">
                     <Switch >
@@ -39,7 +51,10 @@ export const AppRouter = () => {
 
 
                         <Route exact path="/clientes" component={Clients} ></Route>
-                        <Route exact path="/cliente/:clientId" component={Client} ></Route>
+                        <Route exact path="/clientes/ver/:clientId" component={Client} ></Route>
+                        <Route exact path="/clientes/nuevo" component={CreateClient} ></Route>
+                        <Route exact path="/clientes/docs/:clientId" component={ClientAddDocuments} ></Route>
+                        <Route exact path="/clientes/edit/:clientId" component={ClientEdit} ></Route>
 
                         <Route exact path="/proyectos/ver/:projectId/lote/:lotId" component={Lot} ></Route>
 
@@ -47,10 +62,22 @@ export const AppRouter = () => {
                         <Route exact path="/historial" component={History} ></Route>
 
                         <Redirect to="/proyectos" ></Redirect>
+
                     </Switch>
-                </div>
+                </div >
+
+                {
+                    loading && (
+                        <div className="loading-screen">
+                            <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
+                            <span></span>
+                        </div>
+                    )
+                }
+
+
 
             </>
-        </Router>
+        </Router >
     )
 }

@@ -4,6 +4,7 @@ const initialState = {
     loading: false,
     msgError: null,
     msgWarning: null,
+    msgSuccess: null,
     editPage: 1,
     inputModal: {
         active: false,
@@ -20,6 +21,7 @@ export const uiReducer = (state = initialState, action) => {
             return {
                 ...state,
                 msgWarning: null,
+                msgSuccess: null,
                 msgError: action.payload
             }
 
@@ -27,7 +29,16 @@ export const uiReducer = (state = initialState, action) => {
             return {
                 ...state,
                 msgError: null,
+                msgSuccess: null,
                 msgWarning: action.payload
+            }
+
+        case redTypes.uiSetSuccessNotice:
+            return {
+                ...state,
+                msgError: null,
+                msgWarning: null,
+                msgSuccess: action.payload
             }
 
         case redTypes.uiUnSetError:
@@ -40,6 +51,12 @@ export const uiReducer = (state = initialState, action) => {
             return {
                 ...state,
                 msgWarning: null
+            }
+
+        case redTypes.uiUnSetSuccessNotice:
+            return {
+                ...state,
+                msgSuccess: null
             }
 
         case redTypes.startLoading:

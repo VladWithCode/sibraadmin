@@ -447,6 +447,7 @@ export const Create3 = () => {
 
         dispatch(uploadProjectDocument(projectDocument, lots));
 
+        console.log(projectDocument, lots);
 
     }
 

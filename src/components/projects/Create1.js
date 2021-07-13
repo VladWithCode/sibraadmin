@@ -37,13 +37,7 @@ export const Create1 = () => {
 
     }, [dispatch]);
 
-    // const handlePrevPage = () => {
-    //     dispatch(projectSetPage(page - 1))
-    // }
-
     const cancel = () => {
-        dispatch(redirectSet(redTypes.projects, '/proyectos'));
-        dispatch(floatingButtonSet('plus', redTypes.projects));
 
         const modalInfo = {
             title: 'Cancelar creación de proyecto',
@@ -51,6 +45,7 @@ export const Create1 = () => {
             link: '/proyectos',
             okMsg: 'Sí',
             closeMsg: 'No',
+            type: redTypes.projectCreate
         }
 
         dispatch(modalUpdate(modalInfo));
@@ -118,7 +113,7 @@ export const Create1 = () => {
             return false;
         }
 
-        if (!lotTypes || lotTypes?.length === 0){
+        if (!lotTypes || lotTypes?.length === 0) {
             dispatch(setTempError('Debe agregar al menos un tipo de lote'));
             return false;
         }
@@ -130,7 +125,7 @@ export const Create1 = () => {
 
     const handleNextPage = () => {
 
-        if (isFormValid()){
+        if (isFormValid()) {
             dispatch(projectSetPage(page + 1));
             dispatch(projectCreate(formValues));
         }

@@ -49,12 +49,10 @@
 }
 
 @mixin animation($duration, $name, $delay) {
-    &.aos-animate {
-        opacity: 1;
-        animation: $name $duration ease-in-out $delay;
-        backface-visibility: hidden;
-        animation-fill-mode: backwards;
-    }
+    opacity: 1;
+    animation: $name $duration ease-in-out $delay;
+    backface-visibility: hidden;
+    animation-fill-mode: backwards;
 }
 
 @mixin shadow {
@@ -74,17 +72,18 @@
 }
 
 @mixin card {
-    @include shadow-light;
+    // @include shadow-light;
     padding: 2rem;
-    border-radius: .5rem;
+    border-radius: $border-radius;
+    background-color: $white;
 
-    animation: .6s appear;
+    animation: .4s appear;
 
 }
 
 @mixin gradient-success {
     background: rgba(20, 233, 95, 1);
-    background: linear-gradient(0deg,  rgba(20, 233, 95, 1) 0%, rgba(110, 255, 160, 1) 100%);
+    background: linear-gradient(0deg, rgba(20, 233, 95, 1) 0%, rgba(110, 255, 160, 1) 100%);
 }
 
 @mixin gradient-warning {
@@ -96,4 +95,3 @@
     background: rgb(0, 95, 255);
     background: linear-gradient(0deg, rgba(0, 95, 255, 1) 0%, rgba(68, 138, 255, 1) 100%);
 }
-

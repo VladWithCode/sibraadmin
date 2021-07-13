@@ -7,7 +7,7 @@ export const ModalConfirmLotTypes = () => {
 
     const dispatch = useDispatch();
 
-    const {beenClosed, active, title, text, okMsg, closeMsg, action, type} = useSelector(state => state.types.modalConfirm);
+    const { beenClosed, active, title, text, okMsg, closeMsg, action, type } = useSelector(state => state.types.modalConfirm);
 
     const handleClose = () => {
         dispatch(lotTypesModalConfirmDisable());
@@ -22,6 +22,8 @@ export const ModalConfirmLotTypes = () => {
         dispatch(lotTypesDelete(type));
         dispatch(lotTypesModalConfirmDisable());
     }
+
+
 
     return (
         <div className={` ${!active ? 'modal-hidden' : 'modal-bc'} ${beenClosed && !active ? 'modal-bc modal-animate-hide' : ''}`} >

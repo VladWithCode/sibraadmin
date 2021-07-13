@@ -43,7 +43,7 @@
     }
 }
 
-.projects {
+.projects, .clients {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -63,7 +63,7 @@
         overflow: hidden;
         width: 100%;
         height: 100%;
-        // @include shadow-light;
+        @include shadow-light;
         @include transition;
         animation: .5s appear;
         border-radius: $border-radius;
@@ -72,18 +72,6 @@
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
-
-        // &__img {
-        //     overflow: hidden;
-        //     height: 80%;
-
-        //     & img {
-        //         object-fit: cover;
-        //         height: 100%;
-        //         width: 100%;
-        //         @include transition;
-        //     }
-        // }
 
         & .lots-info {
             position: absolute;

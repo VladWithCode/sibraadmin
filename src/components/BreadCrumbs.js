@@ -11,8 +11,8 @@ export const BreadCrumbs = ({ type }) => {
 
     const { projects, clients, history, settings } = useSelector(state => state.breadcrumbs);
 
-    const hanldeClick = (link) => {
-        dispatch(redirectSet(redTypes.projects, link))
+    const hanldeClick = (link, type) => {
+        dispatch(redirectSet(type, link))
     }
 
     switch (type) {
@@ -21,8 +21,8 @@ export const BreadCrumbs = ({ type }) => {
                 <div className="breadcrumbs">
                     {
                         projects.map((e, index) => (
-                            index !== projects.length -1 && (
-                                <Link onClick={() => hanldeClick(e.link)} className="breadcrumbs__item" key={`lot:${e.dispName}`} to={e.link} ><i>&#60;</i><span>{e.dispName}</span> </Link>
+                            index !== projects.length && (
+                                <Link onClick={() => hanldeClick(e.link, redTypes.projects)} className="breadcrumbs__item" key={`lot:${e.dispName}`} to={e.link} ><i>&gt;</i><span>{e.dispName}</span> </Link>
                             )
                         ))
                     }
@@ -34,8 +34,8 @@ export const BreadCrumbs = ({ type }) => {
                 <div className="breadcrumbs">
                     {
                         clients.map((e, index) => (
-                            index !== clients.length -1 && (
-                                <Link onClick={() => hanldeClick(e.link)} className="breadcrumbs__item" key={`lot:${e.dispName}`} to={e.link} ><i>&#60;</i><span>{e.dispName}</span> </Link>
+                            index !== clients.length && (
+                                <Link onClick={() => hanldeClick(e.link, redTypes.clients)} className="breadcrumbs__item" key={`client:${e.dispName}`} to={e.link} ><i>&gt;</i><span>{e.dispName}</span> </Link>
                             )
                         ))
                     }
@@ -47,8 +47,8 @@ export const BreadCrumbs = ({ type }) => {
                 <div className="breadcrumbs">
                     {
                         history.map((e, index) => (
-                            index !== history.length -1 && (
-                                <Link onClick={() => hanldeClick(e.link)} className="breadcrumbs__item" key={`lot:${e.dispName}`} to={e.link} ><i>&#60;</i><span>{e.dispName}</span> </Link>
+                            index !== history.length && (
+                                <Link onClick={() => hanldeClick(e.link)} className="breadcrumbs__item" key={`lot:${e.dispName}`} to={e.link} ><i>&gt;</i><span>{e.dispName}</span> </Link>
                             )
                         ))
                     }
@@ -60,8 +60,8 @@ export const BreadCrumbs = ({ type }) => {
                 <div className="breadcrumbs">
                     {
                         settings.map((e, index) => (
-                            index !== settings.length -1 && (
-                                <Link onClick={() => hanldeClick(e.link)} className="breadcrumbs__item" key={`lot:${e.dispName}`} to={e.link} ><i>&#60;</i><span>{e.dispName}</span> </Link>
+                            index !== settings.length && (
+                                <Link onClick={() => hanldeClick(e.link)} className="breadcrumbs__item" key={`lot:${e.dispName}`} to={e.link} ><i>&gt;</i><span>{e.dispName}</span> </Link>
                             )
                         ))
                     }

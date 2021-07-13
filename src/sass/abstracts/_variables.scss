@@ -20,8 +20,8 @@ $color-btn-secondary: #3e3e3e;
 // $color-success: #25d366;
 $color-success: #14E95F;
 $color-warning: #FF9800;
-$color-ok: #448AFF;
-$color-danger: tomato;
+$color-ok: darken(#448AFF, 10);
+$color-danger: darken(tomato, 10);
 
 
 $white: #fff;

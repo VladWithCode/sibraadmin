@@ -42,41 +42,53 @@ img {
     max-width: 100%;
 }
 
-button, select, option {
+button,
+select,
+option {
     font-family: 'Montserrat', sans-serif;
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 input[type=number] {
-  -moz-appearance: textfield;
+    -moz-appearance: textfield;
 }
 
 h1 {
-    font-size: 4.2rem;
+    font-size: 3.8rem;
 }
 
 
 h2 {
-    font-size: 3.5rem;
+    font-size: 3rem;
 }
 
 
 h3 {
-    font-size: 3rem;
+    font-size: 2.5rem;
+}
+
+h4 {
+    font-size: 1.4rem;
 }
 
 h5 {
-    font-size: 1.8rem;
+    font-size: 1.4rem;
 }
 
 p,
-li {
-    font-size: 1.3rem;
+li,
+span,
+input {
+    font-size: 1.5rem;
+}
+
+p {
+    color: $black;
 }
 
 
@@ -88,24 +100,33 @@ textarea {
 
 .btn,
 button {
-    color: $color-text;
-    text-transform: uppercase;
-    font-weight: 200;
-    max-width: 95%;
-    border: 1px solid white;
+    // color: $color-text;
+
+    // font-weight: 200;
+    // max-width: 95%;
+    // border: 1px solid white;
+
+    // transition: .3s all ease-in-out;
+    // text-align: center;
+
+
+    // &-ghost {
+    //     color: white;
+
+    //     &:hover {
+    //         background-color: white;
+    //         color: black;
+    //     }
+    // }
+    color: $white;
+    font-weight: 400;
+    cursor: pointer;
+    @include transition;
+    border: 1px solid;
+    font-size: 1.5rem;
+    border-radius: 10rem;
     padding: 1rem 2.5rem;
-    transition: .3s all ease-in-out;
-    text-align: center;
-
-
-    &-ghost {
-        color: white;
-
-        &:hover {
-            background-color: white;
-            color: black;
-        }
-    }
+    text-transform: capitalize;
 
 }
 
@@ -208,12 +229,12 @@ a {
 }
 
 .app.minimize {
-    padding:  0 0 0 20rem;
+    padding: 0 0 0 20rem;
 }
 
-input, textarea {
+input,
+textarea {
     color: $color-text-light;
     font-family: 'Montserrat', sans-serif;
     font-size: 1.7rem;
 }
-

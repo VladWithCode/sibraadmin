@@ -6,7 +6,7 @@ export const redTypes = {
     projectAddService: '[Project] AddService',
     projectDeleteService: '[Project] DeleteService',
     projectAddType: '[Project] AddType',
-    projectDeleteType: '[Project] DeleteType', 
+    projectDeleteType: '[Project] DeleteType',
     projectEnableSvcModal: '[ProjectModal] EnableSvcModal',
     projectEnableDocModal: '[ProjectModal] EnableDocModal',
     projectDisableSvcModal: '[ProjectModal] DisableSvcModal',
@@ -16,6 +16,8 @@ export const redTypes = {
     projectSetPage: 'ProjectCRUD SetEditPage',
 
     getProjects: '[GET] Projects',
+    getLots: '[GET] Lots',
+    getClients: '[GET] Clients',
 
     lotCreate: '[Lot] Create',
     lotEdit: '[Lot] Edit',
@@ -28,10 +30,12 @@ export const redTypes = {
     uiUnSetError: '[UI] UnSetError',
     uiSetWarning: '[UI] SetWarning',
     uiUnSetWarning: '[UI] UnSetWarning',
+    uiSetSuccessNotice: '[UI] SetSuccessNotice',
+    uiUnSetSuccessNotice: '[UI] UnSetSuccessNotice',
 
-    clientCreate: '[Client] Create',
+    clientSet: '[Client] Set',
     clientEdit: '[Client] Edit',
-    
+
     modalUpdate: '[Modal] Update',
     modalEnable: '[Modal] Enable',
     modalDisable: '[Modal] Disable',
@@ -47,7 +51,7 @@ export const redTypes = {
     breadcrumbsClearHistory: '[Breadcrumbs] ClearHistory',
     breadcrumbsClearSettings: '[Breadcrumbs] ClearSettings',
     breadcrumbsOpen: '[Breadcrumbs] OpenLink',
-    
+
     redirectProjects: '[Redirect] SetLinkProjects',
     redirectClients: '[Redirect] SetLinkClients',
     redirectHistory: '[Redirect] SetLinkHistory',

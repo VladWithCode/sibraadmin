@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
     NavLink
 } from "react-router-dom";
@@ -14,14 +15,18 @@ export const NavBar = () => {
 
     }
 
+    const { redirect: { projects, clients } } = useSelector(state => state);
+
+    console.log(projects);
+
     return (
         <nav className={navExpanded ? 'expand' : ''}>
             <div className="icons-container">
-                <NavLink to="/proyectos" activeClassName="active" className="link">
+                <NavLink to={`${projects ? projects : '/proyectos'}`} activeClassName="active" className="link">
                     <svg><use href="/../assets/svg/home.svg#home" ></use></svg>
                     <span>Proyectos</span>
                 </NavLink>
-                <NavLink to="/clientes" activeClassName="active" className="link clients">
+                <NavLink to={`${clients ? clients : '/clientes'}`} activeClassName="active" className="link clients">
                     <svg><use href="/../assets/svg/users.svg#users" ></use></svg>
                     <span>Clientes</span>
                 </NavLink>

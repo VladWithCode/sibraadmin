@@ -9,7 +9,8 @@ const initialState = {
     okMsg: '',
     closeMsg: '',
     input: null,
-    input2: null
+    input2: null,
+    type: null
 }
 
 export const modalReducer = (state = initialState, action) => {
@@ -23,7 +24,8 @@ export const modalReducer = (state = initialState, action) => {
                 okMsg: action.payload.okMsg,
                 closeMsg: action.payload.closeMsg,
                 input: action.payload.input,
-                input2: action.payload.input2
+                input2: action.payload.input2,
+                type: action.payload.type
             }
 
         case redTypes.modalEnable:

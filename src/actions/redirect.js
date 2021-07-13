@@ -15,7 +15,7 @@ export const redirectSet = (type, link) => {
             return {
                 type: redTypes.redirectClients,
                 payload: {
-                    cients: link
+                    clients: link
                 }
             }
 

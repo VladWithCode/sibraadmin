@@ -12,5 +12,26 @@ export const consultingReducer = (state = [], action) => {
             return state;
     }
 
+}
 
+export const consultingLotsReducer = (state = [], action) => {
+
+    switch (action.type) {
+        case redTypes.getLots:
+            return action.payload
+    
+        default:
+            return state;
+    }
+
+}
+
+export const consultingClients = (state = [], action) => {
+    switch (action.type) {
+        case redTypes.getClients:
+            return action.payload
+    
+        default:
+            return state;
+    }
 }

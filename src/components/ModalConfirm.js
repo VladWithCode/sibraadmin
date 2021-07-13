@@ -2,10 +2,13 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { modalDisable } from '../actions/modal';
+import { redirectSet } from '../actions/redirect';
+import { clientSet } from '../actions/client';
+import { redTypes } from '../types/reduxTypes'
 
 export const ModalConfirm = () => {
 
-    const { active, beenClosed, title, text, link, okMsg, closeMsg, input, input2 } = useSelector(state => state.modal);
+    const { active, beenClosed, title, text, link, okMsg, closeMsg, type } = useSelector(state => state.modal);
 
     const dispatch = useDispatch();
 
@@ -13,8 +16,19 @@ export const ModalConfirm = () => {
         dispatch(modalDisable());
     }
 
+    const handleOk = () => {
+        if (type === redTypes.projectCreate) {
+            dispatch(redirectSet(redTypes.projects, '/proyectos'));
+        }
+        if (type === redTypes.clientEdit) {
+            dispatch(redirectSet(redTypes.clients, `/clientes`));
+            dispatch(clientSet({}));
+        }
+        dispatch(modalDisable());
+    }
+
     return (
-        <div onClick={handleClose} className={` ${!active ? 'modal-hidden' : 'modal-bc'} ${beenClosed && !active ? 'modal-bc modal-animate-hide' : ''}`} >
+        <div className={` ${!active ? 'modal-hidden' : 'modal-bc'} ${beenClosed && !active ? 'modal-bc modal-animate-hide' : ''}`} >
             <div className="modal">
                 <h3 className="modal__title">
                     {title}
@@ -22,23 +36,16 @@ export const ModalConfirm = () => {
                 <div className="modal__text">
                     {text}
                 </div>
-                {
-                    input && (
-                        <div className="modal__input">
-                            <input type="text" placeholder="Input 1" />
-                            {
-                                input2 && (
-                                    <input type="text" placeholder="Input 2" />
-                                )
-                            }
-                        </div>
-                    )
-                }
+
                 <div className="modal__btns">
-                    <p onClick={handleClose} className="modal__btns__link btn btn-err">
-                        {closeMsg}
-                    </p>
-                    <Link to={link} className="modal__btns__link btn btn-ok">
+                    {
+                        closeMsg && (
+                            <p onClick={handleClose} className="modal__btns__link btn btn-err">
+                                {closeMsg}
+                            </p>
+                        )
+                    }
+                    <Link to={link} onClick={handleOk} className="modal__btns__link btn btn-ok">
                         {okMsg}
                     </Link>
                 </div>

@@ -5,11 +5,12 @@ export const modalUpdate = (modal) => ({
     payload: {
         title: modal.title,
         text: modal.text,
-        link: modal.link? modal.link : '' ,
+        link: modal.link ? modal.link : '',
         okMsg: modal.okMsg,
         closeMsg: modal.closeMsg,
         input: modal.input,
-        inputValue: modal.inputValue
+        inputValue: modal.inputValue,
+        type: modal.type
     }
 });
 

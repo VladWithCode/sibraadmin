@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { breadcrumbsUpdate } from '../../actions/breadcrumbs';
-import { modalUpdate } from '../../actions/modal';
+// import { modalUpdate } from '../../actions/modal';
 import { redirectSet } from '../../actions/redirect';
 import { redTypes } from '../../types/reduxTypes';
 import { BreadCrumbs } from '../BreadCrumbs';
@@ -13,22 +13,36 @@ export const Lot = () => {
 
     const { lotId, projectId } = useParams();
 
-    // Temp
-    const status = 'sold';
+    const { lots, projects } = useSelector(state => state);
+
+    const currentLot = lots.find(lot => lot._id === lotId);
+
+    const currentProject = projects.find(p => p._id === projectId);
+
+    const { area, isCorner, lotNumber, measures, state, manzana } = currentLot;
+
+    const pricePerSqMeter = currentLot.pricePerSqMeter.toLocaleString();
+
+    const price = currentLot.price.toLocaleString();
+
+    const { name, availableServices } = currentProject;
+
+    const stateName = state === 'available' ? 'Disponible' : state === 'delivered' ? 'Entregado' : 'Liquidado';
+
 
     const dispatch = useDispatch();
 
     useEffect(() => {
 
-        const modalInfo = {
-            title: 'Editarproyecto',
-            text: '¿Desea editar el proyecto {name}?',
-            link: `/proyectos/editar/${projectId}`,
-            okMsg: 'Sí',
-            closeMsg: 'No',
-        }
+        // const modalInfo = {
+        //     title: 'Editarproyecto',
+        //     text: '¿Desea editar el proyecto {name}?',
+        //     link: `/proyectos/editar/${projectId}`,
+        //     okMsg: 'Sí',
+        //     closeMsg: 'No',
+        // }
 
-        dispatch(modalUpdate(modalInfo));
+        // dispatch(modalUpdate(modalInfo));
 
         const breadcrumbs = [
             {
@@ -36,87 +50,150 @@ export const Lot = () => {
                 link: '/proyectos'
             },
             {
-                dispName: `Proyecto ${projectId}`,
+                dispName: `${name}`,
                 link: `/proyectos/ver/${projectId}`
             },
             {
-                dispName: `Proyecto ${projectId} || Lote ${lotId}`,
-                link: `proyectos/ver/ ${projectId}/lote/${lotId}`
+                dispName: `Lote ${lotNumber}`,
+                link: `/proyectos/ver/${projectId}/lote/${lotId}`
             }
         ]
 
         dispatch(breadcrumbsUpdate(redTypes.projects, breadcrumbs));
-        dispatch(redirectSet(redTypes.projects, `proyectos/ver/ ${projectId}/lote/${lotId}`));
+        dispatch(redirectSet(redTypes.projects, `/proyectos/ver/${projectId}/lote/${lotId}`));
 
-    }, [dispatch, projectId, lotId]);
+    }, [dispatch, projectId, lotId, lotNumber, name]);
 
 
     return (
         <>
+
             <BreadCrumbs type={redTypes.projects} />
 
-            <div className="project lot">
+            <div className="project">
+
                 <div className="project__header">
-                    <img src="/../assets/img/1.jpg" alt="" />
-                    <div className="project__header__info">
-                        <h1>Colinas del Mar</h1>
+                    <div className="left">
+                        <h3> Lote {lotNumber} </h3>
+                        <span> {name} </span>
+                    </div>
+                    <div className="right">
+                        <div className={`item state ${state}`}>
+                            <p> {stateName} </p>
+                        </div>
                     </div>
                 </div>
-                <div className="lot__body project__body">
-                    <div className="lot__body__info">
-                        <h2>Información del Lote</h2>
-                        <div className="item">
-                            <p>Número de lote: <span>{lotId}</span></p>
-                            <p>Manzana: <span>5</span></p>
-                        </div>
-                        <div className="lot__body__svcs project__body__svcs item">
-                            Servicios disponibles:
-                            <ul>
-                                <li>Pavimento</li>
-                                <li>Servicio de luz</li>
-                                <li>Drenjae y agua</li>
-                                <li>Banqueta</li>
-                                <li>Cordonería</li>
-                                <li>Vigilancia</li>
-                                <li>Pista</li>
-                            </ul>
-                        </div>
-                        {
-                            (status === 'pending' || status === 'sold') && (
-                                <>
-                                    <h2>Información del Cliente</h2>
-                                    <div className="item">
-                                        <p>Número: <span>{'Jairo Bladimir Rangel Cabrera'}</span></p>
-                                        <p>Número de contácto: <span>{6181234567}</span></p>
-                                    </div>
-                                    <h2 className="docs">Documentos</h2>
-                                    <div className="project__body__docs lot__body__docs">
-                                        <div className="doc">Escrituras</div>
-                                        <div className="doc">Contrato de servicio de agua y drenaje</div>
-                                        <div className="doc">Contrato de servicio de electricidad</div>
-                                        <div className="doc">Planos</div>
-                                    </div>
-                                </>
-                            )
-                        }
+
+                <div className="card">
+                    <div className="card__header">
+                        <img src="/../assets/img/lots.png" alt="" />
+                        <h4>Información General del Lote</h4>
                     </div>
-                    <div className="lot__body__resume">
-                        <p className={`status ${status === 'sold' ? 'sold' : status === 'pending' ? 'pending' : 'available'}`}>{status === 'sold' ? 'Liquidado' : status === 'pending' ? 'Vendido' : 'Disponible'}</p>
-                        <div className="item">
-                            <p>Área: <span>96m<sup>2</sup></span></p>
-                            <p className="price">Precio: <span>$140,000.00</span></p>
+                    <div className="card__body">
+                        <div className="right">
+                            <div className="card__body__item">
+                                <span>Número de Lote</span>
+                                <p> {lotNumber} </p>
+                            </div>
+                            <div className="card__body__item">
+                                <span>Número de Manzana</span>
+                                <p> {manzana} </p>
+                            </div>
+                            <div className="card__body__item">
+                                <span>Proyecto</span>
+                                <p> {name} </p>
+                            </div>
+                            <div className="card__body__item">
+                                <span>Esquina</span>
+                                <p> {isCorner ? 'Sí' : 'No'} </p>
+                            </div>
+                            <div className="card__body__item">
+                                <span>Área</span>
+                                <p> {area}m<sup>2</sup> </p>
+                            </div>
+                            <div className="card__body__item">
+                                <span>Precio por m<sup>2</sup> </span>
+                                <p> ${pricePerSqMeter} </p>
+                            </div>
+                            <div className="card__body__item">
+                                <span >Precio</span>
+                                <p className="price"> ${price} </p>
+                            </div>
+
+                        </div>
+                        <div className="left">
+                            <h4>Medidas</h4>
                             {
-                                status === 'pending' && (
-                                    <>
-                                        <p className="paid">Pagado: <span>$95,000.00</span></p>
-                                        <p className="remaining">Restante: <span>$45,000.00</span></p>
-                                    </>
+                                measures.length > 0 && (
+
+                                    measures.map((measure) => (
+                                        <div key={measure._id} className="card__body__item">
+                                            <span>
+                                                {measure.title}
+                                            </span>
+                                            <p>
+                                                {measure.value}m<sup>2</sup>
+                                            </p>
+                                        </div>
+                                    )
+                                    )
+
                                 )
                             }
+
                         </div>
+                    </div>
+                </div>
+
+
+                <div className="card-grid">
+                    <div className="card scroll">
+                        <div className="card__header">
+                            <img src="/../assets/img/services.png" alt="" />
+                            <h4>Servicios Disponibles</h4>
+                        </div>
+                        <div className="card__body__list">
+                            {
+                                availableServices.map(service => (
+                                    service.length > 0 && (
+                                        <div key={service} className="card__body__list__item">
+                                            <p>{service}</p>
+                                        </div>
+                                    )
+                                ))
+                            }
+                        </div>
+                        <div className="card__header mt-4">
+                            <img src="/../assets/img/docs.png" alt="" />
+                            <h4>Documentos Disponibles</h4>
+                        </div>
+                        <div className="card__body__list">
+                            {
+                                // files.map(({ title, doc }) => (
+                                //     <div className="card__body__list__doc">
+                                //         <p>
+                                //             Escrituras
+                                //         </p>
+                                //     </div>
+                                // ))
+                            }
+                            <div className="card__body__list__doc">
+                                <p>
+                                    Escrituras
+                                </p>
+                            </div>
+                            <div className="card__body__list__doc">
+                                <p>
+                                    Contrato de Agua
+                                </p>
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
+
+
             </div>
 
             <FloatingButton type='lotAvailable' />

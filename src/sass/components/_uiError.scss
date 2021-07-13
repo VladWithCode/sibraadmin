@@ -19,6 +19,10 @@
     &.warning {
         background-color: $color-warning;
     }
+
+    &.success {
+        background-color: $color-success;
+    }
 }
 
 @keyframes uiError {

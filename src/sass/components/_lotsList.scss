@@ -2,9 +2,18 @@
 
 .lot-list {
     width: 100%;
+    
+    & .scroll {
+        height: 40rem;
+    }
 
     & .headers {
-        margin: 4rem 0;
+        margin: 0 0 3rem 0;
+
+        & span {
+            color: $black;
+            font-weight: 700;
+        }
     }
 
     & .headers, & .item {
@@ -14,15 +23,15 @@
         align-items: center;
 
         & span {
-            font-size: 2.3rem;
             text-transform: capitalize;
         }
     }
 
     & .item {
         padding: 2rem 0;
-        border-bottom: 1px solid $color-text;
-        opacity: .6;
+        // border-bottom: 1px solid $color-text-light;
+        @include transition;
+        position: relative;
 
         &:last-child {
             border: none;
@@ -34,20 +43,70 @@
             &.available {
                 color: $color-ok;
             }
-            &.sold {
+            &.delivered {
                 color: $color-success;
             }
-            &.pending {
+            &.liquidated {
                 color: $color-warning;
             }
         }
 
+        &.gray {
+            background-color: $color-bc; 
+        }
+
+        &::before {
+            position: absolute;
+            content: '';
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 7rem;
+            border-radius: 0 5rem 0 0;
+            transform: translateX(-8.2rem);
+            @include transition;
+
+        }
+
+        &.available {
+            &::before {
+                @include gradient-ok;
+            }
+        }
+        &.delivered {
+            &::before {
+                @include gradient-success;
+            }
+        }
+        &.liquidated {
+            &::before {
+                @include gradient-warning;
+            }
+        }
+
+       
+
         &:hover {
-            opacity: 1;
+
+            &::before {
+                transform: translateX(0);
+            }
+
+            &.available {
+                color: $color-ok;
+            }
+            &.delivered {
+                color: $color-success;
+            }
+            &.liquidated {
+                color: $color-warning;
+            }
+            
         }
     }
 }
 
 .lot-list-container {
     padding-bottom: 6rem;
+    @include card;
 }

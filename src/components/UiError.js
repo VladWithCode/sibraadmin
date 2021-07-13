@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 export const UiError = () => {
 
-    const { msgError, msgWarning } = useSelector(state => state.ui)
+    const { msgError, msgWarning, msgSuccess } = useSelector(state => state.ui)
 
     return (
         <>
@@ -18,6 +18,13 @@ export const UiError = () => {
                 msgWarning && (
                     <span className="uiError warning">
                         {msgWarning}
+                    </span>
+                )
+            }
+            {
+                msgSuccess && (
+                    <span className="uiError success">
+                        {msgSuccess}
                     </span>
                 )
             }

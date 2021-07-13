@@ -6,13 +6,9 @@ import { redTypes } from "../types/reduxTypes";
 export const clientReducer = (state = {}, action) => {
 
     switch (action.type) {
-        case redTypes.clientCreate:
-            return {
-                ...state,
-                dispName: action.payload.dispName,
-                clientId: action.payload.clientId
-            }
-    
+        case redTypes.clientSet:
+            return action.payload;
+
         default:
             return state;
     }

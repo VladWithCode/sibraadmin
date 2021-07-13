@@ -1,4 +1,3 @@
-
 @import "abstracts/mixins";
 @import "abstracts/variables";
 
@@ -11,12 +10,14 @@
 @import "components/lotTypesList";
 @import "components/manzanas";
 @import "components/manzana-lots";
+@import "components/loading";
 
 @import "pages/project";
 @import "pages/projects";
 @import "pages/lot";
 @import "pages/createProject";
+@import "pages/clients";
+@import "pages/createPages";
 
 @import "base/animations";
 @import "base/base";
-

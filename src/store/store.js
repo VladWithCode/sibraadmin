@@ -13,7 +13,7 @@ import { lotTypesReducer } from '../reducers/lotTypeReducer';
 import { manzanasReducer } from '../reducers/manzanasReducer';
 import { newLotsReducer } from '../reducers/newLotsReducer';
 import { servicesReducer } from '../reducers/servicesReducer';
-import { consultingReducer } from '../reducers/consultingReducer';
+import { consultingReducer, consultingLotsReducer, consultingClients } from '../reducers/consultingReducer';
 
 const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
@@ -30,7 +30,9 @@ const reducers = combineReducers({
     types: lotTypesReducer,
     manzanas: manzanasReducer,
     newLots: newLotsReducer,
-    projects: consultingReducer
+    projects: consultingReducer,
+    lots: consultingLotsReducer,
+    clients: consultingClients
 })
 
 export const store = createStore(

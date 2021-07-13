@@ -13,12 +13,41 @@ export const unSetError = () => ({
 
 
 export const setTempError = (err) => {
-    return(dispatch) => {
-        
+    return (dispatch) => {
+
         dispatch(setError(err));
 
         setTimeout(() => {
             dispatch(unSetError());
+        }, 4001);
+
+    }
+}
+
+export const setTempWarning = (warning) => {
+    return (dispatch) => {
+
+        dispatch(setWarning(warning));
+
+        setTimeout(() => {
+            dispatch(unSetWarning());
+        }, 4001);
+
+    }
+}
+
+export const setTempSuccessNotice = (msg) => {
+    return (dispatch) => {
+
+        console.log('afuera');
+
+        dispatch(setSuccessNotice(msg));
+
+
+
+        setTimeout(() => {
+            console.log('holiiiiii');
+            dispatch(unSetSuccessNotice());
         }, 4001);
 
     }
@@ -33,17 +62,15 @@ export const unSetWarning = () => ({
     type: redTypes.uiUnSetWarning
 })
 
-export const setTempWarning = (warning) => {
-    return(dispatch) => {
-        
-        dispatch(setWarning(warning));
+export const setSuccessNotice = (msg) => ({
+    type: redTypes.uiSetSuccessNotice,
+    payload: msg
+})
 
-        setTimeout(() => {
-            dispatch(unSetWarning());
-        }, 4001);
+export const unSetSuccessNotice = () => ({
+    type: redTypes.uiUnSetSuccessNotice
+})
 
-    }
-}
 
 export const uiStartLoading = () => ({
     type: redTypes.startLoading
