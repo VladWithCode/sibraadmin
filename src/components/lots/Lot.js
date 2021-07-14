@@ -86,7 +86,7 @@ export const Lot = () => {
 
                 <div className="card">
                     <div className="card__header">
-                        <img src="/../assets/img/lots.png" alt="" />
+                        <img src="../assets/img/lots.png" alt="" />
                         <h4>Información General del Lote</h4>
                     </div>
                     <div className="card__body">
@@ -149,7 +149,7 @@ export const Lot = () => {
                 <div className="card-grid">
                     <div className="card scroll">
                         <div className="card__header">
-                            <img src="/../assets/img/services.png" alt="" />
+                            <img src="../assets/img/services.png" alt="" />
                             <h4>Servicios Disponibles</h4>
                         </div>
                         <div className="card__body__list">
@@ -164,7 +164,7 @@ export const Lot = () => {
                             }
                         </div>
                         <div className="card__header mt-4">
-                            <img src="/../assets/img/docs.png" alt="" />
+                            <img src="../assets/img/docs.png" alt="" />
                             <h4>Documentos Disponibles</h4>
                         </div>
                         <div className="card__body__list">
@@ -196,8 +196,8 @@ export const Lot = () => {
 
             </div>
 
-            <FloatingButton type='lotAvailable' />
-            <FloatingButtonSecondary type='lotAvailable' />
+            {/* <FloatingButton type='lotAvailable' />
+            <FloatingButtonSecondary type='lotAvailable' /> */}
         </>
     )
 }

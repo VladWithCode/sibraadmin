@@ -180,7 +180,7 @@ export const CreateClient = () => {
 
     const isFormValid = () => {
 
-        checkEmptyFields(formFields);
+        checkEmptyFields();
         isEmailValid(email);
         isNumberValid(avPhoneNumber, 'avPhoneNumber');
         isNumberValid(phoneNumber, 'phoneNumber')
@@ -328,7 +328,7 @@ export const CreateClient = () => {
 
             <div className="card edit mt-4">
                 <div className="card__header">
-                    <img src="/../assets/img/user.png" alt="" />
+                    <img src="../assets/img/user.png" alt="" />
                     <h4>Información General del Cliente</h4>
                 </div>
                 <div className="card__body">
@@ -397,7 +397,7 @@ export const CreateClient = () => {
                     </form>
                     <div className="left">
                         <div className="card__header">
-                            <img src="/../assets/img/aval.png" alt="" />
+                            <img src="../assets/img/aval.png" alt="" />
                             <h4>Información del Aval</h4>
                         </div>
                         <div className={`card__body__item ${emptyFields.includes('avNames') && 'error'}`}>

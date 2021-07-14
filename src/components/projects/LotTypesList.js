@@ -10,23 +10,23 @@ export const LotTypesList = () => {
     const { types: { lotTypes } } = useSelector(state => state);
 
     const handleOpenAdd = () => {
-        dispatch(lotTypesModalConfirmUpdate({action: false}))
+        dispatch(lotTypesModalConfirmUpdate({ action: false }))
         dispatch(lotTypesModalEnable());
     }
 
     return (
-        <div className="lot_types">
-            <span onClick={handleOpenAdd} className="add add-svc">
-                Agregar tipo
-            </span>
-            <div className="lot_types_list">
-                {
-                    lotTypes?.map(({ type, sameArea, pricePerM, cornerPrice, area }) => (
-                        <LotTypeCard key={type} type={type} sameArea={sameArea} pricePerM={pricePerM} cornerPrice={cornerPrice} area={area} />
-                    ))
-                }
+        <>
+            <div className="add">
+                <button onClick={handleOpenAdd} className="upload">
+                    Agregar tipo de lote
+                </button>
             </div>
-            
-        </div>
+            {
+                lotTypes?.map(({ type, sameArea, pricePerM, cornerPrice, area, front, side }) => (
+                    <LotTypeCard key={type} type={type} sameArea={sameArea} pricePerM={pricePerM} cornerPrice={cornerPrice} area={area} front={front} side={side} />
+                ))
+            }
+        </>
+
     )
 }

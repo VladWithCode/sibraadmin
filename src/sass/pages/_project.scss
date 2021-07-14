@@ -13,6 +13,10 @@
         & .right {
             display: flex;
 
+            & span.lots {
+                font-weight: 700;
+                color: $color-ok;
+            }
 
         }
 
@@ -97,6 +101,24 @@
     overflow: hidden;
     padding: 2rem;
 
+    & .add {
+        width: 100;
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        margin-top: -2rem;
+        margin-bottom: 1rem;
+
+        & button.upload {
+            padding: 0;
+            background-color: transparent;
+            color: $color-success;
+            padding: .5rem;
+            border: none;
+            border-bottom: .1rem solid $color-success;
+        }
+    }
+
     &.edit {
         border: .2rem solid $color-ok;
     }
@@ -150,6 +172,15 @@
 
         &.tall {
             grid-template-rows: 45rem;
+        }
+
+        &.manzanas {
+            grid-template-rows: 25rem;
+            overflow: visible;
+
+            & .card {
+                height: 100%;
+            }
         }
 
     }
@@ -290,6 +321,10 @@
                     border-bottom: .5rem solid $color-danger;
                 }
 
+                &.changed {
+                    color: $color-success;
+                }
+
             }
 
             & p {
@@ -317,6 +352,38 @@
                 & p {
                     // font-size: 1.3rem;
                     color: $color-text-light;
+                }
+
+                & textarea {
+                    resize: none;
+                    width: 100%;
+                    height: 200px;
+                    padding: 1.5rem;
+                    margin: 0;
+                    margin-left: -1rem;
+                    color: $black !important;
+                    font-size: 1.5rem;
+                    border-color: $color-text-light;
+
+                    &:focus {
+                        outline-color: $color-ok;
+                    }
+                }
+
+                &.error {
+                    & span {
+                        color: $color-danger !important;
+                    }
+
+                    & textarea {
+                        border-color: $color-danger;
+
+                        &:focus {
+                            outline-color: $color-danger;
+                        }
+                    }
+
+
                 }
             }
 
@@ -408,6 +475,29 @@
 
                 & .header {
                     margin-bottom: 1rem;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+
+                    & .edit-btns {
+
+                        & button {
+                            background-color: transparent;
+                            border-radius: 0;
+                            padding: .5rem 1rem;
+                            border: none;
+                            border-bottom: .1rem solid;
+                        }
+
+                        & .edit {
+                            color: $color-success;
+                            margin-right: 2rem;
+                        }
+
+                        & .delete {
+                            color: $color-danger;
+                        }
+                    }
 
                     & h4 {
                         color: $black;
@@ -524,5 +614,27 @@
     }
 
 
+
+}
+
+button.upload {
+    background-color: $color-success;
+    border-color: $color-success;
+    font-size: 1.4rem;
+    margin-top: 1rem;
+    border-radius: 0;
+
+    &:hover {
+        background-color: darken($color-success, 10);
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: .6;
+
+        &:hover {
+            background-color: $color-success;
+        }
+    }
 
 }

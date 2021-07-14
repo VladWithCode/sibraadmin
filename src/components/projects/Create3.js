@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import { redTypes } from '../../types/reduxTypes';
 import { lotTypesModalConfirmReset } from '../../actions/lotTypes';
 import { newLotsSet } from '../../actions/newLots';
 import { projectSetPage } from '../../actions/project';
-import { setTempError, setTempWarning } from '../../actions/ui';
-import { uploadProjectDocument } from '../../actions/project';
+// import { setTempError, setTempWarning, uiFinishLoading, uiStartLoading } from '../../actions/ui';
+import { setTempError, uiFinishLoading, uiStartLoading } from '../../actions/ui';
+import { modalEnable, modalUpdate } from '../../actions/modal';
 
 export const Create3 = () => {
 
@@ -12,7 +14,7 @@ export const Create3 = () => {
     const { project, project: { page }, services, types: { lotTypes }, manzanas, newLots } = useSelector(state => state);
     const [lotsSummary, setLotsSummary] = useState([]);
     const [cornersErrors, setCornersErrors] = useState([]);
-    const [repeatedCorners, setRepeatedCorners] = useState([]);
+    // const [repeatedCorners, setRepeatedCorners] = useState([]);
 
     const handlePrevPage = () => {
         dispatch(lotTypesModalConfirmReset());
@@ -138,7 +140,8 @@ export const Create3 = () => {
                         corners: manzana.corners,
                         lotTypes: manzana.lotTypes.map(({ type, inputs, sameArea, quantity }) => ({ type, inputs, sameArea, quantity })),
                         show: manzana.lotTypes.find(({ sameArea, quantity }) => (!sameArea && +quantity > 0)) ? true : false,
-                        cornersArr: manzana.cornersArr
+                        cornersArr: manzana.cornersArr,
+                        lots: manzana.lots
                     })
 
                 })
@@ -154,6 +157,7 @@ export const Create3 = () => {
             const tempLotsArr = [];
 
             manzanas.forEach((manzana) => {
+                console.log('esta es', manzana);
                 manzana.cornersArr = [];
                 for (let i = 1; i <= +manzana.corners; i++) {
                     manzana.cornersArr.push({
@@ -179,7 +183,8 @@ export const Create3 = () => {
                     corners: manzana.corners,
                     lotTypes: manzana.lotTypes.map(({ type, inputs, sameArea, quantity }) => ({ type, inputs, sameArea, quantity })),
                     show: manzana.lotTypes.find(({ sameArea, quantity }) => (!sameArea && +quantity > 0)) ? true : false,
-                    cornersArr: manzana.cornersArr
+                    cornersArr: manzana.cornersArr,
+                    lots: manzana.lots
                 })
             })
 
@@ -226,15 +231,15 @@ export const Create3 = () => {
 
         const cornersArr = newArr.find(manzana => manzana.manzanaNum === manzanaNum).cornersArr;
 
-        if (cornersArr.find(corner => corner.lotNum === target.value)) {
-            dispatch(setTempWarning('No puede haber dos esquinas con el mismo número en la misma manzana'));
-            setRepeatedCorners([...repeatedCorners, {
-                manzanaNum,
-                lotNum: target.value
-            }])
-        } else {
-            setRepeatedCorners(repeatedCorners.filter(corner => (corner.manzanaNum === manzanaNum) && (corner.lotNum !== target.value)));
-        }
+        // if (cornersArr.find(corner => corner.lotNum === target.value)) {
+        //     dispatch(setTempWarning('No puede haber dos esquinas con el mismo número en la misma manzana'));
+        //     setRepeatedCorners([...repeatedCorners, {
+        //         manzanaNum,
+        //         lotNum: target.value
+        //     }])
+        // } else {
+        //     setRepeatedCorners(repeatedCorners.filter(corner => (corner.manzanaNum === manzanaNum) && (corner.lotNum !== target.value)));
+        // }
 
 
         cornersArr[cornerIndex].lotNum = target.value;
@@ -336,7 +341,7 @@ export const Create3 = () => {
     }
 
 
-    const createProjectDocument = () => {
+    const createProjectDocument = async () => {
 
         const irregularLotsNumbers = [];
 
@@ -418,11 +423,11 @@ export const Create3 = () => {
 
         const projectDocument = {
             name: project.name,
-            associationName: 'GG Markenting',
+            associationName: project.associationName,
             description: project.description,
             availableServices: services,
             lots: [],
-            lotTypes: lotTypes.map(({ type, sameArea, pricePerM, cornerPrice, area }) => (
+            lotTypes: lotTypes.map(({ type, sameArea, pricePerM, cornerPrice, area, front, side }) => (
                 {
                     code: type,
                     pricesPerSqMeter: {
@@ -433,11 +438,11 @@ export const Create3 = () => {
                     measures: sameArea ? [
                         {
                             title: 'Frente',
-                            value: 6
+                            value: front
                         },
                         {
                             title: 'Fondo',
-                            value: 16
+                            value: side
                         }
                     ] : undefined
                 }
@@ -445,41 +450,105 @@ export const Create3 = () => {
         }
 
 
-        dispatch(uploadProjectDocument(projectDocument, lots));
+        const response = await uploadProjectDocument(projectDocument, lots);
+
+        if (response.status === 'OK') {
+            const modalInfo = {
+                title: `Proyecto ${project.name} registrado con éxito`,
+                text: response.message,
+                link: `/proyectos`,
+                okMsg: 'Continuar',
+                closeMsg: null,
+                type: redTypes.projectCreate
+            }
+
+            dispatch(modalUpdate(modalInfo));
+            dispatch(modalEnable());
+        }
 
         console.log(projectDocument, lots);
+
+    }
+
+    const uploadProjectDocument = async (projectDocument, lots) => {
+
+        console.log('Subiendo Proyecto');
+
+        const url = 'http://192.168.1.149:3000/api/project/';
+
+        const data = {
+            projectDocument,
+            lots
+        }
+
+        console.log(data);
+
+        dispatch(uiStartLoading());
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                dispatch(uiFinishLoading());
+                return response.json()
+            })
+            .then(data => {
+                return data;
+            })
+            .catch(err => {
+                console.log(err);
+                dispatch(uiFinishLoading());
+            });
+
+        return response;
 
     }
 
 
     return (
 
-        <>
-            <h1>
-                Registro de lotes
-            </h1>
+
+        <div className="pb-5 project create">
+            <div className="project__header">
+                <div className="left">
+                    <h3> Registro de lotes </h3>
+                </div>
+            </div>
+
             <form className="manzana-lots">
                 {/* cornersErrors.find(manz => (manz.manzanaNum === manzanaNum) && (manz.isEmpty)) */}
 
                 {
-                    lotsSummary.map(({ manzanaNum, cornersArr, lotTypes, show }) => {
+                    lotsSummary.map(({ manzanaNum, cornersArr, lotTypes, show, lots }) => {
 
                         const error = cornersErrors.find(manz => (manz.manzanaNum === manzanaNum) && (manz.isEmpty));
 
                         return (
                             // show && (
-                            <div key={manzanaNum} className={`manzana-lots__card ${error && 'error'}`}>
-                                <h3>Manzana {manzanaNum}</h3>
+                            <div key={manzanaNum} className={`manzana-lots__card card ${error && 'error'}`}>
+
+                                <div className="card__header">
+                                    <div>
+                                        <img src="../assets/img/apple.png" alt="" />
+                                        <h4>Manzana {manzanaNum}</h4>
+                                    </div>
+                                    <p>Lotes: {lots} </p>
+                                </div>
 
                                 {
                                     cornersArr.map((corner, cornerIndex) => {
 
-                                        const warning = repeatedCorners.find(c => (c.manzanaNum === manzanaNum) && (c.lotNum === corner.lotNum));
+                                        // const warning = repeatedCorners.find(c => (c.manzanaNum === manzanaNum) && (c.lotNum === corner.lotNum));
 
-                                        const isRepeated = cornersErrors?.find(manz => (manz.manzanaNum === manzanaNum))?.corners.find(i => (i.lotNum === corner.lotNum) && (i.isRepeated));
+                                        // const isRepeated = cornersErrors?.find(manz => (manz.manzanaNum === manzanaNum))?.corners.find(i => (i.lotNum === corner.lotNum) && (i.isRepeated));
 
                                         return (
-                                            <div key={`manzana-${manzanaNum}-corner-${cornerIndex}`} className={`form-field corners ${(error && (+corner.lotNum === 0)) && 'error'} ${(warning || isRepeated) && 'warning'}`}>
+                                            // className={`form-field corners ${(error && (+corner.lotNum === 0)) && 'error'} ${(warning || isRepeated) && 'warning'}`}
+                                            <div key={`manzana-${manzanaNum}-corner-${cornerIndex}`} className={`form-field corners `}>
                                                 <label htmlFor={`manzana-${manzanaNum}-corner-${cornerIndex}`}>
                                                     Número de lote en esquina ({+cornerIndex + 1}):
                                                 </label>
@@ -570,8 +639,7 @@ export const Create3 = () => {
                     Siguiente
                 </button>
             </div>
-
-        </>
+        </div>
 
     )
 }

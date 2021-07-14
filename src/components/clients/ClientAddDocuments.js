@@ -128,7 +128,7 @@ export const ClientAddDocuments = () => {
 
                         <div className="card edit mt-4">
                             <div className="card__header">
-                                <img src="/../assets/img/user.png" alt="" />
+                                <img src="../assets/img/user.png" alt="" />
                                 <h4>Información del Cliente</h4>
                             </div>
                             <div className="card__body">
@@ -154,7 +154,7 @@ export const ClientAddDocuments = () => {
                                         <p> {clientId} </p>
                                     </div>
                                     <div className="mt-3 card__header">
-                                        <img src="/../assets/img/docs.png" alt="" />
+                                        <img src="../assets/img/docs.png" alt="" />
                                         <h4>Documentos Disponibles</h4>
                                     </div>
                                     <input onInput={(e) => {
@@ -187,7 +187,7 @@ export const ClientAddDocuments = () => {
                                 </div>
                                 <div className="left">
                                     <div className="card__header">
-                                        <img src="/../assets/img/aval.png" alt="" />
+                                        <img src="../assets/img/aval.png" alt="" />
                                         <h4>Información del Aval</h4>
                                     </div>
                                     <div className="card__body__item">
@@ -207,7 +207,7 @@ export const ClientAddDocuments = () => {
                                         )
                                     }
                                     <div className="mt-3 card__header">
-                                        <img src="/../assets/img/docs.png" alt="" />
+                                        <img src="../assets/img/docs.png" alt="" />
                                         <h4>Documentos Disponibles</h4>
                                     </div>
                                     <input onInput={(e) => {

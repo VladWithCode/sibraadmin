@@ -22,7 +22,7 @@ export const FloatingButton = () => {
             {
                 type !== redTypes.projectCreate && (
                     <div className="floating-btn" onClick={handleOpenModal} >
-                        <svg><use href={`/../assets/svg/${iconName}.svg#${iconName}`} ></use></svg>
+                        <svg><use href={`../assets/svg/${iconName}.svg#${iconName}`} ></use></svg>
                     </div>
                 )
             }

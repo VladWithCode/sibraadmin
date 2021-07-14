@@ -20,12 +20,14 @@ export const ModalLotType = () => {
         sameArea: false,
         pricePerM: '',
         cornerPrice: '',
-        area: ''
+        area: '',
+        front: '',
+        side: ''
     }
 
     const [formValues, handleInputChange, reset, , setValues] = useForm(initialForm);
 
-    const { type, pricePerM, cornerPrice, area } = formValues;
+    const { type, pricePerM, cornerPrice, area, front, side } = formValues;
 
     const [sameArea, setsameArea] = useState(undefined);
 
@@ -49,7 +51,9 @@ export const ModalLotType = () => {
                 pricePerM,
                 cornerPrice,
                 sameArea,
-                area: sameArea ? area : undefined
+                area: sameArea ? area : undefined,
+                front: sameArea ? front : undefined,
+                side: sameArea ? side : undefined,
             }
 
             dispatch(lotTypesCreate(newType));
@@ -147,25 +151,20 @@ export const ModalLotType = () => {
                     <div className="modal__input__field mt-3 mb-2">
                         <span>Misma área:</span>
                         <div className="options">
-                            {
-                                sameArea ? (
-                                    <input type="radio" id="yes" name="sameArea" defaultChecked />
-                                ) : (
-                                    <input type="radio" id="yes" name="sameArea" />
-                                )
-                            }
+
+
+                            <input type="radio" id="yes" name="sameArea" />
+
+
                             <label onClick={() => setsameArea(true)} htmlFor="yes">
                                 <div className="option">
                                     Sí
                                 </div>
                             </label>
-                            {
-                                sameArea === false ? (
-                                    <input type="radio" id="no" name="sameArea" defaultChecked />
-                                ) : (
-                                    <input type="radio" id="no" name="sameArea" />
-                                )
-                            }
+
+                            <input type="radio" id="no" name="sameArea" defaultChecked />
+
+
                             <label onClick={() => setsameArea(false)} htmlFor="no">
                                 <div className="option">
                                     No
@@ -176,17 +175,28 @@ export const ModalLotType = () => {
                     {
                         sameArea &&
                         (
-                            <div className="modal__input__field">
-                                <span>Área:</span>
-                                <input type="number" onChange={handleInputChange} value={area} name="area" />
-                            </div>
+                            <>
+                                <div className="modal__input__field">
+                                    <span>Área:</span>
+                                    <input type="number" onChange={handleInputChange} value={area} name="area" />
+                                </div>
+                                <div className="modal__input__field">
+                                    <span>Medida frente:</span>
+                                    <input type="number" onChange={handleInputChange} value={front} name="front" />
+                                </div>
+                                <div className="modal__input__field">
+                                    <span>Medida fondo:</span>
+                                    <input type="number" onChange={handleInputChange} value={side} name="side" />
+                                </div>
+                            </>
+
                         )
                     }
 
                 </div>
 
                 <div className="modal__btns">
-                    <p onClick={handleClose} className="modal__btns__link btn btn-err">
+                    <p onClick={handleClose} className="modal__btns__link btn btn-err mr-2">
                         Cancelar
                     </p>
                     {

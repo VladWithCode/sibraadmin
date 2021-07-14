@@ -28,6 +28,7 @@ nav {
 
             display: flex;
             align-items: center;
+            justify-content: flex-start;
 
             & span {
                 margin-left: 2rem;
@@ -106,7 +107,7 @@ nav.expand {
         left: 18rem;
         // @include shadow-light;
         color: $color-ok;
-       
+
 
         & svg {
             transform: rotate(90deg);

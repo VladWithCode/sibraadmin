@@ -7,7 +7,7 @@ import { clientSet } from './client';
 
 export const getProjects = () => {
 
-    const url = 'http://192.168.1.66:3000/api/projects/';
+    const url = 'http://192.168.1.149:3000/api/projects/';
 
     console.log('obteniendo proyectos');
 
@@ -29,7 +29,7 @@ export const getProjects = () => {
 
 export const getClients = () => {
 
-    const url = 'http://192.168.1.66:3000/api/customers/';
+    const url = 'http://192.168.1.149:3000/api/customers/';
 
     console.log('obteniendo clientes');
 
@@ -48,7 +48,7 @@ export const getClients = () => {
 
 export const getLots = (projectId) => {
 
-    const url = `http://192.168.1.66:3000/api/lots/on-project/${projectId}`;
+    const url = `http://192.168.1.149:3000/api/lots/on-project/${projectId}`;
 
     console.log('obteniendo lotes');
 
@@ -70,7 +70,7 @@ export const getLots = (projectId) => {
 
 export const getClient = _id => {
 
-    const url = `http://192.168.1.66:3000/api/customer/${_id}`;
+    const url = `http://192.168.1.149:3000/api/customer/${_id}`;
 
     console.log('obteniendo cliente');
 

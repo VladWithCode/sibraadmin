@@ -2,7 +2,7 @@ import { redTypes } from "../types/reduxTypes";
 
 
 
-export const lotTypesCreate = ({ type, sameArea, pricePerM, cornerPrice, area }) => {
+export const lotTypesCreate = ({ type, sameArea, pricePerM, cornerPrice, area, front, side }) => {
     return {
         type: redTypes.lotTypesCreate,
         payload: {
@@ -10,13 +10,15 @@ export const lotTypesCreate = ({ type, sameArea, pricePerM, cornerPrice, area })
             sameArea,
             pricePerM,
             cornerPrice,
-            area
+            area,
+            front,
+            side
         }
     }
 }
 
 
-export const lotTypesEdit = (type, { newType, sameArea, pricePerM, cornerPrice, area }) => {
+export const lotTypesEdit = (type, { newType, sameArea, pricePerM, cornerPrice, area, front, side }) => {
     return {
         type: redTypes.lotTypesEdit,
         payload: {
@@ -25,7 +27,9 @@ export const lotTypesEdit = (type, { newType, sameArea, pricePerM, cornerPrice, 
             sameArea,
             pricePerM,
             cornerPrice,
-            area
+            area,
+            front,
+            side
         }
     }
 }
@@ -51,7 +55,7 @@ export const lotTypesModalDisable = () => {
     }
 }
 
-export const lotTypesModalConfirmUpdate = ({title, text, okMsg, closeMsg, action, type}) => {
+export const lotTypesModalConfirmUpdate = ({ title, text, okMsg, closeMsg, action, type }) => {
     return {
         type: redTypes.lotTypesModalConfirmUpdate,
         payload: {

@@ -9,6 +9,8 @@ export const projectCreate = project => {
         payload: {
             name: project.name,
             description: project.description,
+            associationName: project.associationName,
+            isFracc: project.isFracc,
             manzanas: project.manzanas,
             lots: project.lots,
             services: project.services,
@@ -75,12 +77,14 @@ export const uploadProjectDocument = (projectDocument, lots) => {
 
         console.log('Subiendo Proyecto');
 
-        const url = 'http://192.168.1.66:3000/api/project/';
+        const url = 'http://192.168.1.149:3000/api/project/';
 
         const data = {
             projectDocument,
             lots
         }
+
+        console.log(data);
 
         dispatch(uiStartLoading());
 
@@ -92,8 +96,11 @@ export const uploadProjectDocument = (projectDocument, lots) => {
             body: JSON.stringify(data)
         })
             .then(response => {
-                console.log(response.json());
                 dispatch(uiFinishLoading());
+                return response.json()
+            })
+            .then(data => {
+                console.log(data);
             })
             .catch(err => {
                 console.log(err);

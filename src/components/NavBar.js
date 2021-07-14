@@ -17,31 +17,29 @@ export const NavBar = () => {
 
     const { redirect: { projects, clients } } = useSelector(state => state);
 
-    console.log(projects);
-
     return (
         <nav className={navExpanded ? 'expand' : ''}>
             <div className="icons-container">
                 <NavLink to={`${projects ? projects : '/proyectos'}`} activeClassName="active" className="link">
-                    <svg><use href="/../assets/svg/home.svg#home" ></use></svg>
+                    <svg><use href="../assets/svg/home.svg#home" ></use></svg>
                     <span>Proyectos</span>
                 </NavLink>
-                <NavLink to={`${clients ? clients : '/clientes'}`} activeClassName="active" className="link clients">
-                    <svg><use href="/../assets/svg/users.svg#users" ></use></svg>
+                <NavLink to={`${clients ? clients : '/clientes'}`} activeClassName="active" className="link">
+                    <svg><use href="../assets/svg/users.svg#users" ></use></svg>
                     <span>Clientes</span>
                 </NavLink>
-                <NavLink to="/historial" activeClassName="active" className="link">
+                {/* <NavLink to="/historial" activeClassName="active" className="link">
                     <svg><use href="/../assets/svg/history.svg#history" ></use></svg>
                     <span>Hitorial</span>
                 </NavLink>
                 <NavLink to="/ajustes" activeClassName="active" className="link settings">
                     <svg><use href="/../assets/svg/cog.svg#cog" ></use></svg>
                     <span>Ajustes</span>
-                </NavLink>
+                </NavLink> */}
 
             </div>
             <div onClick={handleExpand} className="expand-btn">
-                <svg><use href="/../assets/svg/down.svg#down" ></use></svg>
+                <svg><use href="../assets/svg/down.svg#down" ></use></svg>
             </div>
         </nav>
     )

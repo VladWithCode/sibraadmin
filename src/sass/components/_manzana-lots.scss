@@ -7,6 +7,22 @@
         @include card;
         @include transition;
 
+        & .card__header {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+
+            & div {
+                display: flex;
+                align-items: center;
+            }
+
+            & p {
+                font-weight: 700;
+                color: $color-ok;
+            }
+        }
+
         &.error {
             border: 2px solid $color-danger;
         }

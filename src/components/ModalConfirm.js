@@ -40,7 +40,7 @@ export const ModalConfirm = () => {
                 <div className="modal__btns">
                     {
                         closeMsg && (
-                            <p onClick={handleClose} className="modal__btns__link btn btn-err">
+                            <p onClick={handleClose} className="modal__btns__link btn btn-err mr-2">
                                 {closeMsg}
                             </p>
                         )

@@ -26,10 +26,10 @@ export const Create2 = () => {
 
     useEffect(() => {
 
-        const comparingLotTypes = state.manzanas[0]?.lotTypes.map(({ type, sameArea, pricePerM, cornerPrice }) => ({type, sameArea, pricePerM, cornerPrice}));
+        const comparingLotTypes = state.manzanas[0]?.lotTypes.map(({ type, sameArea, pricePerM, cornerPrice }) => ({ type, sameArea, pricePerM, cornerPrice }));
 
 
-        if ((+project.manzanas === state.manzanas.length) && (state.manzanas.length >= 1) && (JSON.stringify(comparingLotTypes)===JSON.stringify(lotTypes))) {
+        if ((+project.manzanas === state.manzanas.length) && (state.manzanas.length >= 1) && (JSON.stringify(comparingLotTypes) === JSON.stringify(lotTypes))) {
             setFormValues([...state.manzanas]);
             setManzanas([...state.manzanas]);
 
@@ -115,7 +115,7 @@ export const Create2 = () => {
             })
 
             if (counter > lots) {
-                setError(`Has excedido el número de lotes (${lots} lotes)`);
+                setError(`Has excedido el número de lotes (${+lots} lotes)`);
             }
 
         } else {
@@ -263,7 +263,7 @@ export const Create2 = () => {
                     return typeError;
                 })
             )
-            dispatch(setTempError(`Has excedido el número de lotes de la manzana ${num} (${currentLots} lotes)`))
+            dispatch(setTempError(`Has excedido el número de lotes de la manzana ${num} (${+currentLots} lotes)`))
         } else if (+counter === +currentLots) {
             setTypesErrors(
                 typesErrors.map(typeError => {
@@ -304,6 +304,7 @@ export const Create2 = () => {
 
         if (counter !== +lots) {
             dispatch(setTempError(`Faltan ${Number(lots) - +counter} lotes por registrar`))
+            setError(true);
             return 'error';
         }
 
@@ -357,7 +358,7 @@ export const Create2 = () => {
                     counter += Number(manzana.corners)
                 }
 
-                
+
                 return manzana;
             })
         )
@@ -391,48 +392,64 @@ export const Create2 = () => {
 
     return (
 
-        <>
-            <h1>
-                Registro de manzanas
-            </h1>
-            <form className="manzanas">
+        <div className="pb-5 project create">
+            <div className="project__header">
+                <div className="left">
+                    <h3> Registro de Manzanas </h3>
+                </div>
+                <div className="right">
+                    <span className="lots">Lotes totales: {lots}</span>
+                </div>
+            </div>
+
+            <div className="card-grid manzanas">
                 {
                     manzanas.map(({ num, lots, corners }, index) => (
-                        <div className="manzanas__card" key={num}>
-                            <h3>Manzana {num}</h3>
-                            <div className={`${error && 'error'} form-field`}>
-                                <label htmlFor={`manzana${num}-lots`}>
-                                    Numero de lotes:
-                                </label>
-                                <input onChange={(e) => {
-                                    handleLotsChange(e.target, num)
-                                }} type="number" name={`manzana${num}-lots`} value={lots} />
+                        <div className="card edit" key={num}>
+                            <div className="card__header">
+                                <img src="../assets/img/apple.png" alt="" />
+                                <h4>Manzana {num}</h4>
+
                             </div>
-                            {
-                                // manzanas[0].lotTypes?.length > 1 && (
-                                manzanas[index].lotTypes.map(({ type, quantity }, index) => (
-                                    <div key={type} className={`${typesErrors?.find(typeError => typeError.manzana === num)?.error && 'error'} ${typesErrors?.find(typeError => typeError.manzana === num)?.completed ? 'completed' : 'warning'} form-field`}>
-                                        <label htmlFor={`manzana${num}-type-${type}`}>
-                                            Número de lotes tipo "{type.toUpperCase()}":
+
+                            <div className="card__body">
+                                <div className="full">
+                                    <div className={`${error && 'error'} card__body__item `}>
+                                        <label htmlFor={`manzana${num}-lots`}>
+                                            Numero de lotes:
                                         </label>
-                                        <input onChange={(e) => handlelotTypeChange(e.target, type, num, index)} type="number" name={`manzana${num}-type-${type}`} value={quantity} />
+                                        <input onChange={(e) => {
+                                            handleLotsChange(e.target, num)
+                                        }} type="number" name={`manzana${num}-lots`} value={lots} />
                                     </div>
-                                ))
-                                // )
-                            }
-                            <div className={`${cornersErrors?.find(cornerError => cornerError.manzana === num)?.error && 'error'} form-field`}>
-                                <label htmlFor={`manzana${num}-corners`}>
-                                    Número de lotes en equinas
-                                </label>
-                                <input onChange={(e) => handleCornerChange(e.target, num)} type="number" name={`manzana${num}-corners`} value={corners} />
+                                    {
+                                        // manzanas[0].lotTypes?.length > 1 && (
+                                        manzanas[index].lotTypes.map(({ type, quantity }, index) => (
+                                            <div key={type} className={`${typesErrors?.find(typeError => typeError.manzana === num)?.error && 'error'} ${typesErrors?.find(typeError => typeError.manzana === num)?.completed ? 'completed' : 'warning'} card__body__item `}>
+                                                <label htmlFor={`manzana${num}-type-${type}`}>
+                                                    Número de lotes tipo "{type.toUpperCase()}":
+                                                </label>
+                                                <input onChange={(e) => handlelotTypeChange(e.target, type, num, index)} type="number" name={`manzana${num}-type-${type}`} value={quantity} />
+                                            </div>
+                                        ))
+                                        // )
+                                    }
+                                    <div className={`${cornersErrors?.find(cornerError => cornerError.manzana === num)?.error && 'error'} card__body__item `}>
+                                        <label htmlFor={`manzana${num}-corners`}>
+                                            Número de lotes en equinas
+                                        </label>
+                                        <input onChange={(e) => handleCornerChange(e.target, num)} type="number" name={`manzana${num}-corners`} value={corners} />
+                                    </div>
+                                </div>
                             </div>
+
                         </div>
                     ))
                 }
-            </form>
+            </div>
 
 
-            <div className="project-create-btns">
+            <div className="project-create-btns mt-5">
                 <button onClick={handlePrevPage} className="btn btn-cancel">
                     Anterior
                 </button>
@@ -440,8 +457,9 @@ export const Create2 = () => {
                     Siguiente
                 </button>
             </div>
+        </div>
 
-        </>
+
 
     )
 }

@@ -4,9 +4,9 @@ import { useForm } from '../../hooks/useForm';
 
 import { projectAddService, projectDeleteService, projectDisableSvcModal } from '../../actions/project';
 
-export const ModalServices = React.memo(({service}) => {
+export const ModalServices = React.memo(({ service }) => {
 
-    
+
     const dispatch = useDispatch();
 
     const { modalServices: { active, beenClosed, input, title, text, okMsg, closeMsg } } = useSelector(state => state.project);
@@ -31,7 +31,7 @@ export const ModalServices = React.memo(({service}) => {
         dispatch(projectDeleteService(service))
         dispatch(projectDisableSvcModal());
     }
-    
+
 
     return (
         <>
@@ -64,7 +64,7 @@ export const ModalServices = React.memo(({service}) => {
                             }
 
                             <div className="modal__btns">
-                                <p onClick={handleClose} className="modal__btns__link btn btn-err">
+                                <p onClick={handleClose} className="modal__btns__link btn btn-err mr-2">
                                     {closeMsg}
                                 </p>
 

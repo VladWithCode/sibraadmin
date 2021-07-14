@@ -2,14 +2,14 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 3rem;
-    margin-top: 8rem;
-    margin-bottom: 5rem;
     max-width: 1200px;
 
     &__card {
         @include card;
         display: flex;
         flex-direction: column;
+
+
 
         & h3 {
             color: $color-ok;

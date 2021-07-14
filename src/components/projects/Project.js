@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { breadcrumbsUpdate } from '../../actions/breadcrumbs';
+import { floatingButtonSet } from '../../actions/floatingButton';
 import { modalUpdate } from '../../actions/modal';
 import { redirectSet } from '../../actions/redirect';
 import { getLots } from '../../actions/consults';
@@ -46,6 +47,7 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
 
         dispatch(breadcrumbsUpdate(redTypes.projects, breadcrumbs));
         dispatch(redirectSet(redTypes.projects, `/proyectos/ver/${_id}`));
+        dispatch(floatingButtonSet('pencil', redTypes.projectCreate));
 
         dispatch(getLots(_id))
 
@@ -91,7 +93,7 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
 
                 <div className="card">
                     <div className="card__header">
-                        <img src="/../assets/img/info.png" alt="" />
+                        <img src="../assets/img/info.png" alt="" />
                         <h4>Información General del Proyecto</h4>
                     </div>
                     <div className="card__body">
@@ -106,7 +108,7 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
                             </div>
                             <div className="card__body__item description">
                                 <span>Descripción del Proyecto</span>
-                                <p> {description} Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, hic dolorum eveniet obcaecati debitis quaerat voluptas illo totam sunt ut quia non iusto quis nisi facere officia laborum fugiat minus ipsa consequuntur, in quo optio odio perferendis. Error, nisi? Quae. </p>
+                                <p> {description} </p>
                             </div>
                         </div>
                         <div className="left">
@@ -134,7 +136,7 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
                 <div className="card-grid">
                     <div className="card scroll">
                         <div className="card__header">
-                            <img src="/../assets/img/services.png" alt="" />
+                            <img src="../assets/img/services.png" alt="" />
                             <h4>Servicios Disponibles</h4>
                         </div>
                         <div className="card__body__list">
@@ -149,31 +151,17 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
                             }
                         </div>
                         <div className="card__header mt-4">
-                            <img src="/../assets/img/docs.png" alt="" />
+                            <img src="../assets/img/docs.png" alt="" />
                             <h4>Documentos Disponibles</h4>
                         </div>
                         <div className="card__body__list">
-                            {
-                                // files.map(({ title, doc }) => (
-                                //     <div className="card__body__list__doc">
-                                //         <p>
-                                //             Escrituras
-                                //         </p>
-                                //     </div>
-                                // ))
-                            }
-                            <div className="card__body__list__doc">
-                                <p>
-                                    Contrato de Agua
-                                </p>
-                            </div>
                         </div>
 
                     </div>
 
                     <div className="card scroll">
                         <div className="card__header">
-                            <img src="/../assets/img/home.png" alt="" />
+                            <img src="../assets/img/home.png" alt="" />
                             <h4>Tipos de lotes</h4>
                         </div>
                         <div className="card__body__list">
@@ -246,7 +234,7 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
 
                 <div className="card">
                     <div className="card__header">
-                        <img src="/../assets/img/lots.png" alt="" />
+                        <img src="../assets/img/lots.png" alt="" />
                         <h4>Lista de Lotes</h4>
                     </div>
                     <div className="card__form">

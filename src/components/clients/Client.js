@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { redTypes } from '../../types/reduxTypes';
@@ -7,6 +7,7 @@ import { breadcrumbsUpdate } from '../../actions/breadcrumbs';
 import { BreadCrumbs } from '../BreadCrumbs';
 import { floatingButtonSet } from '../../actions/floatingButton';
 import { modalUpdate } from '../../actions/modal';
+import { getClient } from '../../actions/consults';
 
 export const Client = () => {
 
@@ -19,6 +20,8 @@ export const Client = () => {
     const { col, extNumber, street, zip } = address;
 
     useEffect(() => {
+
+        dispatch(getClient(clientId));
 
         const modalInfo = {
             title: 'Editar Cliente',
@@ -48,9 +51,9 @@ export const Client = () => {
     }, [dispatch, client, clientId, names, patLastname, id]);
 
     const handleOpen = (path) => {
-        const url = `http://192.168.1.66:3000${path}`;
+        const url = `http://192.168.1.149:3000${path}`;
 
-        window.open(url, "_blank", 'top=500,left=200,frame=false,nodeIntegration=no');
+        window.open(url, "_blank", 'top=500,left=200,frame=true,nodeIntegration=no');
     }
 
     return (
@@ -70,7 +73,7 @@ export const Client = () => {
 
                 <div className="card">
                     <div className="card__header">
-                        <img src="/../assets/img/user.png" alt="" />
+                        <img src="../assets/img/user.png" alt="" />
                         <h4>Información General del Cliente</h4>
                     </div>
                     <div className="card__body">
@@ -129,7 +132,7 @@ export const Client = () => {
                                 <p>{zip}</p>
                             </div>
                             <div className="mt-3 card__header">
-                                <img src="/../assets/img/docs.png" alt="" />
+                                <img src="../assets/img/docs.png" alt="" />
                                 <h4>Documentos Disponibles</h4>
                             </div>
                             <div className="scroll">
@@ -154,7 +157,7 @@ export const Client = () => {
                 <div className="card-grid tall mb-4">
                     <div className="card">
                         <div className="card__header">
-                            <img src="/../assets/img/aval.png" alt="" />
+                            <img src="../assets/img/aval.png" alt="" />
                             <h4>Información del Aval</h4>
                         </div>
 
@@ -177,7 +180,7 @@ export const Client = () => {
                                     <p> {aval.phoneNumber} </p>
                                 </div>
                                 <div className="mt-3 card__header">
-                                    <img src="/../assets/img/docs.png" alt="" />
+                                    <img src="../assets/img/docs.png" alt="" />
                                     <h4>Documentos Disponibles</h4>
                                 </div>
                                 <div className="scroll">

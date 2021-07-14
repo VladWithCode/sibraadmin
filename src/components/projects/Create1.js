@@ -22,13 +22,14 @@ export const Create1 = () => {
 
     const { project: currentProject, types: { lotTypes }, services } = useSelector(state => state);
 
-    const [formValues, handleInputChange] = useForm(currentProject);
+    const [formFields, handleInputChange] = useForm(currentProject);
 
-    const { name, description, manzanas, lots } = formValues;
+    const { name, description, manzanas, lots, associationName } = formFields;
 
     const { page } = currentProject;
 
     const [service, setService] = useState('');
+    const [emptyFields, setEmptyFields] = useState([]);
 
     useEffect(() => {
 
@@ -54,17 +55,13 @@ export const Create1 = () => {
 
     const isFormValid = () => {
 
-        // name, description, manzanas, lots, pricePerSqM, priceCorner
-
-        if (name.trim().length <= 3) {
-            if (name.trim().length === 0) {
-                dispatch(setTempError('El proyecto debe de tener un nombre'));
-            } else {
-                dispatch(setTempError('El Nombre debe ser más largo'));
-            }
+        if (checkEmptyFields(formFields)) {
+            dispatch(setTempError('Los campos en rojo son obligatorios'));
             return false;
         }
-        if (description.trim().length < 20) {
+
+
+        if (description.trim().length < 10) {
             if (description.trim().length === 0) {
                 dispatch(setTempError('El proyecto debe de tener una descripción'));
             } else {
@@ -84,7 +81,7 @@ export const Create1 = () => {
         }
 
         if (Number(lots) === 0) {
-            dispatch(setTempError('El proyecto no tienen lotes'));
+            dispatch(setTempError('El proyecto no tiene lotes'));
             return false;
         }
 
@@ -125,9 +122,11 @@ export const Create1 = () => {
 
     const handleNextPage = () => {
 
+
+
         if (isFormValid()) {
             dispatch(projectSetPage(page + 1));
-            dispatch(projectCreate(formValues));
+            dispatch(projectCreate(formFields));
         }
 
     }
@@ -150,7 +149,7 @@ export const Create1 = () => {
 
 
 
-    const handleAdd = () => {
+    const handleAdd = (e) => {
 
         const modalInfo = {
             title: 'Agregar servicio',
@@ -168,60 +167,150 @@ export const Create1 = () => {
 
 
     const inputChange = e => {
-        dispatch(projectCreate(formValues));
+        dispatch(projectCreate({ ...formFields, [e.target.name]: e.target.value }));
         handleInputChange(e);
+        // checkEmptyFields({ ...formFields, [e.target.name]: e.target.value });
+        checkEmptyField(e);
+    }
+
+    const checkEmptyField = e => {
+
+        if (e.target.value?.trim().length > 0) {
+            const tempEmptyFields = emptyFields;
+
+            if (tempEmptyFields.includes(e.target.name)) {
+                const index = tempEmptyFields.indexOf(e.target.name);
+
+                tempEmptyFields.splice(index, 1);
+            }
+
+            setEmptyFields(tempEmptyFields);
+        }
+
     }
 
 
+    const checkEmptyFields = (fields) => {
 
+        console.log(fields);
+
+        const tempEmptyFields = [];
+
+        for (let key in fields) {
+            if (key === 'manzanas' || key === 'lots' || key === 'associationName' || key === 'name' || key === 'description') {
+                if (fields[key].toString().trim() === "") {
+                    tempEmptyFields.push(key);
+                }
+            }
+
+        }
+
+        setEmptyFields(tempEmptyFields);
+
+        console.log(tempEmptyFields);
+
+        return tempEmptyFields.length === 0 ? false : true;
+    }
 
     return (
 
-        <>
-            <h1>
-                Crear Nuevo proyecto
-            </h1>
-            <form>
-                <h2 className="section-title">Información General</h2>
-                <div className="form-field">
-                    <label htmlFor="name">Nombre del Proyecto:</label>
-                    <input type="text" name="name" value={name} onChange={(e) => { inputChange(e) }} />
+        <div className="pb-5 project create">
+            <div className="project__header">
+                <div className="left">
+                    <h3> Registro de Proyecto </h3>
                 </div>
-                <div className="form-field desc">
-                    <label htmlFor="description">Descripción del Proyecto:</label>
-                    <textarea name="description" value={description} onChange={(e) => { inputChange(e) }} ></textarea>
+                {/* <div className="right">
+                    Número de cliente {clients.length + 1}
+                </div> */}
+            </div>
+
+            <div className="card edit mt-4">
+                <div className="card__header">
+                    <img src="../assets/img/info.png" alt="" />
+                    <h4>Información General del Proyecto</h4>
                 </div>
-                <div className="form-field">
-                    <label htmlFor="manzanas">Manzanas:</label>
-                    <input type="number" name="manzanas" value={manzanas} onChange={(e) => { inputChange(e) }} />
+                <div className="card__body">
+                    <form className="right">
+                        <div className={`card__body__item ${emptyFields.includes('name') && 'error'}`}>
+                            <label htmlFor="name">Nombre del Proyecto</label>
+                            <input autoFocus name="name" onChange={(e) => { inputChange(e) }} value={name} type="text" autoComplete="off" />
+                        </div>
+                        <div className={`card__body__item ${emptyFields.includes('associationName') && 'error'}`}>
+                            <label htmlFor="associationName">Asociación</label>
+                            <input autoFocus name="associationName" onChange={(e) => { inputChange(e) }} value={associationName} type="text" autoComplete="off" />
+                        </div>
+                        <div className={`card__body__item description ${emptyFields.includes('description') && 'error'}`}>
+                            <span htmlFor="description">Descripción del Proyecto</span>
+                            <textarea name="description" value={description} onChange={(e) => { inputChange(e) }} ></textarea>
+                        </div>
+
+                    </form>
+                    <div className="left">
+                        <div className={`card__body__item ${emptyFields.includes('lots') && 'error'}`}>
+                            <label htmlFor="lots">Cantidad de lotes</label>
+                            <input autoFocus name="lots" onChange={(e) => { inputChange(e) }} value={lots} type="number" autoComplete="off" />
+                        </div>
+                        <div className={`card__body__item ${emptyFields.includes('manzanas') && 'error'}`}>
+                            <label htmlFor="manzanas">Número de Manzanas</label>
+                            <input autoFocus name="manzanas" onChange={(e) => { inputChange(e) }} value={manzanas} type="text" autoComplete="off" />
+                        </div>
+
+                    </div>
                 </div>
-                <div className="form-field">
-                    <label htmlFor="lots">Cantidad de Lotes:</label>
-                    <input type="number" name="lots" value={lots} onChange={(e) => { inputChange(e) }} />
-                </div>
-                <h2 className="section-title">Servicios</h2>
-                <div className="form-field svcs">
-                    <span onClick={handleAdd} className="add add-svc">
-                        Agregar servicio
-                    </span>
-                    <div className="svcs__list">
-                        <ul>
+            </div>
+
+            <div className="card-grid ">
+                <div className="card edit">
+
+                    <div className="card__header">
+                        <img src="../assets/img/services.png" alt="" />
+                        <h4>Servicios Disponibles</h4>
+
+                    </div>
+                    <div className="add">
+                        <button onClick={handleAdd} className="upload">
+                            Agregar servicio
+                        </button>
+                    </div>
+
+                    <div className="scroll">
+                        <div className="card__body__list">
                             {
-                                services?.map(service => (
-                                    <li onClick={() => handleDeleteService(service)} key={service} >{service}</li>
+                                services.map(service => (
+                                    service.length > 0 && (
+                                        <div onClick={() => handleDeleteService(service)} key={service} className="card__body__list__doc">
+                                            <p>{service}</p>
+                                        </div>
+                                    )
                                 ))
                             }
-                        </ul>
+                        </div>
+
                     </div>
                 </div>
 
-                <h2 className="section-title">Tipos de Lotes</h2>
-                <div className="form-field">
-                    <LotTypesList />
+                <div className="card edit scroll">
+                    <div className="card__header">
+                        <img src="../assets/img/home.png" alt="" />
+                        <h4>Tipos de lotes</h4>
+                    </div>
+                    <div className="card__body__list">
+                        <LotTypesList />
+                    </div>
+
+
                 </div>
+            </div>
 
-            </form>
 
+            <div className="form-buttons">
+                <button className="cancel" onClick={cancel}>
+                    Cancelar
+                </button>
+                <button className="next" onClick={handleNextPage}>
+                    Siguiente
+                </button>
+            </div>
 
             <ModalServices service={service} />
 
@@ -229,16 +318,66 @@ export const Create1 = () => {
 
             <ModalConfirmLotTypes />
 
+        </div>
 
-            <div className="project-create-btns">
-                <button onClick={cancel} className="btn btn-cancel">
-                    Cancelar
-                </button>
-                <button onClick={handleNextPage} className="btn btn-next">
-                    Siguiente
-                </button>
-            </div>
+        // <>
+        //     <h1>
+        //         Crear Nuevo proyecto
+        //     </h1>
+        //     <form>
+        //         <h2 className="section-title">Información General</h2>
+        //         <div className="form-field">
+        //             <label htmlFor="name">Nombre del Proyecto:</label>
+        //             <input type="text" name="name" value={name} onChange={(e) => { inputChange(e) }} />
+        //         </div>
+        //         <div className="form-field desc">
+        //             <label htmlFor="description">Descripción del Proyecto:</label>
+        //             <textarea name="description" value={description} onChange={(e) => { inputChange(e) }} ></textarea>
+        //         </div>
+        //         <div className="form-field">
+        //             <label htmlFor="manzanas">Manzanas:</label>
+        //             <input type="number" name="manzanas" value={manzanas} onChange={(e) => { inputChange(e) }} />
+        //         </div>
+        //         <div className="form-field">
+        //             <label htmlFor="lots">Cantidad de Lotes:</label>
+        //             <input type="number" name="lots" value={lots} onChange={(e) => { inputChange(e) }} />
+        //         </div>
+        //         <h2 className="section-title">Servicios</h2>
+        //         <div className="form-field svcs">
+        //             <span onClick={handleAdd} className="add add-svc">
+        //                 Agregar servicio
+        //             </span>
+        //             <div className="svcs__list">
+        //                 <ul>
+        //                     {
+        //                         services?.map(service => (
+        //                             <li onClick={() => handleDeleteService(service)} key={service} >{service}</li>
+        //                         ))
+        //                     }
+        //                 </ul>
+        //             </div>
+        //         </div>
 
-        </>
+        //         <h2 className="section-title">Tipos de Lotes</h2>
+        //         <div className="form-field">
+        //             <LotTypesList />
+        //         </div>
+
+        //     </form>
+
+
+
+
+
+        //     <div className="project-create-btns">
+        //         <button onClick={cancel} className="btn btn-cancel">
+        //             Cancelar
+        //         </button>
+        //         <button onClick={handleNextPage} className="btn btn-next">
+        //             Siguiente
+        //         </button>
+        //     </div>
+
+        // </>
     )
 }

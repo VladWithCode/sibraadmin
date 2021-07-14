@@ -4,6 +4,10 @@ export const useForm = (initialState) => {
 
   const [values, setvalues] = useState(initialState);
 
+  // useEffect(() => {
+  //   setvalues(initialState)
+  // }, [initialState])
+
   const reset = () => {
     setvalues(initialState)
   }

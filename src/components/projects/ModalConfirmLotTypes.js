@@ -37,7 +37,7 @@ export const ModalConfirmLotTypes = () => {
                 </div>
 
                 <div className="modal__btns">
-                    <p onClick={handleClose} className={`modal__btns__link btn ${action === redTypes.delete ? 'btn-ok' : 'btn-err'}`}>
+                    <p onClick={handleClose} className={`modal__btns__link btn mr-2 ${action === redTypes.delete ? 'btn-ok' : 'btn-err'}`}>
                         {closeMsg}
                     </p>
                     <p onClick={action === redTypes.delete ? hanldeDelete : handleEdit} className={`modal__btns__link btn ${action === redTypes.edit ? 'btn-ok' : 'btn-err ml-2'}`}>

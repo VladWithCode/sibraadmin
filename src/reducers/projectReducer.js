@@ -3,6 +3,8 @@ import { redTypes } from "../types/reduxTypes";
 const initialState = {
     page: 1,
     name: '',
+    isFracc: false,
+    associationName: '',
     description: '',
     manzanas: '',
     lots: '',
@@ -58,6 +60,8 @@ export const projectReducer = (state = initialState, action) => {
                 ...state,
                 name: action.payload.name,
                 description: action.payload.description,
+                associationName: action.payload.associationName,
+                isFracc: action.payload.isFracc,
                 manzanas: action.payload.manzanas,
                 lots: action.payload.lots,
                 services: action.payload.services,
@@ -112,14 +116,14 @@ export const projectReducer = (state = initialState, action) => {
                 }
             }
 
-        case redTypes.projectSetPage: 
-        return {
-            ...state,
-            page: action.payload.page
-        }
+        case redTypes.projectSetPage:
+            return {
+                ...state,
+                page: action.payload.page
+            }
 
 
-            
+
 
         default:
             return state;

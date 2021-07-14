@@ -29,9 +29,7 @@ export const Clients = () => {
             closeMsg: 'No',
         }
 
-        setTimeout(() => {
-            dispatch(modalUpdate(modalInfo));
-        }, 1500);
+        dispatch(modalUpdate(modalInfo));
 
         dispatch(floatingButtonSet('plus', redTypes.clients));
 
@@ -56,7 +54,7 @@ export const Clients = () => {
                 <div className="app-screen__title projects-screen-top">
                     <h1 className="app-screen__title" >Clientes</h1>
                     <form className="search">
-                        <svg  ><use href="../assets/svg/search.svg#search" ></use></svg>
+                        <svg  ><use href={`../assets/svg/search.svg#search`} ></use></svg>
                         <input onChange={handleSearch} value={inputSearch} placeholder="Nombre/RFC" type="text" name="inputSearch" />
                     </form>
                 </div>
