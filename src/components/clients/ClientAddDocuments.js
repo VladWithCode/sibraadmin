@@ -9,6 +9,10 @@ import { setTempSuccessNotice, uiStartLoading, uiFinishLoading } from '../../act
 import { redirectSet } from '../../actions/redirect';
 import { floatingButtonSet } from '../../actions/floatingButton';
 import { modalUpdate, modalEnable } from '../../actions/modal';
+import { staticURL } from '../../url';
+import { projectEnableSvcModal, projectUpdateSvcModal } from '../../actions/project';
+import { ModalDoc } from '../ModalDoc';
+
 // floatingButtonSet
 
 export const ClientAddDocuments = () => {
@@ -30,6 +34,11 @@ export const ClientAddDocuments = () => {
     })
 
     const { fileName, avFileName } = filesNames;
+
+    const [fileInfo, setFileInfo] = useState({
+        fileName: '',
+        type: ''
+    });
 
     const types = {
         client: 'client',
@@ -62,9 +71,7 @@ export const ClientAddDocuments = () => {
         newForm.set('file', file);
         newForm.set('fileName', name);
 
-        console.log(newForm);
-
-        const url = `http://192.168.1.66:3000/api/customer/${clientId}/${type === types.client ? 'file' : 'aval/file'}`;
+        const url = `${staticURL}/customer/${clientId}/${type === types.client ? 'file' : 'aval/file'}`;
 
 
         await fetch(url, { // Your POST endpoint
@@ -114,8 +121,26 @@ export const ClientAddDocuments = () => {
         dispatch(modalEnable());
     }
 
+    const handleDeleteFile = (fileName, type) => {
+
+        const modalInfo = {
+            title: 'Eliminar documento',
+            text: `¿Desea eliminar el documento: ${fileName}?`,
+            input: null,
+            okMsg: 'Eliminar',
+            closeMsg: 'Cancelar'
+        }
+
+        setFileInfo({ fileName, type });
+
+        dispatch(projectEnableSvcModal());
+        dispatch(projectUpdateSvcModal(modalInfo));
+    }
+
     return (
         <div className="pb-5 project create">
+
+            <ModalDoc fileName={fileInfo.fileName} type={fileInfo.type} id={client._id} />
 
             {
                 client._id && (
@@ -173,8 +198,8 @@ export const ClientAddDocuments = () => {
                                     <div className="scroll mt-3">
                                         <div className="card__body__list">
                                             {
-                                                files.map(({ name, staticPath }) => (
-                                                    <div onClick={() => { handleOpen(staticPath) }} key={name} className="card__body__list__doc">
+                                                files.map(({ name }) => (
+                                                    <div onClick={() => { handleDeleteFile(name, types.client) }} key={name} className="card__body__list__doc">
                                                         <p>
                                                             {name}
                                                         </p>
@@ -226,8 +251,8 @@ export const ClientAddDocuments = () => {
                                     <div className="scroll mt-3">
                                         <div className="card__body__list">
                                             {
-                                                aval.files.map(({ name, staticPath }) => (
-                                                    <div onClick={() => { handleOpen(staticPath) }} key={name} className="card__body__list__doc">
+                                                aval.files.map(({ name }) => (
+                                                    <div onClick={() => { handleDeleteFile(name, types.aval) }} key={name} className="card__body__list__doc">
                                                         <p>
                                                             {name}
                                                         </p>

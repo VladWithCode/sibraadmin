@@ -39,14 +39,11 @@ export const setTempWarning = (warning) => {
 export const setTempSuccessNotice = (msg) => {
     return (dispatch) => {
 
-        console.log('afuera');
-
         dispatch(setSuccessNotice(msg));
 
 
 
         setTimeout(() => {
-            console.log('holiiiiii');
             dispatch(unSetSuccessNotice());
         }, 4001);
 

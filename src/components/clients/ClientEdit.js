@@ -8,7 +8,10 @@ import { floatingButtonSet } from '../../actions/floatingButton';
 import { redirectSet } from '../../actions/redirect';
 import { setTempError, setTempWarning, uiStartLoading, uiFinishLoading, setTempSuccessNotice } from '../../actions/ui';
 import { modalEnable, modalUpdate } from '../../actions/modal';
-import { clientSet } from '../../actions/client';
+import { staticURL } from '../../url';
+import { projectEnableSvcModal, projectUpdateSvcModal } from '../../actions/project';
+import { ModalDoc } from '../ModalDoc';
+
 
 
 export const ClientEdit = () => {
@@ -24,6 +27,12 @@ export const ClientEdit = () => {
     const [isWrong, setIsWrong] = useState([]);
 
     const [hasChanged, setHasChanged] = useState([]);
+
+    const [fileInfo, setFileInfo] = useState({
+        fileName: '',
+        type: ''
+    });
+
 
     const initialForm = {
         names: client?.names,
@@ -44,7 +53,7 @@ export const ClientEdit = () => {
         avPhoneNumber: aval?.phoneNumber?.toString()
     }
 
-    const [formFields, handleInputChange, , , setValues] = useForm(initialForm);
+    const [formFields, handleInputChange] = useForm(initialForm);
 
     const { names, patLastname, matLastname, rfc, curp, email, phoneNumber, col, street, zip, extNumber, intNumber, avNames, avMatLastname, avPatLastname, avPhoneNumber } = formFields;
 
@@ -321,7 +330,7 @@ export const ClientEdit = () => {
             doc: client
         }
 
-        const url = `http://192.168.1.149:3000/api/customers/${clientId}`;
+        const url = `${staticURL}/customers/${clientId}`;
 
         // dispatch(uiStartLoading());
 
@@ -385,7 +394,7 @@ export const ClientEdit = () => {
 
         console.log(newForm);
 
-        const url = `http://192.168.1.149:3000/api/customer/${clientId}/${type === types.client ? 'file' : 'aval/file'}`;
+        const url = `${staticURL}/customer/${clientId}/${type === types.client ? 'file' : 'aval/file'}`;
 
 
         await fetch(url, { // Your POST endpoint
@@ -414,12 +423,36 @@ export const ClientEdit = () => {
         inputFile.value = null;
     }
 
-    const handleOpen = (path) => {
-        const url = `http://192.168.1.149:3000${path}`;
+    const handleDeleteFile = (fileName, type) => {
 
-        window.open(url, "_blank", 'top=500,left=200,frame=false,nodeIntegration=no');
+        const modalInfo = {
+            title: 'Eliminar documento',
+            text: `¿Desea eliminar el documento: ${fileName}?`,
+            input: null,
+            okMsg: 'Eliminar',
+            closeMsg: 'Cancelar'
+        }
+
+        setFileInfo({ fileName, type });
+
+        dispatch(projectEnableSvcModal());
+        dispatch(projectUpdateSvcModal(modalInfo));
     }
 
+    const deleteClient = (type) => {
+        const modalInfo = {
+            title: 'Eliminar Cliente',
+            text: `¿Desea eliminar al cliente ${names} ${patLastname}?`,
+            input: null,
+            okMsg: 'Eliminar',
+            closeMsg: 'Cancelar'
+        }
+
+        setFileInfo({ fileName: `${names} ${patLastname}`, type });
+
+        dispatch(projectEnableSvcModal());
+        dispatch(projectUpdateSvcModal(modalInfo));
+    }
 
     return (
         <div className="pb-5 project create">
@@ -427,10 +460,14 @@ export const ClientEdit = () => {
                 <div className="left">
                     <h3> Edición de Cliente </h3>
                 </div>
-                {/* <div className="right">
-                    Número de cliente {clients.length + 1}
-                </div> */}
+                <div className="right">
+                    <button className="cancel" onClick={() => deleteClient(redTypes.clientDelete)}>
+                        Eliminar cliente
+                    </button>
+                </div>
             </div>
+
+            <ModalDoc fileName={fileInfo.fileName} type={fileInfo.type} id={client._id} />
 
             <div className="card edit mt-4">
                 <div className="card__header">
@@ -520,8 +557,8 @@ export const ClientEdit = () => {
                         <div className="scroll mt-3">
                             <div className="card__body__list">
                                 {
-                                    files.map(({ name, staticPath }) => (
-                                        <div onClick={() => { handleOpen(staticPath) }} key={name} className="card__body__list__doc">
+                                    files.map(({ name }) => (
+                                        <div onClick={() => { handleDeleteFile(name, redTypes.client) }} key={name} className="card__body__list__doc">
                                             <p>
                                                 {name}
                                             </p>
@@ -578,7 +615,7 @@ export const ClientEdit = () => {
                             <div className="card__body__list">
                                 {
                                     aval.files.map(({ name, staticPath }) => (
-                                        <div onClick={() => { handleOpen(staticPath) }} key={name} className="card__body__list__doc">
+                                        <div onClick={() => { handleDeleteFile(name, redTypes.aval) }} key={name} className="card__body__list__doc">
                                             <p>
                                                 {name}
                                             </p>

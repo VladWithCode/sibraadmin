@@ -74,6 +74,10 @@ export const redTypes = {
     manzanasSet: '[Manzanas] Set',
 
     projects: 'projects',
+    project: 'project',
+    client: 'client',
+    clientDelete: 'clientDelete',
+    aval: 'aval',
     clients: 'clients',
     history: 'history',
     settings: 'settings',

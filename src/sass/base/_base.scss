@@ -31,6 +31,26 @@ body {
     line-height: 1.2;
     font-size: 1.3rem;
     background-color: $color-bc;
+
+    &::-webkit-scrollbar {
+        width: 1rem;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: lighten($color-text-light, 60);
+        border-radius: 4px;
+        width: 2rem;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: lighten($color-ok, 20);
+        border-radius: 4px;
+
+        &:hover {
+            background-color: $color-ok;
+        }
+
+    }
 }
 
 html {
@@ -226,10 +246,40 @@ a {
     width: 100vw;
     padding: 0 0 3rem 5rem;
     transition: .2s all linear;
+    // overflow: hidden;
 }
 
 .app.minimize {
     padding: 0 0 0 20rem;
+}
+
+.app-scroll {
+    overflow-y: scroll;
+    height: 90vh;
+    padding: 2rem 3rem 6rem 3rem !important;
+    margin: 2rem auto 30rem auto !important;
+
+    &::-webkit-scrollbar {
+        width: 1rem;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: lighten($color-text-light, 20);
+        border-radius: 5rem;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: lighten($color-ok, 10);
+        border-radius: 5rem;
+        @include transition;
+
+        &:hover {
+            background-color: $color-ok;
+        }
+
+    }
+
+
 }
 
 input,

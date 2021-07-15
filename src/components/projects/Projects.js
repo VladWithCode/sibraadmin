@@ -57,7 +57,7 @@ export const Projects = React.memo(({ history: { location: { pathname } } }) => 
             <div className="app-screen__title projects-screen-top">
                 <h1 className="app-screen__title" >Proyectos</h1>
                 <form className="search">
-                    <svg ><use href={`../../assets/svg/search.svg#search`} ></use></svg>
+                    <svg ><use href={`../assets/svg/search.svg#search`} ></use></svg>
                     <input type="text" name="inputSearch" value={inputSearch} onChange={handleSearch} />
                 </form>
             </div>

@@ -1,9 +1,10 @@
 import React from 'react'
+import { CalendarComponent } from './Calendar';
 
 export const History = () => {
     return (
-        <h1>
-            Historial
-        </h1>
+        <div>
+            <CalendarComponent></CalendarComponent>
+        </div>
     )
 }

@@ -1,13 +1,16 @@
 
 import { redTypes } from "../types/reduxTypes";
-import { uiStartLoading, uiFinishLoading } from './ui';
+import { uiStartLoading, uiFinishLoading, setTempSuccessNotice, setTempError, setTempWarning } from './ui';
 import { clientSet } from './client';
+import { staticURL } from '../url';
+import { redirectSet } from './redirect';
+import { modalEnable, modalUpdate } from './modal';
 
 // http://189.155.253.90:3000/api/proyects/
 
 export const getProjects = () => {
 
-    const url = 'http://192.168.1.149:3000/api/projects/';
+    const url = `${staticURL}/projects/`;
 
     console.log('obteniendo proyectos');
 
@@ -29,7 +32,7 @@ export const getProjects = () => {
 
 export const getClients = () => {
 
-    const url = 'http://192.168.1.149:3000/api/customers/';
+    const url = `${staticURL}/customers/`;
 
     console.log('obteniendo clientes');
 
@@ -48,7 +51,7 @@ export const getClients = () => {
 
 export const getLots = (projectId) => {
 
-    const url = `http://192.168.1.149:3000/api/lots/on-project/${projectId}`;
+    const url = `${staticURL}/lots/on-project/${projectId}`;
 
     console.log('obteniendo lotes');
 
@@ -70,7 +73,7 @@ export const getLots = (projectId) => {
 
 export const getClient = _id => {
 
-    const url = `http://192.168.1.149:3000/api/customer/${_id}`;
+    const url = `${staticURL}/customer/${_id}`;
 
     console.log('obteniendo cliente');
 
@@ -85,6 +88,85 @@ export const getClient = _id => {
             })
             .catch(err => console.log(err))
     }
+}
+
+export const deleteFile = (fileName, type, id) => {
+
+    const url = `${staticURL}/${type === redTypes.project ? 'projects' : 'customers'}/${id}${type === redTypes.aval ? '/aval' : ''}/file`;
+
+    const data = { fileName };
+
+
+    return (dispatch) => {
+
+        dispatch(uiStartLoading);
+
+        fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                return response.json();
+            })
+            .then((data) => {
+                console.log('data', data);
+                dispatch(uiFinishLoading());
+                dispatch(setTempSuccessNotice(`Documento ${fileName} eliminado con éxito`));
+                type !== redTypes.project && (
+                    dispatch(getClient(id))
+                )
+            })
+            .catch(err => {
+                console.log(err);
+                dispatch(uiFinishLoading());
+                dispatch(setTempError('No se pudo eliminar el documento, intente más tarde'));
+            });
+    }
+
+}
+
+export const deleteClient = (id, name) => {
+
+    const url = `${staticURL}/customers/${id}`;
+
+    return (dispatch) => {
+
+        fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                return response.json();
+            })
+            .then((data) => {
+                console.log('data', data);
+                dispatch(uiFinishLoading());
+                dispatch(redirectSet(redTypes.clients, '/clientes'));
+                const modalInfo = {
+                    title: `Cliente eliminado con éxito`,
+                    text: `Cliente ${name} ha sido eliminado`,
+                    link: `/clientes`,
+                    okMsg: 'Continuar',
+                    closeMsg: null,
+                    type: redTypes.clientEdit
+                }
+
+                dispatch(modalUpdate(modalInfo));
+                dispatch(modalEnable());
+
+            })
+            .catch(err => {
+                console.log(err);
+                dispatch(uiFinishLoading());
+                dispatch(setTempError('No se pudo eliminar el documento, intente más tarde'));
+            });
+    }
+
 }
 
 const loadProjects = (projects) => {

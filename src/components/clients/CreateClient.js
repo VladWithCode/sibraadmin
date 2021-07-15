@@ -6,34 +6,18 @@ import { floatingButtonSet } from '../../actions/floatingButton';
 import { redTypes } from '../../types/reduxTypes';
 import { redirectSet } from '../../actions/redirect';
 import { clientSet } from '../../actions/client';
+import { getClients } from '../../actions/consults';
 import { setTempError, setTempWarning, uiStartLoading, uiFinishLoading } from '../../actions/ui';
+import { staticURL } from '../../url';
 
 export const CreateClient = () => {
 
     const dispatch = useDispatch();
 
-    const { clients } = useSelector(state => state);
+    const { clients, client } = useSelector(state => state);
 
-    const initialForm = {
-        names: '',
-        patLastname: '',
-        matLastname: '',
-        _id: '',
-        curp: '',
-        email: '',
-        phoneNumber: '',
-        col: '',
-        street: '',
-        zip: '',
-        extNumber: '',
-        intNumber: '',
-        avNames: '',
-        avPatLastname: '',
-        avMatLastname: '',
-        avPhoneNumber: ''
-    }
 
-    const [formFields, handleInputChange] = useForm(initialForm);
+    const [formFields, handleInputChange] = useForm(client);
 
     const { names, patLastname, matLastname, _id, curp, email, phoneNumber, col, street, zip, extNumber, intNumber, avNames, avMatLastname, avPatLastname, avPhoneNumber } = formFields;
 
@@ -54,6 +38,9 @@ export const CreateClient = () => {
     const handleChange = e => {
         handleInputChange(e);
         checkEmptyField(e);
+
+        dispatch(clientSet({ ...formFields, [e.target.name]: e.target.value }));
+
     }
 
     const cancel = () => {
@@ -121,6 +108,7 @@ export const CreateClient = () => {
 
                 dispatch(modalUpdate(modalInfo));
                 dispatch(modalEnable());
+                dispatch(getClients())
                 dispatch(clientSet(res.customer));
 
             } else if (res.err?.code === 11000) {
@@ -288,7 +276,7 @@ export const CreateClient = () => {
 
         console.log('Subiendo cliente');
 
-        const url = 'http://192.168.1.66:3000/api/customers/';
+        const url = `${staticURL}/customers/`;
 
         // dispatch(uiStartLoading());
 

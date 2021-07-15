@@ -1,5 +1,6 @@
 import { redTypes } from "../types/reduxTypes";
 import { uiStartLoading, uiFinishLoading } from "./ui";
+import { staticURL } from '../url';
 
 
 export const projectCreate = project => {
@@ -77,7 +78,7 @@ export const uploadProjectDocument = (projectDocument, lots) => {
 
         console.log('Subiendo Proyecto');
 
-        const url = 'http://192.168.1.149:3000/api/project/';
+        const url = `${staticURL}/project/`;
 
         const data = {
             projectDocument,
