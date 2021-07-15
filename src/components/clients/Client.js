@@ -8,6 +8,7 @@ import { BreadCrumbs } from '../BreadCrumbs';
 import { floatingButtonSet } from '../../actions/floatingButton';
 import { modalUpdate } from '../../actions/modal';
 import { getClient } from '../../actions/consults';
+import { staticURLDocs } from '../../url';
 
 export const Client = () => {
 
@@ -51,7 +52,7 @@ export const Client = () => {
     }, [dispatch, client, clientId, names, patLastname, id]);
 
     const handleOpen = (path) => {
-        const url = `http://192.168.1.149:3000${path}`;
+        const url = `${staticURLDocs}${path}`;
 
         window.open(url, "_blank", 'top=500,left=200,frame=true,nodeIntegration=no');
     }

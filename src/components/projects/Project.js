@@ -10,6 +10,7 @@ import { redTypes } from '../../types/reduxTypes';
 import { BreadCrumbs } from '../BreadCrumbs';
 import { FloatingButton } from '../FloatingButton';
 import { LotsList } from '../lots/LotsList';
+import { staticURLDocs } from '../../url';
 
 export const Project = React.memo(({ history: { location: { pathname } } }) => {
 
@@ -18,7 +19,7 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
 
     const { projects } = useSelector(state => state);
 
-    const { name, _id, associationName, totalLots, description, isFracc, reservedLots, liquidatedLots, deliveredLots, lotTypes, availableServices, manzanas } = projects.find(({ _id }) => _id === projectId);
+    const { name, _id, associationName, totalLots, description, isFracc, reservedLots, liquidatedLots, deliveredLots, lotTypes, availableServices, manzanas, files } = projects.find(({ _id }) => _id === projectId);
 
     const [searchParams, setSearchParams] = useState({
         searchOrder: null,
@@ -65,7 +66,11 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
 
     }, [dispatch, _id, name]);
 
+    const handleOpen = (path) => {
+        const url = `${staticURLDocs}${path}`;
 
+        window.open(url, "_blank", 'top=500,left=200,frame=true,nodeIntegration=no');
+    }
 
     return (
         <>
@@ -155,6 +160,15 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
                             <h4>Documentos Disponibles</h4>
                         </div>
                         <div className="card__body__list">
+                            {
+                                files?.map(({ name, staticPath }) => (
+                                    <div onClick={() => { handleOpen(staticPath) }} key={name} className="card__body__list__doc">
+                                        <p>
+                                            {name}
+                                        </p>
+                                    </div>
+                                ))
+                            }
                         </div>
 
                     </div>

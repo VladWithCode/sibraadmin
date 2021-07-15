@@ -12,11 +12,11 @@ const relativePath = app.getAppPath();
 function createWindow() {
     mainWindow = new BrowserWindow({ width: 900, height: 680, backgroundColor: '#fff', minWidth: 900, minHeight: 680 });
     mainWindow.loadURL(isDev ? 'http://localhost:3000' : path.join(relativePath, 'build/index.html'));
-    // if (isDev) {
-    // Open the DevTools.
-    //BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
-    mainWindow.webContents.openDevTools();
-    // }
+    if (isDev) {
+        // Open the DevTools.
+        //BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
+        mainWindow.webContents.openDevTools();
+    }
     // if (!isDev) {
     //     mainWindow.webPreferences.devTools = false;
     // }
