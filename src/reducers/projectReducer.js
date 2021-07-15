@@ -51,6 +51,16 @@ const initialState = {
 //     }
 // });
 
+export const editProjectReducer = (state = {}, action) => {
+    switch (action.type) {
+        case redTypes.projectSet:
+            return action.payload
+
+        default:
+            return state;
+    }
+}
+
 
 export const projectReducer = (state = initialState, action) => {
 
@@ -69,6 +79,8 @@ export const projectReducer = (state = initialState, action) => {
                 pricePerSqM: action.payload.pricePerSqM,
                 priceCorner: action.payload.priceCorner
             }
+
+
 
         case redTypes.projectEdit:
             return {

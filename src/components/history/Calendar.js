@@ -1,10 +1,29 @@
 import React, { useState } from 'react';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
+import { Calendar, momentLocalizer, dateFnsLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import "moment/locale/es-mx";
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { messages } from '../../helpers/calendarSetup';
 import { CalendarEvent } from './CalendarEvent';
+// import format from 'date-fns/format'
+// import parse from 'date-fns/parse'
+// import startOfWeek from 'date-fns/startOfWeek'
+// import getDay from 'date-fns/getDay'
+
+
+// const locales = {
+//     'es': require('date-fns/locale/es'),
+// }
+
+// console.log(startOfWeek);
+
+// const localizer = dateFnsLocalizer({
+//     format,
+//     parse,
+//     startOfWeek,
+//     getDay,
+//     locales,
+// })
 
 moment.locale('es-mx');
 
@@ -12,11 +31,12 @@ const localizer = momentLocalizer(moment) // or globalizeLocalizer
 
 const events = [
     {
-        title: 'cumpleaños del jefe',
+        title: 'Pago de mensualidad',
         start: moment().toDate(),
         end: moment().add(4, 'hours').toDate(),
         bgcolor: '#fafafa',
-        state: 'late'
+        state: 'late',
+        allDay: true
     },
     {
         title: 'cumpleaños del jefe',

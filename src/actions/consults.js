@@ -5,6 +5,7 @@ import { clientSet } from './client';
 import { staticURL } from '../url';
 import { redirectSet } from './redirect';
 import { modalEnable, modalUpdate } from './modal';
+import { projectSet } from "./project";
 
 // http://189.155.253.90:3000/api/proyects/
 
@@ -24,6 +25,28 @@ export const getProjects = () => {
             .then(data => {
                 dispatch(uiFinishLoading());
                 dispatch(loadProjects(data.projects))
+            })
+            .catch(err => console.log(err))
+    }
+
+}
+
+export const getProject = (id) => {
+
+    const url = `${staticURL}/projects/${id}`;
+
+    console.log('obteniendo proyecto');
+
+    return (dispatch) => {
+        dispatch(uiStartLoading());
+        fetch(url)
+            .then(resp => {
+                console.log(resp);
+                return resp.json();
+            })
+            .then(data => {
+                dispatch(uiFinishLoading());
+                dispatch(projectSet(data.project))
             })
             .catch(err => console.log(err))
     }

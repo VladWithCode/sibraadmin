@@ -28,10 +28,10 @@ export const NavBar = () => {
                     <svg><use href="../assets/svg/users.svg#users" ></use></svg>
                     <span>Clientes</span>
                 </NavLink>
-                <NavLink to="/historial" activeClassName="active" className="link">
+                {/* <NavLink to="/historial" activeClassName="active" className="link">
                     <svg><use href="/../assets/svg/history.svg#history" ></use></svg>
                     <span>Hitorial</span>
-                </NavLink>
+                </NavLink> */}
                 {/* <NavLink to="/ajustes" activeClassName="active" className="link settings">
                     <svg><use href="/../assets/svg/cog.svg#cog" ></use></svg>
                     <span>Ajustes</span>

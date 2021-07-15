@@ -22,6 +22,12 @@ export const projectCreate = project => {
     }
 }
 
+export const projectSet = project => ({
+    type: redTypes.projectSet,
+    payload: project
+
+})
+
 export const projectDeleteService = service => ({
     type: redTypes.projectDeleteService,
     payload: {

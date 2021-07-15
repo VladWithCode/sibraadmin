@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { redTypes } from '../../types/reduxTypes';
 import { lotTypesModalConfirmReset } from '../../actions/lotTypes';
 import { newLotsSet } from '../../actions/newLots';
-import { projectSetPage } from '../../actions/project';
+import { projectSet, projectSetPage } from '../../actions/project';
 // import { setTempError, setTempWarning, uiFinishLoading, uiStartLoading } from '../../actions/ui';
 import { setTempError, uiFinishLoading, uiStartLoading } from '../../actions/ui';
 import { modalEnable, modalUpdate } from '../../actions/modal';
+import { staticURL } from '../../url';
 
 export const Create3 = () => {
 
@@ -453,10 +454,12 @@ export const Create3 = () => {
         const response = await uploadProjectDocument(projectDocument, lots);
 
         if (response.status === 'OK') {
+
+
             const modalInfo = {
                 title: `Proyecto ${project.name} registrado con éxito`,
-                text: response.message,
-                link: `/proyectos`,
+                text: 'Continúe para agregar documentos al proyecto',
+                link: `/proyectos/doc/${response.project._id}`,
                 okMsg: 'Continuar',
                 closeMsg: null,
                 type: redTypes.projectCreate
@@ -474,7 +477,7 @@ export const Create3 = () => {
 
         console.log('Subiendo Proyecto');
 
-        const url = 'http://192.168.1.149:3000/api/project/';
+        const url = `${staticURL}/project/`;
 
         const data = {
             projectDocument,
@@ -497,6 +500,7 @@ export const Create3 = () => {
                 return response.json()
             })
             .then(data => {
+                dispatch(projectSet(data.project));
                 return data;
             })
             .catch(err => {

@@ -22,7 +22,7 @@ import { UiError } from "../components/UiError";
 import { useSelector } from "react-redux";
 import { ClientAddDocuments } from "../components/clients/ClientAddDocuments";
 import { ClientEdit } from "../components/clients/ClientEdit";
-
+import { ProjectAddDocuments } from '../components/projects/ProjectAddDocuments';
 
 
 
@@ -48,6 +48,7 @@ export const AppRouter = () => {
                         <Route exact path="/proyectos/ver/:projectId" component={Project} ></Route>
                         <Route exact path="/proyectos/nuevo" component={CreateProject} ></Route>
                         <Route exact path="/proyectos/editar/:projectId" component={EditProject}  ></Route>
+                        <Route exact path="/proyectos/doc/:projectId" component={ProjectAddDocuments}  ></Route>
 
 
                         <Route exact path="/clientes" component={Clients} ></Route>

@@ -6,7 +6,7 @@ import thunk from 'redux-thunk';
 import { floatingButtonReducer } from '../reducers/floatingButtonReducer';
 import { lotReducer } from '../reducers/lotReducer';
 import { modalReducer } from '../reducers/modalReducer';
-import { projectReducer } from '../reducers/projectReducer';
+import { editProjectReducer, projectReducer } from '../reducers/projectReducer';
 import { redirectReducer } from '../reducers/redirectReducer';
 import { uiReducer } from '../reducers/uiReducer';
 import { lotTypesReducer } from '../reducers/lotTypeReducer';
@@ -32,7 +32,8 @@ const reducers = combineReducers({
     newLots: newLotsReducer,
     projects: consultingReducer,
     lots: consultingLotsReducer,
-    clients: consultingClients
+    clients: consultingClients,
+    projectEdit: editProjectReducer
 })
 
 export const store = createStore(
