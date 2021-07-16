@@ -15,9 +15,9 @@ export const Client = () => {
     const { clientId } = useParams();
     const dispatch = useDispatch();
     const { clients } = useSelector(state => state);
-    const client = clients.find(c => c.id === clientId);
+    const client = clients.find(c => c._id === clientId);
 
-    const { names, patLastname, matLastname, phoneNumber, id, address, curp, email, aval, files } = client;
+    const { names, patLastname, matLastname, phoneNumber, _id, address, curp, email, aval, files } = client;
     const { col, extNumber, street, zip } = address;
 
     useEffect(() => {
@@ -27,7 +27,7 @@ export const Client = () => {
         const modalInfo = {
             title: 'Editar Cliente',
             text: `¿Desea editar al cliente ${names} ${patLastname}?`,
-            link: `/clientes/edit/${id}`,
+            link: `/clientes/edit/${_id}`,
             okMsg: 'Sí',
             closeMsg: 'No',
         }
@@ -49,7 +49,7 @@ export const Client = () => {
         dispatch(redirectSet(redTypes.clients, `/clientes/ver/${clientId}`));
         dispatch(floatingButtonSet('pencil', redTypes.clientEdit));
 
-    }, [dispatch, client, clientId, names, patLastname, id]);
+    }, [dispatch, client, clientId, names, patLastname, _id]);
 
     const handleOpen = (path) => {
         const url = `${staticURLDocs}${path}`;
@@ -65,7 +65,7 @@ export const Client = () => {
                 <div className="project__header">
                     <div className="left">
                         <h3> Cliente </h3>
-                        <span> {id} </span>
+                        <span> {_id} </span>
                     </div>
                     <div className="right">
 
@@ -93,7 +93,7 @@ export const Client = () => {
                             </div>
                             <div className="card__body__item">
                                 <span>RFC</span>
-                                <p> {id} </p>
+                                <p> {_id} </p>
                             </div>
                             <div className="card__body__item">
                                 <span>CURP</span>

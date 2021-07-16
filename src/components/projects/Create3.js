@@ -427,14 +427,12 @@ export const Create3 = () => {
             associationName: project.associationName,
             description: project.description,
             availableServices: services,
+            manzanas: manzanas.length,
             lots: [],
-            lotTypes: lotTypes.map(({ type, sameArea, pricePerM, cornerPrice, area, front, side }) => (
+            lotTypes: lotTypes.map(({ type, sameArea, pricePerM, area, front, side }) => (
                 {
                     code: type,
-                    pricesPerSqMeter: {
-                        corner: cornerPrice,
-                        regular: pricePerM
-                    },
+                    price: pricePerM,
                     area: area ? +area : undefined,
                     measures: sameArea ? [
                         {
@@ -640,7 +638,7 @@ export const Create3 = () => {
                     Anterior
                 </button>
                 <button onClick={handleNextPage} className="btn btn-next">
-                    Siguiente
+                    Crear Proyecto
                 </button>
             </div>
         </div>

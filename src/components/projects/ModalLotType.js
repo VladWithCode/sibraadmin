@@ -19,7 +19,6 @@ export const ModalLotType = () => {
         type: '',
         sameArea: false,
         pricePerM: '',
-        cornerPrice: '',
         area: '',
         front: '',
         side: ''
@@ -27,7 +26,7 @@ export const ModalLotType = () => {
 
     const [formValues, handleInputChange, reset, , setValues] = useForm(initialForm);
 
-    const { type, pricePerM, cornerPrice, area, front, side } = formValues;
+    const { type, pricePerM, area, front, side } = formValues;
 
     const [sameArea, setsameArea] = useState(undefined);
 
@@ -49,7 +48,6 @@ export const ModalLotType = () => {
             const newType = {
                 type,
                 pricePerM,
-                cornerPrice,
                 sameArea,
                 area: sameArea ? area : undefined,
                 front: sameArea ? front : undefined,
@@ -68,7 +66,6 @@ export const ModalLotType = () => {
             const newType = {
                 newType: type,
                 pricePerM,
-                cornerPrice,
                 sameArea,
                 area: sameArea ? area : undefined
             }
@@ -95,17 +92,17 @@ export const ModalLotType = () => {
             }
         }
 
-        if ((Number(pricePerM) === 0) || (Number(cornerPrice) === 0) || sameArea === undefined) {
+        if ((Number(pricePerM) === 0) || sameArea === undefined) {
             dispatch(setTempError('Todos los campos son obligatorios'));
 
             return false;
         }
 
-        if (Number(pricePerM) >= Number(cornerPrice)) {
-            dispatch(setTempError('El precio en esquinas debe ser mayor'));
+        // if (Number(pricePerM) >= Number(cornerPrice)) {
+        //     dispatch(setTempError('El precio en esquinas debe ser mayor'));
 
-            return false;
-        }
+        //     return false;
+        // }
 
         if (sameArea) {
             if (area) {
@@ -141,12 +138,8 @@ export const ModalLotType = () => {
                         <input type="text" onChange={handleInputChange} value={type} name="type" />
                     </div>
                     <div className="modal__input__field">
-                        <span>Precio por m<sup>2</sup>:</span>
+                        <span>Precio:</span>
                         <input type="number" onChange={handleInputChange} value={pricePerM} name="pricePerM" />
-                    </div>
-                    <div className="modal__input__field">
-                        <span>Precio por m<sup>2</sup> en esquinas:</span>
-                        <input type="number" onChange={handleInputChange} value={cornerPrice} name="cornerPrice" />
                     </div>
                     <div className="modal__input__field mt-3 mb-2">
                         <span>Misma área:</span>

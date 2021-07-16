@@ -5,6 +5,7 @@ import { modalDisable } from '../actions/modal';
 import { redirectSet } from '../actions/redirect';
 import { clientSet } from '../actions/client';
 import { redTypes } from '../types/reduxTypes'
+import { getProjects } from '../actions/consults';
 
 export const ModalConfirm = () => {
 
@@ -18,7 +19,9 @@ export const ModalConfirm = () => {
 
     const handleOk = () => {
         if (type === redTypes.projectCreate) {
+            dispatch(getProjects());
             dispatch(redirectSet(redTypes.projects, '/proyectos'));
+
         }
         if (type === redTypes.clientEdit) {
             dispatch(redirectSet(redTypes.clients, `/clientes`));

@@ -116,6 +116,8 @@ export const CreateClient = () => {
                 const { isRepeated, key, dispName } = repeated;
                 console.log(repeated);
 
+                dispatch(setTempError(`Hubo un error al registrar al cliente`))
+
                 if (isRepeated) {
                     setEmptyFields([key]);
                     dispatch(setTempError(`Ya hay un cliente con el mismo ${dispName}`));

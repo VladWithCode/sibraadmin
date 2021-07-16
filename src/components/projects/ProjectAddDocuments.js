@@ -45,7 +45,7 @@ export const ProjectAddDocuments = () => {
     useEffect(() => {
 
         dispatch(getProject(projectId));
-        dispatch(redirectSet(redTypes.clients, `/proyectos/docs/${projectId}`));
+        dispatch(redirectSet(redTypes.projects, `/proyectos/docs/${projectId}`));
         dispatch(floatingButtonSet('pencil', redTypes.projectCreate));
 
     }, [dispatch, projectId])
@@ -71,6 +71,8 @@ export const ProjectAddDocuments = () => {
         const url = `${staticURL}/projects/${projectId}/file`;
 
 
+        console.log(file);
+
         const response = await fetch(url, { // Your POST endpoint
             method: 'PUT',
             body: newForm
@@ -85,13 +87,18 @@ export const ProjectAddDocuments = () => {
                 console.log(success);
                 dispatch(uiFinishLoading());
                 dispatch(setTempSuccessNotice(`Archivo ${name} agregado con éxito`));
+                dispatch(getProject(success.project._id));
             } // Handle the success response object
         ).catch(
-            error => console.log(error) // Handle the error response object
+            error => {
+                console.log(error)
+                dispatch(uiFinishLoading());
+            } // Handle the error response object
+
         );
 
         reset();
-        dispatch(getProject(response.project._id));
+
 
 
         const inputFile = document.querySelector(`[name=file`);
@@ -112,6 +119,7 @@ export const ProjectAddDocuments = () => {
 
         dispatch(modalUpdate(modalInfo));
         dispatch(modalEnable());
+
     }
 
     const handleDeleteFile = (fileName, type) => {

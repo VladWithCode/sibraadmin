@@ -24,7 +24,7 @@ export const getProjects = () => {
             })
             .then(data => {
                 dispatch(uiFinishLoading());
-                dispatch(loadProjects(data.projects))
+                dispatch(loadProjects(data.projects ? data.projects : []))
             })
             .catch(err => console.log(err))
     }
@@ -41,7 +41,6 @@ export const getProject = (id) => {
         dispatch(uiStartLoading());
         fetch(url)
             .then(resp => {
-                console.log(resp);
                 return resp.json();
             })
             .then(data => {
@@ -65,7 +64,8 @@ export const getClients = () => {
             .then(resp => resp.json())
             .then(data => {
                 dispatch(uiFinishLoading());
-                dispatch(loadClients(data.customers.docs));
+                dispatch(loadClients(data.customers ? data.customers : []));
+                console.log(data);
             })
             .catch(err => console.log(err))
     }
@@ -122,7 +122,7 @@ export const deleteFile = (fileName, type, id) => {
 
     return (dispatch) => {
 
-        dispatch(uiStartLoading);
+        dispatch(uiStartLoading());
 
         fetch(url, {
             method: 'DELETE',
@@ -138,8 +138,10 @@ export const deleteFile = (fileName, type, id) => {
                 console.log('data', data);
                 dispatch(uiFinishLoading());
                 dispatch(setTempSuccessNotice(`Documento ${fileName} eliminado con éxito`));
-                type !== redTypes.project && (
+                type !== redTypes.project ? (
                     dispatch(getClient(id))
+                ) : (
+                    dispatch(getProject(id))
                 )
             })
             .catch(err => {

@@ -105,10 +105,10 @@ export const Create1 = () => {
             return false;
         }
 
-        if (!services || services?.length === 0) {
-            dispatch(setTempError('Debe agregar al menos un servicio'));
-            return false;
-        }
+        // if (!services || services?.length === 0) {
+        //     dispatch(setTempError('Debe agregar al menos un servicio'));
+        //     return false;
+        // }
 
         if (!lotTypes || lotTypes?.length === 0) {
             dispatch(setTempError('Debe agregar al menos un tipo de lote'));

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { lotTypesModalConfirmEnable, lotTypesModalConfirmUpdate } from '../../actions/lotTypes';
 import { redTypes } from '../../types/reduxTypes';
 
-export const LotTypeCard = ({ type, sameArea, pricePerM, cornerPrice, area, front, side }) => {
+export const LotTypeCard = ({ type, sameArea, pricePerM, area, front, side }) => {
 
     const dispatch = useDispatch();
 
@@ -69,25 +69,22 @@ export const LotTypeCard = ({ type, sameArea, pricePerM, cornerPrice, area, fron
                         )
                     }
                     <div className="prices">
-                        <h5>
-                            Precios por m<sup>2</sup>
-                        </h5>
                         <div className="card__body__item">
                             <span>
-                                Regular
+                                Precio
                             </span>
                             <p>
                                 ${pricePerM}
                             </p>
                         </div>
-                        <div className="card__body__item">
+                        {/* <div className="card__body__item">
                             <span>
                                 Esquinas
                             </span>
                             <p>
-                                ${cornerPrice}
+                                $
                             </p>
-                        </div>
+                        </div> */}
                     </div>
 
 

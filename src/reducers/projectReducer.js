@@ -54,6 +54,7 @@ const initialState = {
 export const editProjectReducer = (state = {}, action) => {
     switch (action.type) {
         case redTypes.projectSet:
+            console.log('payload', action.payload);
             return action.payload
 
         default:

@@ -61,7 +61,7 @@ export const Clients = () => {
 
                 <div className="clients">
                     {
-                        dispClients?.map(({ _id, names, patLastname, matLastname, phoneNumber, id: rfc }) => {
+                        dispClients?.map(({ _id, names, patLastname, matLastname, phoneNumber, rfc }) => {
 
                             const name = `${names} ${patLastname && patLastname} ${matLastname && matLastname}`
 

@@ -48,13 +48,13 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
 
         dispatch(breadcrumbsUpdate(redTypes.projects, breadcrumbs));
         dispatch(redirectSet(redTypes.projects, `/proyectos/ver/${_id}`));
-        dispatch(floatingButtonSet('pencil', redTypes.projectCreate));
+        dispatch(floatingButtonSet('pencil', redTypes.projectEdit));
 
         dispatch(getLots(_id))
 
         const modalInfo = {
-            title: 'Editarproyecto',
-            text: '¿Desea editar el proyecto {name}?',
+            title: 'Editar proyecto',
+            text: `¿Desea editar el proyecto ${name}?`,
             link: `/proyectos/editar/${_id}`,
             okMsg: 'Sí',
             closeMsg: 'No',

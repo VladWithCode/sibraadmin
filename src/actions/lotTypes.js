@@ -18,7 +18,7 @@ export const lotTypesCreate = ({ type, sameArea, pricePerM, cornerPrice, area, f
 }
 
 
-export const lotTypesEdit = (type, { newType, sameArea, pricePerM, cornerPrice, area, front, side }) => {
+export const lotTypesEdit = (type, { newType, sameArea, pricePerM, area, front, side }) => {
     return {
         type: redTypes.lotTypesEdit,
         payload: {
@@ -26,7 +26,6 @@ export const lotTypesEdit = (type, { newType, sameArea, pricePerM, cornerPrice, 
             newType,
             sameArea,
             pricePerM,
-            cornerPrice,
             area,
             front,
             side

@@ -22,8 +22,8 @@ export const LotTypesList = () => {
                 </button>
             </div>
             {
-                lotTypes?.map(({ type, sameArea, pricePerM, cornerPrice, area, front, side }) => (
-                    <LotTypeCard key={type} type={type} sameArea={sameArea} pricePerM={pricePerM} cornerPrice={cornerPrice} area={area} front={front} side={side} />
+                lotTypes?.map(({ type, sameArea, pricePerM, area, front, side }) => (
+                    <LotTypeCard key={type} type={type} sameArea={sameArea} pricePerM={pricePerM} area={area} front={front} side={side} />
                 ))
             }
         </>
