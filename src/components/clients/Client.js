@@ -17,8 +17,8 @@ export const Client = () => {
     const { clients } = useSelector(state => state);
     const client = clients.find(c => c._id === clientId);
 
-    const { names, patLastname, matLastname, phoneNumber, _id, address, curp, email, aval, files } = client;
-    const { col, extNumber, street, zip } = address;
+    const { names, patLastname, matLastname, phoneNumber, _id, address, curp, email, files, refs } = client;
+    const { col, extNumber, intNumber, street, zip } = address;
 
     useEffect(() => {
 
@@ -87,10 +87,14 @@ export const Client = () => {
                                 <span>Apellido Paterno</span>
                                 <p> {patLastname} </p>
                             </div>
-                            <div className="card__body__item">
-                                <span>Apellido Materno</span>
-                                <p> {matLastname ? matLastname : ' '} </p>
-                            </div>
+                            {
+                                matLastname && (
+                                    <div className="card__body__item">
+                                        <span>Apellido Materno</span>
+                                        <p> {matLastname} </p>
+                                    </div>
+                                )
+                            }
                             <div className="card__body__item">
                                 <span>RFC</span>
                                 <p> {_id} </p>
@@ -125,9 +129,17 @@ export const Client = () => {
                                 <p>{street}</p>
                             </div>
                             <div className="card__body__item">
-                                <span>Número</span>
+                                <span>Número exterior</span>
                                 <p>{extNumber}</p>
                             </div>
+                            {
+                                intNumber && (
+                                    <div className="card__body__item">
+                                        <span>Número interior</span>
+                                        <p>{intNumber}</p>
+                                    </div>
+                                )
+                            }
                             <div className="card__body__item">
                                 <span>Código Postal</span>
                                 <p>{zip}</p>
@@ -155,31 +167,93 @@ export const Client = () => {
                     </div>
                 </div>
 
-                <div className="card-grid tall mb-4">
-                    <div className="card">
-                        <div className="card__header">
-                            <img src="../assets/img/aval.png" alt="" />
-                            <h4>Información del Aval</h4>
-                        </div>
+                <div className="project__header">
+                    <div className="left">
+                        <h3> Referencias </h3>
+                    </div>
 
-                        <div className="card__body">
-                            <div className="full">
+                </div>
+
+                <div className="card-grid">
+
+                    {
+                        refs.map((ref, index) => (
+
+
+
+                            <div className={`card`}>
+                                <div className="card__header">
+                                    <img src="../assets/img/aval.png" alt="" />
+                                    <h4>Referencia personal {index + 1}</h4>
+                                </div>
                                 <div className="card__body__item">
                                     <span>Nombre(s)</span>
-                                    <p>{aval.names}</p>
+                                    <p>{ref.names}</p>
                                 </div>
                                 <div className="card__body__item">
                                     <span>Apellido Paterno</span>
-                                    <p> {aval.patLastname} </p>
+                                    <p> {ref.patLastname} </p>
                                 </div>
-                                <div className="card__body__item">
-                                    <span>Apellido Materno</span>
-                                    <p> {aval.matLastname ? matLastname : ' '} </p>
-                                </div>
+                                {
+                                    ref.matLastname && (
+                                        <div className="card__body__item">
+                                            <span>Apellido Materno</span>
+                                            <p> {ref.matLastname} </p>
+                                        </div>
+                                    )
+                                }
                                 <div className="card__body__item">
                                     <span>Número de Contacto</span>
-                                    <p> {aval.phoneNumber} </p>
+                                    <p> {ref.phoneNumber} </p>
                                 </div>
+
+                                {
+                                    (ref.address.col && ref.address.street && ref.address.extNumber && ref.address.intNumber && ref.address.zip) && (
+                                        <div className="mt-3 card__header">
+                                            <h4>Dirección</h4>
+                                        </div>
+                                    )
+                                }
+                                {
+                                    ref.address.col && (
+                                        <div className="card__body__item">
+                                            <span>Colonia</span>
+                                            <p> {ref.address.col} </p>
+                                        </div>
+                                    )
+                                }
+                                {
+                                    ref.address.street && (
+                                        <div className="card__body__item">
+                                            <span>Calle</span>
+                                            <p> {ref.address.street} </p>
+                                        </div>
+                                    )
+                                }
+                                {
+                                    ref.address.extNumber && (
+                                        <div className="card__body__item">
+                                            <span>Número exterior</span>
+                                            <p> {ref.address.extNumber} </p>
+                                        </div>
+                                    )
+                                }
+                                {
+                                    ref.address.intNumber && (
+                                        <div className="card__body__item">
+                                            <span>Número interior</span>
+                                            <p> {ref.address.intNumber} </p>
+                                        </div>
+                                    )
+                                }
+                                {
+                                    ref.address.zip && (
+                                        <div className="card__body__item">
+                                            <span>código postal</span>
+                                            <p> {ref.address.zip} </p>
+                                        </div>
+                                    )
+                                }
                                 <div className="mt-3 card__header">
                                     <img src="../assets/img/docs.png" alt="" />
                                     <h4>Documentos Disponibles</h4>
@@ -187,7 +261,7 @@ export const Client = () => {
                                 <div className="scroll">
                                     <div className="card__body__list">
                                         {
-                                            aval.files.map(({ name, staticPath }) => (
+                                            ref.files.map(({ name, staticPath }) => (
                                                 <div onClick={() => { handleOpen(staticPath) }} key={name} className="card__body__list__doc">
                                                     <p>
                                                         {name}
@@ -199,13 +273,25 @@ export const Client = () => {
 
                                 </div>
 
+
+
+
+
                             </div>
 
-                        </div>
 
-                    </div>
+
+                        ))
+
+                    }
 
                 </div>
+
+
+
+
+
+
 
 
             </div>

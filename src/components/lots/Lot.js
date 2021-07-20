@@ -2,12 +2,13 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { breadcrumbsUpdate } from '../../actions/breadcrumbs';
-// import { modalUpdate } from '../../actions/modal';
+import { modalUpdate } from '../../actions/modal';
 import { redirectSet } from '../../actions/redirect';
 import { redTypes } from '../../types/reduxTypes';
 import { BreadCrumbs } from '../BreadCrumbs';
-import { FloatingButton } from '../FloatingButton';
-import { FloatingButtonSecondary } from '../FloatingButtonSecondary';
+import { staticURLDocs } from '../../url';
+import { setLot } from '../../actions/lot';
+import { floatingButtonSet } from '../../actions/floatingButton';
 
 export const Lot = () => {
 
@@ -19,9 +20,9 @@ export const Lot = () => {
 
     const currentProject = projects.find(p => p._id === projectId);
 
-    const { area, isCorner, lotNumber, measures, state, manzana } = currentLot;
+    const { area, isCorner, lotNumber, measures, state, manzana, files } = currentLot;
 
-    const pricePerSqMeter = currentLot.pricePerSqMeter.toLocaleString();
+    // const pricePerSqMeter = currentLot.pricePerSqMeter.toLocaleString();
 
     const price = currentLot.price.toLocaleString();
 
@@ -34,15 +35,15 @@ export const Lot = () => {
 
     useEffect(() => {
 
-        // const modalInfo = {
-        //     title: 'Editarproyecto',
-        //     text: '¿Desea editar el proyecto {name}?',
-        //     link: `/proyectos/editar/${projectId}`,
-        //     okMsg: 'Sí',
-        //     closeMsg: 'No',
-        // }
+        const modalInfo = {
+            title: 'Editar lote',
+            text: `¿Desea editar el lote ${lotNumber}?`,
+            link: `/proyectos/edit/${projectId}/lote/${lotId}`,
+            okMsg: 'Sí',
+            closeMsg: 'No',
+        }
 
-        // dispatch(modalUpdate(modalInfo));
+        dispatch(modalUpdate(modalInfo));
 
         const breadcrumbs = [
             {
@@ -60,9 +61,17 @@ export const Lot = () => {
         ]
 
         dispatch(breadcrumbsUpdate(redTypes.projects, breadcrumbs));
+        dispatch(floatingButtonSet('pencil', redTypes.projectEdit));
         dispatch(redirectSet(redTypes.projects, `/proyectos/ver/${projectId}/lote/${lotId}`));
+        dispatch(setLot(currentLot));
 
-    }, [dispatch, projectId, lotId, lotNumber, name]);
+    }, [dispatch, projectId, lotId, lotNumber, name, currentLot]);
+
+    const handleOpen = (path) => {
+        const url = `${staticURLDocs}${path}`;
+
+        window.open(url, "_blank", 'top=500,left=200,frame=true,nodeIntegration=no');
+    }
 
 
     return (
@@ -112,10 +121,6 @@ export const Lot = () => {
                                 <p> {area}m<sup>2</sup> </p>
                             </div>
                             <div className="card__body__item">
-                                <span>Precio por m<sup>2</sup> </span>
-                                <p> ${pricePerSqMeter} </p>
-                            </div>
-                            <div className="card__body__item">
                                 <span >Precio</span>
                                 <p className="price"> ${price} </p>
                             </div>
@@ -146,7 +151,7 @@ export const Lot = () => {
                 </div>
 
 
-                <div className="card-grid">
+                <div className="card-grid mt-2">
                     <div className="card scroll">
                         <div className="card__header">
                             <img src="../assets/img/services.png" alt="" />
@@ -169,24 +174,14 @@ export const Lot = () => {
                         </div>
                         <div className="card__body__list">
                             {
-                                // files.map(({ title, doc }) => (
-                                //     <div className="card__body__list__doc">
-                                //         <p>
-                                //             Escrituras
-                                //         </p>
-                                //     </div>
-                                // ))
+                                files?.map(({ name, staticPath }) => (
+                                    <div onClick={() => { handleOpen(staticPath) }} key={name} className="card__body__list__doc">
+                                        <p>
+                                            {name}
+                                        </p>
+                                    </div>
+                                ))
                             }
-                            <div className="card__body__list__doc">
-                                <p>
-                                    Escrituras
-                                </p>
-                            </div>
-                            <div className="card__body__list__doc">
-                                <p>
-                                    Contrato de Agua
-                                </p>
-                            </div>
                         </div>
 
                     </div>

@@ -31,6 +31,9 @@ export const Create1 = () => {
     const [service, setService] = useState('');
     const [emptyFields, setEmptyFields] = useState([]);
 
+    const [greenAreas, setGreenAreas] = useState(currentProject.greenAreas);
+
+
     useEffect(() => {
 
         dispatch(redirectSet(redTypes.projects, '/proyectos/nuevo'));
@@ -115,6 +118,41 @@ export const Create1 = () => {
             return false;
         }
 
+        const emptyGreenAreas = [];
+        let isValid = true;
+
+        if (greenAreas.length > 0) {
+            greenAreas.forEach((greenArea, index) => {
+                if (greenArea.manzanaNum.trim().length === 0) {
+                    emptyGreenAreas.push('empty');
+                    setEmptyFields([
+                        ...emptyFields,
+                        `greenArea${index}`
+                    ])
+                }
+
+                if (+manzanas < +greenArea.manzanaNum) {
+                    dispatch(setTempError(`El área verde en manzana ${greenArea.manzanaNum} no es válido`));
+                    isValid = false;
+                }
+            })
+
+
+
+        }
+
+        if (emptyGreenAreas.length > 0) {
+            return false;
+        }
+
+        if (!isValid) {
+            return false;
+        }
+
+
+
+
+
         dispatch(unSetError());
         return true;
 
@@ -122,11 +160,12 @@ export const Create1 = () => {
 
     const handleNextPage = () => {
 
-
-
         if (isFormValid()) {
             dispatch(projectSetPage(page + 1));
-            dispatch(projectCreate(formFields));
+            dispatch(projectCreate({
+                ...formFields,
+                greenAreas
+            }));
         }
 
     }
@@ -192,8 +231,6 @@ export const Create1 = () => {
 
     const checkEmptyFields = (fields) => {
 
-        console.log(fields);
-
         const tempEmptyFields = [];
 
         for (let key in fields) {
@@ -210,6 +247,49 @@ export const Create1 = () => {
         console.log(tempEmptyFields);
 
         return tempEmptyFields.length === 0 ? false : true;
+    }
+
+    const addGreenArea = () => {
+        const newGreenArea = {
+            manzanaNum: ''
+        }
+
+        setGreenAreas([...greenAreas, newGreenArea]);
+        dispatch(projectCreate({ ...formFields, greenAreas: [...currentProject.greenAreas, newGreenArea] }));
+    }
+
+    const handleChangeGreenArea = (index, e) => {
+        console.log(index, e.target.name);
+
+        checkEmptyField(e);
+
+        const tempGreenAreas = greenAreas;
+
+        console.log(tempGreenAreas);
+
+        tempGreenAreas[index].manzanaNum = e.target.value;
+
+        setGreenAreas(tempGreenAreas);
+
+
+        dispatch(projectCreate({
+            ...formFields,
+            greenAreas: tempGreenAreas
+        }))
+
+    }
+
+    const deleteGreenArea = index => {
+
+        greenAreas.splice(index, 1);
+        setGreenAreas(greenAreas);
+
+
+
+        dispatch(projectCreate({
+            ...formFields,
+            greenAreas
+        }))
     }
 
     return (
@@ -254,12 +334,28 @@ export const Create1 = () => {
                             <label htmlFor="manzanas">Número de Manzanas</label>
                             <input autoFocus name="manzanas" onChange={(e) => { inputChange(e) }} value={manzanas} type="text" autoComplete="off" />
                         </div>
+                        <div className="card__header  mt-4">
+                            <img src="../assets/img/apple.png" alt="" />
+                            <h4>Áreas verdes</h4>
+                            <button onClick={addGreenArea} className="add-ref">Agregar</button>
+                        </div>
+                        {
+                            greenAreas.map((greenArea, index) => (
+                                <div key={`greenArea${index}`} className={`card__body__item ${emptyFields.includes(`greenArea${index}`) && 'error'}`}>
+                                    <button onClick={e => deleteGreenArea(index)} className="delete-area">
+                                        &times;
+                                    </button>
+                                    <label className="pl-2" htmlFor={`greenArea${index}`}>Manzana para área verde</label>
+                                    <input autoFocus name={`greenArea${index}`} onChange={(e) => { handleChangeGreenArea(index, e) }} value={greenArea.manzanaNum} type="number" autoComplete="off" />
+                                </div>
+                            ))
+                        }
 
                     </div>
                 </div>
             </div>
 
-            <div className="card-grid ">
+            <div className="card-grid mt-2">
                 <div className="card edit">
 
                     <div className="card__header">
@@ -320,64 +416,5 @@ export const Create1 = () => {
 
         </div>
 
-        // <>
-        //     <h1>
-        //         Crear Nuevo proyecto
-        //     </h1>
-        //     <form>
-        //         <h2 className="section-title">Información General</h2>
-        //         <div className="form-field">
-        //             <label htmlFor="name">Nombre del Proyecto:</label>
-        //             <input type="text" name="name" value={name} onChange={(e) => { inputChange(e) }} />
-        //         </div>
-        //         <div className="form-field desc">
-        //             <label htmlFor="description">Descripción del Proyecto:</label>
-        //             <textarea name="description" value={description} onChange={(e) => { inputChange(e) }} ></textarea>
-        //         </div>
-        //         <div className="form-field">
-        //             <label htmlFor="manzanas">Manzanas:</label>
-        //             <input type="number" name="manzanas" value={manzanas} onChange={(e) => { inputChange(e) }} />
-        //         </div>
-        //         <div className="form-field">
-        //             <label htmlFor="lots">Cantidad de Lotes:</label>
-        //             <input type="number" name="lots" value={lots} onChange={(e) => { inputChange(e) }} />
-        //         </div>
-        //         <h2 className="section-title">Servicios</h2>
-        //         <div className="form-field svcs">
-        //             <span onClick={handleAdd} className="add add-svc">
-        //                 Agregar servicio
-        //             </span>
-        //             <div className="svcs__list">
-        //                 <ul>
-        //                     {
-        //                         services?.map(service => (
-        //                             <li onClick={() => handleDeleteService(service)} key={service} >{service}</li>
-        //                         ))
-        //                     }
-        //                 </ul>
-        //             </div>
-        //         </div>
-
-        //         <h2 className="section-title">Tipos de Lotes</h2>
-        //         <div className="form-field">
-        //             <LotTypesList />
-        //         </div>
-
-        //     </form>
-
-
-
-
-
-        //     <div className="project-create-btns">
-        //         <button onClick={cancel} className="btn btn-cancel">
-        //             Cancelar
-        //         </button>
-        //         <button onClick={handleNextPage} className="btn btn-next">
-        //             Siguiente
-        //         </button>
-        //     </div>
-
-        // </>
     )
 }

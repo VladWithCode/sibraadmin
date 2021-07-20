@@ -5,12 +5,12 @@ import { redTypes } from '../types/reduxTypes'
 
 import { projectDisableSvcModal } from '../actions/project';
 
-export const ModalDoc = React.memo(({ fileName, type, id }) => {
+export const ModalDoc = React.memo(({ fileName, type, id, projectId }) => {
 
 
     const dispatch = useDispatch();
 
-    const { modalServices: { active, beenClosed, title, text, okMsg, closeMsg } } = useSelector(state => state.project);
+    const { modalServices: { active, beenClosed, title, text, okMsg, closeMsg, refId } } = useSelector(state => state.project);
 
     const handleClose = () => {
         dispatch(projectDisableSvcModal());
@@ -20,10 +20,10 @@ export const ModalDoc = React.memo(({ fileName, type, id }) => {
         e?.preventDefault();
 
         if (type === redTypes.clientDelete) {
-            dispatch(deleteClient(id, fileName))
+            dispatch(deleteClient(id, fileName, projectId))
 
         } else {
-            dispatch(deleteFile(fileName, type, id));
+            dispatch(deleteFile(fileName, type, id, refId, projectId));
         }
 
         dispatch(projectDisableSvcModal());

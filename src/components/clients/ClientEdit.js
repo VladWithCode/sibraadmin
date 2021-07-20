@@ -6,6 +6,7 @@ import { useForm } from '../../hooks/useForm';
 import { getClient, getClients } from '../../actions/consults';
 import { floatingButtonSet } from '../../actions/floatingButton';
 import { redirectSet } from '../../actions/redirect';
+import { clientSet } from '../../actions/client';
 import { setTempError, setTempWarning, uiStartLoading, uiFinishLoading, setTempSuccessNotice } from '../../actions/ui';
 import { modalEnable, modalUpdate } from '../../actions/modal';
 import { staticURL } from '../../url';
@@ -20,7 +21,9 @@ export const ClientEdit = () => {
     const { clientId } = useParams();
     const { clients, client } = useSelector(state => state);
 
-    const { aval, files, address } = client;
+    const { refs, address } = client;
+
+    const [refsArr, setrefsArr] = useState(refs);
 
     const [emptyFields, setEmptyFields] = useState([]);
 
@@ -46,47 +49,103 @@ export const ClientEdit = () => {
         street: address?.street,
         zip: address?.zip?.toString(),
         extNumber: address?.extNumber?.toString(),
-        intNumber: address?.intNumber?.toString(),
-        avNames: aval?.names,
-        avPatLastname: aval?.patLastname,
-        avMatLastname: aval?.matLastname,
-        avPhoneNumber: aval?.phoneNumber?.toString()
+        intNumber: address?.intNumber?.toString()
     }
 
     const [formFields, handleInputChange] = useForm(initialForm);
 
-    const { names, patLastname, matLastname, rfc, curp, email, phoneNumber, col, street, zip, extNumber, intNumber, avNames, avMatLastname, avPatLastname, avPhoneNumber } = formFields;
+    const { names, patLastname, matLastname, rfc, curp, email, phoneNumber, col, street, zip, extNumber, intNumber } = formFields;
 
-    const [filesDoc, setFilesDoc] = useState({
-        file: null,
-        avFile: null
-    })
+    const checkChanges = (attribute, value) => {
 
-    const [filesNames, handleFileNameChange, reset] = useForm({
-        fileName: '',
-        avFileName: ''
-    })
+        const tempHasChanged = hasChanged;
 
-    const { fileName, avFileName } = filesNames;
+        console.log(attribute);
 
-    const types = {
-        client: 'client',
-        aval: 'aval'
+        if (attribute === 'col' || attribute === 'street' || attribute === 'intNumber' || attribute === 'extNumber' || attribute === 'zip') {
+
+            if (attribute === 'extNumber' || attribute === 'zip' || attribute === 'intNumber') {
+                if (value.toString() === clients.find(c => c._id === clientId).address[attribute].toString()) {
+
+                    if (tempHasChanged.includes(attribute)) {
+                        const index = tempHasChanged.indexOf(attribute);
+
+                        tempHasChanged.splice(index, 1);
+                    }
+                } else {
+                    if (!tempHasChanged.includes(attribute)) {
+                        tempHasChanged.push(attribute);
+                    }
+                }
+
+            }
+
+            if (value === clients.find(c => c._id === clientId).address[attribute]) {
+
+                if (tempHasChanged.includes(attribute)) {
+                    const index = tempHasChanged.indexOf(attribute);
+
+                    tempHasChanged.splice(index, 1);
+                }
+            } else {
+                if (!tempHasChanged.includes(attribute)) {
+                    tempHasChanged.push(attribute);
+                }
+            }
+
+        } else {
+            if (value === clients.find(c => c._id === clientId)[attribute]) {
+
+                if (tempHasChanged.includes(attribute)) {
+                    const index = tempHasChanged.indexOf(attribute);
+
+                    tempHasChanged.splice(index, 1);
+                }
+            } else {
+                if (!tempHasChanged.includes(attribute)) {
+                    tempHasChanged.push(attribute);
+                }
+            }
+        }
+
+
+        setHasChanged(tempHasChanged);
     }
 
     useEffect(() => {
 
-        dispatch(getClient(clientId));
-        dispatch(getClients());
+        // dispatch(getClient(clientId));
+        // dispatch(getClients());
         dispatch(floatingButtonSet('pencil', redTypes.projectCreate));
         dispatch(redirectSet(redTypes.clients, `/clientes/edit/${clientId}`));
 
-    }, [dispatch, clientId]);
+        for (let key in formFields) {
+            checkChanges(key, formFields[key])
+        }
+
+        console.log(formFields);
+
+
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch]);
 
     const handleChange = e => {
         handleInputChange(e);
         checkEmptyField(e);
         checkChanges(e.target.name, e.target.value);
+
+        const tempClient = {}
+
+        for (let key in formFields) {
+            tempClient[key] = formFields[key]
+        }
+
+        dispatch(clientSet({
+            ...client,
+            ...tempClient,
+            refs: refsArr
+        }))
     }
 
     const cancel = () => {
@@ -130,12 +189,20 @@ export const ClientEdit = () => {
                         extNumber,
                         zip
                     },
-                    aval: {
-                        names: avNames,
-                        patLastname: avPatLastname,
-                        matLastname: avMatLastname,
-                        phoneNumber: avPhoneNumber
-                    }
+                    refs: refsArr.map(ref => ({
+                        names: ref.names,
+                        patLastname: ref.patLastname,
+                        matLastname: ref.matLastname,
+                        phoneNumber: ref.phoneNumber,
+                        email: ref.email,
+                        address: {
+                            col: ref.col,
+                            street: ref.street,
+                            extNumber: ref.extNumber,
+                            intNumber: ref.intNumber,
+                            zip: ref.zip
+                        }
+                    }))
                 }
 
                 const res = await updateClient(client);
@@ -145,16 +212,17 @@ export const ClientEdit = () => {
                 if (res.status === 'OK') {
                     const modalInfo = {
                         title: `Cliente ${names} actualizado con éxito`,
-                        text: '¿Desea volver a la pantalla de clientes?',
-                        link: `/clientes`,
-                        okMsg: 'Sí',
-                        closeMsg: 'No',
+                        text: 'Continúa para agregar documentos',
+                        link: `/clientes/docs/${res.customer._id}`,
+                        okMsg: 'Continuar',
+                        closeMsg: null,
                         type: redTypes.clientEdit
                     }
 
                     dispatch(modalUpdate(modalInfo));
                     dispatch(modalEnable());
-                    // dispatch(clientSet(res.customer));
+                    dispatch(getClients())
+                    dispatch(clientSet(res.customer));
 
                 } else if (res.err?.code === 11000) {
                     const repeated = isDuplicated(client);
@@ -226,18 +294,35 @@ export const ClientEdit = () => {
 
     const isFormValid = () => {
 
-        checkEmptyFields(formFields);
+        checkEmptyFields();
         isEmailValid(email);
-        isNumberValid(avPhoneNumber, 'avPhoneNumber');
         isNumberValid(phoneNumber, 'phoneNumber')
 
-        if (checkEmptyFields(formFields)) {
+        const validNumbers = [];
+
+        refsArr.forEach((ref, index) => {
+            const isValid = isNumberValid(ref.phoneNumber, `phoneNumber${index}`);
+            if (!isValid) {
+                validNumbers.push(isValid);
+            }
+        })
+
+        if (checkEmptyFields()) {
             return false;
         }
 
-        if (!isNumberValid(phoneNumber, 'phoneNumber') || !isNumberValid(avPhoneNumber, 'avPhoneNumber') || !isEmailValid(email) || checkEmptyFields(formFields)) {
+        if (!isNumberValid(phoneNumber, 'phoneNumber') || !isEmailValid(email) || checkEmptyFields(formFields)) {
             return false;
         }
+
+        console.log('a veeer', validNumbers);
+
+
+        if (validNumbers.length > 0) {
+            return false
+        }
+
+
 
         return true;
     }
@@ -255,15 +340,30 @@ export const ClientEdit = () => {
             }
         }
 
+        refsArr.forEach((ref, index) => {
+            for (let key in ref) {
+                if (key !== 'intNumber' && key !== 'matLastname' && key !== 'otherNumbers' && key !== 'col' && key !== 'street' && key !== 'extNumber' && key !== 'email' && key !== 'intNumber' && key !== 'zip' && key !== 'files') {
+                    if (ref[key].toString().trim() === "") {
+                        tempEmptyFields.push(`${key}${index}`);
+                        dispatch(setTempError('Los campos en rojo son obligatorios'))
+                    }
+                }
+            }
+        })
+
         setEmptyFields(tempEmptyFields);
+
+        console.log(tempEmptyFields);
 
         return tempEmptyFields.length === 0 ? false : true;
     }
 
     const checkEmptyField = e => {
 
+        const tempEmptyFields = emptyFields;
+
         if (e.target.value?.trim().length > 0) {
-            const tempEmptyFields = emptyFields;
+
 
             if (tempEmptyFields.includes(e.target.name)) {
                 const index = tempEmptyFields.indexOf(e.target.name);
@@ -271,8 +371,15 @@ export const ClientEdit = () => {
                 tempEmptyFields.splice(index, 1);
             }
 
-            setEmptyFields(tempEmptyFields);
+
         }
+        else {
+            if (!tempEmptyFields.includes(e.target.name)) {
+                tempEmptyFields.push(e.target.name)
+            }
+        }
+
+        setEmptyFields(tempEmptyFields);
 
     }
 
@@ -357,88 +464,6 @@ export const ClientEdit = () => {
 
     }
 
-    const checkChanges = (attribute, value) => {
-
-        const tempHasChanged = hasChanged;
-        if (value === initialForm[attribute]) {
-
-
-            if (tempHasChanged.includes(attribute)) {
-                const index = tempHasChanged.indexOf(attribute);
-
-                tempHasChanged.splice(index, 1);
-            }
-        } else {
-            if (!tempHasChanged.includes(attribute)) {
-                tempHasChanged.push(attribute);
-            }
-        }
-        setHasChanged(tempHasChanged);
-    }
-
-    const onFileInput = (e, type) => {
-        setFilesDoc(
-            { ...filesDoc, [type]: e.target.files[0] }
-        )
-    }
-
-    const uploadFile = async (file, name, type, e) => {
-        e?.preventDefault();
-
-        dispatch(uiStartLoading());
-
-        const newForm = new FormData();
-
-        newForm.set('file', file);
-        newForm.set('fileName', name);
-
-        console.log(newForm);
-
-        const url = `${staticURL}/customer/${clientId}/${type === types.client ? 'file' : 'aval/file'}`;
-
-
-        await fetch(url, { // Your POST endpoint
-            method: 'PUT',
-            body: newForm
-
-        }).then(
-            response => {
-                console.log(response);
-                return response.json();
-            } // if the response is a JSON object
-        ).then(
-            success => {
-                console.log(success);
-                dispatch(uiFinishLoading());
-                dispatch(setTempSuccessNotice(`Archivo ${name} agregado con éxito`));
-                dispatch(getClient(clientId));
-            } // Handle the success response object
-        ).catch(
-            error => console.log(error) // Handle the error response object
-        );
-
-        reset();
-
-        const inputFile = document.querySelector(`[name=${type === types.client ? 'file' : 'avFile'}]`);
-        inputFile.value = null;
-    }
-
-    const handleDeleteFile = (fileName, type) => {
-
-        const modalInfo = {
-            title: 'Eliminar documento',
-            text: `¿Desea eliminar el documento: ${fileName}?`,
-            input: null,
-            okMsg: 'Eliminar',
-            closeMsg: 'Cancelar'
-        }
-
-        setFileInfo({ fileName, type });
-
-        dispatch(projectEnableSvcModal());
-        dispatch(projectUpdateSvcModal(modalInfo));
-    }
-
     const deleteClient = (type) => {
         const modalInfo = {
             title: 'Eliminar Cliente',
@@ -452,6 +477,82 @@ export const ClientEdit = () => {
 
         dispatch(projectEnableSvcModal());
         dispatch(projectUpdateSvcModal(modalInfo));
+    }
+
+    const addRef = () => {
+        const newRef = {
+            names: '',
+            patLastname: '',
+            matLastname: '',
+            email: '',
+            phoneNumber: '',
+            col: '',
+            street: '',
+            zip: '',
+            extNumber: '',
+            intNumber: ''
+        }
+
+        setrefsArr([...refsArr, newRef]);
+
+        const tempClient = {}
+
+        for (let key in formFields) {
+            tempClient[key] = formFields[key]
+        }
+
+
+        dispatch(clientSet({
+            ...client,
+            ...tempClient,
+            refs: [...refsArr, newRef]
+        }))
+    }
+
+    const deleteRef = index => {
+        refsArr.splice(index, 1);
+        setrefsArr(refsArr);
+
+        dispatch(clientSet({ ...formFields, refs: refsArr }));
+
+        const tempClient = {}
+
+        for (let key in formFields) {
+            tempClient[key] = formFields[key]
+        }
+
+        dispatch(clientSet({
+            ...client,
+            ...tempClient,
+            refs: refsArr
+        }))
+    }
+
+    const handleChangeRef = (index, e, key) => {
+        console.log(index, e.target.name, key);
+
+        checkEmptyField(e);
+
+        const tempRefsArr = refsArr;
+
+        console.log(tempRefsArr);
+
+        tempRefsArr[index][key] = e.target.value;
+
+        setrefsArr(tempRefsArr);
+
+        const tempClient = {}
+
+        for (let key in formFields) {
+            tempClient[key] = formFields[key]
+        }
+
+        dispatch(clientSet({
+            ...client,
+            ...tempClient,
+            refs: tempRefsArr
+        }))
+
     }
 
     return (
@@ -469,163 +570,158 @@ export const ClientEdit = () => {
 
             <ModalDoc fileName={fileInfo.fileName} type={fileInfo.type} id={client._id} />
 
-            <div className="card edit mt-4">
-                <div className="card__header">
-                    <img src="../assets/img/user.png" alt="" />
-                    <h4>Información General del Cliente</h4>
-                </div>
-                <div className="card__body">
-                    <form className="right">
-                        <div className={`card__body__item ${emptyFields.includes('names') && 'error'}`}>
-                            <label htmlFor="names">Nombre(s)</label>
-                            <input className={`${hasChanged.includes('names') && 'changed'}`} autoFocus name="names" onChange={handleChange} value={names} type="text" autoComplete="off" />
-                        </div>
-                        <div className={`card__body__item ${emptyFields.includes('patLastname') && 'error'}`}>
-                            <label htmlFor="patLastname">Apellido Paterno</label>
-                            <input className={`${hasChanged.includes('patLastname') && 'changed'}`} name="patLastname" onChange={handleChange} value={patLastname} type="text" autoComplete="off" />
-                        </div>
-                        <div className={`card__body__item ${emptyFields.includes('matLastname') && 'error'}`}>
-                            <label htmlFor="matLastname">Apellido Materno</label>
-                            <input className={`${hasChanged.includes('matLastname') && 'changed'}`} name="matLastname" onChange={handleChange} value={matLastname} type="text" autoComplete="off" />
-                        </div>
-                        <div className={`card__body__item ${emptyFields.includes('rfc') && 'error'}`}>
-                            <label htmlFor="rfc">RFC</label>
-                            <input className={`${hasChanged.includes('rfc') && 'changed'}`} minLength="12" maxLength="13" name="rfc" onChange={handleChange} value={rfc} type="text" autoComplete="off" />
-                        </div>
-                        <div className={`card__body__item ${emptyFields.includes('curp') && 'error'}`}>
-                            <label htmlFor="curp">CURP</label>
-                            <input className={`${hasChanged.includes('curp') && 'changed'}`} minLength="18" maxLength="18" name="curp" onChange={handleChange} value={curp} type="text" autoComplete="off" />
-                        </div>
-                        <div className="mt-4 card__header">
-                            <h4>Información de contacto</h4>
-                        </div>
-                        <div className={`card__body__item ${emptyFields.includes('email') && 'error'} ${isWrong.includes('email') && 'warning'}`}>
-                            <label htmlFor="email">Email</label>
-                            <input className={`${hasChanged.includes('email') && 'changed'}`} name="email" onChange={(e) => {
-                                handleChange(e);
-                                isEmailValid(e.target.value)
-                            }} value={email} type="email" />
-                        </div>
-                        <div className={`card__body__item ${emptyFields.includes('phoneNumber') && 'error'} ${isWrong.includes('phoneNumber') && 'warning'}`}>
-                            <label htmlFor="phoneNumber">Número de Contacto</label>
-                            <input className={`${hasChanged.includes('phoneNumber') && 'changed'}`} minLength="10" maxLength="10" name="phoneNumber" onChange={(e) => {
-                                handleChange(e);
-                                isNumberValid(e.target.value, 'phoneNumber')
-                            }} value={phoneNumber} type="number" />
-                        </div>
-                        <div className="card__header mt-4">
-                            <h4>Dirección</h4>
-                        </div>
-                        <div className={`card__body__item ${emptyFields.includes('col') && 'error'}`}>
-                            <label htmlFor="col">Colonia</label>
-                            <input className={`${hasChanged.includes('col') && 'changed'}`} name="col" onChange={handleChange} value={col} type="text" autoComplete="off" />
-                        </div>
-                        <div className={`card__body__item ${emptyFields.includes('street') && 'error'}`}>
-                            <label htmlFor="street">Calle</label>
-                            <input className={`${hasChanged.includes('street') && 'changed'}`} name="street" onChange={handleChange} value={street} type="text" autoComplete="off" />
-                        </div>
-                        <div className={`card__body__item ${emptyFields.includes('intNumber') && 'error'}`}>
-                            <label htmlFor="intNumber">Número interior</label>
-                            <input className={`${hasChanged.includes('intNumber') && 'changed'}`} name="intNumber" onChange={handleChange} value={intNumber} type="number" />
-                        </div>
-                        <div className={`card__body__item ${emptyFields.includes('extNumber') && 'error'}`}>
-                            <label htmlFor="extNumber">Número exterior</label>
-                            <input className={`${hasChanged.includes('extNumber') && 'changed'}`} name="extNumber" onChange={handleChange} value={extNumber} type="number" />
-                        </div>
-                        <div className={`card__body__item ${emptyFields.includes('zip') && 'error'}`}>
-                            <label htmlFor="zip">Código Postal</label>
-                            <input className={`${hasChanged.includes('zip') && 'changed'}`} name="zip" onChange={handleChange} value={zip} type="number" />
-                        </div>
-
-                        <div className="mt-3 card__header">
-                            <img src="../assets/img/docs.png" alt="" />
-                            <h4>Documentos Disponibles</h4>
-                        </div>
-                        <input onInput={(e) => {
-                            onFileInput(e, 'file');
-                        }} type="file" name="file" />
-                        <div className="file-form mt-2">
-                            <div className={`card__body__item`}>
-                                <label htmlFor="fileName">Nombre del Archivo</label>
-                                <input type="text" name="fileName" onChange={handleFileNameChange} value={fileName} />
-                            </div>
-                            <button disabled={fileName.length >= 3 && (filesDoc.file) ? false : true} className="upload" onClick={(e) => {
-                                uploadFile(filesDoc.file, fileName, types.client, e)
-                            }}  > Subir archivo</button>
-                        </div>
-
-                        <div className="scroll mt-3">
-                            <div className="card__body__list">
-                                {
-                                    files.map(({ name }) => (
-                                        <div onClick={() => { handleDeleteFile(name, redTypes.client) }} key={name} className="card__body__list__doc">
-                                            <p>
-                                                {name}
-                                            </p>
-                                        </div>
-                                    ))
-                                }
-                            </div>
-                        </div>
-
-                    </form>
-                    <div className="left">
-                        <div className="card__header">
-                            <img src="../assets/img/aval.png" alt="" />
-                            <h4>Información del Aval</h4>
-                        </div>
-                        <div className={`card__body__item ${emptyFields.includes('avNames') && 'error'}`}>
-                            <label htmlFor="avNames">Nombre(s)</label>
-                            <input className={`${hasChanged.includes('avNames') && 'changed'}`} autoFocus name="avNames" onChange={handleChange} value={avNames} type="text" autoComplete="off" />
-                        </div>
-                        <div className={`card__body__item ${emptyFields.includes('avPatLastname') && 'error'}`}>
-                            <label htmlFor="avPatLastname">Apellido Paterno</label>
-                            <input className={`${hasChanged.includes('avPatLastname') && 'changed'}`} name="avPatLastname" onChange={handleChange} value={avPatLastname} type="text" autoComplete="off" />
-                        </div>
-                        <div className={`card__body__item ${emptyFields.includes('avMatLastname') && 'error'}`}>
-                            <label htmlFor="avMatLastname">Apellido Materno</label>
-                            <input className={`${hasChanged.includes('avMatLastname') && 'changed'}`} name="avMatLastname" onChange={handleChange} value={avMatLastname} type="text" autoComplete="off" />
-                        </div>
-                        <div className={`card__body__item ${emptyFields.includes('avPhoneNumber') && 'error'} ${isWrong.includes('avPhoneNumber') && 'warning'}`}>
-                            <label htmlFor="avPhoneNumber">Número de contacto</label>
-                            <input className={`${hasChanged.includes('avPhoneNumber') && 'changed'}`} name="avPhoneNumber" onChange={(e) => {
-                                handleChange(e);
-                                isNumberValid(e.target.value, 'avPhoneNumber')
-                            }} value={avPhoneNumber} type="number" autoComplete="off" />
-                        </div>
-
-                        <div className="mt-3 card__header">
-                            <img src="../assets/img/docs.png" alt="" />
-                            <h4>Documentos Disponibles</h4>
-                        </div>
-                        <input onInput={(e) => {
-                            onFileInput(e, 'avFile');
-                        }} type="file" name="avFile" />
-                        <div className="file-form mt-2">
-                            <div className={`card__body__item`}>
-                                <label htmlFor="avFileName">Nombre del Archivo</label>
-                                <input type="text" name="avFileName" onChange={handleFileNameChange} value={avFileName} />
-                            </div>
-                            <button disabled={avFileName.length >= 3 && (filesDoc.avFile) ? false : true} className="upload" onClick={(e) => {
-                                uploadFile(filesDoc.avFile, avFileName, types.aval)
-                            }}  > Subir archivo</button>
-                        </div>
-
-                        <div className="scroll mt-3">
-                            <div className="card__body__list">
-                                {
-                                    aval.files.map(({ name, staticPath }) => (
-                                        <div onClick={() => { handleDeleteFile(name, redTypes.aval) }} key={name} className="card__body__list__doc">
-                                            <p>
-                                                {name}
-                                            </p>
-                                        </div>
-                                    ))
-                                }
-                            </div>
-                        </div>
+            <div className="card-grid mt-4">
+                <div className="card edit">
+                    <div className="card__header">
+                        <img src="../assets/img/user.png" alt="" />
+                        <h4>Información General del Cliente</h4>
                     </div>
+                    <div className={`card__body__item ${emptyFields.includes('names') && 'error'}`}>
+                        <label htmlFor="names">Nombre(s)</label>
+                        <input className={`${hasChanged.includes('names') && 'changed'}`} autoFocus name="names" onChange={handleChange} value={names} type="text" autoComplete="off" />
+                    </div>
+                    <div className={`card__body__item ${emptyFields.includes('patLastname') && 'error'}`}>
+                        <label htmlFor="patLastname">Apellido Paterno</label>
+                        <input className={`${hasChanged.includes('patLastname') && 'changed'}`} name="patLastname" onChange={handleChange} value={patLastname} type="text" autoComplete="off" />
+                    </div>
+                    <div className={`card__body__item ${emptyFields.includes('matLastname') && 'error'}`}>
+                        <label htmlFor="matLastname">Apellido Materno</label>
+                        <input className={`${hasChanged.includes('matLastname') && 'changed'}`} name="matLastname" onChange={handleChange} value={matLastname} type="text" autoComplete="off" />
+                    </div>
+                    <div className={`card__body__item ${emptyFields.includes('rfc') && 'error'}`}>
+                        <label htmlFor="rfc">RFC</label>
+                        <input className={`${hasChanged.includes('rfc') && 'changed'}`} minLength="12" maxLength="13" name="rfc" onChange={handleChange} value={rfc} type="text" autoComplete="off" />
+                    </div>
+                    <div className={`card__body__item ${emptyFields.includes('curp') && 'error'}`}>
+                        <label htmlFor="curp">CURP</label>
+                        <input className={`${hasChanged.includes('curp') && 'changed'}`} minLength="18" maxLength="18" name="curp" onChange={handleChange} value={curp} type="text" autoComplete="off" />
+                    </div>
+                    <div className="mt-4 card__header">
+                        <h4>Información de contacto</h4>
+                    </div>
+                    <div className={`card__body__item ${emptyFields.includes('email') && 'error'} ${isWrong.includes('email') && 'warning'}`}>
+                        <label htmlFor="email">Email</label>
+                        <input className={`${hasChanged.includes('email') && 'changed'}`} name="email" onChange={(e) => {
+                            handleChange(e);
+                            isEmailValid(e.target.value)
+                        }} value={email} type="email" />
+                    </div>
+                    <div className={`card__body__item ${emptyFields.includes('phoneNumber') && 'error'} ${isWrong.includes('phoneNumber') && 'warning'}`}>
+                        <label htmlFor="phoneNumber">Número de Contacto</label>
+                        <input className={`${hasChanged.includes('phoneNumber') && 'changed'}`} minLength="10" maxLength="10" name="phoneNumber" onChange={(e) => {
+                            handleChange(e);
+                            isNumberValid(e.target.value, 'phoneNumber')
+                        }} value={phoneNumber} type="number" />
+                    </div>
+                    <div className="card__header mt-4">
+                        <h4>Dirección</h4>
+                    </div>
+                    <div className={`card__body__item ${emptyFields.includes('col') && 'error'}`}>
+                        <label htmlFor="col">Colonia</label>
+                        <input className={`${hasChanged.includes('col') && 'changed'}`} name="col" onChange={handleChange} value={col} type="text" autoComplete="off" />
+                    </div>
+                    <div className={`card__body__item ${emptyFields.includes('street') && 'error'}`}>
+                        <label htmlFor="street">Calle</label>
+                        <input className={`${hasChanged.includes('street') && 'changed'}`} name="street" onChange={handleChange} value={street} type="text" autoComplete="off" />
+                    </div>
+                    <div className={`card__body__item ${emptyFields.includes('intNumber') && 'error'}`}>
+                        <label htmlFor="intNumber">Número interior</label>
+                        <input className={`${hasChanged.includes('intNumber') && 'changed'}`} name="intNumber" onChange={handleChange} value={intNumber} type="number" />
+                    </div>
+                    <div className={`card__body__item ${emptyFields.includes('extNumber') && 'error'}`}>
+                        <label htmlFor="extNumber">Número exterior</label>
+                        <input className={`${hasChanged.includes('extNumber') && 'changed'}`} name="extNumber" onChange={handleChange} value={extNumber} type="number" />
+                    </div>
+                    <div className={`card__body__item ${emptyFields.includes('zip') && 'error'}`}>
+                        <label htmlFor="zip">Código Postal</label>
+                        <input className={`${hasChanged.includes('zip') && 'changed'}`} name="zip" onChange={handleChange} value={zip} type="number" />
+                    </div>
+
                 </div>
+
+                {
+                    refsArr?.map((ref, index) => (
+                        <div key={`ref${index}`} className="card edit">
+                            {
+                                index === 0 && (
+                                    <div className="card__header">
+                                        <img src="../assets/img/aval.png" alt="" />
+                                        <h4>Referencias</h4>
+
+
+                                        <button onClick={addRef} className="add-ref">Agregar referencia</button>
+
+
+                                    </div>
+                                )
+                            }
+
+                            <div >
+                                <div className=" mt-4 card__header">
+                                    <h4>Información de Referencia {index + 1}</h4>
+                                    {
+                                        index !== 0 && (
+                                            <button onClick={() => deleteRef(index)} className="add-ref delete">Eliminar referencia</button>
+                                        )
+                                    }
+                                </div>
+                                <div className={`card__body__item ${emptyFields.includes(`names${index}`) && 'error'}`}>
+                                    <label htmlFor={`names${index}`}>Nombre(s)</label>
+                                    <input autoFocus name={`names${index}`} onChange={e => handleChangeRef(index, e, 'names')} value={ref.names} type="text" autoComplete="off" />
+                                </div>
+                                <div className={`card__body__item ${emptyFields.includes(`patLastname${index}`) && 'error'}`}>
+                                    <label htmlFor={`patLastname${index}`}>Apellido Paterno</label>
+                                    <input name={`patLastname${index}`} onChange={e => handleChangeRef(index, e, 'patLastname')} value={ref.patLastname} type="text" autoComplete="off" />
+                                </div>
+                                <div className={`card__body__item ${emptyFields.includes(`matLastname${index}`) && 'error'}`}>
+                                    <label htmlFor={`matLastname${index}`}>Apellido Materno</label>
+                                    <input name={`matLastname${index}`} onChange={e => handleChangeRef(index, e, 'matLastname')} value={ref.matLastname} type="text" autoComplete="off" />
+                                </div>
+                                <div className={`card__body__item ${emptyFields.includes(`phoneNumber${index}`) && 'error'} ${isWrong.includes(`phoneNumber${index}`) && 'warning'}`}>
+                                    <label htmlFor={`phoneNumber${index}`}>Número de contacto</label>
+                                    <input name={`phoneNumber${index}`} onChange={(e) => {
+                                        handleChangeRef(index, e, 'phoneNumber');
+                                        isNumberValid(e.target.value, `phoneNumber${index}`)
+                                    }} value={ref.phoneNumber} type="number" autoComplete="off" />
+                                </div>
+                                <div className={`card__body__item  ${isWrong.includes(`email${index}`) && 'warning'}`}>
+                                    <label htmlFor={`email${index}`}>Email</label>
+                                    <input name={`email${index}`} onChange={(e) => {
+                                        handleChangeRef(index, e, 'email');
+                                        // isEmailValid(e.target.value)
+                                    }} value={ref.email} type="email" />
+                                </div>
+                                <div className="card__header mt-4">
+                                    <h4>Dirección</h4>
+                                </div>
+                                <div className={`card__body__item ${emptyFields.includes(`col${index}`) && 'error'}`}>
+                                    <label htmlFor={`col${index}`}>Colonia</label>
+                                    <input name={`col${index}`} onChange={e => handleChangeRef(index, e, 'col')} value={ref.col} type="text" autoComplete="off" />
+                                </div>
+                                <div className={`card__body__item ${emptyFields.includes(`street${index}`) && 'error'}`}>
+                                    <label htmlFor={`street${index}`}>Calle</label>
+                                    <input name={`street${index}`} onChange={e => handleChangeRef(index, e, 'street')} value={ref.street} type="text" autoComplete="off" />
+                                </div>
+                                <div className={`card__body__item ${emptyFields.includes(`intNumber${index}`) && 'error'}`}>
+                                    <label htmlFor={`intNumber${index}`}>Número interior</label>
+                                    <input name={`intNumber${index}`} onChange={e => handleChangeRef(index, e, 'intNumber')} value={ref.intNumber} type="number" />
+                                </div>
+                                <div className={`card__body__item ${emptyFields.includes(`extNumber${index}`) && 'error'}`}>
+                                    <label htmlFor={`extNumber${index}`}>Número exterior</label>
+                                    <input name={`extNumber${index}`} onChange={e => handleChangeRef(index, e, 'extNumber')} value={ref.extNumber} type="number" />
+                                </div>
+                                <div className={`card__body__item ${emptyFields.includes(`zip${index}`) && 'error'}`}>
+                                    <label htmlFor={`zip${index}`}>Código Postal</label>
+                                    <input name={`zip${index}`} onChange={e => handleChangeRef(index, e, 'zip')} value={ref.zip} type="number" />
+                                </div>
+
+                            </div>
+                        </div>
+                    ))
+                }
+
+
+
             </div>
 
             <div className="form-buttons">
@@ -633,7 +729,7 @@ export const ClientEdit = () => {
                     Cancelar
                 </button>
                 <button className="next" onClick={handleCreateClient}>
-                    Terminar edición
+                    Guardar Cambios
                 </button>
             </div>
 

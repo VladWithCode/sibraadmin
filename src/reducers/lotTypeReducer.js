@@ -32,6 +32,17 @@ const initialState = {
 export const lotTypesReducer = (state = initialState, action) => {
 
     switch (action.type) {
+
+        case redTypes.lotTypesReset:
+            return initialState;
+
+        case redTypes.lotTypesSet:
+            console.log('setLotTypes: ', action.payload);
+            return {
+                ...state,
+                lotTypes: action.payload
+            };
+
         case redTypes.lotTypesCreate:
 
             const newList = state.lotTypes ? {

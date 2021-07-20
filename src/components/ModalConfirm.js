@@ -23,6 +23,11 @@ export const ModalConfirm = () => {
             dispatch(redirectSet(redTypes.projects, '/proyectos'));
 
         }
+        if (type === redTypes.projectCreate) {
+            dispatch(getProjects());
+            dispatch(redirectSet(redTypes.projects, link));
+
+        }
         if (type === redTypes.clientEdit) {
             dispatch(redirectSet(redTypes.clients, `/clientes`));
             dispatch(clientSet({}));

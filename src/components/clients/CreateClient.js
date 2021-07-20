@@ -16,10 +16,13 @@ export const CreateClient = () => {
 
     const { clients, client } = useSelector(state => state);
 
+    const { refs } = client;
+
+    const [refsArr, setrefsArr] = useState(refs);
 
     const [formFields, handleInputChange] = useForm(client);
 
-    const { names, patLastname, matLastname, _id, curp, email, phoneNumber, col, street, zip, extNumber, intNumber, avNames, avMatLastname, avPatLastname, avPhoneNumber } = formFields;
+    const { names, patLastname, matLastname, _id, curp, email, phoneNumber, col, street, zip, extNumber, intNumber } = formFields;
 
     const [emptyFields, setEmptyFields] = useState([]);
 
@@ -83,12 +86,26 @@ export const CreateClient = () => {
                     extNumber,
                     zip
                 },
-                aval: {
-                    names: avNames,
-                    patLastname: avPatLastname,
-                    matLastname: avMatLastname,
-                    phoneNumber: avPhoneNumber
-                }
+                // aval: {
+                //     names: avNames,
+                //     patLastname: avPatLastname,
+                //     matLastname: avMatLastname,
+                //     phoneNumber: avPhoneNumber
+                // }
+                refs: refsArr.map(ref => ({
+                    names: ref.names,
+                    patLastname: ref.patLastname,
+                    matLastname: ref.matLastname,
+                    phoneNumber: ref.phoneNumber,
+                    email: ref.email,
+                    address: {
+                        col: ref.col,
+                        street: ref.street,
+                        extNumber: ref.extNumber,
+                        intNumber: ref.intNumber,
+                        zip: ref.zip
+                    }
+                }))
             }
 
             const res = await uploadClient(client);
@@ -172,16 +189,33 @@ export const CreateClient = () => {
 
         checkEmptyFields();
         isEmailValid(email);
-        isNumberValid(avPhoneNumber, 'avPhoneNumber');
         isNumberValid(phoneNumber, 'phoneNumber')
 
-        if (checkEmptyFields(formFields)) {
+        const validNumbers = [];
+
+        refsArr.forEach((ref, index) => {
+            const isValid = isNumberValid(ref.phoneNumber, `phoneNumber${index}`);
+            if (!isValid) {
+                validNumbers.push(isValid);
+            }
+        })
+
+        if (checkEmptyFields()) {
             return false;
         }
 
-        if (!isNumberValid(phoneNumber, 'phoneNumber') || !isNumberValid(avPhoneNumber, 'avPhoneNumber') || !isEmailValid(email) || checkEmptyFields(formFields)) {
+        if (!isNumberValid(phoneNumber, 'phoneNumber') || !isEmailValid(email) || checkEmptyFields(formFields)) {
             return false;
         }
+
+        console.log('a veeer', validNumbers);
+
+
+        if (validNumbers.length > 0) {
+            return false
+        }
+
+
 
         return true;
     }
@@ -192,17 +226,29 @@ export const CreateClient = () => {
 
         for (let key in formFields) {
             if (key !== 'intNumber' && key !== 'matLastname' && key !== 'avMatLastname') {
-                if (formFields[key].trim() === "") {
+                if (formFields[key].toString().trim() === "") {
                     tempEmptyFields.push(key);
                     dispatch(setTempError('Los campos en rojo son obligatorios'))
                 }
             }
         }
 
+        refsArr.forEach((ref, index) => {
+            for (let key in ref) {
+                if (key !== 'intNumber' && key !== 'matLastname' && key !== 'col' && key !== 'street' && key !== 'extNumber' && key !== 'email' && key !== 'intNumber' && key !== 'zip') {
+                    if (ref[key].toString().trim() === "") {
+                        tempEmptyFields.push(`${key}${index}`);
+                        dispatch(setTempError('Los campos en rojo son obligatorios'))
+                    }
+                }
+            }
+        })
+
         setEmptyFields(tempEmptyFields);
 
         return tempEmptyFields.length === 0 ? false : true;
     }
+
 
     const checkEmptyField = e => {
 
@@ -247,7 +293,8 @@ export const CreateClient = () => {
     }
 
     const isNumberValid = (number, name) => {
-        const isValid = number.length === 10 ? true : false;
+
+        const isValid = number?.length === 10 ? true : false;
 
         const wrongFields = isWrong;
 
@@ -305,6 +352,45 @@ export const CreateClient = () => {
 
     }
 
+    const addRef = () => {
+        const newRef = {
+            names: '',
+            patLastname: '',
+            matLastname: '',
+            email: '',
+            phoneNumber: '',
+            col: '',
+            street: '',
+            zip: '',
+            extNumber: '',
+            intNumber: ''
+        }
+
+        setrefsArr([...refsArr, newRef]);
+        dispatch(clientSet({ ...formFields, refs: [...refs, newRef] }));
+    }
+
+    const deleteRef = index => {
+        refsArr.splice(index, 1);
+        setrefsArr(refsArr);
+        dispatch(clientSet({ ...formFields, refs: refsArr }));
+    }
+
+    const handleChangeRef = (index, e, key) => {
+
+        checkEmptyField(e);
+
+        const tempRefsArr = refsArr;
+
+        console.log(tempRefsArr);
+
+        tempRefsArr[index][key] = e.target.value;
+
+        setrefsArr(tempRefsArr);
+        dispatch(clientSet({ ...formFields, refs: tempRefsArr }));
+
+    }
+
     return (
         <div className="pb-5 project create">
             <div className="project__header">
@@ -350,7 +436,7 @@ export const CreateClient = () => {
                             <label htmlFor="email">Email</label>
                             <input name="email" onChange={(e) => {
                                 handleChange(e);
-                                isEmailValid(e.target.value)
+                                // isEmailValid(e.target.value)
                             }} value={email} type="email" />
                         </div>
                         <div className={`card__body__item ${emptyFields.includes('phoneNumber') && 'error'} ${isWrong.includes('phoneNumber') && 'warning'}`}>
@@ -371,13 +457,13 @@ export const CreateClient = () => {
                             <label htmlFor="street">Calle</label>
                             <input name="street" onChange={handleChange} value={street} type="text" autoComplete="off" />
                         </div>
-                        <div className={`card__body__item ${emptyFields.includes('intNumber') && 'error'}`}>
-                            <label htmlFor="intNumber">Número interior</label>
-                            <input name="intNumber" onChange={handleChange} value={intNumber} type="number" />
-                        </div>
                         <div className={`card__body__item ${emptyFields.includes('extNumber') && 'error'}`}>
                             <label htmlFor="extNumber">Número exterior</label>
                             <input name="extNumber" onChange={handleChange} value={extNumber} type="number" />
+                        </div>
+                        <div className={`card__body__item ${emptyFields.includes('intNumber') && 'error'}`}>
+                            <label htmlFor="intNumber">Número interior</label>
+                            <input name="intNumber" onChange={handleChange} value={intNumber} type="number" />
                         </div>
                         <div className={`card__body__item ${emptyFields.includes('zip') && 'error'}`}>
                             <label htmlFor="zip">Código Postal</label>
@@ -386,7 +472,7 @@ export const CreateClient = () => {
 
                     </form>
                     <div className="left">
-                        <div className="card__header">
+                        {/* <div className="card__header">
                             <img src="../assets/img/aval.png" alt="" />
                             <h4>Información del Aval</h4>
                         </div>
@@ -408,7 +494,78 @@ export const CreateClient = () => {
                                 handleChange(e);
                                 isNumberValid(e.target.value, 'avPhoneNumber')
                             }} value={avPhoneNumber} type="number" autoComplete="off" />
+                        </div> */}
+
+                        <div className="card__header">
+                            <img src="../assets/img/aval.png" alt="" />
+                            <h4>Referencias</h4>
+                            <button onClick={addRef} className="add-ref">Agregar referencia</button>
                         </div>
+
+
+                        {
+                            refsArr?.map((ref, index) => (
+                                <div key={`ref${index}`}>
+                                    <div className=" mt-4 card__header">
+                                        <h4>Información de Referencia {index + 1}</h4>
+                                        {
+                                            index !== 0 && (
+                                                <button onClick={() => deleteRef(index)} className="add-ref delete">Eliminar referencia</button>
+                                            )
+                                        }
+                                    </div>
+                                    <div className={`card__body__item ${emptyFields.includes(`names${index}`) && 'error'}`}>
+                                        <label htmlFor={`names${index}`}>Nombre(s)</label>
+                                        <input autoFocus name={`names${index}`} onChange={e => handleChangeRef(index, e, 'names')} value={ref.names} type="text" autoComplete="off" />
+                                    </div>
+                                    <div className={`card__body__item ${emptyFields.includes(`patLastname${index}`) && 'error'}`}>
+                                        <label htmlFor={`patLastname${index}`}>Apellido Paterno</label>
+                                        <input name={`patLastname${index}`} onChange={e => handleChangeRef(index, e, 'patLastname')} value={ref.patLastname} type="text" autoComplete="off" />
+                                    </div>
+                                    <div className={`card__body__item ${emptyFields.includes(`matLastname${index}`) && 'error'}`}>
+                                        <label htmlFor={`matLastname${index}`}>Apellido Materno</label>
+                                        <input name={`matLastname${index}`} onChange={e => handleChangeRef(index, e, 'matLastname')} value={ref.matLastname} type="text" autoComplete="off" />
+                                    </div>
+                                    <div className={`card__body__item ${emptyFields.includes(`phoneNumber${index}`) && 'error'} ${isWrong.includes(`phoneNumber${index}`) && 'warning'}`}>
+                                        <label htmlFor={`phoneNumber${index}`}>Número de contacto</label>
+                                        <input name={`phoneNumber${index}`} onChange={(e) => {
+                                            handleChangeRef(index, e, 'phoneNumber');
+                                            isNumberValid(e.target.value, `phoneNumber${index}`)
+                                        }} value={ref.phoneNumber} type="number" autoComplete="off" />
+                                    </div>
+                                    <div className={`card__body__item  ${isWrong.includes(`email${index}`) && 'warning'}`}>
+                                        <label htmlFor={`email${index}`}>Email</label>
+                                        <input name={`email${index}`} onChange={(e) => {
+                                            handleChangeRef(index, e, 'email');
+                                            // isEmailValid(e.target.value)
+                                        }} value={ref.email} type="email" />
+                                    </div>
+                                    <div className="card__header mt-4">
+                                        <h4>Dirección</h4>
+                                    </div>
+                                    <div className={`card__body__item ${emptyFields.includes(`col${index}`) && 'error'}`}>
+                                        <label htmlFor={`col${index}`}>Colonia</label>
+                                        <input name={`col${index}`} onChange={e => handleChangeRef(index, e, 'col')} value={ref.col} type="text" autoComplete="off" />
+                                    </div>
+                                    <div className={`card__body__item ${emptyFields.includes(`street${index}`) && 'error'}`}>
+                                        <label htmlFor={`street${index}`}>Calle</label>
+                                        <input name={`street${index}`} onChange={e => handleChangeRef(index, e, 'street')} value={ref.street} type="text" autoComplete="off" />
+                                    </div>
+                                    <div className={`card__body__item ${emptyFields.includes(`extNumber${index}`) && 'error'}`}>
+                                        <label htmlFor={`extNumber${index}`}>Número exterior</label>
+                                        <input name={`extNumber${index}`} onChange={e => handleChangeRef(index, e, 'extNumber')} value={ref.extNumber} type="number" />
+                                    </div>
+                                    <div className={`card__body__item ${emptyFields.includes(`intNumber${index}`) && 'error'}`}>
+                                        <label htmlFor={`intNumber${index}`}>Número interior</label>
+                                        <input name={`intNumber${index}`} onChange={e => handleChangeRef(index, e, 'intNumber')} value={ref.intNumber} type="number" />
+                                    </div>
+                                    <div className={`card__body__item ${emptyFields.includes(`zip${index}`) && 'error'}`}>
+                                        <label htmlFor={`zip${index}`}>Código Postal</label>
+                                        <input name={`zip${index}`} onChange={e => handleChangeRef(index, e, 'zip')} value={ref.zip} type="number" />
+                                    </div>
+                                </div>
+                            ))
+                        }
                     </div>
                 </div>
             </div>

@@ -11,6 +11,8 @@ import { BreadCrumbs } from '../BreadCrumbs';
 import { FloatingButton } from '../FloatingButton';
 import { LotsList } from '../lots/LotsList';
 import { staticURLDocs } from '../../url';
+import { projectCreate, projectSetServices } from '../../actions/project';
+import { lotTypesSet } from '../../actions/lotTypes';
 
 export const Project = React.memo(({ history: { location: { pathname } } }) => {
 
@@ -19,7 +21,9 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
 
     const { projects } = useSelector(state => state);
 
-    const { name, _id, associationName, totalLots, description, isFracc, reservedLots, liquidatedLots, deliveredLots, lotTypes, availableServices, manzanas, files } = projects.find(({ _id }) => _id === projectId);
+    const project = projects.find(({ _id }) => _id === projectId)
+
+    const { name, _id, associationName, totalLots, description, isFracc, reservedLots, liquidatedLots, deliveredLots, lotTypes, availableServices, manzanas, files } = project;
 
     const [searchParams, setSearchParams] = useState({
         searchOrder: null,
@@ -50,6 +54,18 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
         dispatch(redirectSet(redTypes.projects, `/proyectos/ver/${_id}`));
         dispatch(floatingButtonSet('pencil', redTypes.projectEdit));
 
+        dispatch(projectCreate({
+            ...project,
+            name: project?.name,
+            description: project?.description,
+            associationName: project?.associationName
+        }));
+
+        dispatch(projectSetServices(project.availableServices));
+
+        console.log('vamos a ver ', project.lotTypes);
+        dispatch(lotTypesSet(false, project.lotTypes));
+
         dispatch(getLots(_id))
 
         const modalInfo = {
@@ -57,14 +73,14 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
             text: `¿Desea editar el proyecto ${name}?`,
             link: `/proyectos/editar/${_id}`,
             okMsg: 'Sí',
-            closeMsg: 'No',
+            closeMsg: 'No'
         }
 
         dispatch(modalUpdate(modalInfo));
 
 
 
-    }, [dispatch, _id, name]);
+    }, [dispatch, _id, name, project]);
 
     const handleOpen = (path) => {
         const url = `${staticURLDocs}${path}`;
@@ -138,7 +154,7 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
                 </div>
 
 
-                <div className="card-grid">
+                <div className="card-grid mt-2">
                     <div className="card scroll">
                         <div className="card__header">
                             <img src="../assets/img/services.png" alt="" />
@@ -180,7 +196,7 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
                         </div>
                         <div className="card__body__list">
                             {
-                                lotTypes.map(({ _id, code, pricesPerSqMeter: { corner, regular }, area, measures }) => (
+                                lotTypes.map(({ _id, code, price, area, measures }) => (
                                     <div key={_id} className="card__body__list__lotType">
                                         <div className="header">
                                             <h4>Tipo de lote "{code}"</h4>
@@ -195,25 +211,16 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
                                                 )
                                             }
                                             <div className="prices">
-                                                <h5>
-                                                    Precios por m<sup>2</sup>
-                                                </h5>
+
                                                 <div className="card__body__item">
                                                     <span>
-                                                        Regular
+                                                        Precio
                                                     </span>
                                                     <p>
-                                                        ${regular}
+                                                        {price ? price : 'Variable'}
                                                     </p>
                                                 </div>
-                                                <div className="card__body__item">
-                                                    <span>
-                                                        Esquinas
-                                                    </span>
-                                                    <p>
-                                                        ${corner}
-                                                    </p>
-                                                </div>
+
                                             </div>
                                             {
                                                 measures?.length > 0 && (
@@ -246,7 +253,7 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
                 </div>
 
 
-                <div className="card">
+                <div className="card mt-2">
                     <div className="card__header">
                         <img src="../assets/img/lots.png" alt="" />
                         <h4>Lista de Lotes</h4>

@@ -33,6 +33,39 @@ export const lotTypesEdit = (type, { newType, sameArea, pricePerM, area, front, 
     }
 }
 
+export const lotTypesSet = (restart, lotTypes) => {
+    if (restart) {
+        return {
+            type: redTypes.lotTypesReset
+        }
+    }
+
+    // type, sameArea, pricePerM, area, front, side
+
+    const newLotTypes = lotTypes.map(({ code, price, area, measures, _id }) => {
+        const obj = {
+            type: code,
+            pricePerM: price,
+            _id
+        }
+
+        if (area) {
+            obj['sameArea'] = true;
+            obj['front'] = measures[0].value;
+            obj['side'] = measures[1].value;
+        }
+
+        return obj;
+
+    })
+
+
+    return {
+        type: redTypes.lotTypesSet,
+        payload: newLotTypes
+    }
+}
+
 export const lotTypesDelete = type => {
     return {
         type: redTypes.lotTypesDelete,

@@ -9,6 +9,7 @@ export const newLotsReducer = (state = [], action) => {
         case redTypes.newLotsSet:
             return [...action.payload];
 
+
         default:
             return state;
     }

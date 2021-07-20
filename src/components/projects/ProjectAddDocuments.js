@@ -2,24 +2,24 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getClient, getProject, getProjects } from '../../actions/consults';
+import { getProject, getProjects } from '../../actions/consults';
 import { useForm } from '../../hooks/useForm';
 import { redTypes } from '../../types/reduxTypes';
-import { setTempSuccessNotice, uiStartLoading, uiFinishLoading } from '../../actions/ui';
+import { setTempSuccessNotice, uiStartLoading, uiFinishLoading, setTempError } from '../../actions/ui';
 import { redirectSet } from '../../actions/redirect';
 import { floatingButtonSet } from '../../actions/floatingButton';
 import { modalUpdate, modalEnable } from '../../actions/modal';
 import { staticURL } from '../../url';
-import { projectEnableSvcModal, projectUpdateSvcModal } from '../../actions/project';
+import { projectEnableSvcModal, projectUpdateSvcModal, projectSet } from '../../actions/project';
 import { ModalDoc } from '../ModalDoc';
-
-// floatingButtonSet
 
 export const ProjectAddDocuments = () => {
 
+    // const { projectEdit: project, projects } = useSelector(state => state);
     const { projectEdit: project } = useSelector(state => state);
     const dispatch = useDispatch();
     const { projectId } = useParams();
+    // const currentProject = projects.find(p => p._id === projectId);
 
     const { name, associationName, description, files } = project;
 
@@ -39,18 +39,16 @@ export const ProjectAddDocuments = () => {
         type: ''
     });
 
-    console.log('holi')
+    const [extraCharges, setExtraCharges] = useState(project.extraCharges);
 
+    const [emptyFields, setEmptyFields] = useState([]);
 
     useEffect(() => {
 
-        dispatch(getProject(projectId));
-        dispatch(redirectSet(redTypes.projects, `/proyectos/docs/${projectId}`));
+        dispatch(redirectSet(redTypes.projects, `/proyectos/doc/${projectId}`));
         dispatch(floatingButtonSet('pencil', redTypes.projectCreate));
 
     }, [dispatch, projectId])
-
-    // FUNCTIONS
 
     const onFileInput = (e, type) => {
         setFilesDoc(
@@ -70,10 +68,7 @@ export const ProjectAddDocuments = () => {
 
         const url = `${staticURL}/projects/${projectId}/file`;
 
-
-        console.log(file);
-
-        const response = await fetch(url, { // Your POST endpoint
+        await fetch(url, { // Your POST endpoint
             method: 'PUT',
             body: newForm
 
@@ -101,25 +96,88 @@ export const ProjectAddDocuments = () => {
 
 
 
-        const inputFile = document.querySelector(`[name=file`);
+        const inputFile = document.querySelector(`[name=file]`);
         inputFile.value = null;
     }
 
 
 
-    const handleNext = () => {
-        const modalInfo = {
-            title: `Terminar registro`,
-            text: '¿Desea terminar de subir archivos?',
-            link: `/proyectos/ver/${projectId}`,
-            okMsg: 'Terminar',
-            closeMsg: 'Cancelar',
-            type: redTypes.projectCreate
+    const handleNext = async () => {
+
+        console.log(isFormValid());
+
+        if (isFormValid()) {
+
+            dispatch(uiStartLoading());
+
+            const res = await postData();
+
+            dispatch(uiFinishLoading());
+
+
+            if (res.status === 'OK') {
+                const modalInfo = {
+                    title: `Terminar registro`,
+                    text: 'Proyecto actualizado con éxito',
+                    link: `/proyectos/ver/${projectId}`,
+                    okMsg: 'Terminar',
+                    closeMsg: 'Cancelar',
+                    type: redTypes.projectCreate
+                }
+
+                dispatch(modalUpdate(modalInfo));
+                dispatch(modalEnable());
+
+                dispatch(getProject(projectId));
+                // dispatch(projectSet(res.project));
+
+            } else {
+
+                dispatch(setTempError('Ha ocurrido un error'));
+
+            }
+
         }
 
-        dispatch(modalUpdate(modalInfo));
-        dispatch(modalEnable());
+    }
 
+    const postData = () => {
+        const data = {
+            chargesData: extraCharges
+        }
+
+        const url = `${staticURL}/projects/${projectId}/extra-charges`;
+
+        const res = fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                return response.json();
+            })
+            .then((data) => {
+                console.log('data', data);
+                return data;
+            })
+            .catch(err => {
+                console.log(err);
+                // dispatch(uiFinishLoading());
+            });
+
+        return res;
+    }
+
+    const isFormValid = () => {
+        checkEmptyFields();
+
+        if (checkEmptyFields()) {
+            return false;
+        }
+
+        return true;
     }
 
     const handleDeleteFile = (fileName, type) => {
@@ -136,6 +194,72 @@ export const ProjectAddDocuments = () => {
 
         dispatch(projectEnableSvcModal());
         dispatch(projectUpdateSvcModal(modalInfo));
+    }
+
+    const addExtraCharge = () => {
+        const newRef = {
+            title: '',
+            description: '',
+            amount: ''
+        }
+
+        setExtraCharges([...extraCharges, newRef]);
+        dispatch(projectSet({ ...project, extraCharges: [...extraCharges, newRef] }));
+    }
+
+    const deleteExtraCharge = index => {
+        extraCharges.splice(index, 1);
+        setExtraCharges(extraCharges);
+        dispatch(projectSet({ ...project, extraCharges }));
+    }
+
+    const checkEmptyField = e => {
+
+        if (e.target.value?.trim().length > 0) {
+            const tempEmptyFields = emptyFields;
+
+            if (tempEmptyFields.includes(e.target.name)) {
+                const index = tempEmptyFields.indexOf(e.target.name);
+
+                tempEmptyFields.splice(index, 1);
+            }
+
+            setEmptyFields(tempEmptyFields);
+        }
+
+    }
+
+    const handleChangeExtraCharge = (index, e, key) => {
+
+        checkEmptyField(e);
+
+        const tempRefsArr = extraCharges;
+
+        tempRefsArr[index][key] = e.target.value;
+
+        setExtraCharges(tempRefsArr);
+        dispatch(projectSet({ ...project, extraCharges: tempRefsArr }));
+
+    }
+
+    const checkEmptyFields = () => {
+
+        const tempEmptyFields = []
+
+        extraCharges.forEach((ref, index) => {
+            for (let key in ref) {
+                if (key !== 'description') {
+                    if (ref[key].toString().trim() === "") {
+                        tempEmptyFields.push(`${key}${index}`);
+                        dispatch(setTempError('Los campos en rojo son obligatorios'))
+                    }
+                }
+            }
+        })
+
+        setEmptyFields(tempEmptyFields);
+
+        return tempEmptyFields.length === 0 ? false : true;
     }
 
     return (
@@ -202,6 +326,47 @@ export const ProjectAddDocuments = () => {
                                         </div>
                                     </div>
 
+                                </div>
+                                <div className="left">
+                                    <div className="card__header">
+                                        <img src="../assets/img/services.png" alt="" />
+                                        <h4>Cargos Extras</h4>
+                                        <button onClick={addExtraCharge} className="add-ref">Agregar cargo extra</button>
+                                    </div>
+                                    {
+                                        extraCharges?.map((extraCharge, index) => (
+                                            <div key={`extraCharge${index}`}>
+                                                <div className=" mt-4 card__header">
+                                                    <h4>Cargo Extra {index + 1}</h4>
+                                                    <button onClick={() => deleteExtraCharge(index)} className="add-ref delete">Eliminar cargo</button>
+                                                </div>
+                                                <div className={`card__body__item ${emptyFields.includes(`title${index}`) && 'error'} mt-4`}>
+                                                    <label htmlFor={`title${index}`}>Nombre del cargo</label>
+                                                    <input
+                                                        autoFocus name={`title${index}`}
+                                                        value={extraCharge.title}
+                                                        type="text"
+                                                        autoComplete="off"
+                                                        onChange={e => handleChangeExtraCharge(index, e, 'title')} />
+                                                </div>
+                                                <div className={`card__body__item ${emptyFields.includes(`amount${index}`) && 'error'}`}>
+                                                    <label htmlFor={`amount${index}`}>Cantidad</label>
+                                                    <input
+                                                        autoFocus name={`amount${index}`}
+                                                        value={extraCharge.amount}
+                                                        type="number"
+                                                        autoComplete="off"
+                                                        onChange={e => handleChangeExtraCharge(index, e, 'amount')} />
+                                                </div>
+                                                <div className={`card__body__item description extra ${emptyFields.includes(`description${index}`) && 'error'}`}>
+                                                    <span htmlFor={`description${index}`}>Descripción del cargo</span>
+                                                    <textarea name={`description${index}`} value={extraCharge.description} onChange={e => handleChangeExtraCharge(index, e, 'description')} ></textarea>
+                                                </div>
+
+
+                                            </div>
+                                        ))
+                                    }
                                 </div>
 
                             </div>

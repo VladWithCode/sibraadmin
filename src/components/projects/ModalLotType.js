@@ -92,7 +92,7 @@ export const ModalLotType = () => {
             }
         }
 
-        if ((Number(pricePerM) === 0) || sameArea === undefined) {
+        if ((sameArea && (Number(pricePerM) === 0)) || sameArea === undefined) {
             dispatch(setTempError('Todos los campos son obligatorios'));
 
             return false;
@@ -137,10 +137,6 @@ export const ModalLotType = () => {
                         <span>Nombre de tipo:</span>
                         <input type="text" onChange={handleInputChange} value={type} name="type" />
                     </div>
-                    <div className="modal__input__field">
-                        <span>Precio:</span>
-                        <input type="number" onChange={handleInputChange} value={pricePerM} name="pricePerM" />
-                    </div>
                     <div className="modal__input__field mt-3 mb-2">
                         <span>Misma área:</span>
                         <div className="options">
@@ -169,6 +165,10 @@ export const ModalLotType = () => {
                         sameArea &&
                         (
                             <>
+                                <div className="modal__input__field">
+                                    <span>Precio:</span>
+                                    <input type="number" onChange={handleInputChange} value={pricePerM} name="pricePerM" />
+                                </div>
                                 <div className="modal__input__field">
                                     <span>Área:</span>
                                     <input type="number" onChange={handleInputChange} value={area} name="area" />

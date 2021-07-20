@@ -13,13 +13,18 @@ export const redTypes = {
     projectDisableDocModal: '[ProjectModal] DisableDocModal',
     projectUpdateSvcModal: '[ProjectModal] UpdateSvcModal',
     projectUpdateDocModal: '[ProjectModal] UpdateDocModal',
-    projectSetPage: 'ProjectCRUD SetEditPage',
+    projectSetPage: '[ProjectCRUD] SetEditPage',
+    projectReset: '[Project] Reset',
+
+    projectSetServices: '[Services] Set',
 
     projectSet: '[Project] Set',
 
     getProjects: '[GET] Projects',
     getLots: '[GET] Lots',
     getClients: '[GET] Clients',
+
+    setLot: '[Lot] Set',
 
     lotCreate: '[Lot] Create',
     lotEdit: '[Lot] Edit',
@@ -71,6 +76,9 @@ export const redTypes = {
     lotTypesModalConfirmDisable: '[LotTypesModalConfirm] Disable',
     lotTypesModalConfirmReset: '[LotTypesModalConfirm] Reset',
 
+    lotTypesSet: '[LotTypes] Set',
+    lotTypesReset: '[LotTypes] Reset',
+
     newLotsSet: '[NewLots] Set',
 
     manzanasSet: '[Manzanas] Set',
@@ -82,6 +90,7 @@ export const redTypes = {
     aval: 'aval',
     clients: 'clients',
     history: 'history',
+    lot: 'lot',
     settings: 'settings',
     edit: 'edit',
     delete: 'delete'

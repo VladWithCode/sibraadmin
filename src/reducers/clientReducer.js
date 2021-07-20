@@ -14,10 +14,20 @@ const initialState = {
     zip: '',
     extNumber: '',
     intNumber: '',
-    avNames: '',
-    avPatLastname: '',
-    avMatLastname: '',
-    avPhoneNumber: ''
+    refs: [
+        {
+            names: '',
+            patLastname: '',
+            matLastname: '',
+            email: '',
+            phoneNumber: '',
+            col: '',
+            street: '',
+            zip: '',
+            extNumber: '',
+            intNumber: ''
+        }
+    ]
 }
 
 

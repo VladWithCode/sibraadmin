@@ -5,7 +5,7 @@ export const servicesReducer = (state = [], action) => {
     switch (action.type) {
         case redTypes.projectAddService:
             return [...state, action.payload.service];
-            
+
 
         case redTypes.projectDeleteService:
 
@@ -13,8 +13,11 @@ export const servicesReducer = (state = [], action) => {
             const newServices = services.filter(service => service !== action.payload.service);
 
             return newServices;
-            
-    
+
+        case redTypes.projectSetServices:
+            return action.payload
+
+
         default:
             return state;
     }

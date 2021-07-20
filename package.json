@@ -6,6 +6,7 @@
   "private": true,
   "description": "Aplicación de administración para SIBRA",
   "main": "public/electron.js",
+  "license": "ISC",
   "homepage": "./",
   "dependencies": {
     "@testing-library/jest-dom": "^5.12.0",

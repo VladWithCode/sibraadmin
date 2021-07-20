@@ -16,6 +16,7 @@ const initialState = {
         // 'Vigilancia',
         // 'Alberca común'
     ],
+    greenAreas: [],
     docs: [
         // {
         //     path: '',
@@ -54,7 +55,6 @@ const initialState = {
 export const editProjectReducer = (state = {}, action) => {
     switch (action.type) {
         case redTypes.projectSet:
-            console.log('payload', action.payload);
             return action.payload
 
         default:
@@ -78,7 +78,9 @@ export const projectReducer = (state = initialState, action) => {
                 services: action.payload.services,
                 docs: action.payload.docs,
                 pricePerSqM: action.payload.pricePerSqM,
-                priceCorner: action.payload.priceCorner
+                priceCorner: action.payload.priceCorner,
+                greenAreas: action.payload.greenAreas,
+
             }
 
 
@@ -125,7 +127,8 @@ export const projectReducer = (state = initialState, action) => {
                     okMsg: action.payload.okMsg ? action.payload.okMsg : state.modalServices.okMsg,
                     closeMsg: action.payload.closeMsg ? action.payload.closeMsg : state.modalServices.closeMsg,
                     action: action.payload.action ? action.payload.action : state.modalServices.action,
-                    input: action.payload.input ? action.payload.input : state.modalServices.input
+                    input: action.payload.input ? action.payload.input : state.modalServices.input,
+                    refId: action.payload.refId ? action.payload.refId : state.modalServices.refId
                 }
             }
 
@@ -134,6 +137,22 @@ export const projectReducer = (state = initialState, action) => {
                 ...state,
                 page: action.payload.page
             }
+
+
+        case redTypes.projectReset:
+            return initialState;
+
+
+        // case redTypes.projectSetServices:
+        //     // console.log('Holaaaa');
+        //     // console.log({
+        //     //     ...state,
+        //     //     services: action.payload
+        //     // });
+        //     return {
+        //         ...state,
+        //         services: action.payload
+        //     }
 
 
 

@@ -6,7 +6,9 @@ import { useForm } from '../../hooks/useForm';
 import { modalUpdate } from '../../actions/modal';
 import { getProjects } from '../../actions/consults';
 import { floatingButtonSet } from '../../actions/floatingButton';
+import { lotTypesSet } from '../../actions/lotTypes';
 import { redTypes } from '../../types/reduxTypes';
+import { projectReset } from '../../actions/project';
 
 export const Projects = React.memo(({ history: { location: { pathname } } }) => {
 
@@ -31,13 +33,12 @@ export const Projects = React.memo(({ history: { location: { pathname } } }) => 
             closeMsg: 'No',
         }
 
-        setTimeout(() => {
-            dispatch(modalUpdate(modalInfo));
-        }, 1500);
-
+        dispatch(modalUpdate(modalInfo));
 
         dispatch(floatingButtonSet('plus', redTypes.projects));
         dispatch(getProjects());
+        dispatch(lotTypesSet(true, {}));
+        dispatch(projectReset());
 
     }, [dispatch]);
 

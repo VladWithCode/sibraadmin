@@ -12,7 +12,7 @@ import { staticURL } from '../../url';
 export const Create3 = () => {
 
     const dispatch = useDispatch();
-    const { project, project: { page }, services, types: { lotTypes }, manzanas, newLots } = useSelector(state => state);
+    const { project, project: { page, greenAreas }, services, types: { lotTypes }, manzanas, newLots } = useSelector(state => state);
     const [lotsSummary, setLotsSummary] = useState([]);
     const [cornersErrors, setCornersErrors] = useState([]);
     // const [repeatedCorners, setRepeatedCorners] = useState([]);
@@ -175,7 +175,8 @@ export const Create3 = () => {
                         lotType.inputs.push({
                             lotNum: '',
                             measures: [],
-                            area: ''
+                            area: '',
+                            price: ''
                         })
                     }
                 })
@@ -267,6 +268,17 @@ export const Create3 = () => {
         const newArr = lotsSummary;
 
         newArr.find(manzana => manzana.manzanaNum === manzanaNum).lotTypes.find(lotType => lotType.type === type).inputs[inputIndex].area = target.value;
+
+        setLotsSummary(newArr);
+
+        dispatch(newLotsSet(newArr));
+    }
+
+    const handleChangePrice = ({ target }, manzanaNum, inputIndex, type) => {
+
+        const newArr = lotsSummary;
+
+        newArr.find(manzana => manzana.manzanaNum === manzanaNum).lotTypes.find(lotType => lotType.type === type).inputs[inputIndex].price = target.value;
 
         setLotsSummary(newArr);
 
@@ -401,6 +413,7 @@ export const Create3 = () => {
                             type: lotType.type,
                             lotNumber: +lotInput.lotNum,
                             manzana: +manzana.manzanaNum,
+                            price: +lotInput.price,
                             isCorner: corners.includes(+lotInput.lotNum) ? true : false,
                             area: +lotInput.area,
                             measures: lotInput.measures.map(({ measureName, measure }) => ({
@@ -427,8 +440,9 @@ export const Create3 = () => {
             associationName: project.associationName,
             description: project.description,
             availableServices: services,
-            manzanas: manzanas.length,
+            manzanas: manzanas.length + greenAreas.length,
             lots: [],
+            greenAreas: greenAreas.map(ga => (+ga.manzanaNum)),
             lotTypes: lotTypes.map(({ type, sameArea, pricePerM, area, front, side }) => (
                 {
                     code: type,
@@ -451,7 +465,7 @@ export const Create3 = () => {
 
         const response = await uploadProjectDocument(projectDocument, lots);
 
-        if (response.status === 'OK') {
+        if (response?.status === 'OK') {
 
 
             const modalInfo = {
@@ -465,6 +479,8 @@ export const Create3 = () => {
 
             dispatch(modalUpdate(modalInfo));
             dispatch(modalEnable());
+        } else {
+            dispatch(setTempError('Ocurrió un error'))
         }
 
         console.log(projectDocument, lots);
@@ -498,7 +514,8 @@ export const Create3 = () => {
                 return response.json()
             })
             .then(data => {
-                dispatch(projectSet(data.project));
+                console.log(data);
+                data.project && dispatch(projectSet(data.project));
                 return data;
             })
             .catch(err => {
@@ -561,7 +578,7 @@ export const Create3 = () => {
                                 }
 
                                 {
-                                    lotTypes.map(({ type, inputs, sameArea, quantity }) => (
+                                    lotTypes.map(({ type, inputs, sameArea, quantity, price }) => (
                                         (!sameArea && +quantity > 0) && (
                                             <div className="manzana-lots__card__content" key={`${manzanaNum}-${type}`}>
                                                 <h4  >Lotes tipo "{type.toUpperCase()}"</h4>
@@ -581,6 +598,13 @@ export const Create3 = () => {
                                                                 </label>
                                                                 <input onChange={(e) => handleChangeArea(e, manzanaNum, inputIndex, type)} type="number" name={`manzana-${manzanaNum}-${type}-${inputIndex}-area`} value={area} />
                                                             </div>
+                                                            <div className={`form-field lot-area`}>
+                                                                <label htmlFor={`manzana-${manzanaNum}-${type}-${inputIndex}-price`}>
+                                                                    Precio:
+                                                                </label>
+                                                                <input onChange={(e) => handleChangePrice(e, manzanaNum, inputIndex, type)} type="number" name={`manzana-${manzanaNum}-${type}-${inputIndex}-price`} value={price} />
+                                                            </div>
+
 
                                                             <div className="btn">
                                                                 <button onClick={(e) => { addMeasure(e, manzanaNum, inputIndex, type) }} className="add-measure">

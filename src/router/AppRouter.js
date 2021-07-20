@@ -23,6 +23,7 @@ import { useSelector } from "react-redux";
 import { ClientAddDocuments } from "../components/clients/ClientAddDocuments";
 import { ClientEdit } from "../components/clients/ClientEdit";
 import { ProjectAddDocuments } from '../components/projects/ProjectAddDocuments';
+import { LotEdit } from "../components/lots/LotEdit";
 
 
 
@@ -49,6 +50,7 @@ export const AppRouter = () => {
                         <Route exact path="/proyectos/nuevo" component={CreateProject} ></Route>
                         <Route exact path="/proyectos/editar/:projectId" component={EditProject}  ></Route>
                         <Route exact path="/proyectos/doc/:projectId" component={ProjectAddDocuments}  ></Route>
+                        <Route exact path="/proyectos/edit/:projectId/lote/:lotId" component={LotEdit} ></Route>
 
 
                         <Route exact path="/clientes" component={Clients} ></Route>
@@ -58,6 +60,7 @@ export const AppRouter = () => {
                         <Route exact path="/clientes/edit/:clientId" component={ClientEdit} ></Route>
 
                         <Route exact path="/proyectos/ver/:projectId/lote/:lotId" component={Lot} ></Route>
+
 
                         <Route exact path="/ajustes" component={Settings} ></Route>
                         <Route exact path="/historial" component={History} ></Route>

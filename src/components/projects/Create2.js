@@ -7,7 +7,8 @@ import { setTempError, setTempWarning, unSetError, unSetWarning } from '../../ac
 
 export const Create2 = () => {
 
-    const { project, project: { lots, page }, types: { lotTypes } } = useSelector(state => state);
+    const { project, project: { lots, page, greenAreas }, types: { lotTypes } } = useSelector(state => state);
+    const state = useSelector(state => state);
 
     const dispatch = useDispatch();
 
@@ -22,14 +23,25 @@ export const Create2 = () => {
     const [typesErrors, setTypesErrors] = useState([]);
     const [cornersErrors, setCornersErrors] = useState([]);
 
-    const state = useSelector(state => state);
+    let countLots = +lots;
+    state.manzanas.forEach(m => countLots -= +m.lots)
+
+    const [remainingLots, setRemainingLots] = useState(countLots)
+
 
     useEffect(() => {
 
         const comparingLotTypes = state.manzanas[0]?.lotTypes.map(({ type, sameArea, pricePerM, cornerPrice }) => ({ type, sameArea, pricePerM, cornerPrice }));
 
+        let lotsHaveChanged = false;
 
-        if ((+project.manzanas === state.manzanas.length) && (state.manzanas.length >= 1) && (JSON.stringify(comparingLotTypes) === JSON.stringify(lotTypes))) {
+        for (let key in comparingLotTypes) {
+            if (comparingLotTypes[key].toString() !== lotTypes[key].toString()) {
+                lotsHaveChanged = true;
+            }
+        }
+
+        if ((+project.manzanas === (state.manzanas.length + greenAreas.length)) && ((state.manzanas.length + greenAreas.length) >= 1) && (!lotsHaveChanged)) {
             setFormValues([...state.manzanas]);
             setManzanas([...state.manzanas]);
 
@@ -121,16 +133,29 @@ export const Create2 = () => {
         } else {
 
             const newArr = [];
-            for (let i = 1; i <= project.manzanas; i++) {
+            const greenAreasNums = greenAreas.map(ga => +ga.manzanaNum);
+            let counter = 1;
+
+            console.log('areas nums', greenAreasNums);
+
+            for (let i = 1; i <= (+project.manzanas - greenAreasNums.length); i++) {
+
+                while (greenAreasNums.includes(counter)) {
+                    counter++;
+                }
+
                 newArr.push((
                     {
-                        num: i,
+                        num: counter,
                         lots: '',
                         lotTypes: lotTypes.map(lotType => ({ ...lotType, quantity: '' })),
                         corners: '',
                         lotsErr: null
                     }
                 ))
+
+                counter++
+
             }
             setFormValues(newArr);
             setManzanas(newArr);
@@ -185,6 +210,8 @@ export const Create2 = () => {
             dispatch(unSetError());
         }
 
+        setRemainingLots(lots - counter);
+
         dispatch(manzanasSet(formValues));
 
         if (+counterTypes > +counter) {
@@ -212,16 +239,6 @@ export const Create2 = () => {
             )
             dispatch(unSetError());
             dispatch(unSetWarning());
-        } else {
-            setTypesErrors(
-                typesErrors.map(typeError => {
-                    if (typeError?.manzana === num) {
-                        typeError.error = false
-                        typeError.completed = false
-                    }
-                    return typeError;
-                })
-            )
         }
 
     }
@@ -397,12 +414,13 @@ export const Create2 = () => {
                 <div className="left">
                     <h3> Registro de Manzanas </h3>
                 </div>
-                <div className="right">
+                <div className="right lots">
                     <span className="lots">Lotes totales: {lots}</span>
+                    <span className="lots">Lotes restantes: {remainingLots}</span>
                 </div>
             </div>
 
-            <div className="card-grid manzanas">
+            <div className="card-grid">
                 {
                     manzanas.map(({ num, lots, corners }, index) => (
                         <div className="card edit" key={num}>

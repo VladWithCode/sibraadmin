@@ -28,7 +28,11 @@ export const lotReducer = (state = {}, action) => {
                 pricePerSqM: action.payload.pricePerSqM,
                 priceCorner: action.payload.priceCorner
             }
-    
+
+        case redTypes.setLot:
+            return action.payload
+
+
         default:
             return state;
     }

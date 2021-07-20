@@ -113,12 +113,15 @@ export const getClient = _id => {
     }
 }
 
-export const deleteFile = (fileName, type, id) => {
+export const deleteFile = (fileName, type, id, refId, projectId) => {
 
-    const url = `${staticURL}/${type === redTypes.project ? 'projects' : 'customers'}/${id}${type === redTypes.aval ? '/aval' : ''}/file`;
+
+
+    const url = `${staticURL}/${type === redTypes.project ? 'projects' : type === redTypes.lot ? 'lots' : 'customers'}/${id}${type === redTypes.aval ? `/ref/${refId}` : ''}/file`;
 
     const data = { fileName };
 
+    console.log('a esta url: ', url);
 
     return (dispatch) => {
 
@@ -143,6 +146,16 @@ export const deleteFile = (fileName, type, id) => {
                 ) : (
                     dispatch(getProject(id))
                 )
+
+                if (projectId) {
+                    fetch(`${staticURL}/lots/${id}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            dispatch(setLot(data.lot))
+                        })
+                        .catch(err => console.log(err))
+                }
+
             })
             .catch(err => {
                 console.log(err);
@@ -184,6 +197,8 @@ export const deleteClient = (id, name) => {
                 dispatch(modalUpdate(modalInfo));
                 dispatch(modalEnable());
 
+
+
             })
             .catch(err => {
                 console.log(err);
@@ -201,12 +216,20 @@ const loadProjects = (projects) => {
     }
 }
 
-const loadLots = (lots) => {
+export const loadLots = (lots) => {
     return {
         type: redTypes.getLots,
         payload: lots
     }
 }
+
+export const setLot = (lot) => {
+    return {
+        type: redTypes.setLot,
+        payload: lot
+    }
+}
+
 
 const loadClients = (clients) => {
     return {

@@ -68,16 +68,22 @@ export const LotTypeCard = ({ type, sameArea, pricePerM, area, front, side }) =>
                             </div>
                         )
                     }
-                    <div className="prices">
-                        <div className="card__body__item">
-                            <span>
-                                Precio
-                            </span>
-                            <p>
-                                ${pricePerM}
-                            </p>
-                        </div>
-                        {/* <div className="card__body__item">
+
+
+                    {
+                        sameArea && (
+
+                            <>
+                                <div className="prices">
+                                    <div className="card__body__item">
+                                        <span>
+                                            Precio
+                                        </span>
+                                        <p>
+                                            ${pricePerM}
+                                        </p>
+                                    </div>
+                                    {/* <div className="card__body__item">
                             <span>
                                 Esquinas
                             </span>
@@ -85,12 +91,7 @@ export const LotTypeCard = ({ type, sameArea, pricePerM, area, front, side }) =>
                                 $
                             </p>
                         </div> */}
-                    </div>
-
-
-                    {
-                        sameArea && (
-                            <>
+                                </div>
 
                                 <div className="measures">
                                     <h5>Medidas</h5>

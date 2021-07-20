@@ -17,10 +17,15 @@ export const projectCreate = project => {
             services: project.services,
             docs: project.docs,
             pricePerSqM: project.pricePerSqM,
-            priceCorner: project.priceCorner
+            priceCorner: project.priceCorner,
+            greenAreas: project.greenAreas
         }
     }
 }
+
+export const projectReset = () => ({
+    type: redTypes.projectReset
+})
 
 export const projectSet = project => ({
     type: redTypes.projectSet,
@@ -42,6 +47,11 @@ export const projectAddService = service => ({
     }
 })
 
+export const projectSetServices = services => ({
+    type: redTypes.projectSetServices,
+    payload: services
+})
+
 export const projectEnableSvcModal = () => ({
     type: redTypes.projectEnableSvcModal
 })
@@ -60,7 +70,8 @@ export const projectUpdateSvcModal = modal => {
             okMsg: modal.okMsg ? modal.okMsg : null,
             closeMsg: modal.closeMsg ? modal.closeMsg : null,
             action: modal.action ? modal.action : null,
-            input: modal.input ? modal.input : null
+            input: modal.input ? modal.input : null,
+            refId: modal.refId ? modal.refId : null
         }
     }
 }
