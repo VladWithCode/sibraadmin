@@ -68,8 +68,7 @@
     "appId": "sibra-admin",
     "win": {
       "target": "nsis",
-      "icon": "setup/favicon.ico",
-      "requestedExecutionLevel": "requireAdministrator"
+      "icon": "setup/favicon.ico"
     },
     "files": [
       "assets/**/*",

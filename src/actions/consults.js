@@ -98,8 +98,6 @@ export const getClient = _id => {
 
     const url = `${staticURL}/customer/${_id}`;
 
-    console.log('obteniendo cliente');
-
     return (dispatch) => {
         dispatch(uiStartLoading());
         fetch(url)

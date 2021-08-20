@@ -18,7 +18,13 @@ export const projectCreate = project => {
             docs: project.docs,
             pricePerSqM: project.pricePerSqM,
             priceCorner: project.priceCorner,
-            greenAreas: project.greenAreas
+            greenAreas: project.greenAreas,
+            notary: project.notary,
+            propertyScripture: project.propertyScripture,
+            propertyBook: project.propertyBook,
+            scriptureDate: project.scriptureDate,
+            constitutiveScripture: project.constitutiveScripture,
+            constitutiveVolume: project.constitutiveVolume
         }
     }
 }

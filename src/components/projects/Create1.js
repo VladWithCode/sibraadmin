@@ -24,7 +24,7 @@ export const Create1 = () => {
 
     const [formFields, handleInputChange] = useForm(currentProject);
 
-    const { name, description, manzanas, lots, associationName } = formFields;
+    const { name, description, manzanas, lots, associationName, notary, propertyScripture, propertyBook, scriptureDate, constitutiveScripture, constitutiveVolume } = formFields;
 
     const { page } = currentProject;
 
@@ -322,6 +322,30 @@ export const Create1 = () => {
                         <div className={`card__body__item description ${emptyFields.includes('description') && 'error'}`}>
                             <span htmlFor="description">Descripción del Proyecto</span>
                             <textarea name="description" value={description} onChange={(e) => { inputChange(e) }} ></textarea>
+                        </div>
+                        <div className={`card__body__item ${emptyFields.includes('notary') && 'error'}`}>
+                            <label htmlFor="notary">Notario</label>
+                            <input autoFocus name="notary" onChange={(e) => { inputChange(e) }} value={notary} type="text" autoComplete="off" />
+                        </div>
+                        <div className={`card__body__item ${emptyFields.includes('propertyScripture') && 'error'}`}>
+                            <label htmlFor="propertyScripture">Número de escritura</label>
+                            <input autoFocus name="propertyScripture" onChange={(e) => { inputChange(e) }} value={propertyScripture} type="text" autoComplete="off" />
+                        </div>
+                        <div className={`card__body__item ${emptyFields.includes('propertyBook') && 'error'}`}>
+                            <label htmlFor="propertyBook">Número de libro</label>
+                            <input autoFocus name="propertyBook" onChange={(e) => { inputChange(e) }} value={propertyBook} type="text" autoComplete="off" />
+                        </div>
+                        <div className={`card__body__item ${emptyFields.includes('scriptureDate') && 'error'}`}>
+                            <label htmlFor="scriptureDate">Fecha de escrituración</label>
+                            <input autoFocus name="scriptureDate" onChange={(e) => { inputChange(e) }} value={scriptureDate} type="text" autoComplete="off" />
+                        </div>
+                        <div className={`card__body__item ${emptyFields.includes('constitutiveScripture') && 'error'}`}>
+                            <label htmlFor="constitutiveScripture">Escritura de acta constitutiva</label>
+                            <input autoFocus name="constitutiveScripture" onChange={(e) => { inputChange(e) }} value={constitutiveScripture} type="text" autoComplete="off" />
+                        </div>
+                        <div className={`card__body__item ${emptyFields.includes('constitutiveVolume') && 'error'}`}>
+                            <label htmlFor="constitutiveVolume">Volumen de acta constitutiva</label>
+                            <input autoFocus name="constitutiveVolume" onChange={(e) => { inputChange(e) }} value={constitutiveVolume} type="text" autoComplete="off" />
                         </div>
 
                     </form>

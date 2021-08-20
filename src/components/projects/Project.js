@@ -11,8 +11,9 @@ import { BreadCrumbs } from '../BreadCrumbs';
 import { FloatingButton } from '../FloatingButton';
 import { LotsList } from '../lots/LotsList';
 import { staticURLDocs } from '../../url';
-import { projectCreate, projectSetServices } from '../../actions/project';
+import { projectCreate, projectSet, projectSetServices } from '../../actions/project';
 import { lotTypesSet } from '../../actions/lotTypes';
+import { ProjectExtraCharges } from './ProjectExtraCharges';
 
 export const Project = React.memo(({ history: { location: { pathname } } }) => {
 
@@ -21,9 +22,9 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
 
     const { projects } = useSelector(state => state);
 
-    const project = projects.find(({ _id }) => _id === projectId)
+    const project = projects.find(({ _id }) => _id === projectId);
 
-    const { name, _id, associationName, totalLots, description, isFracc, reservedLots, liquidatedLots, deliveredLots, lotTypes, availableServices, manzanas, files } = project;
+    const { name, _id, associationName, totalLots, description, isFracc, reservedLots, liquidatedLots, deliveredLots, lotTypes, availableServices, manzanas, files, extraCharges } = project;
 
     const [searchParams, setSearchParams] = useState({
         searchOrder: null,
@@ -54,16 +55,8 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
         dispatch(redirectSet(redTypes.projects, `/proyectos/ver/${_id}`));
         dispatch(floatingButtonSet('pencil', redTypes.projectEdit));
 
-        dispatch(projectCreate({
-            ...project,
-            name: project?.name,
-            description: project?.description,
-            associationName: project?.associationName
-        }));
-
         dispatch(projectSetServices(project.availableServices));
 
-        console.log('vamos a ver ', project.lotTypes);
         dispatch(lotTypesSet(false, project.lotTypes));
 
         dispatch(getLots(_id))
@@ -79,8 +72,11 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
         dispatch(modalUpdate(modalInfo));
 
 
+        dispatch(projectSet(projects.find(p => p._id === projectId)));
 
-    }, [dispatch, _id, name, project]);
+
+
+    }, [dispatch, _id, name, project, projects, projectId]);
 
     const handleOpen = (path) => {
         const url = `${staticURLDocs}${path}`;
@@ -252,6 +248,7 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
                     </div>
                 </div>
 
+                <ProjectExtraCharges extraCharges={extraCharges} />
 
                 <div className="card mt-2">
                     <div className="card__header">
@@ -293,7 +290,9 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
 
                     <LotsList searchParams={searchParams} projectId={projectId} sortType={1} />
 
-                </div>
+                </div>+
+
+
 
 
 

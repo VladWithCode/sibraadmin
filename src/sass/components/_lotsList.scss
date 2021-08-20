@@ -1,8 +1,6 @@
-
-
 .lot-list {
     width: 100%;
-    
+
     & .scroll {
         height: 40rem;
     }
@@ -16,7 +14,8 @@
         }
     }
 
-    & .headers, & .item {
+    & .headers,
+    & .item {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
         text-align: center;
@@ -43,16 +42,19 @@
             &.available {
                 color: $color-ok;
             }
+
             &.delivered {
                 color: $color-success;
             }
-            &.liquidated {
+
+            &.liquidated,
+            &.reserved {
                 color: $color-warning;
             }
         }
 
         &.gray {
-            background-color: $color-bc; 
+            background-color: $color-bc;
         }
 
         &::before {
@@ -73,18 +75,21 @@
                 @include gradient-ok;
             }
         }
+
         &.delivered {
             &::before {
                 @include gradient-success;
             }
         }
-        &.liquidated {
+
+        &.liquidated,
+        &.reserved {
             &::before {
                 @include gradient-warning;
             }
         }
 
-       
+
 
         &:hover {
 
@@ -95,13 +100,15 @@
             &.available {
                 color: $color-ok;
             }
+
             &.delivered {
                 color: $color-success;
             }
+
             &.liquidated {
                 color: $color-warning;
             }
-            
+
         }
     }
 }

@@ -32,6 +32,9 @@ export const lotReducer = (state = {}, action) => {
         case redTypes.setLot:
             return action.payload
 
+        case redTypes.lotReset:
+            return {}
+
 
         default:
             return state;

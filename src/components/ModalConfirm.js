@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { modalDisable } from '../actions/modal';
+import { modalDisable, modalReset } from '../actions/modal';
 import { redirectSet } from '../actions/redirect';
 import { clientSet } from '../actions/client';
 import { redTypes } from '../types/reduxTypes'
@@ -9,7 +9,7 @@ import { getProjects } from '../actions/consults';
 
 export const ModalConfirm = () => {
 
-    const { active, beenClosed, title, text, link, okMsg, closeMsg, type } = useSelector(state => state.modal);
+    const { active, beenClosed, title, text, link, okMsg, closeMsg, type, resetClient } = useSelector(state => state.modal);
 
     const dispatch = useDispatch();
 
@@ -32,6 +32,11 @@ export const ModalConfirm = () => {
             dispatch(redirectSet(redTypes.clients, `/clientes`));
             dispatch(clientSet({}));
         }
+
+        if (resetClient) {
+            dispatch(modalReset());
+        }
+
         dispatch(modalDisable());
     }
 

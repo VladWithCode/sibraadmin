@@ -17,6 +17,8 @@ export const Create3 = () => {
     const [cornersErrors, setCornersErrors] = useState([]);
     // const [repeatedCorners, setRepeatedCorners] = useState([]);
 
+    const { notary, propertyScripture, propertyBook, scriptureDate, constitutiveScripture, constitutiveVolume } = project;
+
     const handlePrevPage = () => {
         dispatch(lotTypesModalConfirmReset());
         dispatch(projectSetPage(+page - 1));
@@ -439,6 +441,12 @@ export const Create3 = () => {
             name: project.name,
             associationName: project.associationName,
             description: project.description,
+            notary,
+            propertyScripture,
+            propertyBook,
+            scriptureDate,
+            constitutiveScripture,
+            constitutiveVolume,
             availableServices: services,
             manzanas: manzanas.length + greenAreas.length,
             lots: [],

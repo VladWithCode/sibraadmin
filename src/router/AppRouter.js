@@ -24,6 +24,9 @@ import { ClientAddDocuments } from "../components/clients/ClientAddDocuments";
 import { ClientEdit } from "../components/clients/ClientEdit";
 import { ProjectAddDocuments } from '../components/projects/ProjectAddDocuments';
 import { LotEdit } from "../components/lots/LotEdit";
+import { BuyLot } from "../components/lots/BuyLot";
+import { Payment } from "../components/lots/Payment";
+import { PayExtracharge } from "../components/history-globals/PayExtracharge";
 
 
 
@@ -31,6 +34,7 @@ import { LotEdit } from "../components/lots/LotEdit";
 export const AppRouter = () => {
 
     const { loading } = useSelector(state => state.ui);
+
 
     return (
         <Router>
@@ -50,7 +54,6 @@ export const AppRouter = () => {
                         <Route exact path="/proyectos/nuevo" component={CreateProject} ></Route>
                         <Route exact path="/proyectos/editar/:projectId" component={EditProject}  ></Route>
                         <Route exact path="/proyectos/doc/:projectId" component={ProjectAddDocuments}  ></Route>
-                        <Route exact path="/proyectos/edit/:projectId/lote/:lotId" component={LotEdit} ></Route>
 
 
                         <Route exact path="/clientes" component={Clients} ></Route>
@@ -60,6 +63,10 @@ export const AppRouter = () => {
                         <Route exact path="/clientes/edit/:clientId" component={ClientEdit} ></Route>
 
                         <Route exact path="/proyectos/ver/:projectId/lote/:lotId" component={Lot} ></Route>
+                        <Route exact path="/proyectos/edit/:projectId/lote/:lotId" component={LotEdit} ></Route>
+                        <Route exact path="/proyectos/comprar/:projectId/lote/:lotId" component={BuyLot} ></Route>
+                        <Route exact path="/proyectos/abonar/:projectId/lote/:lotId" component={Payment} ></Route>
+                        <Route exact path="/proyectos/extras/abonar/:extraChargeId" component={PayExtracharge} ></Route>
 
 
                         <Route exact path="/ajustes" component={Settings} ></Route>

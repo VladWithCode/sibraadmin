@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { redirectSet } from '../../actions/redirect';
+import { redTypes } from '../../types/reduxTypes';
+import { setLot } from '../../actions/consults';
 
 export const LotsList = React.memo(({ projectId, searchParams }) => {
 
@@ -9,6 +12,8 @@ export const LotsList = React.memo(({ projectId, searchParams }) => {
     const [displayLots, setDisplayLots] = useState([]);
 
     const { searchOrder, searchManzana, searchLot } = searchParams;
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
 
@@ -72,6 +77,9 @@ export const LotsList = React.memo(({ projectId, searchParams }) => {
 
     }, [lots, searchOrder, searchManzana, searchLot]);
 
+    const updateLot = _id => {
+        dispatch(setLot(lots.find(l => l._id === _id)));
+    }
 
     return (
 
@@ -90,14 +98,14 @@ export const LotsList = React.memo(({ projectId, searchParams }) => {
                         (displayLots.length > 0) ? (
                             displayLots.map(({ _id, manzana, lotNumber, area, price, state }, index) => {
 
-                                const stateName = state === 'available' ? 'Disponible' : state === 'delivered' ? 'Entregado' : 'Liquidado';
+                                const stateName = state === 'available' ? 'Disponible' : state === 'delivered' ? 'Entregado' : state === 'reserved' ? 'Comprado' : 'Liquidado';
 
                                 const dispPrice = price.toLocaleString();
                                 const dispArea = area.toLocaleString();
                                 const gray = ((index + 1) % 2) === 0 ? true : false;
 
                                 return (
-                                    <Link key={_id} className={`item ${state} ${gray && 'gray'}`} to={`./${projectId}/lote/${_id}`} >
+                                    <Link onClick={() => updateLot(_id)} key={_id} className={`item ${state} ${gray && 'gray'}`} to={`./${projectId}/lote/${_id}`} >
                                         <span className={state}>{stateName}</span>
                                         <span>{manzana}</span>
                                         <span>{lotNumber}</span>

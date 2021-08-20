@@ -7,29 +7,31 @@ import { redirectSet } from '../../actions/redirect';
 import { redTypes } from '../../types/reduxTypes';
 import { BreadCrumbs } from '../BreadCrumbs';
 import { staticURLDocs } from '../../url';
-import { setLot } from '../../actions/lot';
-import { floatingButtonSet } from '../../actions/floatingButton';
+import { getLot, setLot } from '../../actions/lot';
+import { floatingButtonSet, secondaryFloatingButtonSet } from '../../actions/floatingButton';
+import { FloatingButtonSecondary } from '../FloatingButtonSecondary';
+import { History } from '../history-globals/History';
+import { PriceHistory } from './PriceHistory';
 
 export const Lot = () => {
 
     const { lotId, projectId } = useParams();
 
-    const { lots, projects } = useSelector(state => state);
+    const { lots, projects, lot: tempLot } = useSelector(state => state);
 
-    const currentLot = lots.find(lot => lot._id === lotId);
+    const currentLot = tempLot._id ? tempLot : lots.find(lot => lot._id === lotId);
 
     const currentProject = projects.find(p => p._id === projectId);
 
-    const { area, isCorner, lotNumber, measures, state, manzana, files } = currentLot;
+    const { area, isCorner, lotNumber, measures, state, manzana, files, record, priceHistory } = currentLot;
 
-    // const pricePerSqMeter = currentLot.pricePerSqMeter.toLocaleString();
+    console.log('currentLot: ', currentLot);
 
     const price = currentLot.price.toLocaleString();
 
     const { name, availableServices } = currentProject;
 
-    const stateName = state === 'available' ? 'Disponible' : state === 'delivered' ? 'Entregado' : 'Liquidado';
-
+    const stateName = state === 'available' ? 'Disponible' : state === 'delivered' ? 'Entregado' : state === 'reserved' ? 'Comprado' : 'Liquidado';
 
     const dispatch = useDispatch();
 
@@ -63,9 +65,11 @@ export const Lot = () => {
         dispatch(breadcrumbsUpdate(redTypes.projects, breadcrumbs));
         dispatch(floatingButtonSet('pencil', redTypes.projectEdit));
         dispatch(redirectSet(redTypes.projects, `/proyectos/ver/${projectId}/lote/${lotId}`));
-        dispatch(setLot(currentLot));
+        dispatch(getLot(currentLot._id));
+        dispatch(secondaryFloatingButtonSet('bill', state === 'reserved' ? redTypes.lotReserved : null, projectId, lotId));
 
-    }, [dispatch, projectId, lotId, lotNumber, name, currentLot]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, projectId, lotId]);
 
     const handleOpen = (path) => {
         const url = `${staticURLDocs}${path}`;
@@ -78,6 +82,7 @@ export const Lot = () => {
         <>
 
             <BreadCrumbs type={redTypes.projects} />
+            <FloatingButtonSecondary />
 
             <div className="project">
 
@@ -151,8 +156,9 @@ export const Lot = () => {
                 </div>
 
 
-                <div className="card-grid mt-2">
-                    <div className="card scroll">
+
+                <div className="card scroll mt-2">
+                    <div className="full">
                         <div className="card__header">
                             <img src="../assets/img/services.png" alt="" />
                             <h4>Servicios Disponibles</h4>
@@ -183,10 +189,38 @@ export const Lot = () => {
                                 ))
                             }
                         </div>
-
                     </div>
 
                 </div>
+
+
+                {
+                    (record && typeof record !== 'string') && (
+                        <>
+                            <div className="project__header">
+                                <div className="left">
+                                    <h3> Historiales </h3>
+                                </div>
+                            </div>
+
+                            <History key={record._id} record={record} />
+
+                        </>
+                    )
+                }
+
+                {
+                    priceHistory && (
+                        <>
+                            <div className="project__header">
+                                <div className="left">
+                                    <h3> Historial de precios </h3>
+                                </div>
+                            </div>
+                            <PriceHistory priceHistory={priceHistory} />
+                        </>
+                    )
+                }
 
 
             </div>

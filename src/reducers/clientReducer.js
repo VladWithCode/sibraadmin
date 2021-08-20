@@ -7,6 +7,13 @@ const initialState = {
     matLastname: '',
     _id: '',
     curp: '',
+    maritalState: '',
+    occupation: '',
+    township: '',
+    state: '',
+    pob: '',
+    dob: '',
+    nationality: '',
     email: '',
     phoneNumber: '',
     col: '',
@@ -27,7 +34,8 @@ const initialState = {
             extNumber: '',
             intNumber: ''
         }
-    ]
+    ],
+    address: ''
 }
 
 
@@ -37,8 +45,13 @@ export const clientReducer = (state = initialState, action) => {
         case redTypes.clientSet:
             return action.payload;
 
+        case redTypes.clientReset:
+            return initialState
+
         default:
             return state;
     }
+
+
 
 }

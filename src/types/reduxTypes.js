@@ -42,12 +42,14 @@ export const redTypes = {
 
     clientSet: '[Client] Set',
     clientEdit: '[Client] Edit',
+    clientReset: '[Client] Reset',
 
     modalUpdate: '[Modal] Update',
     modalEnable: '[Modal] Enable',
     modalDisable: '[Modal] Disable',
     modalSetInput: '[Modal] SetInput',
     modalSetInput2: '[Modal] SetInput2',
+    modalReset: '[Modal] Reset',
 
     breadcrumbsUpdateProjects: '[Breadcrumbs] UpdateProjects',
     breadcrumbsUpdateClients: '[Breadcrumbs] UpadateClients',
@@ -65,6 +67,7 @@ export const redTypes = {
     redirectSettings: '[Redirect] SetLinkSettings',
 
     floatingButtonSet: '[FloatingButton] Set',
+    secondaryFloatingButtonSet: '[SecondaryFloatingButton] Set',
 
     lotTypesCreate: '[LotTypes] CreateType',
     lotTypesEdit: '[LotTypes] EditType',
@@ -75,6 +78,7 @@ export const redTypes = {
     lotTypesModalConfirmEnable: '[LotTypesModalConfirm] Enable',
     lotTypesModalConfirmDisable: '[LotTypesModalConfirm] Disable',
     lotTypesModalConfirmReset: '[LotTypesModalConfirm] Reset',
+    lotReset: '[Lot] Reset',
 
     lotTypesSet: '[LotTypes] Set',
     lotTypesReset: '[LotTypes] Reset',
@@ -91,6 +95,7 @@ export const redTypes = {
     clients: 'clients',
     history: 'history',
     lot: 'lot',
+    lotReserved: 'lotReserved',
     settings: 'settings',
     edit: 'edit',
     delete: 'delete'

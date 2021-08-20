@@ -53,6 +53,7 @@ export const lotTypesSet = (restart, lotTypes) => {
             obj['sameArea'] = true;
             obj['front'] = measures[0].value;
             obj['side'] = measures[1].value;
+            obj['area'] = area;
         }
 
         return obj;

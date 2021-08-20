@@ -8,6 +8,12 @@ const initialState = {
     description: '',
     manzanas: '',
     lots: '',
+    notary: '',
+    propertyScripture: '',
+    propertyBook: '',
+    scriptureDate: '',
+    constitutiveScripture: '',
+    constitutiveVolume: '',
     services: [
         // 'Pavimento',
         // 'Servicio de luz',
@@ -80,6 +86,12 @@ export const projectReducer = (state = initialState, action) => {
                 pricePerSqM: action.payload.pricePerSqM,
                 priceCorner: action.payload.priceCorner,
                 greenAreas: action.payload.greenAreas,
+                notary: action.payload.notary,
+                propertyScripture: action.payload.propertyScripture,
+                propertyBook: action.payload.propertyBook,
+                scriptureDate: action.payload.scriptureDate,
+                constitutiveScripture: action.payload.constitutiveScripture,
+                constitutiveVolume: action.payload.constitutiveVolume
 
             }
 

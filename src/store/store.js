@@ -3,7 +3,7 @@ import { breadcrumbsReducer } from '../reducers/breadcrumbsReducer';
 import { clientReducer } from '../reducers/clientReducer';
 import thunk from 'redux-thunk';
 
-import { floatingButtonReducer } from '../reducers/floatingButtonReducer';
+import { floatingButtonReducer, secondaryFloatingButtonReducer } from '../reducers/floatingButtonReducer';
 import { lotReducer } from '../reducers/lotReducer';
 import { modalReducer } from '../reducers/modalReducer';
 import { editProjectReducer, projectReducer } from '../reducers/projectReducer';
@@ -26,6 +26,7 @@ const reducers = combineReducers({
     modal: modalReducer,
     breadcrumbs: breadcrumbsReducer,
     floatingButton: floatingButtonReducer,
+    secFloatingButton: secondaryFloatingButtonReducer,
     redirect: redirectReducer,
     types: lotTypesReducer,
     manzanas: manzanasReducer,

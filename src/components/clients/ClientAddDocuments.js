@@ -256,7 +256,7 @@ export const ClientAddDocuments = () => {
                                     const currentFileName = fileNames[`fileName${index}`];
 
                                     return (
-                                        <div className="card">
+                                        <div className="card" key={index}>
                                             <div className="card__header">
                                                 <img src="../assets/img/aval.png" alt="" />
                                                 <h4>Referencia personal {index + 1}</h4>

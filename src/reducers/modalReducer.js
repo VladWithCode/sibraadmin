@@ -10,7 +10,8 @@ const initialState = {
     closeMsg: '',
     input: null,
     input2: null,
-    type: null
+    type: null,
+    resetClient: false
 }
 
 export const modalReducer = (state = initialState, action) => {
@@ -25,7 +26,8 @@ export const modalReducer = (state = initialState, action) => {
                 closeMsg: action.payload.closeMsg,
                 input: action.payload.input,
                 input2: action.payload.input2,
-                type: action.payload.type
+                type: action.payload.type,
+                resetClient: action.payload.resetClient ? action.payload.resetClient : false
             }
 
         case redTypes.modalEnable:
@@ -52,6 +54,9 @@ export const modalReducer = (state = initialState, action) => {
                 ...state,
                 input2: action.payload.input2
             }
+
+        case redTypes.modalReset:
+            return initialState
 
 
         default:

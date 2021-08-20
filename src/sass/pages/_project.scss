@@ -2,6 +2,7 @@
     @include animation(appear, .5s, 0);
     margin: 0 auto;
     width: 90%;
+    padding: 3rem 0;
 
     &__header {
         margin: 4rem 0 2rem 0;
@@ -9,6 +10,50 @@
         justify-content: space-between;
         align-items: center;
 
+        & .options {
+
+            display: flex;
+
+            & input[type="radio"] {
+                display: none;
+
+                &:not(:checked)+label {
+                    background-color: transparent;
+
+                }
+
+                &:checked+label {
+                    color: white;
+                    background-color: $color-success;
+
+                    &:hover {
+                        background-color: darken($color-success, 5);
+                    }
+                }
+
+            }
+
+            & label {
+                // border-radius: 10rem;
+                padding: 1rem 1.5rem;
+                cursor: pointer;
+                @include transition;
+
+                &:hover {
+                    color: $color-success;
+                }
+
+                // &:nth-of-type(2) {
+                //     margin: 0 2rem;
+                // }
+
+                margin-right: 2rem;
+
+                &:last-of-type {
+                    margin: 0;
+                }
+            }
+        }
 
         & .right {
             display: flex;
@@ -34,6 +79,7 @@
 
         & .right,
         & .left {
+            height: 100%;
 
             & h3 {
                 color: $black;
@@ -92,7 +138,8 @@
                         @include gradient-success;
                     }
 
-                    &.liquidated {
+                    &.liquidated,
+                    &.reserved {
                         @include gradient-warning;
                     }
 
@@ -112,6 +159,7 @@
     grid-column: span 1;
     overflow: hidden;
     padding: 2rem;
+    position: relative;
 
     & .add {
         width: 100;
@@ -207,6 +255,63 @@
         align-items: center;
         margin-bottom: 2rem;
         position: relative;
+        width: 100%;
+
+        &.pointer {
+            cursor: pointer;
+        }
+
+        & .dropdown {
+            position: absolute;
+            right: 0;
+            top: 80%;
+            transform: rotate(180deg);
+            font-weight: 700;
+            font-size: 2rem;
+            @include transition;
+            cursor: pointer;
+
+            &:hover {
+                transform: rotate(140deg);
+                color: $color-ok;
+            }
+
+            &.active {
+                color: $color-ok;
+                transform: rotate(0deg);
+            }
+
+        }
+
+        & .state {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            margin: 0;
+            font-size: 1.4rem;
+            border-right: 1px solid;
+            border-bottom: 1px solid;
+            padding: 0 .5rem .3rem 0;
+            text-transform: uppercase;
+            line-height: 1;
+            cursor: default;
+
+            &.warning {
+                color: $color-warning;
+                border-color: $color-warning;
+            }
+
+            &.danger {
+                color: $color-danger;
+                border-color: $color-danger;
+            }
+
+            &.success {
+                color: $color-success;
+                border-color: $color-success;
+            }
+        }
 
         & .add-ref {
             position: absolute;
@@ -218,7 +323,8 @@
             border-radius: 0;
             font-size: 1.4rem;
 
-            &.delete {
+            &.delete,
+            &.ok {
                 background-color: transparent;
                 color: $color-danger;
                 padding: .5rem;
@@ -227,6 +333,21 @@
 
                 &:hover {
                     color: darken($color-danger, 10);
+                    background-color: transparent;
+                }
+
+                &.payment {
+                    font-size: 2rem;
+                    border: none;
+                    top: -1.2rem;
+                }
+            }
+
+            &.ok {
+                color: $color-ok;
+
+                &:hover {
+                    color: darken($color-ok, 15);
                     background-color: transparent;
                 }
             }
@@ -251,9 +372,12 @@
     &__body {
         display: flex;
         justify-content: space-between;
+        flex-wrap: wrap;
 
         & .right,
-        & .left {
+        & .left,
+        & .full .right,
+        & .full .left {
             flex: 0 1 calc(50% - 3rem);
 
             & .scroll {
@@ -299,10 +423,21 @@
 
         & .full {
             flex: 0 1 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            overflow: hidden;
+            transition: height .4s ease-in-out;
+            height: fit-content;
 
             & .scroll {
                 height: 12rem
             }
+
+            &.inactive {
+                height: 0;
+            }
+
         }
 
         & .right {}
@@ -315,6 +450,16 @@
             padding: 1rem;
             width: 100%;
             position: relative;
+
+            & select {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                text-align: right;
+                padding: 1rem 1.5rem;
+                border: none;
+                background-color: transparent;
+            }
 
             & button.delete-area {
                 position: absolute;
@@ -354,7 +499,7 @@
                 font-weight: 700;
                 font-size: 1.3rem;
                 z-index: 2;
-
+                cursor: default;
             }
 
             & input {
@@ -371,7 +516,7 @@
                 color: $black;
                 font-weight: 400;
                 text-align: right;
-                z-index: 1;
+                z-index: 3;
                 // transition: .2s all ease-in-out;
 
                 &:-webkit-autofill {
@@ -400,11 +545,21 @@
 
             & p {
                 color: $black;
+                cursor: default;
 
                 &.price {
                     color: $color-ok;
                     font-weight: 700;
                 }
+
+                &.debt {
+                    color: $color-warning;
+                }
+
+                &.payed {
+                    color: $color-success;
+                }
+
             }
 
 
@@ -503,6 +658,48 @@
                     }
 
                 }
+            }
+
+            & .options {
+                position: absolute;
+                right: 0;
+                top: 0;
+                display: flex;
+                justify-content: flex-end;
+                pointer-events: none;
+
+                & input[type="radio"] {
+                    display: none;
+                    pointer-events: none;
+
+                    &:not(:checked)+label {
+                        background-color: transparent;
+                        color: $color-text;
+                    }
+
+                    &:checked+label {
+                        color: white;
+                        background-color: $color-success;
+
+                        &:hover {
+                            background-color: darken($color-success, 5);
+                        }
+                    }
+
+                }
+
+                & label {
+                    padding: 1rem 1.5rem;
+                    cursor: pointer !important;
+                    @include transition;
+                    pointer-events: all;
+
+                    &:hover {
+                        color: $color-success;
+                    }
+                }
+
+
             }
         }
 

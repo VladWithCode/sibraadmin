@@ -10,7 +10,8 @@ export const modalUpdate = (modal) => ({
         closeMsg: modal.closeMsg,
         input: modal.input,
         inputValue: modal.inputValue,
-        type: modal.type
+        type: modal.type,
+        resetClient: modal.resetClient
     }
 });
 
@@ -34,4 +35,8 @@ export const modalSetInput2 = (input) => ({
     payload: {
         input2: input
     }
+})
+
+export const modalReset = () => ({
+    type: redTypes.modalReset
 })

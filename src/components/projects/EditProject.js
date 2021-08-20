@@ -24,7 +24,7 @@ export const EditProject = () => {
 
     const { projectId } = useParams();
 
-    const { project, projects, types: { lotTypes }, services: availableServices } = useSelector(state => state);
+    const { projectEdit: project, projects, types: { lotTypes }, services: availableServices } = useSelector(state => state);
 
     const currentProject = {
         name: project?.name,
@@ -59,7 +59,6 @@ export const EditProject = () => {
 
         dispatch(redirectSet(redTypes.projects, `/proyectos/editar/${projectId}`));
         dispatch(floatingButtonSet('pencil', redTypes.projectEdit));
-        dispatch(projectSet(projects.find(p => p._id === projectId)))
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, project.name, projectId, project.lotTypes]);
@@ -134,9 +133,11 @@ export const EditProject = () => {
                     _id: lt._id,
                     price: lt.pricePerM,
                     sameArea: lt.sameArea,
-                    mesures: null
+                    measures: null,
+                    area: +lt.area
                 }
                 if (lt.front) {
+
                     obj.measures = [
                         {
                             title: 'frente',
@@ -151,6 +152,8 @@ export const EditProject = () => {
 
                 return obj;
             })
+
+            console.log('types', typesData);
 
             dispatch(uiStartLoading());
 

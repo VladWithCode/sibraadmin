@@ -45,6 +45,13 @@ export const ClientEdit = () => {
         curp: client?.curp,
         email: client?.email,
         phoneNumber: client?.phoneNumber?.toString(),
+        maritalState: client?.maritalState,
+        occupation: client?.occupation,
+        township: client?.township,
+        state: client?.state,
+        pob: client?.pob,
+        dob: client?.dob,
+        nationality: client?.nationality,
         col: address?.col,
         street: address?.street,
         zip: address?.zip?.toString(),
@@ -54,7 +61,7 @@ export const ClientEdit = () => {
 
     const [formFields, handleInputChange] = useForm(initialForm);
 
-    const { names, patLastname, matLastname, rfc, curp, email, phoneNumber, col, street, zip, extNumber, intNumber } = formFields;
+    const { names, patLastname, matLastname, rfc, curp, email, maritalState, occupation, township, state, pob, dob, nationality, phoneNumber, col, street, zip, extNumber, intNumber } = formFields;
 
     const checkChanges = (attribute, value) => {
 
@@ -64,7 +71,7 @@ export const ClientEdit = () => {
 
         if (attribute === 'col' || attribute === 'street' || attribute === 'intNumber' || attribute === 'extNumber' || attribute === 'zip') {
 
-            if (attribute === 'extNumber' || attribute === 'zip' || attribute === 'intNumber') {
+            if (value) {
                 if (value.toString() === clients.find(c => c._id === clientId).address[attribute].toString()) {
 
                     if (tempHasChanged.includes(attribute)) {
@@ -77,8 +84,8 @@ export const ClientEdit = () => {
                         tempHasChanged.push(attribute);
                     }
                 }
-
             }
+
 
             if (value === clients.find(c => c._id === clientId).address[attribute]) {
 
@@ -182,6 +189,13 @@ export const ClientEdit = () => {
                     curp,
                     email,
                     phoneNumber,
+                    maritalState,
+                    occupation,
+                    township,
+                    state,
+                    pob,
+                    dob,
+                    nationality,
                     address: {
                         col,
                         street,
@@ -331,8 +345,10 @@ export const ClientEdit = () => {
 
         const tempEmptyFields = []
 
+        // maritalState, occupation, township, state, pob, dob, nationality,
+
         for (let key in formFields) {
-            if (key !== 'intNumber' && key !== 'matLastname' && key !== 'avMatLastname') {
+            if (key !== 'intNumber' && key !== 'matLastname' && key !== 'avMatLastname' && key !== 'maritalState' && key !== 'occupation' && key !== 'township' && key !== 'state' && key !== 'pob' && key !== 'dob' && key !== 'nationality') {
                 if (formFields[key].toString().trim() === "") {
                     tempEmptyFields.push(key);
                     dispatch(setTempError('Los campos en rojo son obligatorios'))
@@ -343,9 +359,11 @@ export const ClientEdit = () => {
         refsArr.forEach((ref, index) => {
             for (let key in ref) {
                 if (key !== 'intNumber' && key !== 'matLastname' && key !== 'otherNumbers' && key !== 'col' && key !== 'street' && key !== 'extNumber' && key !== 'email' && key !== 'intNumber' && key !== 'zip' && key !== 'files') {
-                    if (ref[key].toString().trim() === "") {
-                        tempEmptyFields.push(`${key}${index}`);
-                        dispatch(setTempError('Los campos en rojo son obligatorios'))
+                    if (ref[key]) {
+                        if (ref[key].toString().trim() === "") {
+                            tempEmptyFields.push(`${key}${index}`);
+                            dispatch(setTempError('Los campos en rojo son obligatorios'))
+                        }
                     }
                 }
             }
@@ -595,6 +613,30 @@ export const ClientEdit = () => {
                     <div className={`card__body__item ${emptyFields.includes('curp') && 'error'}`}>
                         <label htmlFor="curp">CURP</label>
                         <input className={`${hasChanged.includes('curp') && 'changed'}`} minLength="18" maxLength="18" name="curp" onChange={handleChange} value={curp} type="text" autoComplete="off" />
+                    </div>
+                    <div className={`card__body__item ${emptyFields.includes('maritalState') && 'error'}`}>
+                        <label htmlFor="maritalState">Estado civil</label>
+                        <input className={`${hasChanged.includes('maritalState') && 'changed'}`} name="maritalState" onChange={handleChange} value={matLastname} type="text" autoComplete="off" />
+                    </div>
+                    <div className={`card__body__item ${emptyFields.includes('occupation') && 'error'}`}>
+                        <label htmlFor="occupation">Ocupación</label>
+                        <input className={`${hasChanged.includes('occupation') && 'changed'}`} name="occupation" onChange={handleChange} value={occupation} type="text" autoComplete="off" />
+                    </div>
+                    <div className={`card__body__item ${emptyFields.includes('state') && 'error'}`}>
+                        <label htmlFor="state">Estado</label>
+                        <input className={`${hasChanged.includes('state') && 'changed'}`} name="state" onChange={handleChange} value={state} type="text" autoComplete="off" />
+                    </div>
+                    <div className={`card__body__item ${emptyFields.includes('township') && 'error'}`}>
+                        <label htmlFor="township">Municipio</label>
+                        <input className={`${hasChanged.includes('township') && 'changed'}`} name="township" onChange={handleChange} value={township} type="text" autoComplete="off" />
+                    </div>
+                    <div className={`card__body__item ${emptyFields.includes('pob') && 'error'}`}>
+                        <label htmlFor="pob">Lugar de nacimiento</label>
+                        <input className={`${hasChanged.includes('pob') && 'changed'}`} name="pob" onChange={handleChange} value={pob} type="text" autoComplete="off" />
+                    </div>
+                    <div className={`card__body__item ${emptyFields.includes('dob') && 'error'}`}>
+                        <label htmlFor="dob">Fecha de nacimiento</label>
+                        <input className={`${hasChanged.includes('dob') && 'changed'}`} name="dob" onChange={handleChange} value={dob} type="text" autoComplete="off" />
                     </div>
                     <div className="mt-4 card__header">
                         <h4>Información de contacto</h4>

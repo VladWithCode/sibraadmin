@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { NavLink, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from '../../hooks/useForm';
-import { modalUpdate } from '../../actions/modal';
-import { getClients } from '../../actions/consults';
+import { modalReset, modalUpdate } from '../../actions/modal';
+import { getClient, getClients } from '../../actions/consults';
 import { floatingButtonSet } from '../../actions/floatingButton';
 import { redTypes } from '../../types/reduxTypes';
 
@@ -27,6 +27,7 @@ export const Clients = () => {
             link: '/clientes/nuevo',
             okMsg: 'Sí',
             closeMsg: 'No',
+            resetClient: true
         }
 
         dispatch(modalUpdate(modalInfo));
@@ -66,7 +67,7 @@ export const Clients = () => {
                             const name = `${names} ${patLastname && patLastname} ${matLastname && matLastname}`
 
                             return (
-                                <NavLink key={_id} to={`./clientes/ver/${_id}`} className="clients__card" >
+                                <NavLink onClick={() => dispatch(getClient(_id))} key={_id} to={`./clientes/ver/${_id}`} className="clients__card" >
                                     <h4 className="name">{name}</h4>
                                     <span className="rfc">{rfc} </span>
 

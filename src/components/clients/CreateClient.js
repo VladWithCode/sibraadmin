@@ -22,7 +22,7 @@ export const CreateClient = () => {
 
     const [formFields, handleInputChange] = useForm(client);
 
-    const { names, patLastname, matLastname, _id, curp, email, phoneNumber, col, street, zip, extNumber, intNumber } = formFields;
+    const { names, patLastname, matLastname, _id, curp, email, phoneNumber, col, street, zip, extNumber, intNumber, maritalState, occupation, township, state, pob, dob, nationality } = formFields;
 
     const [emptyFields, setEmptyFields] = useState([]);
 
@@ -77,6 +77,13 @@ export const CreateClient = () => {
                 matLastname,
                 _id,
                 curp,
+                maritalState,
+                occupation,
+                township,
+                state,
+                pob,
+                dob,
+                nationality,
                 email,
                 phoneNumber,
                 address: {
@@ -225,24 +232,28 @@ export const CreateClient = () => {
         const tempEmptyFields = []
 
         for (let key in formFields) {
-            if (key !== 'intNumber' && key !== 'matLastname' && key !== 'avMatLastname') {
+            if (key !== 'intNumber' && key !== 'matLastname' && key !== 'avMatLastname' && key !== 'maritalState' && key !== 'occupation' && key !== 'township' && key !== 'state' && key !== 'pob' && key !== 'dob' && key !== 'nationality' && key !== 'address') {
                 if (formFields[key].toString().trim() === "") {
                     tempEmptyFields.push(key);
                     dispatch(setTempError('Los campos en rojo son obligatorios'))
+                    console.log(key);
                 }
             }
         }
 
         refsArr.forEach((ref, index) => {
             for (let key in ref) {
-                if (key !== 'intNumber' && key !== 'matLastname' && key !== 'col' && key !== 'street' && key !== 'extNumber' && key !== 'email' && key !== 'intNumber' && key !== 'zip') {
+                if (key !== 'intNumber' && key !== 'matLastname' && key !== 'col' && key !== 'street' && key !== 'extNumber' && key !== 'email' && key !== 'intNumber' && key !== 'zip' && key !== 'address') {
                     if (ref[key].toString().trim() === "") {
                         tempEmptyFields.push(`${key}${index}`);
                         dispatch(setTempError('Los campos en rojo son obligatorios'))
+                        console.log(key);
                     }
                 }
             }
         })
+
+        console.log(refsArr);
 
         setEmptyFields(tempEmptyFields);
 
@@ -428,6 +439,35 @@ export const CreateClient = () => {
                         <div className={`card__body__item ${emptyFields.includes('curp') && 'error'}`}>
                             <label htmlFor="curp">CURP</label>
                             <input minLength="18" maxLength="18" name="curp" onChange={handleChange} value={curp} type="text" autoComplete="off" />
+                        </div>
+                        <div className={`card__body__item ${emptyFields.includes('maritalState') && 'error'}`}>
+                            <label htmlFor="maritalState">Estado civil</label>
+                            <input name="maritalState" onChange={handleChange} value={maritalState} type="text" autoComplete="off" />
+                        </div>
+                        <div className={`card__body__item ${emptyFields.includes('occupation') && 'error'}`}>
+                            <label htmlFor="occupation">Ocupación</label>
+                            <input name="occupation" onChange={handleChange} value={occupation} type="text" autoComplete="off" />
+                        </div>
+                        <div className={`card__body__item ${emptyFields.includes('state') && 'error'}`}>
+                            <label htmlFor="state">Estado</label>
+                            <input name="state" onChange={handleChange} value={state} type="text" autoComplete="off" />
+                        </div>
+
+                        <div className={`card__body__item ${emptyFields.includes('township') && 'error'}`}>
+                            <label htmlFor="township">Municipio</label>
+                            <input name="township" onChange={handleChange} value={township} type="text" autoComplete="off" />
+                        </div>
+                        <div className={`card__body__item ${emptyFields.includes('pob') && 'error'}`}>
+                            <label htmlFor="pob">Lugar de nacimiento</label>
+                            <input name="pob" onChange={handleChange} value={pob} type="text" autoComplete="off" />
+                        </div>
+                        <div className={`card__body__item ${emptyFields.includes('dob') && 'error'}`}>
+                            <label htmlFor="dob">Fecha de nacimiento</label>
+                            <input name="dob" onChange={handleChange} value={dob} type="text" autoComplete="off" />
+                        </div>
+                        <div className={`card__body__item ${emptyFields.includes('nationality') && 'error'}`}>
+                            <label htmlFor="nationality">Nacionalidad</label>
+                            <input name="nationality" onChange={handleChange} value={nationality} type="text" autoComplete="off" />
                         </div>
                         <div className="mt-4 card__header">
                             <h4>Información de contacto</h4>
