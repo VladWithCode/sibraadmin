@@ -1,19 +1,16 @@
 import { redTypes } from "../types/reduxTypes";
 
 
-const initialState = {
+const initialState = []
 
-}
-
-const recordReducer = (state = initialState, action) => {
+export const recordReducer = (state = initialState, action) => {
 
     switch (action.type) {
-        case redTypes:
-
-            break;
+        case redTypes.recordsSet:
+            return action.payload;
 
         default:
-            break;
+            return state;
     }
 
 }

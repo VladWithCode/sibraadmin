@@ -80,8 +80,13 @@ export const redTypes = {
     lotTypesModalConfirmReset: '[LotTypesModalConfirm] Reset',
     lotReset: '[Lot] Reset',
 
+    recordsSet: '[Records] Set',
+
     lotTypesSet: '[LotTypes] Set',
     lotTypesReset: '[LotTypes] Reset',
+
+    buyLotSet: '[BuyLot] Set',
+    buyLotReset: '[BuyLot] Reset',
 
     newLotsSet: '[NewLots] Set',
 

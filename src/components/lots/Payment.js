@@ -2,22 +2,25 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { floatingButtonSet } from '../../actions/floatingButton';
+import { getLot } from '../../actions/lot';
 import { modalEnable, modalUpdate } from '../../actions/modal';
 import { redirectSet } from '../../actions/redirect';
-import { setTempError } from '../../actions/ui';
+import { setTempError, uiFinishLoading, uiStartLoading } from '../../actions/ui';
 import { redTypes } from '../../types/reduxTypes';
 import { staticURL } from '../../url';
+import { ClientShort } from '../clients/ClientShort';
 
 export const Payment = () => {
 
     const dispatch = useDispatch();
     const { projectId, lotId } = useParams();
 
-    const { lot: currentLot } = useSelector(state => state);
+    const { lot: currentLot, clients } = useSelector(state => state);
 
     const { area, isCorner, lotNumber, measures, manzana, price, record } = currentLot;
 
-    const { paymentInfo: { minimumPaymentAmount } } = record;
+    const currentClient = clients.find(c => c._id === record?.customer);
+
 
     useEffect(() => {
 
@@ -60,14 +63,69 @@ export const Payment = () => {
             return;
         }
 
-        const url = `${staticURL}/records/${record}`;
+        const data = {
+            type: +amount >= record.paymentInfo.lotAmountDue ? 'liquidation' : 'payment',
+            amount: +amount,
+            markedAsNextPayment: formValues.markedAsNextPayment
+        }
 
-        const data = await fetch(url)
-            .then(res => res.json())
-            .then(d => d)
-            .catch(err => err)
+        dispatch(uiStartLoading());
 
-        console.log(data);
+        const res = await postPayment(data);
+
+        dispatch(uiFinishLoading());
+
+        console.log(res);
+
+        if (res) {
+            if (res.status === 'OK') {
+                const modalInfo = {
+                    title: `Pago realizado con éxito`,
+                    text: `pago por la cantidad de $${amount}`,
+                    link: `/proyectos/ver/${projectId}/lote/${lotId}`,
+                    okMsg: 'Continuar',
+                    closeMsg: null,
+                    type: redTypes.projectCreate
+                }
+
+                dispatch(modalUpdate(modalInfo));
+                dispatch(modalEnable());
+                dispatch(getLot(lotId));
+
+            } else {
+                dispatch(setTempError('Hubo un problema con la base de datos'));
+
+                return;
+            }
+        }
+
+    }
+
+    const postPayment = data => {
+
+        const url = `${staticURL}/records/${record._id}/payment`;
+
+        console.log('haciendo post jejeje', url);
+
+        const res = fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                return response.json();
+            })
+            .then((data) => {
+                return data;
+            })
+            .catch(err => {
+                console.log(err);
+                // dispatch(uiFinishLoading());
+            });
+
+        return res;
 
     }
 
@@ -113,7 +171,7 @@ export const Payment = () => {
                 </div>
             </div>
 
-            <div className="card">
+            <div className="card mb-2">
                 <div className="card__header">
                     <img src="../assets/img/lots.png" alt="" />
                     <h4>Información General del Lote</h4>
@@ -138,35 +196,45 @@ export const Payment = () => {
                         </div>
                         <div className="card__body__item">
                             <span >Precio</span>
-                            <p className="price"> ${price.toLocaleString()} </p>
+                            <p className="price"> ${price?.toLocaleString()} </p>
                         </div>
 
                     </div>
                     <div className="left">
                         <h4>Medidas</h4>
+
                         {
-                            measures.length > 0 && (
+                            measures && (
+                                measures.length > 0 && (
 
-                                measures.map((measure) => (
-                                    <div key={measure._id} className="card__body__item">
-                                        <span>
-                                            {measure.title}
-                                        </span>
-                                        <p>
-                                            {measure.value}m<sup>2</sup>
-                                        </p>
-                                    </div>
-                                )
-                                )
+                                    measures.map((measure) => (
+                                        <div key={measure._id} className="card__body__item">
+                                            <span>
+                                                {measure.title}
+                                            </span>
+                                            <p>
+                                                {measure.value}m<sup>2</sup>
+                                            </p>
+                                        </div>
+                                    )
+                                    )
 
+                                )
                             )
                         }
+
 
                     </div>
                 </div>
             </div>
 
-            <div className="card edit mt-4">
+            {
+                currentClient && (
+                    <ClientShort client={currentClient} />
+                )
+            }
+
+            <div className="card edit mt-2">
 
                 <div className="card__header">
                     <img src="../assets/img/payment.png" alt="" />
@@ -184,7 +252,7 @@ export const Payment = () => {
                             <label >acción</label>
                             <div className="options">
 
-                                <input type="radio" name="markedAsNextPayment" onClick={() => setFormValues({ ...formValues, amount: minimumPaymentAmount, markedAsNextPayment: true })} id="no" />
+                                <input type="radio" name="markedAsNextPayment" onClick={() => setFormValues({ ...formValues, amount: record.paymentInfo.minimumPaymentAmount, markedAsNextPayment: true })} id="no" />
                                 <label htmlFor="no">
                                     Pagar mensualidad
                                 </label>

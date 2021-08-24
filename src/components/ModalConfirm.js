@@ -18,11 +18,7 @@ export const ModalConfirm = () => {
     }
 
     const handleOk = () => {
-        if (type === redTypes.projectCreate) {
-            dispatch(getProjects());
-            dispatch(redirectSet(redTypes.projects, '/proyectos'));
 
-        }
         if (type === redTypes.projectCreate) {
             dispatch(getProjects());
             dispatch(redirectSet(redTypes.projects, link));

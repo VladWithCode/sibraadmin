@@ -15,7 +15,7 @@ export const NavBar = () => {
 
     }
 
-    const { redirect: { projects, clients } } = useSelector(state => state);
+    const { redirect: { projects, clients, history } } = useSelector(state => state);
 
     return (
         <nav className={navExpanded ? 'expand' : ''}>
@@ -28,7 +28,7 @@ export const NavBar = () => {
                     <svg><use href="../assets/svg/users.svg#users" ></use></svg>
                     <span>Clientes</span>
                 </NavLink>
-                <NavLink to="/historial" activeClassName="active" className="link">
+                <NavLink to={`${history ? history : '/historial'}`} activeClassName="active" className="link">
                     <svg><use href="/../assets/svg/history.svg#history" ></use></svg>
                     <span>Hitorial</span>
                 </NavLink>

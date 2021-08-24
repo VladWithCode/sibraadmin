@@ -9,7 +9,8 @@ const secondaryInitialState = {
     iconName: 'bill',
     type: null,
     projectId: '0',
-    lotId: '0'
+    lotId: '0',
+    func: false
 }
 
 export const floatingButtonReducer = (state = initialState, action) => {
@@ -35,7 +36,8 @@ export const secondaryFloatingButtonReducer = (state = secondaryInitialState, ac
                 iconName: action.payload.iconName,
                 type: action.payload.type,
                 projectId: action.payload.projectId,
-                lotId: action.payload.lotId
+                lotId: action.payload.lotId,
+                func: action.payload.func
             }
 
         default:

@@ -9,12 +9,14 @@ export const floatingButtonSet = (iconName = 'plus', type) => ({
     }
 });
 
-export const secondaryFloatingButtonSet = (iconName = 'bill', type, projectId, lotId) => ({
-    type: redTypes.secondaryFloatingButtonSet,
-    payload: {
-        iconName,
-        type,
-        projectId,
-        lotId
-    }
-})
+export const secondaryFloatingButtonSet = (iconName = 'bill', type, projectId, lotId,
+    func) => ({
+        type: redTypes.secondaryFloatingButtonSet,
+        payload: {
+            iconName,
+            type,
+            projectId,
+            lotId,
+            func
+        }
+    })

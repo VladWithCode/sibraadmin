@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { breadcrumbsUpdate } from '../../actions/breadcrumbs';
@@ -12,12 +12,13 @@ import { floatingButtonSet, secondaryFloatingButtonSet } from '../../actions/flo
 import { FloatingButtonSecondary } from '../FloatingButtonSecondary';
 import { History } from '../history-globals/History';
 import { PriceHistory } from './PriceHistory';
+import { ClientShort } from '../clients/ClientShort';
 
 export const Lot = () => {
 
     const { lotId, projectId } = useParams();
 
-    const { lots, projects, lot: tempLot } = useSelector(state => state);
+    const { lots, projects, lot: tempLot, clients } = useSelector(state => state);
 
     const currentLot = tempLot._id ? tempLot : lots.find(lot => lot._id === lotId);
 
@@ -25,7 +26,8 @@ export const Lot = () => {
 
     const { area, isCorner, lotNumber, measures, state, manzana, files, record, priceHistory } = currentLot;
 
-    console.log('currentLot: ', currentLot);
+    const [currentClient] = useState(clients.find(c => c._id === record?.customer));
+
 
     const price = currentLot.price.toLocaleString();
 
@@ -193,6 +195,18 @@ export const Lot = () => {
 
                 </div>
 
+                {
+                    currentClient && (
+                        <>
+                            <div className="project__header">
+                                <div className="left">
+                                    <h3> Cliente Comprador </h3>
+                                </div>
+                            </div>
+                            <ClientShort client={currentClient} />
+                        </>
+                    )
+                }
 
                 {
                     (record && typeof record !== 'string') && (

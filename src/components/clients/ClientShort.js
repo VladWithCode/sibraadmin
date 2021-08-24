@@ -9,7 +9,7 @@ export const ClientShort = ({ client }) => {
             <div className="card__body">
                 <div className="card__header">
                     <img src="../assets/img/user.png" alt="" />
-                    <h4>Cliente comprador</h4>
+                    <h4>Información básica del cliente</h4>
                 </div>
                 <div className="right">
                     <div className="card__body__item">
@@ -39,7 +39,7 @@ export const ClientShort = ({ client }) => {
                     {
                         occupation && (
                             <div className="card__body__item">
-                                <span>apelido materno</span>
+                                <span>ocupación</span>
                                 <p> {occupation} </p>
                             </div>
                         )

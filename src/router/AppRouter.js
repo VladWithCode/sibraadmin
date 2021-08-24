@@ -64,8 +64,11 @@ export const AppRouter = () => {
 
                         <Route exact path="/proyectos/ver/:projectId/lote/:lotId" component={Lot} ></Route>
                         <Route exact path="/proyectos/edit/:projectId/lote/:lotId" component={LotEdit} ></Route>
+
+
                         <Route exact path="/proyectos/comprar/:projectId/lote/:lotId" component={BuyLot} ></Route>
                         <Route exact path="/proyectos/abonar/:projectId/lote/:lotId" component={Payment} ></Route>
+
                         <Route exact path="/proyectos/extras/abonar/:extraChargeId" component={PayExtracharge} ></Route>
 
 

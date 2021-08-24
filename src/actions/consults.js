@@ -1,6 +1,6 @@
 
 import { redTypes } from "../types/reduxTypes";
-import { uiStartLoading, uiFinishLoading, setTempSuccessNotice, setTempError, setTempWarning } from './ui';
+import { uiStartLoading, uiFinishLoading, setTempSuccessNotice, setTempError } from './ui';
 import { clientSet } from './client';
 import { staticURL } from '../url';
 import { redirectSet } from './redirect';
@@ -206,6 +206,32 @@ export const deleteClient = (id, name) => {
     }
 
 }
+
+export const getRecords = () => {
+
+    const url = `${staticURL}/record/`;
+
+    console.log('get records');
+
+    return (dispatch) => {
+        dispatch(uiStartLoading());
+        fetch(url)
+            .then(resp => resp.json())
+            .then(data => {
+                dispatch(uiFinishLoading());
+                dispatch(loadRecords(data.records));
+                console.log(data);
+
+            })
+            .catch(err => console.log(err))
+    }
+
+}
+
+const loadRecords = (records) => ({
+    type: redTypes.recordsSet,
+    payload: records
+})
 
 const loadProjects = (projects) => {
     return {

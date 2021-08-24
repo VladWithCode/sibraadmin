@@ -9,59 +9,62 @@ import { getClients } from '../../actions/consults';
 import { staticURL } from '../../url';
 import { modalEnable, modalUpdate } from '../../actions/modal';
 import { ClientShort } from '../clients/ClientShort';
+import { buyLotSet } from '../../actions/payments';
+import { getLot } from '../../actions/lot';
 
 export const BuyLot = () => {
 
     const dispatch = useDispatch();
     const { projectId, lotId } = useParams();
-    const { lot, clients } = useSelector(state => state);
+    const { lot, clients, paymentInfo } = useSelector(state => state);
 
     const { state } = lot
 
     const initialForm = {
-        depositAmount: '',
-        lotPrice: lot.price,
-        recordOpenedAt: '',
+        depositAmount: paymentInfo?.depositAmount,
+        lotPrice: +paymentInfo?.lotPrice > 0 ? paymentInfo?.lotPrice : lot.price,
+        recordOpenedAt: paymentInfo?.recordOpenedAt,
 
         // in case of reservation
-        reservationDate: '',
-        preReservationDate: '',
-        preReservationAmount: '',
+        reservationDate: paymentInfo?.reservationDate,
+        preReservationDate: paymentInfo?.preReservationDate,
+        preReservationAmount: paymentInfo?.preReservationAmount,
 
         // comission
-        payedTo: '',
-        amount: '',
-        payedAt: '',
+        payedTo: paymentInfo?.payedTo,
+        amount: paymentInfo?.amount,
+        payedAt: paymentInfo?.payedAt,
 
         //PENDING payed
 
-        lapseToPay: ''
+        lapseToPay: paymentInfo?.lapseToPay
     }
 
-    const [extraInfo, setExtraInfo] = useState({
-        client: '',
-        liquidate: false,
+    const [extraInfo, setExtraInfo] = useState(() => {
 
-        // in case of reservation
-        preReserved: state === 'preReserved' ? true : false,
+        console.log('cargando state');
 
-        history: false,
+        return {
+            client: paymentInfo?.client,
+            liquidate: paymentInfo?.liquidate,
 
-        // payment ifo
-        lapseType: '',
-        paymentsDate: ''
+            // in case of reservation
+            preReserved: state === 'preReserved' ? true : false,
 
+            history: paymentInfo?.history,
+
+            // payment ifo
+            lapseType: paymentInfo?.lapseType,
+            paymentsDate: paymentInfo?.paymentsDate
+
+        }
     });
 
     const client = clients.find(c => c._id.toString() === extraInfo.client.toString());
 
-    const [payments, setPayments] = useState([
-        {
-            amount: "",
-            paymentDate: "",
-            payedDate: ""
-        }
-    ]);
+    const [payments, setPayments] = useState(
+        paymentInfo?.payments
+    );
 
 
     const days = [
@@ -192,7 +195,7 @@ export const BuyLot = () => {
                 lotPrice,
                 recordOpenedAt,
                 reservationDate,
-                paymentsDate: +extraInfo.paymentsDate,
+                paymentsDate: extraInfo.paymentsDate,
                 lapseType: extraInfo.lapseType,
                 lapseToPay
             }
@@ -204,20 +207,39 @@ export const BuyLot = () => {
                 lotPrice,
                 recordOpenedAt,
                 reservationDate,
-                paymentsDate: +extraInfo.paymentsDate,
+                paymentsDate: extraInfo.paymentsDate,
                 lapseType: extraInfo.lapseType,
                 lapseToPay
             }
         }
 
-        console.log('esta es la data', data);
 
         dispatch(uiStartLoading());
         const res = await postData(data);
         dispatch(uiFinishLoading());
 
-        // console.log(data);
-        console.log(res);
+        console.log(data);
+
+        if (res.status === 'OK') {
+
+            const modalInfo = {
+                title: `Compra registrada con éxito con éxito`,
+                text: null,
+                link: `/proyectos/ver/${projectId}/lote/${lotId}`,
+                okMsg: 'Continuar',
+                closeMsg: null,
+                type: redTypes.projectCreate
+            }
+
+            dispatch(modalUpdate(modalInfo));
+            dispatch(modalEnable());
+            dispatch(getLot(lotId));
+
+        } else {
+            dispatch(setTempError('Ha ocurrido un error en la base de datos'))
+        }
+
+        // console.log(res);
 
     }
 
@@ -287,8 +309,8 @@ export const BuyLot = () => {
     const cancel = () => {
 
         const modalInfo = {
-            title: 'Cancelar creación de cliente',
-            text: null,
+            title: 'Cancelar el pago del lote',
+            text: '¿Desea cancelar el pago?',
             link: `proyectos/ver/${projectId}/lote/${lotId}`,
             okMsg: 'Sí',
             closeMsg: 'No',
@@ -298,6 +320,27 @@ export const BuyLot = () => {
         dispatch(modalUpdate(modalInfo));
         dispatch(modalEnable());
     }
+
+    const onFieldChange = (e) => {
+        onInputChange(e);
+        dispatch(buyLotSet({
+            [e.target.name]: e.target.value
+        }))
+
+    }
+
+    const onExtraInfoChange = (newInfo) => {
+
+        setExtraInfo({
+            ...extraInfo,
+            ...newInfo
+        })
+
+        dispatch(buyLotSet(newInfo));
+
+    }
+
+    console.log(extraInfo);
 
     return (
         <div className="pb-5 project create">
@@ -310,8 +353,13 @@ export const BuyLot = () => {
                         <div className="options" >
 
 
-                            <input type="radio" value={false} onClick={() => setExtraInfo({ ...extraInfo, liquidate: false, history: false, preReserved: false })} id="enganche" name="action" defaultChecked />
-
+                            {
+                                (!extraInfo.liquidate && !extraInfo.history && !extraInfo.preReserved) ? (
+                                    <input type="radio" value={false} onClick={() => onExtraInfoChange({ liquidate: false, history: false, preReserved: false })} id="enganche" name="action" defaultChecked />
+                                ) : (
+                                    <input type="radio" value={false} onClick={() => onExtraInfoChange({ liquidate: false, history: false, preReserved: false })} id="enganche" name="action" />
+                                )
+                            }
 
                             <label htmlFor="enganche">
                                 <div className="option">
@@ -319,7 +367,15 @@ export const BuyLot = () => {
                                 </div>
                             </label>
 
-                            <input type="radio" value={true} onClick={() => setExtraInfo({ ...extraInfo, liquidate: false, history: false, preReserved: true })} id="preReserve" name="action" />
+
+
+                            {
+                                extraInfo.preReserved ? (
+                                    <input type="radio" value={true} onClick={() => onExtraInfoChange({ liquidate: false, history: false, preReserved: true })} id="preReserve" name="action" defaultChecked />
+                                ) : (
+                                    <input type="radio" value={true} onClick={() => onExtraInfoChange({ liquidate: false, history: false, preReserved: true })} id="preReserve" name="action" />
+                                )
+                            }
 
 
                             <label htmlFor="preReserve">
@@ -328,7 +384,16 @@ export const BuyLot = () => {
                                 </div>
                             </label>
 
-                            <input type="radio" value={true} onClick={() => setExtraInfo({ ...extraInfo, history: false, preReserved: false, liquidate: true })} id="liquidate" name="action" />
+                            {
+                                extraInfo.liquidate ? (
+                                    <input type="radio" value={true} onClick={() => onExtraInfoChange({ history: false, preReserved: false, liquidate: true })} id="liquidate" name="action" defaultChecked />
+
+                                ) : (
+                                    <input type="radio" value={true} onClick={() => onExtraInfoChange({ history: false, preReserved: false, liquidate: true })} id="liquidate" name="action" />
+
+
+                                )
+                            }
 
 
                             <label htmlFor="liquidate">
@@ -337,8 +402,13 @@ export const BuyLot = () => {
                                 </div>
                             </label>
 
-
-                            <input type="radio" value={true} onClick={() => setExtraInfo({ ...extraInfo, history: true, preReserved: false, liquidate: false })} id="history" name="action" />
+                            {
+                                extraInfo.history ? (
+                                    <input type="radio" value={true} onClick={() => onExtraInfoChange({ history: true, preReserved: false, liquidate: false })} id="history" name="action" defaultChecked />
+                                ) : (
+                                    <input type="radio" value={true} onClick={() => onExtraInfoChange({ history: true, preReserved: false, liquidate: false })} id="history" name="action" />
+                                )
+                            }
 
 
                             <label htmlFor="history">
@@ -364,7 +434,7 @@ export const BuyLot = () => {
                     <div className="right">
                         <div className={`card__body__item ${emptyFields.includes('lotPrice') && 'error'}`}>
                             <label htmlFor="lotPrice">Precio de Lote</label>
-                            <input autoFocus name="lotPrice" type="number" autoComplete="off" onChange={onInputChange} value={lotPrice} />
+                            <input autoFocus name="lotPrice" type="number" autoComplete="off" onChange={onFieldChange} value={lotPrice} />
                         </div>
 
                         {
@@ -375,15 +445,15 @@ export const BuyLot = () => {
                                             <>
                                                 <div className={`card__body__item ${emptyFields.includes('depositAmount') && 'error'}`}>
                                                     <label htmlFor="depositAmount">Enganche</label>
-                                                    <input name="depositAmount" type="number" autoComplete="off" onChange={onInputChange} value={depositAmount} />
+                                                    <input name="depositAmount" type="number" autoComplete="off" onChange={onFieldChange} value={depositAmount} />
                                                 </div>
                                                 <div className={`card__body__item ${emptyFields.includes('recordOpenedAt') && 'error'}`}>
                                                     <label htmlFor="recordOpenedAt">Inicio de historial</label>
-                                                    <input name="recordOpenedAt" type="date" autoComplete="off" onChange={onInputChange} value={recordOpenedAt} />
+                                                    <input name="recordOpenedAt" type="date" autoComplete="off" onChange={onFieldChange} value={recordOpenedAt} />
                                                 </div>
                                                 <div className={`card__body__item ${emptyFields.includes('reservationDate') && 'error'}`}>
                                                     <label htmlFor="reservationDate">Fecha de apartado</label>
-                                                    <input name="reservationDate" type="date" autoComplete="off" onChange={onInputChange} value={reservationDate} />
+                                                    <input name="reservationDate" type="date" autoComplete="off" onChange={onFieldChange} value={reservationDate} />
                                                 </div>
 
                                             </>
@@ -391,11 +461,11 @@ export const BuyLot = () => {
                                             <>
                                                 <div className={`card__body__item ${emptyFields.includes('preReservationDate') && 'error'}`}>
                                                     <label htmlFor="preReservationDate">Fecha de preapartado</label>
-                                                    <input name="preReservationDate" type="date" autoComplete="off" onChange={onInputChange} value={preReservationDate} />
+                                                    <input name="preReservationDate" type="date" autoComplete="off" onChange={onFieldChange} value={preReservationDate} />
                                                 </div>
                                                 <div className={`card__body__item ${emptyFields.includes('preReservationAmount') && 'error'}`}>
                                                     <label htmlFor="preReservationAmount">Cantidad de preapartado</label>
-                                                    <input name="preReservationAmount" type="number" autoComplete="off" onChange={onInputChange} value={preReservationAmount} />
+                                                    <input name="preReservationAmount" type="number" autoComplete="off" onChange={onFieldChange} value={preReservationAmount} />
                                                 </div>
                                             </>
                                         )
@@ -404,7 +474,7 @@ export const BuyLot = () => {
                             ) : (
                                 <div className={`card__body__item ${emptyFields.includes('reservationDate') && 'error'}`}>
                                     <label htmlFor="reservationDate">Fecha de compra</label>
-                                    <input name="reservationDate" type="date" autoComplete="off" onChange={onInputChange} value={reservationDate} />
+                                    <input name="reservationDate" type="date" autoComplete="off" onChange={onFieldChange} value={reservationDate} />
                                 </div>
                             )
                         }
@@ -423,12 +493,12 @@ export const BuyLot = () => {
                                                     <label >Tipo de Pagos</label>
                                                     <div className="options">
 
-                                                        <input type="radio" name="lapseType" onClick={() => setExtraInfo({ ...extraInfo, lapseType: 'mensual' })} id="mensual" />
+                                                        <input type="radio" name="lapseType" onClick={() => onExtraInfoChange({ lapseType: 'mensual' })} id="mensual" />
                                                         <label htmlFor="mensual">
                                                             Mensual
                                                         </label>
 
-                                                        <input type="radio" name="lapseType" onClick={() => setExtraInfo({ ...extraInfo, lapseType: 'semanal' })} id="semanal" />
+                                                        <input type="radio" name="lapseType" onClick={() => onExtraInfoChange({ lapseType: 'semanal' })} id="semanal" />
                                                         <label htmlFor="semanal">
                                                             Semanal
                                                         </label>
@@ -440,7 +510,7 @@ export const BuyLot = () => {
                                                     <label htmlFor="payDay" >Día de pago</label>
                                                     {
                                                         extraInfo.lapseType === 'semanal' ? (
-                                                            <select onChange={e => setExtraInfo({ ...extraInfo, paymentsDate: e.target.value })} name="payDay" id="payDay">
+                                                            <select onChange={e => onExtraInfoChange({ paymentsDate: e.target.value })} name="payDay" id="payDay">
 
                                                                 {
                                                                     days.map(day => (
@@ -450,7 +520,7 @@ export const BuyLot = () => {
 
                                                             </select>
                                                         ) : (
-                                                            <input name="paymentsDay" type="number" autoComplete="off" onChange={e => setExtraInfo({ ...extraInfo, paymentsDate: e.target.value })} value={extraInfo.paymentsDate} />
+                                                            <input name="paymentsDay" type="number" autoComplete="off" onChange={e => onExtraInfoChange({ paymentsDate: e.target.value })} value={extraInfo.paymentsDate} />
                                                         )
                                                     }
 
@@ -460,7 +530,7 @@ export const BuyLot = () => {
                                                     extraInfo.lapseType.length > 2 && (
                                                         <div className={`card__body__item ${emptyFields.includes('lapseToPay') && 'error'}`}>
                                                             <label htmlFor="lapseToPay">Número de pagos</label>
-                                                            <input name="lapseToPay" type="number" autoComplete="off" onChange={onInputChange} value={lapseToPay} />
+                                                            <input name="lapseToPay" type="number" autoComplete="off" onChange={onFieldChange} value={lapseToPay} />
                                                         </div>
                                                     )
                                                 }
@@ -483,7 +553,7 @@ export const BuyLot = () => {
 
                         <div className={`card__body__item ${emptyFields.includes('client') && 'error'}`}>
                             <label htmlFor="buyer">Cliente</label>
-                            <select onChange={(e) => setExtraInfo({ ...extraInfo, client: e.target.value })} name="buyer" id="buyer">
+                            <select onChange={(e) => onExtraInfoChange({ client: e.target.value })} name="buyer" id="buyer">
                                 <option value=""></option>
                                 {
                                     clients?.map(c => {
@@ -510,15 +580,15 @@ export const BuyLot = () => {
                     </div>
                     <div className={`card__body__item ${emptyFields.includes('payedTo') && 'error'}`}>
                         <label htmlFor="payedTo">Asesor</label>
-                        <input name="payedTo" type="text" autoComplete="off" onChange={onInputChange} value={payedTo} />
+                        <input name="payedTo" type="text" autoComplete="off" onChange={onFieldChange} value={payedTo} />
                     </div>
                     <div className={`card__body__item ${emptyFields.includes('amount') && 'error'}`}>
                         <label htmlFor="amount">Comisión</label>
-                        <input name="amount" type="number" autoComplete="off" onChange={onInputChange} value={amount} />
+                        <input name="amount" type="number" autoComplete="off" onChange={onFieldChange} value={amount} />
                     </div>
                     <div className={`card__body__item ${emptyFields.includes('payedAt') && 'error'}`}>
                         <label htmlFor="payedAt">Fecha cuando fue pagada</label>
-                        <input name="payedAt" type="date" autoComplete="off" onChange={onInputChange} value={payedAt} />
+                        <input name="payedAt" type="date" autoComplete="off" onChange={onFieldChange} value={payedAt} />
                     </div>
                 </div>
 

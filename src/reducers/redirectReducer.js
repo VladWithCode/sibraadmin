@@ -21,6 +21,12 @@ export const redirectReducer = (state = initialState, action) => {
                 clients: action.payload.clients
             }
 
+        case redTypes.redirectHistory:
+            return {
+                ...state,
+                history: action.payload.history
+            }
+
         default:
             return state;
     }
