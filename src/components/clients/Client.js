@@ -20,6 +20,8 @@ export const Client = () => {
     const { names, patLastname, matLastname, phoneNumber, _id, address, curp, email, files, refs, maritalState, occupation, township, pob, dob, nationality, records } = client;
     // const { col, extNumber, intNumber, street, zip } = address;
 
+    const activeRecords = records?.filter(rec => rec.state !== 'cancelled');
+
     useEffect(() => {
 
         dispatch(getClient(clientId));
@@ -208,7 +210,7 @@ export const Client = () => {
                                 <div className="card__body__list">
                                     {
                                         files?.map(({ name, staticPath }) => (
-                                            <div onClick={() => { handleOpen(staticPath) }} key={name} className="card__body__list__doc">
+                                            <div onClick={() => { handleOpen(staticPath) }} key={staticPath} className="card__body__list__doc">
                                                 <p>
                                                     {name}
                                                 </p>
@@ -238,7 +240,7 @@ export const Client = () => {
                             refs.map((ref, index) => (
 
 
-                                <div className={`card`}>
+                                <div className={`card`} key={index}>
                                     <div className="card__header">
                                         <img src="../assets/img/aval.png" alt="" />
                                         <h4>Referencia personal {index + 1}</h4>
@@ -329,7 +331,7 @@ export const Client = () => {
                                             {
                                                 ref.files && (
                                                     ref.files.map(({ name, staticPath }) => (
-                                                        <div onClick={() => { handleOpen(staticPath) }} key={name} className="card__body__list__doc">
+                                                        <div onClick={() => { handleOpen(staticPath) }} key={staticPath} className="card__body__list__doc">
                                                             <p>
                                                                 {name}
                                                             </p>
@@ -358,16 +360,16 @@ export const Client = () => {
                 </div>
 
                 {
-                    records?.length > 0 && (
+                    activeRecords?.length > 0 && (
                         <>
                             <div className="project__header">
                                 <div className="left">
-                                    <h3> Historiales </h3>
+                                    <h3> Historiales Activos </h3>
                                 </div>
                             </div>
                             {
-                                records.map((record) => (
-                                    <History key={record._id} record={record} />
+                                activeRecords.map((record) => (
+                                    <History key={record._id} record={record} lotId={record.lot} />
                                 ))
                             }
                         </>

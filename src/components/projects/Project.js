@@ -27,9 +27,9 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
     const { name, _id, associationName, totalLots, description, isFracc, reservedLots, liquidatedLots, deliveredLots, lotTypes, availableServices, manzanas, files, extraCharges } = project;
 
     const [searchParams, setSearchParams] = useState({
-        searchOrder: null,
-        searchManzana: null,
-        searchLot: null
+        searchOrder: '',
+        searchManzana: '',
+        searchLot: ''
     });
 
     const dispManzanas = [];
@@ -103,7 +103,7 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
                         </div>
                         <div className="item total">
                             <p> {deliveredLots} </p>
-                            <span>Lotes vendidos</span>
+                            <span>Lotes Entregados</span>
                         </div>
                     </div>
                 </div>

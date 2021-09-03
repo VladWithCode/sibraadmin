@@ -27,6 +27,9 @@ import { LotEdit } from "../components/lots/LotEdit";
 import { BuyLot } from "../components/lots/BuyLot";
 import { Payment } from "../components/lots/Payment";
 import { PayExtracharge } from "../components/history-globals/PayExtracharge";
+import { CommissionPut } from "../components/clients/ComissionPut";
+import { CancelRecord } from "../components/history-globals/CancelRecord";
+import { UpdateRecord } from "../components/history-globals/UpdateRecord";
 
 
 
@@ -67,13 +70,17 @@ export const AppRouter = () => {
 
 
                         <Route exact path="/proyectos/comprar/:projectId/lote/:lotId" component={BuyLot} ></Route>
-                        <Route exact path="/proyectos/abonar/:projectId/lote/:lotId" component={Payment} ></Route>
 
-                        <Route exact path="/proyectos/extras/abonar/:extraChargeId" component={PayExtracharge} ></Route>
+                        <Route exact path="/historial/abonar/:projectId/lote/:lotId" component={Payment} ></Route>
+                        <Route exact path="/historial" component={History} ></Route>
+                        <Route exact path="/historial/extras/abonar/:extraChargeId/:recordId" component={PayExtracharge} ></Route>
+                        <Route exact path="/historial/comision/editar/:recordId" component={CommissionPut} ></Route>
 
+                        <Route exact path="/historial/cancelar/:recordId" component={CancelRecord} ></Route>
+
+                        <Route exact path="/historial/editar/:recordId" component={UpdateRecord} ></Route>
 
                         <Route exact path="/ajustes" component={Settings} ></Route>
-                        <Route exact path="/historial" component={History} ></Route>
 
                         <Redirect to="/proyectos" ></Redirect>
 

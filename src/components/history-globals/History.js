@@ -1,19 +1,26 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { historyGetLot, historySetRecordInfo } from '../../actions/historyActions';
+import { CommissionInfo } from './CommisionInfo';
 import { ExtraCharge } from './ExtraCharge';
 import { Payment } from './Payment';
 
 export const History = ({ record }) => {
 
-    const { lotNumber, manzana, lotArea, payments, extraCharges, paymentInfo: { lotPrice, lotAmountDue, amountPayed, lapseLeft } } = record;
-    const state = record.state === 'available' ? 'Disponible' : record.state === 'delivered' ? 'Entregado' : record.state === 'reserved' ? 'Comprado' : 'Liquidado';
+    const dispatch = useDispatch();
+
+    const { lot: lotId, lotNumber, manzana, lotArea, payments, extraCharges, paymentInfo: { lotPrice, lotAmountDue, amountPayed, lotAmountPayed, lapseLeft, lapseType, minimumPaymentAmount, lapseToPay } } = record;
+
+    const state = record.state === 'available' ? 'Disponible' : record.state === 'delivered' ? 'Entregado' : record.state === 'reserved' ? 'Comprado' : record.state === 'lotpayed' ? 'Pagado' : 'Liquidado';
 
     const { projects } = useSelector(state => state);
     const { name: projectName } = projects.find(p => p._id === record.project);
 
     const [activeSections, setActiveSections] = useState({
         payments: false,
-        extraCharges: false
+        extraCharges: false,
+        commissionInfo: false
     })
 
     const switchActive = section => {
@@ -23,11 +30,37 @@ export const History = ({ record }) => {
         })
     }
 
+    const updateLot = () => {
+        dispatch(historyGetLot(lotId));
+        dispatch(historySetRecordInfo(record));
+        console.log('este fue el record: ', record);
+    }
+
     return (
-        <div className="card">
+        <div className="card mb-3">
             <div className="card__header">
                 <img src="../assets/img/info.png" alt="" />
                 <h4>Lote en {projectName} </h4>
+                {
+                    record.state !== 'cancelled' ? (
+                        <div className="links">
+                            <Link onClick={updateLot} to={`/historial/editar/${record._id}`}
+                                className="edit">
+                                editar
+                            </Link>
+                            <Link onClick={updateLot} to={`/historial/cancelar/${record._id}`}
+                                className="danger">
+                                cancelar venta
+                            </Link>
+                        </div>
+                    )
+                        :
+                        (
+                            <span className="cancel cancelled">
+                                Cancelado
+                            </span>
+                        )
+                }
             </div>
             <div className="card__body">
                 <div className="right">
@@ -52,17 +85,34 @@ export const History = ({ record }) => {
                     </div>
                     <div className="card__body__item">
                         <span>pagado</span>
-                        <p className="payed"> ${amountPayed.toLocaleString()} </p>
+                        <p className="payed"> ${lotAmountPayed.toLocaleString()} </p>
+                    </div>
+                    {
+                        ((record.state !== 'delivered') && (record.state !== 'lotpayed') && (record.state !== 'liquidated')) && (
+                            <>
+                                <div className="card__body__item">
+                                    <span>deuda restante</span>
+                                    <p className="debt" > ${lotAmountDue.toLocaleString()} </p>
+                                </div>
+                                <div className="card__body__item">
+                                    <span>pagos restantes</span>
+                                    <p> {lapseLeft} </p>
+                                </div>
+                            </>
+                        )
+                    }
+                    <div className="card__body__item">
+                        <span>tipo de pagos</span>
+                        <p> {lapseType} </p>
                     </div>
                     <div className="card__body__item">
-                        <span>deuda</span>
-                        <p className="debt" > ${lotAmountDue.toLocaleString()} </p>
+                        <span>número de pagos</span>
+                        <p> {lapseToPay} </p>
                     </div>
                     <div className="card__body__item">
-                        <span>pagos restantes</span>
-                        <p> {lapseLeft} </p>
+                        <span>cantidad por pago</span>
+                        <p> ${minimumPaymentAmount.toLocaleString()} </p>
                     </div>
-
                 </div>
 
                 <div className="card__header pointer mt-3" onClick={() => switchActive('payments')}>
@@ -81,21 +131,68 @@ export const History = ({ record }) => {
                     }
                 </div>
 
-                <div className="card__header pointer mt-3" onClick={() => switchActive('extraCharges')}>
-                    <img src="../assets/img/services.png" alt="" />
-                    <h4>Pagos extras</h4>
-                    <span className={`dropdown ${activeSections.extraCharges && 'active'} `}>v</span>
-                </div>
+                {
+                    extraCharges.length > 0 && (
+                        <>
+                            <div className="card__header pointer mt-3" onClick={() => switchActive('extraCharges')}>
+                                <img src="../assets/img/services.png" alt="" />
+                                <h4>Pagos extras</h4>
+                                <span className={`dropdown ${activeSections.extraCharges && 'active'} `}>v</span>
+                            </div>
 
-                <div className={`full ${!activeSections.extraCharges && 'inactive'} `}>
+
+                            <div className={`full ${!activeSections.extraCharges && 'inactive'} `}>
+                                {
+
+                                    extraCharges.map((extraCharge, index) => (
+                                        <ExtraCharge key={index} extraCharge={extraCharge} index={index + 1} recordState={record.state} recordId={record._id} />
+                                    ))
+
+                                }
+                            </div>
+
+                        </>
+                    )
+                }
+
+
+
+                <div className="card__header pointer mt-3" onClick={() => switchActive('commissionInfo')}>
+                    <img src="../assets/img/user.png" alt="" />
+                    <h4>Comisión</h4>
                     {
-                        extraCharges && (
-                            extraCharges.map((extraCharge, index) => (
-                                <ExtraCharge key={index} extraCharge={extraCharge} index={index + 1} />
-                            ))
-                        )
+                        record?.commissionInfo ?
+                            (
+                                <span className={`dropdown ${activeSections.commissionInfo && 'active'} `}>v</span>
+                            )
+                            :
+                            (
+                                <Link onClick={updateLot} to={`/historial/comision/editar/${record._id}`} className={`commission`}>
+                                    Registrar
+                                </Link>
+                            )
                     }
                 </div>
+
+                {
+                    record?.commissionInfo && (
+
+                        (
+                            <div className={`full ${!activeSections.commissionInfo && 'inactive'} `}>
+                                <div className="right">
+                                    <CommissionInfo recordId={record._id} commissionInfo={record.commissionInfo} />
+                                </div>
+                                <Link onClick={updateLot} to={`/historial/comision/editar/${record._id}`} className={`commission`}>
+                                    Editar
+                                </Link>
+                            </div>
+
+                        )
+
+
+                    )
+                }
+
 
 
             </div>

@@ -7,7 +7,7 @@ import { redirectSet } from '../../actions/redirect';
 import { redTypes } from '../../types/reduxTypes';
 import { BreadCrumbs } from '../BreadCrumbs';
 import { staticURLDocs } from '../../url';
-import { getLot, setLot } from '../../actions/lot';
+import { getLot } from '../../actions/lot';
 import { floatingButtonSet, secondaryFloatingButtonSet } from '../../actions/floatingButton';
 import { FloatingButtonSecondary } from '../FloatingButtonSecondary';
 import { History } from '../history-globals/History';
@@ -20,16 +20,13 @@ export const Lot = () => {
 
     const { lots, projects, lot: tempLot, clients } = useSelector(state => state);
 
-    const currentLot = tempLot._id ? tempLot : lots.find(lot => lot._id === lotId);
+    const [currentLot, setCurrentLot] = useState(tempLot._id ? tempLot : lots.find(lot => lot._id === lotId));
 
     const currentProject = projects.find(p => p._id === projectId);
 
-    const { area, isCorner, lotNumber, measures, state, manzana, files, record, priceHistory } = currentLot;
+    const { area, isCorner, lotNumber, measures, state, manzana, files, priceHistory } = currentLot;
 
-    const [currentClient] = useState(clients.find(c => c._id === record?.customer));
-
-
-    const price = currentLot.price.toLocaleString();
+    const [currentClient, setCurrentClient] = useState(clients.find(c => c._id === currentLot.record));
 
     const { name, availableServices } = currentProject;
 
@@ -70,8 +67,14 @@ export const Lot = () => {
         dispatch(getLot(currentLot._id));
         dispatch(secondaryFloatingButtonSet('bill', state === 'reserved' ? redTypes.lotReserved : null, projectId, lotId));
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, projectId, lotId]);
+    }, [dispatch]);
+
+    useEffect(() => {
+        setCurrentClient(clients.find(c => c._id === currentLot.customer));
+
+        setCurrentLot(tempLot._id ? tempLot : lots.find(lot => lot._id === lotId));
+
+    }, [clients, currentLot.customer, lotId, lots, tempLot]);
 
     const handleOpen = (path) => {
         const url = `${staticURLDocs}${path}`;
@@ -129,7 +132,7 @@ export const Lot = () => {
                             </div>
                             <div className="card__body__item">
                                 <span >Precio</span>
-                                <p className="price"> ${price} </p>
+                                <p className="price"> ${currentLot?.price?.toLocaleString()} </p>
                             </div>
 
                         </div>
@@ -209,7 +212,7 @@ export const Lot = () => {
                 }
 
                 {
-                    (record && typeof record !== 'string') && (
+                    (currentLot?.record && typeof currentLot?.record !== 'string') && (
                         <>
                             <div className="project__header">
                                 <div className="left">
@@ -217,7 +220,7 @@ export const Lot = () => {
                                 </div>
                             </div>
 
-                            <History key={record._id} record={record} />
+                            <History key={currentLot?.record._id} record={currentLot?.record} lotId={lotId} />
 
                         </>
                     )

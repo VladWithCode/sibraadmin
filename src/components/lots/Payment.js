@@ -15,7 +15,7 @@ export const Payment = () => {
     const dispatch = useDispatch();
     const { projectId, lotId } = useParams();
 
-    const { lot: currentLot, clients } = useSelector(state => state);
+    const { historyActions: { lot: currentLot }, clients } = useSelector(state => state);
 
     const { area, isCorner, lotNumber, measures, manzana, price, record } = currentLot;
 
@@ -25,7 +25,7 @@ export const Payment = () => {
     useEffect(() => {
 
         dispatch(floatingButtonSet('pencil', redTypes.projectCreate));
-        dispatch(redirectSet(redTypes.projects, `/proyectos/abonar/${projectId}/lote/${lotId}`));
+        dispatch(redirectSet(redTypes.history, `/historial/abonar/${projectId}/lote/${lotId}`));
 
     }, [dispatch, projectId, lotId]);
 
@@ -37,7 +37,7 @@ export const Payment = () => {
         markAsNextPayment: false
     })
 
-    const { amount, type, markAsNextPayment } = formValues;
+    const { amount, markedAsNextPayment } = formValues;
 
     const inputChange = e => {
         checkEmptyField(e);
@@ -66,7 +66,7 @@ export const Payment = () => {
         const data = {
             type: +amount >= record.paymentInfo.lotAmountDue ? 'liquidation' : 'payment',
             amount: +amount,
-            markedAsNextPayment: formValues.markedAsNextPayment
+            markedAsNextPayment
         }
 
         dispatch(uiStartLoading());
@@ -82,10 +82,10 @@ export const Payment = () => {
                 const modalInfo = {
                     title: `Pago realizado con éxito`,
                     text: `pago por la cantidad de $${amount}`,
-                    link: `/proyectos/ver/${projectId}/lote/${lotId}`,
+                    link: `/historial`,
                     okMsg: 'Continuar',
                     closeMsg: null,
-                    type: redTypes.projectCreate
+                    type: redTypes.history
                 }
 
                 dispatch(modalUpdate(modalInfo));
@@ -150,12 +150,12 @@ export const Payment = () => {
     const cancel = () => {
 
         const modalInfo = {
-            title: 'Cancelar creación de cliente',
-            text: null,
-            link: `/proyectos/ver/${projectId}/lote/${lotId}`,
+            title: 'Cancelar pago',
+            text: '¿Desea cancelar el pago del lote?',
+            link: `/historial`,
             okMsg: 'Sí',
             closeMsg: 'No',
-            type: redTypes.clientEdit
+            type: redTypes.history
         }
 
         dispatch(modalUpdate(modalInfo));
@@ -285,50 +285,6 @@ export const Payment = () => {
                     Realizar Pago
                 </button>
             </div>
-
-            {/* <div className="options" >
-
-
-                <input type="radio" value={false} onClick={() => setExtraInfo({ ...extraInfo, liquidate: false, history: false, preReserved: false })} id="enganche" name="action" defaultChecked />
-
-
-                <label htmlFor="enganche">
-                    <div className="option">
-                        Pagar Enganche
-                    </div>
-                </label>
-
-                <input type="radio" value={true} onClick={() => setExtraInfo({ ...extraInfo, liquidate: false, history: false, preReserved: true })} id="preReserve" name="action" />
-
-
-                <label htmlFor="preReserve">
-                    <div className="option">
-                        Preapartar
-                    </div>
-                </label>
-
-                <input type="radio" value={true} onClick={() => setExtraInfo({ ...extraInfo, history: false, preReserved: false, liquidate: true })} id="liquidate" name="action" />
-
-
-                <label htmlFor="liquidate">
-                    <div className="option">
-                        Liquidar
-                    </div>
-                </label>
-
-
-                <input type="radio" value={true} onClick={() => setExtraInfo({ ...extraInfo, history: true, preReserved: false, liquidate: false })} id="history" name="action" />
-
-
-                <label htmlFor="history">
-                    <div className="option">
-                        Registrar Historial
-                    </div>
-                </label>
-
-
-            </div> */}
-
         </div>
     )
 }

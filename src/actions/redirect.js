@@ -21,7 +21,7 @@ export const redirectSet = (type, link) => {
 
         case redTypes.history:
             return {
-                type: redTypes.redirectHistory,
+                type: redTypes.history,
                 payload: {
                     history: link
                 }
@@ -36,6 +36,6 @@ export const redirectSet = (type, link) => {
             }
 
         default:
-            return {};
+            return { };
     }
 }

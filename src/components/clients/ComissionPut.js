@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router';
 import { floatingButtonSet } from '../../actions/floatingButton';
-import { getLot } from '../../actions/lot';
+import { historyGetLot } from '../../actions/historyActions';
 import { modalEnable, modalUpdate } from '../../actions/modal';
 import { redirectSet } from '../../actions/redirect';
 import { setTempError, uiFinishLoading, uiStartLoading } from '../../actions/ui';
@@ -10,42 +10,159 @@ import { redTypes } from '../../types/reduxTypes';
 import { staticURL } from '../../url';
 import { ClientShort } from '../clients/ClientShort';
 
-export const PayExtracharge = () => {
+export const CommissionPut = () => {
 
     const dispatch = useDispatch();
-    const { extraChargeId, recordId } = useParams();
 
-    const { historyActions: { lot: currentLot }, clients, projects } = useSelector(state => state);
+    const { historyActions: { lot: currentLot }, clients } = useSelector(state => state);
 
     const { area, isCorner, lotNumber, measures, manzana, price, record } = currentLot;
 
+
     const currentClient = clients.find(c => c._id === record?.customer);
 
-    const { extraCharges } = projects.find(p => p._id === record.project);
-
-    const currentExtraCharges = extraCharges.find(e => e._id === extraChargeId);
-
-    const { amount: extraAmount, title } = currentExtraCharges;
 
     useEffect(() => {
 
+        dispatch(historyGetLot())
         dispatch(floatingButtonSet('pencil', redTypes.projectCreate));
-        dispatch(redirectSet(redTypes.history, `/historial/extras/abonar/${extraChargeId}/${recordId}`));
+        dispatch(redirectSet(redTypes.history, `/historial/comision/editar/${record._id}`));
 
-    }, [dispatch, extraChargeId, recordId]);
+    }, [dispatch, record._id]);
 
     const [emptyFields, setEmptyFields] = useState([]);
+    const [hasChanged, setHasChanged] = useState([]);
 
     const [formValues, setFormValues] = useState({
-        amount: '',
-        date: ''
+        payedTo: record.commissionInfo?.payedTo,
+        amount: record.commissionInfo?.amount,
+        payedAt: record.commissionInfo?.payedAt.split('T')[0]
     })
 
-    const { amount, date } = formValues;
+    const { amount, payedTo, payedAt } = formValues;
 
     const inputChange = e => {
         checkEmptyField(e);
         setFormValues({ ...formValues, [e.target.name]: e.target.value });
+        checkChanges(e.target.name)
+    }
+
+    const updateComissionInfo = async () => {
+
+        if (+amount === 0) {
+            const tempEmptyFields = emptyFields;
+
+            if (tempEmptyFields.includes('amount')) {
+                const index = tempEmptyFields.indexOf('amount');
+
+                tempEmptyFields.splice(index, 1);
+            } else {
+                tempEmptyFields.push('amount');
+            }
+
+            if (tempEmptyFields.includes('payedTo')) {
+                const index = tempEmptyFields.indexOf('payedTo');
+
+                tempEmptyFields.splice(index, 1);
+            } else {
+                tempEmptyFields.push('payedTo');
+            }
+
+            setEmptyFields(tempEmptyFields);
+            dispatch(setTempError('Debe ingresar una cantidad de pago'));
+
+            return;
+        }
+
+        if (payedAt.trim().length <= 2) {
+
+            const tempEmptyFields = emptyFields;
+
+            if (tempEmptyFields.includes('payedTo')) {
+                const index = tempEmptyFields.indexOf('payedTo');
+
+                tempEmptyFields.splice(index, 1);
+            } else {
+                tempEmptyFields.push('payedTo');
+            }
+
+            if (tempEmptyFields.includes('payedTo')) {
+                const index = tempEmptyFields.indexOf('payedTo');
+
+                tempEmptyFields.splice(index, 1);
+            } else {
+                tempEmptyFields.push('payedTo');
+            }
+
+            setEmptyFields(tempEmptyFields);
+
+            dispatch(setTempError('Debe ingresar un nombre válido'));
+
+            return;
+        }
+
+        const data = {
+            amount,
+            payedAt,
+            payedTo
+        }
+
+        dispatch(uiStartLoading());
+
+        const res = await postCommissionInfo(data);
+
+        dispatch(uiFinishLoading());
+
+        if (res) {
+            if (res.status === 'OK') {
+                const modalInfo = {
+                    title: `Comisión registrada con éxito`,
+                    text: `Comisión entregada a ${payedTo} por una cantidad de: ${amount}`,
+                    link: `/historial`,
+                    okMsg: 'Continuar',
+                    closeMsg: null,
+                    type: redTypes.history
+                }
+
+                dispatch(modalUpdate(modalInfo));
+                dispatch(modalEnable());
+
+            } else {
+                dispatch(setTempError('Hubo un problema con la base de datos'));
+
+                return;
+            }
+        }
+
+    }
+
+    const postCommissionInfo = data => {
+
+        const url = `${staticURL}/records/${record._id}/set-commission`;
+
+
+        const res = fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                console.log(response);
+                return response.json();
+            })
+            .then((data) => {
+                console.log(data);
+                return data;
+            })
+            .catch(err => {
+                console.log(err);
+                // dispatch(uiFinishLoading());
+            });
+
+        return res;
+
     }
 
     const checkEmptyField = e => {
@@ -69,7 +186,7 @@ export const PayExtracharge = () => {
     const cancel = () => {
 
         const modalInfo = {
-            title: 'Cancelar pago de cargo extra',
+            title: 'Cancelar creación de cliente',
             text: null,
             link: `/historial`,
             okMsg: 'Sí',
@@ -81,96 +198,41 @@ export const PayExtracharge = () => {
         dispatch(modalEnable());
     }
 
-    const pay = async () => {
 
-        if (+amount === 0) {
-            const tempEmptyFields = emptyFields;
+    const checkChanges = (attribute) => {
 
-            if (tempEmptyFields.includes('amount')) {
-                const index = tempEmptyFields.indexOf('amount');
+        const tempHasChanged = hasChanged;
 
-                tempEmptyFields.splice(index, 1);
-            } else {
-                tempEmptyFields.push('amount');
-            }
+        if (record.commissionInfo) {
+            if (formValues[attribute.toString()] === record.commissionInfo[attribute]) {
 
-            setEmptyFields(tempEmptyFields);
-            dispatch(setTempError('Debe ingresar una cantidad de pago'));
+                if (tempHasChanged.includes(attribute)) {
+                    const index = tempHasChanged.indexOf(attribute);
 
-            return;
-        }
-
-        const data = {
-            amount: +amount,
-            date: date || null
-        }
-
-        dispatch(uiStartLoading());
-
-        const res = await postPayment(data);
-
-        dispatch(uiFinishLoading());
-
-        console.log(res);
-
-        if (res) {
-            if (res.status === 'OK') {
-                const modalInfo = {
-                    title: `Pago realizado con éxito`,
-                    text: `pago por la cantidad de $${amount}`,
-                    link: `/historial`,
-                    okMsg: 'Continuar',
-                    closeMsg: null,
-                    type: redTypes.history
+                    tempHasChanged.splice(index, 1);
                 }
 
-                dispatch(modalUpdate(modalInfo));
-                dispatch(modalEnable());
-
             } else {
-                dispatch(setTempError('Hubo un problema con la base de datos'));
-
-                return;
+                if (!tempHasChanged.includes(attribute)) {
+                    tempHasChanged.push(attribute);
+                }
             }
         }
 
+
+        setHasChanged(tempHasChanged);
     }
 
-    const postPayment = data => {
 
-        const url = `${staticURL}/records/${record._id}/charge/${extraChargeId}/pay`;
 
-        console.log('haciendo post jejeje', url);
-
-        const res = fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-            .then(response => {
-                return response.json();
-            })
-            .then((data) => {
-                return data;
-            })
-            .catch(err => {
-                console.log(err);
-                // dispatch(uiFinishLoading());
-            });
-
-        return res;
-
-    }
-
+    console.log(formValues);
 
 
     return (
         <div className="pb-5 project create">
             <div className="project__header">
                 <div className="left">
-                    <h3> Abono a Cargo Extra </h3>
+                    <h3> Comisión </h3>
                 </div>
             </div>
 
@@ -237,51 +299,32 @@ export const PayExtracharge = () => {
                 )
             }
 
-            <div className="card my-2">
-                <div className="card__header">
-                    <img src="../assets/img/services.png" alt="" />
-                    <h4>Cargo extra</h4>
-                </div>
-                <div className="card__body">
-                    <div className="right">
-                        <div className="card__body__item">
-                            <span>Nombre del cargo</span>
-                            <p> {title} </p>
-                        </div>
-                        <div className="card__body__item">
-                            <span>Precio del cargo</span>
-                            <p> ${extraAmount.toLocaleString()} </p>
-                        </div>
-
-                    </div>
-                    <div className="left">
-
-
-
-                    </div>
-                </div>
-            </div>
-
             <div className="card edit mt-2">
-
-                <div className="card__header">
-                    <img src="../assets/img/payment.png" alt="" />
-                    <h4>Información del pago</h4>
-                </div>
                 <div className="card__body">
                     <div className="right">
 
-                        <div className={`card__body__item ${emptyFields.includes('amount') && 'error'}`}>
-                            <label htmlFor="amount">Cantidad del pago</label>
-                            <input autoFocus name="amount" type="number" autoComplete="off" value={amount} onChange={inputChange} />
+
+                        <div className="card__header">
+                            <img src="../assets/img/aval.png" alt="" />
+                            <h4>Comisión</h4>
                         </div>
+                        <div className={`card__body__item ${emptyFields.includes('payedTo') && 'error'}`}>
+                            <label htmlFor="payedTo">Asesor</label>
+                            <input className={`${hasChanged.includes('payedTo') && 'changed'}`} name="payedTo" type="text" autoComplete="off" onChange={inputChange} value={payedTo} />
+                        </div>
+                        <div className={`card__body__item ${emptyFields.includes('amount') && 'error'}`}>
+                            <label htmlFor="amount">Comisión</label>
+                            <input className={`${hasChanged.includes('amount') && 'changed'}`} name="amount" type="number" autoComplete="off" onChange={inputChange} value={amount} />
+                        </div>
+                        <div className={`card__body__item ${emptyFields.includes('payedAt') && 'error'}`}>
+                            <label htmlFor="payedAt">Fecha cuando fue pagada</label>
+                            <input className={`${hasChanged.includes('payedAt') && 'changed'}`} name="payedAt" type="date" autoComplete="off" onChange={inputChange} value={payedAt} />
+                        </div>
+
                     </div>
                     <div className="left">
 
-                        <div className={`card__body__item ${emptyFields.includes('date') && 'error'}`}>
-                            <label htmlFor="date">Fecha del pago</label>
-                            <input autoFocus name="date" type="date" autoComplete="off" value={date} onChange={inputChange} />
-                        </div>
+
 
                     </div>
 
@@ -294,10 +337,11 @@ export const PayExtracharge = () => {
                 <button className="cancel" onClick={cancel} >
                     Cancelar
                 </button>
-                <button className="next" onClick={pay}>
+                <button className="next" onClick={updateComissionInfo}>
                     Realizar Pago
                 </button>
             </div>
+
         </div>
     )
 }

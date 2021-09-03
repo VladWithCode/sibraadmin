@@ -5,20 +5,23 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { buyLotReset } from '../actions/payments';
 
-
 export const FloatingButtonSecondary = () => {
 
     const dispatch = useDispatch();
 
     const { iconName, type, projectId, lotId } = useSelector(state => state.secFloatingButton);
 
-    const link = type === redTypes.lotReserved ? `/proyectos/abonar/${projectId}/lote/${lotId}` : `/proyectos/comprar/${projectId}/lote/${lotId}`
+    const link = type === redTypes.lotReserved ? `/historial/abonar/${projectId}/lote/${lotId}` : `/proyectos/comprar/${projectId}/lote/${lotId}`
 
     useEffect(() => {
 
         dispatch(buyLotReset())
 
-    }, [dispatch])
+        // type === redTypes.lotReserved && (
+        //     dispatch((historyGetLot(lotId)))
+        // )
+
+    }, [dispatch, lotId, type])
 
     return (
 

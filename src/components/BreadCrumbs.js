@@ -34,7 +34,7 @@ export const BreadCrumbs = ({ type }) => {
                 <div className="breadcrumbs">
                     {
                         clients.map((e, index) => (
-                            index !== clients.length && (
+                            index !== clients.length - 1 && (
                                 <Link onClick={() => hanldeClick(e.link, redTypes.clients)} className="breadcrumbs__item" key={`client:${e.dispName}`} to={e.link} ><i>&gt;</i><span>{e.dispName}</span> </Link>
                             )
                         ))

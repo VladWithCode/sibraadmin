@@ -28,6 +28,9 @@ export const ModalConfirm = () => {
             dispatch(redirectSet(redTypes.clients, `/clientes`));
             dispatch(clientSet({}));
         }
+        if (type === redTypes.history) {
+            dispatch(redirectSet(redTypes.history, `/historial`));
+        }
 
         if (resetClient) {
             dispatch(modalReset());

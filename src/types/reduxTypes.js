@@ -92,7 +92,14 @@ export const redTypes = {
 
     manzanasSet: '[Manzanas] Set',
 
+    // HISTORY ACTIONS
+    historySetLot: '[History] Set Lot',
+    historySetRecordInfo: '[History] Set RecordInfo',
+    historySetPayment: '[History] Set Payment',
+    historySetExtraPayment: '[History] Set ExtraPayment',
+
     projects: 'projects',
+    payments: 'payments',
     project: 'project',
     client: 'client',
     clientDelete: 'clientDelete',

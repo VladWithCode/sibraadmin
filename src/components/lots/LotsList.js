@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { redirectSet } from '../../actions/redirect';
-import { redTypes } from '../../types/reduxTypes';
 import { setLot } from '../../actions/consults';
 
 export const LotsList = React.memo(({ projectId, searchParams }) => {

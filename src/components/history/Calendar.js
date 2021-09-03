@@ -17,45 +17,34 @@ export const CalendarComponent = () => {
 
     const { records } = useSelector(state => state);
 
-    const [events, setEvents] = useState(
-        records.map((record) => ({
-            lotId: record.lot,
-            projectId: record.projectId,
-            title: record.customer.fullName,
-            start: moment().toDate(),
-            end: moment().toDate(),
-            bgcolor: '#fafafa',
-            isLate: record.paymentInfo.isLate,
-            hasProrogation: record.paymentInfo.isLate,
-            allDay: true,
-            phoneNumber: record.customer.phoneNumber
-        }))
-    )
+    const [events, setEvents] = useState([]);
+
     useEffect(() => {
 
         setEvents(
-            records.map((record) => ({
-                lotId: record.lot,
-                projectId: record.project,
-                title: record.customer.fullName,
-                start: moment().toDate(),
-                end: moment().toDate(),
-                bgcolor: '#fafafa',
-                isLate: record.paymentInfo.isLate,
-                hasProrogation: record.paymentInfo.isLate,
-                allDay: true,
-                phoneNumber: record.customer.phoneNumber,
-                event: 'Pago del lote'
-            }))
+            records.map((record) => {
+                if (record.state === 'reserved' || record.state === 'prereserved') {
+                    return ({
+                        lotId: record.lot,
+                        projectId: record.project,
+                        title: record.customer.fullName,
+                        start: moment(record.paymentInfo.nextPaymentDate).toDate(),
+                        end: moment(record.paymentInfo.nextPaymentDate).toDate(),
+                        bgcolor: '#fafafa',
+                        isLate: record.paymentInfo.isLate,
+                        hasProrogation: record.paymentInfo.isLate,
+                        allDay: true,
+                        phoneNumber: record.customer.phoneNumber,
+                        event: 'Pago del lote'
+                    })
+                }
+                return null
+            })
         )
 
     }, [records])
 
-    console.log(records);
-
     const eventStyleGetter = ({ event, isLate, hasProrogation, isSelected }) => {
-        // console.log(event, start, end, isSelected);
-
 
         const style = {
             backgroundColor: isLate ? 'tomato' : hasProrogation ? '#FF9800' : 'white',
@@ -73,12 +62,14 @@ export const CalendarComponent = () => {
         console.log('holi');
     }
 
+
+
     const onViewChanged = e => {
         setLastView(e);
         localStorage.setItem('lastView', e);
     }
 
-    // console.log(moment("2021-08-02T19:14:28.846Z").toDate());
+
 
     return (
 
@@ -87,7 +78,6 @@ export const CalendarComponent = () => {
             <div className="app-screen__title projects-screen-top">
                 <h1 className="app-screen__title" >Historiales</h1>
             </div>
-
             <div className="history">
                 <div className="card calendar">
                     <Calendar

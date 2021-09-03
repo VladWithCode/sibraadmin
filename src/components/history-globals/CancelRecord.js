@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom';
 import { floatingButtonSet } from '../../actions/floatingButton';
 import { getLot } from '../../actions/lot';
 import { modalEnable, modalUpdate } from '../../actions/modal';
@@ -10,104 +10,70 @@ import { redTypes } from '../../types/reduxTypes';
 import { staticURL } from '../../url';
 import { ClientShort } from '../clients/ClientShort';
 
-export const PayExtracharge = () => {
+export const CancelRecord = () => {
 
     const dispatch = useDispatch();
-    const { extraChargeId, recordId } = useParams();
+    const { recordId } = useParams();
 
-    const { historyActions: { lot: currentLot }, clients, projects } = useSelector(state => state);
+    const { historyActions: { lot: currentLot }, clients } = useSelector(state => state);
 
     const { area, isCorner, lotNumber, measures, manzana, price, record } = currentLot;
 
     const currentClient = clients.find(c => c._id === record?.customer);
 
-    const { extraCharges } = projects.find(p => p._id === record.project);
-
-    const currentExtraCharges = extraCharges.find(e => e._id === extraChargeId);
-
-    const { amount: extraAmount, title } = currentExtraCharges;
 
     useEffect(() => {
 
         dispatch(floatingButtonSet('pencil', redTypes.projectCreate));
-        dispatch(redirectSet(redTypes.history, `/historial/extras/abonar/${extraChargeId}/${recordId}`));
+        dispatch(redirectSet(redTypes.history, `/historial/cancelar/${recordId}`));
 
-    }, [dispatch, extraChargeId, recordId]);
+    }, [dispatch, recordId]);
 
     const [emptyFields, setEmptyFields] = useState([]);
 
     const [formValues, setFormValues] = useState({
-        amount: '',
-        date: ''
+        refundedAmount: '',
+        type: '',
+        markAsNextPayment: false
     })
 
-    const { amount, date } = formValues;
+    const { refundedAmount, cancelledAt, reason } = formValues;
 
     const inputChange = e => {
         checkEmptyField(e);
-        setFormValues({ ...formValues, [e.target.name]: e.target.value });
+        setFormValues({ ...formValues, refundedAmount: e.target.value });
     }
 
-    const checkEmptyField = e => {
+    const onSubmit = async () => {
 
-        if (e.target.value?.trim().length > 0) {
+        if (+refundedAmount === 0) {
             const tempEmptyFields = emptyFields;
 
-            if (tempEmptyFields.includes(e.target.name)) {
-                const index = tempEmptyFields.indexOf(e.target.name);
-
-                tempEmptyFields.splice(index, 1);
-            }
-
-            setEmptyFields(tempEmptyFields);
-        }
-
-    }
-
-
-
-    const cancel = () => {
-
-        const modalInfo = {
-            title: 'Cancelar pago de cargo extra',
-            text: null,
-            link: `/historial`,
-            okMsg: 'Sí',
-            closeMsg: 'No',
-            type: redTypes.history
-        }
-
-        dispatch(modalUpdate(modalInfo));
-        dispatch(modalEnable());
-    }
-
-    const pay = async () => {
-
-        if (+amount === 0) {
-            const tempEmptyFields = emptyFields;
-
-            if (tempEmptyFields.includes('amount')) {
-                const index = tempEmptyFields.indexOf('amount');
+            if (tempEmptyFields.includes('refundedAmount')) {
+                const index = tempEmptyFields.indexOf('refundedAmount');
 
                 tempEmptyFields.splice(index, 1);
             } else {
-                tempEmptyFields.push('amount');
+                tempEmptyFields.push('refundedAmount');
             }
 
             setEmptyFields(tempEmptyFields);
-            dispatch(setTempError('Debe ingresar una cantidad de pago'));
+            dispatch(setTempError('Debe ingresar una cantidad que se le reembolsó al cliente'));
 
             return;
         }
 
         const data = {
-            amount: +amount,
-            date: date || null
+            refundedAmount: +refundedAmount,
+            cancelledAt: cancelledAt || null,
+            reason: reason || null
         }
 
         dispatch(uiStartLoading());
 
-        const res = await postPayment(data);
+        console.log('esta es la data: ', data);
+
+        const res = await cancelRecord(data);
 
         dispatch(uiFinishLoading());
 
@@ -116,8 +82,8 @@ export const PayExtracharge = () => {
         if (res) {
             if (res.status === 'OK') {
                 const modalInfo = {
-                    title: `Pago realizado con éxito`,
-                    text: `pago por la cantidad de $${amount}`,
+                    title: `Historial cancelado con exito`,
+                    text: `Se ha cancelado el historial`,
                     link: `/historial`,
                     okMsg: 'Continuar',
                     closeMsg: null,
@@ -136,9 +102,9 @@ export const PayExtracharge = () => {
 
     }
 
-    const postPayment = data => {
+    const cancelRecord = data => {
 
-        const url = `${staticURL}/records/${record._id}/charge/${extraChargeId}/pay`;
+        const url = `${staticURL}/records/${recordId}/cancel`;
 
         console.log('haciendo post jejeje', url);
 
@@ -164,13 +130,42 @@ export const PayExtracharge = () => {
 
     }
 
+    const checkEmptyField = e => {
 
+        if (e.target.value?.trim().length > 0) {
+            const tempEmptyFields = emptyFields;
+
+            if (tempEmptyFields.includes(e.target.name)) {
+                const index = tempEmptyFields.indexOf(e.target.name);
+
+                tempEmptyFields.splice(index, 1);
+            }
+
+            setEmptyFields(tempEmptyFields);
+        }
+
+    }
+
+    const cancel = () => {
+
+        const modalInfo = {
+            title: 'Abortar',
+            text: '¿Desea abortar la cancelación del historial?',
+            link: `/historial`,
+            okMsg: 'Sí',
+            closeMsg: 'No',
+            type: redTypes.history
+        }
+
+        dispatch(modalUpdate(modalInfo));
+        dispatch(modalEnable());
+    }
 
     return (
         <div className="pb-5 project create">
             <div className="project__header">
                 <div className="left">
-                    <h3> Abono a Cargo Extra </h3>
+                    <h3> Cancelar historial </h3>
                 </div>
             </div>
 
@@ -237,51 +232,43 @@ export const PayExtracharge = () => {
                 )
             }
 
-            <div className="card my-2">
-                <div className="card__header">
-                    <img src="../assets/img/services.png" alt="" />
-                    <h4>Cargo extra</h4>
-                </div>
-                <div className="card__body">
-                    <div className="right">
-                        <div className="card__body__item">
-                            <span>Nombre del cargo</span>
-                            <p> {title} </p>
-                        </div>
-                        <div className="card__body__item">
-                            <span>Precio del cargo</span>
-                            <p> ${extraAmount.toLocaleString()} </p>
-                        </div>
-
-                    </div>
-                    <div className="left">
-
-
-
-                    </div>
-                </div>
-            </div>
-
             <div className="card edit mt-2">
 
                 <div className="card__header">
                     <img src="../assets/img/payment.png" alt="" />
-                    <h4>Información del pago</h4>
+                    <h4>Cancelación de historial</h4>
                 </div>
                 <div className="card__body">
                     <div className="right">
 
-                        <div className={`card__body__item ${emptyFields.includes('amount') && 'error'}`}>
-                            <label htmlFor="amount">Cantidad del pago</label>
-                            <input autoFocus name="amount" type="number" autoComplete="off" value={amount} onChange={inputChange} />
+                        <div className={`card__body__item ${emptyFields.includes('refundedAmount') && 'error'}`}>
+                            <label htmlFor="refundedAmount">Cantidad devuelta al cliente
+                            </label>
+                            <input autoFocus name="refundedAmount" type="number" autoComplete="off" value={refundedAmount} onChange={inputChange} />
                         </div>
+
+
+
+                        <div className={`card__body__item ${emptyFields.includes('cancelledAt') && 'error'}`}>
+                            <label htmlFor="cancelledAt">Fecha de cancelación
+                            </label>
+                            <input autoFocus name="cancelledAt" type="date" autoComplete="off" value={cancelledAt} onChange={inputChange} />
+                        </div>
+
+
+                        <div className={`card__body__item ${emptyFields.includes('reason') && 'error'}`}>
+                            <label htmlFor="reason">motivo de cancelación
+                            </label>
+                            <input autoFocus name="reason" type="text" autoComplete="off" value={reason} onChange={inputChange} />
+                        </div>
+
+
+
+
                     </div>
                     <div className="left">
 
-                        <div className={`card__body__item ${emptyFields.includes('date') && 'error'}`}>
-                            <label htmlFor="date">Fecha del pago</label>
-                            <input autoFocus name="date" type="date" autoComplete="off" value={date} onChange={inputChange} />
-                        </div>
+
 
                     </div>
 
@@ -294,10 +281,11 @@ export const PayExtracharge = () => {
                 <button className="cancel" onClick={cancel} >
                     Cancelar
                 </button>
-                <button className="next" onClick={pay}>
-                    Realizar Pago
+                <button className="next" onClick={onSubmit}>
+                    Confirmar Cancelación
                 </button>
             </div>
+
         </div>
     )
 }

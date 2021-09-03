@@ -133,14 +133,17 @@ export const BuyLot = () => {
             customerId: extraInfo.client,
             projectId,
             lotId,
-            state
+            state,
+            paymentInfo: {
+                depositAmount: +depositAmount
+            }
         }
 
         if (payedTo.length > 1) {
             data.commissionInfo = {
-                payedTo,
+                payedTo: payedTo,
                 amount: +amount,
-                payedAt
+                payedAt: payedAt || null
             }
         }
 
@@ -148,14 +151,16 @@ export const BuyLot = () => {
 
             data.paymentInfo = {
                 lotPrice,
-                reservationDate
+                reservationDate,
+                depositAmount: +depositAmount
             }
 
         } else if (extraInfo.preReserved) {
             data.paymentInfo = {
                 preReservationAmount: +preReservationAmount,
                 preReservationDate,
-                lotPrice: +lotPrice
+                lotPrice: +lotPrice,
+                depositAmount: +depositAmount
             }
 
         } else if (extraInfo.history) {
@@ -220,7 +225,7 @@ export const BuyLot = () => {
 
         console.log(data);
 
-        if (res.status === 'OK') {
+        if (res?.status === 'OK') {
 
             const modalInfo = {
                 title: `Compra registrada con éxito con éxito`,
@@ -493,15 +498,38 @@ export const BuyLot = () => {
                                                     <label >Tipo de Pagos</label>
                                                     <div className="options">
 
-                                                        <input type="radio" name="lapseType" onClick={() => onExtraInfoChange({ lapseType: 'mensual' })} id="mensual" />
-                                                        <label htmlFor="mensual">
-                                                            Mensual
-                                                        </label>
+                                                        {
+                                                            extraInfo.lapseType === 'mensual' ?
+                                                                (
+                                                                    <>
+                                                                        <input type="radio" name="lapseType" onClick={() => onExtraInfoChange({ lapseType: 'mensual' })} id="mensual" defaultChecked />
+                                                                        <label htmlFor="mensual">
+                                                                            Mensual
+                                                                        </label>
 
-                                                        <input type="radio" name="lapseType" onClick={() => onExtraInfoChange({ lapseType: 'semanal' })} id="semanal" />
-                                                        <label htmlFor="semanal">
-                                                            Semanal
-                                                        </label>
+                                                                        <input type="radio" name="lapseType" onClick={() => onExtraInfoChange({ lapseType: 'semanal' })} id="semanal" />
+                                                                        <label htmlFor="semanal">
+                                                                            Semanal
+                                                                        </label>
+                                                                    </>
+                                                                )
+                                                                :
+                                                                (
+                                                                    <>
+                                                                        <input type="radio" name="lapseType" onClick={() => onExtraInfoChange({ lapseType: 'mensual' })} id="mensual" />
+                                                                        <label htmlFor="mensual">
+                                                                            Mensual
+                                                                        </label>
+
+                                                                        <input type="radio" name="lapseType" onClick={() => onExtraInfoChange({ lapseType: 'semanal' })} id="semanal" defaultChecked />
+                                                                        <label htmlFor="semanal">
+                                                                            Semanal
+                                                                        </label>
+                                                                    </>
+                                                                )
+                                                        }
+
+
                                                     </div>
                                                 </div>
 
@@ -511,6 +539,8 @@ export const BuyLot = () => {
                                                     {
                                                         extraInfo.lapseType === 'semanal' ? (
                                                             <select onChange={e => onExtraInfoChange({ paymentsDate: e.target.value })} name="payDay" id="payDay">
+
+                                                                <option value=""></option>
 
                                                                 {
                                                                     days.map(day => (
