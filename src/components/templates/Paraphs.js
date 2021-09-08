@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
-import { templatesDeleteParaph } from '../../actions/templates';
+import { templatesDeleteParaph, templatesSetParaph } from '../../actions/templates';
 
 export const Paraphs = ({ paraph, index, templateId }) => {
 
@@ -13,6 +13,13 @@ export const Paraphs = ({ paraph, index, templateId }) => {
     const [active, setActive] = useState(true);
 
     const inputChange = (e) => {
+
+        dispatch(templatesSetParaph({
+            content: e.target.value,
+            paraphId: paraph._id,
+            templateId
+        }));
+
         setParaphValues({
             ...paraphValues,
             content: e.target.value

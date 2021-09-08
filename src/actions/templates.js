@@ -55,3 +55,12 @@ export const templatesDeleteParaph = (templateId, paraphId) => ({
 export const templateUpdate = () => {
     console.log('Actualizar template');
 }
+
+export const templatesSetParaph = obj => {
+    console.log(obj);
+
+    return {
+        type: redTypes.templatesSetParaph,
+        payload: obj
+    }
+}

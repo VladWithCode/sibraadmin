@@ -110,6 +110,7 @@ export const redTypes = {
     templatesGet: '[Templates] Get',
     templateUpdate: '[Template] Update',
     templatesSetView: '[Templates] Set View',
+    templatesSetParaph: '[Templates] Set Paraph',
     templatesEditParaph: '[Templates] Edit Paraph',
     templatesAddParaph: '[Templates] Add Paraph',
     templatesDeleteParaph: '[Templates] Delete Paraph',

@@ -132,6 +132,16 @@ export const templatesReducer = (state = initialState, action) => {
                 ...state
             }
 
+        case redTypes.templatesSetParaph:
+
+            let currentTemplat = state.currentTemplates.find(t => t._id === action.payload.templateId);
+
+            currentTemplat.paraphs.find(p => p._id === action.payload.paraphId).content = action.payload.content
+
+            return {
+                ...state
+            }
+
         default:
             return state;
     }
