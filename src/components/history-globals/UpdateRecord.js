@@ -5,9 +5,7 @@ import { floatingButtonSet } from '../../actions/floatingButton';
 import { historyPostUpdate, historySetRecordInfo } from '../../actions/historyActions';
 import { modalEnable, modalUpdate } from '../../actions/modal';
 import { redirectSet } from '../../actions/redirect';
-import { setTempError, uiFinishLoading, uiStartLoading } from '../../actions/ui';
 import { redTypes } from '../../types/reduxTypes';
-import { staticURL } from '../../url';
 import { ClientShort } from '../clients/ClientShort';
 import { ExtraPaymentsEdit } from './ExtraPaymentsEdit';
 import { PaymentsEdit } from './PaymentsEdit';
@@ -68,82 +66,6 @@ export const UpdateRecord = () => {
     }, [dispatch, recordId, record]);
 
     console.log('estos son los formValues: ', currentRecord);
-
-    const onSubmit = async () => {
-
-
-
-        // if (emptyFields.length > 0) {
-
-        //     dispatch(setTempError('No puede haber campos vacíos'));
-
-        //     return;
-        // }
-
-        // const data = {
-        //     lapseToPay: +lapseToPay
-        // }
-
-        // dispatch(uiStartLoading());
-
-        // console.log('esta es la data: ', data);
-
-        // const res = await updateRecord(data);
-
-        // dispatch(uiFinishLoading());
-
-        // console.log(res);
-
-        // if (res) {
-        //     if (res.status === 'OK') {
-        //         const modalInfo = {
-        //             title: `Historial cancelado con exito`,
-        //             text: `Se ha cancelado el historial`,
-        //             link: `/historial`,
-        //             okMsg: 'Continuar',
-        //             closeMsg: null,
-        //             type: redTypes.history
-        //         }
-
-        //         dispatch(modalUpdate(modalInfo));
-        //         dispatch(modalEnable());
-
-        //     } else {
-        //         dispatch(setTempError('Hubo un problema con la base de datos'));
-
-        //         return;
-        //     }
-        // }
-
-    }
-
-    const updateRecord = data => {
-
-        const url = `${staticURL}/records/${recordId}/cancel`;
-
-        console.log('haciendo post jejeje', url);
-
-        const res = fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-            .then(response => {
-                return response.json();
-            })
-            .then((data) => {
-                return data;
-            })
-            .catch(err => {
-                console.log(err);
-                // dispatch(uiFinishLoading());
-            });
-
-        return res;
-
-    }
 
     const checkEmptyField = e => {
 

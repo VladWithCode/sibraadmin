@@ -10,7 +10,7 @@ import { staticURLDocs } from '../../url';
 import { getLot } from '../../actions/lot';
 import { floatingButtonSet, secondaryFloatingButtonSet } from '../../actions/floatingButton';
 import { FloatingButtonSecondary } from '../FloatingButtonSecondary';
-import { History } from '../history-globals/History';
+import { Record } from '../history-globals/Record';
 import { PriceHistory } from './PriceHistory';
 import { ClientShort } from '../clients/ClientShort';
 
@@ -220,7 +220,7 @@ export const Lot = () => {
                                 </div>
                             </div>
 
-                            <History key={currentLot?.record._id} record={currentLot?.record} lotId={lotId} />
+                            <Record key={currentLot?.record._id} record={currentLot?.record} lotId={lotId} />
 
                         </>
                     )

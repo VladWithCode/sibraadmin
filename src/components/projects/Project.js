@@ -24,7 +24,7 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
 
     const project = projects.find(({ _id }) => _id === projectId);
 
-    const { name, _id, associationName, totalLots, description, isFracc, reservedLots, liquidatedLots, deliveredLots, lotTypes, availableServices, manzanas, files, extraCharges } = project;
+    const { name, _id, associationName, totalLots, description, isFracc, reservedLots, liquidatedLots, deliveredLots, lotTypes, availableServices, manzanas, files, extraCharges, notary, propertyScripture, propertyBook, scriptureDate, constitutiveScripture, constitutiveVolume } = project;
 
     const [searchParams, setSearchParams] = useState({
         searchOrder: '',
@@ -114,7 +114,7 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
                         <h4>Información General del Proyecto</h4>
                     </div>
                     <div className="card__body">
-                        <div className="right">
+                        <div className="left">
                             <div className="card__body__item">
                                 <span>Asociación</span>
                                 <p> {associationName} </p>
@@ -127,8 +127,32 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
                                 <span>Descripción del Proyecto</span>
                                 <p> {description} </p>
                             </div>
+                            <div className="card__body__item">
+                                <span>Notario</span>
+                                <p> {notary} </p>
+                            </div>
+                            <div className="card__body__item">
+                                <span>número de escritura</span>
+                                <p> {propertyScripture} </p>
+                            </div>
+                            <div className="card__body__item">
+                                <span>número de libro</span>
+                                <p> {propertyBook} </p>
+                            </div>
+                            <div className="card__body__item">
+                                <span>fecha de escrituración</span>
+                                <p> {scriptureDate} </p>
+                            </div>
+                            <div className="card__body__item">
+                                <span>escritura de acta constitutiva</span>
+                                <p> {constitutiveScripture} </p>
+                            </div>
+                            <div className="card__body__item">
+                                <span>volumen de acta constitutiva</span>
+                                <p> {constitutiveVolume} </p>
+                            </div>
                         </div>
-                        <div className="left">
+                        <div className="right">
                             <div className="card__body__item">
                                 <span>Lotes totales</span>
                                 <p> {totalLots} </p>

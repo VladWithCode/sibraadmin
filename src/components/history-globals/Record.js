@@ -6,11 +6,11 @@ import { CommissionInfo } from './CommisionInfo';
 import { ExtraCharge } from './ExtraCharge';
 import { Payment } from './Payment';
 
-export const History = ({ record }) => {
+export const Record = ({ record, payment }) => {
 
     const dispatch = useDispatch();
 
-    const { lot: lotId, lotNumber, manzana, lotArea, payments, extraCharges, paymentInfo: { lotPrice, lotAmountDue, amountPayed, lotAmountPayed, lapseLeft, lapseType, minimumPaymentAmount, lapseToPay } } = record;
+    const { lot: lotId, lotNumber, manzana, lotArea, payments, extraCharges, paymentInfo: { lotPrice, lotAmountDue, lotAmountPayed, lapseLeft, lapseType, minimumPaymentAmount, lapseToPay } } = record;
 
     const state = record.state === 'available' ? 'Disponible' : record.state === 'delivered' ? 'Entregado' : record.state === 'reserved' ? 'Comprado' : record.state === 'lotpayed' ? 'Pagado' : 'Liquidado';
 
@@ -31,9 +31,8 @@ export const History = ({ record }) => {
     }
 
     const updateLot = () => {
-        dispatch(historyGetLot(lotId));
+        dispatch(historyGetLot(record.lot));
         dispatch(historySetRecordInfo(record));
-        console.log('este fue el record: ', record);
     }
 
     return (
@@ -44,14 +43,26 @@ export const History = ({ record }) => {
                 {
                     record.state !== 'cancelled' ? (
                         <div className="links">
-                            <Link onClick={updateLot} to={`/historial/editar/${record._id}`}
-                                className="edit">
-                                editar
-                            </Link>
-                            <Link onClick={updateLot} to={`/historial/cancelar/${record._id}`}
-                                className="danger">
-                                cancelar venta
-                            </Link>
+                            {
+                                !payment && (
+                                    <>
+                                        {
+                                            record.state !== 'liquidated' ? (
+                                                <Link onClick={updateLot} to={`/historial/editar/${record._id}`}
+                                                    className="edit">
+                                                    editar
+                                                </Link>
+                                            ) : (
+                                                <p className="edit">Entregar</p>
+                                            )
+                                        }
+                                        <Link onClick={updateLot} to={`/historial/cancelar/${record._id}`}
+                                            className="danger">
+                                            cancelar venta
+                                        </Link>
+                                    </>
+                                )
+                            }
                         </div>
                     )
                         :
@@ -64,6 +75,10 @@ export const History = ({ record }) => {
             </div>
             <div className="card__body">
                 <div className="right">
+                    <div className="card__body__item">
+                        <span>Estado del historial</span>
+                        <p> {state} </p>
+                    </div>
                     <div className="card__body__item">
                         <span>número de manzana</span>
                         <p> {manzana} </p>
@@ -98,21 +113,32 @@ export const History = ({ record }) => {
                                     <span>pagos restantes</span>
                                     <p> {lapseLeft} </p>
                                 </div>
+                                <div className="card__body__item">
+                                    <span>tipo de pagos</span>
+                                    <p> {lapseType} </p>
+                                </div>
+
+
+                                <div className="card__body__item">
+                                    <span>número de pagos</span>
+                                    <p> {lapseToPay} </p>
+                                </div>
+
+
+                                <div className="card__body__item">
+                                    <span>cantidad por pago</span>
+                                    <p> ${minimumPaymentAmount.toLocaleString()} </p>
+                                </div>
                             </>
                         )
                     }
-                    <div className="card__body__item">
-                        <span>tipo de pagos</span>
-                        <p> {lapseType} </p>
-                    </div>
-                    <div className="card__body__item">
-                        <span>número de pagos</span>
-                        <p> {lapseToPay} </p>
-                    </div>
-                    <div className="card__body__item">
-                        <span>cantidad por pago</span>
-                        <p> ${minimumPaymentAmount.toLocaleString()} </p>
-                    </div>
+
+
+
+
+
+
+
                 </div>
 
                 <div className="card__header pointer mt-3" onClick={() => switchActive('payments')}>
@@ -167,9 +193,11 @@ export const History = ({ record }) => {
                             )
                             :
                             (
-                                <Link onClick={updateLot} to={`/historial/comision/editar/${record._id}`} className={`commission`}>
-                                    Registrar
-                                </Link>
+                                !payment && (
+                                    <Link onClick={updateLot} to={`/historial/comision/editar/${record._id}`} className={`commission`}>
+                                        Editar
+                                    </Link>
+                                )
                             )
                     }
                 </div>
@@ -182,9 +210,13 @@ export const History = ({ record }) => {
                                 <div className="right">
                                     <CommissionInfo recordId={record._id} commissionInfo={record.commissionInfo} />
                                 </div>
-                                <Link onClick={updateLot} to={`/historial/comision/editar/${record._id}`} className={`commission`}>
-                                    Editar
-                                </Link>
+                                {
+                                    !payment && (
+                                        <Link onClick={updateLot} to={`/historial/comision/editar/${record._id}`} className={`commission`}>
+                                            Editar
+                                        </Link>
+                                    )
+                                }
                             </div>
 
                         )

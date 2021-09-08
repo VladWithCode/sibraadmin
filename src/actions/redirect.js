@@ -27,6 +27,14 @@ export const redirectSet = (type, link) => {
                 }
             }
 
+        case redTypes.templates:
+            return {
+                type: redTypes.templates,
+                payload: {
+                    templates: link
+                }
+            }
+
         case redTypes.settings:
             return {
                 type: redTypes.redirectSettings,
@@ -36,6 +44,6 @@ export const redirectSet = (type, link) => {
             }
 
         default:
-            return { };
+            return {};
     }
 }

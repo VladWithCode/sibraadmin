@@ -9,7 +9,7 @@ import { floatingButtonSet } from '../../actions/floatingButton';
 import { modalUpdate } from '../../actions/modal';
 import { getClient } from '../../actions/consults';
 import { staticURLDocs } from '../../url';
-import { History } from '../history-globals/History';
+import { Record } from '../history-globals/Record';
 
 export const Client = () => {
 
@@ -369,7 +369,7 @@ export const Client = () => {
                             </div>
                             {
                                 activeRecords.map((record) => (
-                                    <History key={record._id} record={record} lotId={record.lot} />
+                                    <Record key={record._id} record={record} lotId={record.lot} />
                                 ))
                             }
                         </>

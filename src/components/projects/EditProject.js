@@ -29,12 +29,18 @@ export const EditProject = () => {
     const currentProject = {
         name: project?.name,
         description: project?.description,
-        associationName: project?.associationName
+        associationName: project?.associationName,
+        notary: project?.notary,
+        propertyScripture: project?.propertyScripture,
+        propertyBook: project?.propertyBook,
+        scriptureDate: project?.scriptureDate,
+        constitutiveScripture: project?.constitutiveScripture,
+        constitutiveVolume: project?.constitutiveVolume
     }
 
     const [formFields, handleInputChange] = useForm(currentProject);
 
-    const { name, description, associationName } = formFields;
+    const { name, description, associationName, notary, propertyScripture, propertyBook, scriptureDate, constitutiveScripture, constitutiveVolume } = formFields;
 
 
     const [service, setService] = useState('');
@@ -123,7 +129,13 @@ export const EditProject = () => {
                     name,
                     associationName,
                     description,
-                    availableServices
+                    availableServices,
+                    notary,
+                    propertyScripture,
+                    propertyBook,
+                    scriptureDate,
+                    constitutiveScripture,
+                    constitutiveVolume
                 }
             }
 
@@ -365,7 +377,7 @@ export const EditProject = () => {
                     <h4>Información General del Proyecto</h4>
                 </div>
                 <div className="card__body">
-                    <form className="right">
+                    <div className="right">
                         <div className={`card__body__item ${emptyFields.includes('name') && 'error'} ${hasChanged.includes('name') && 'changed'}`}>
                             <label htmlFor="name">Nombre del Proyecto</label>
                             <input className={`card__body__item ${hasChanged.includes('name') && 'changed'}`} autoFocus name="name" onChange={(e) => { inputChange(e) }} value={name} type="text" autoComplete="off" />
@@ -379,9 +391,33 @@ export const EditProject = () => {
                             <textarea className={`card__body__item ${hasChanged.includes('description') && 'changed'}`} name="description" value={description} onChange={(e) => { inputChange(e) }} ></textarea>
                         </div>
 
-                    </form>
+                    </div>
                     <div className="left">
 
+                        <div className={`card__body__item ${emptyFields.includes('notary') && 'error'} ${hasChanged.includes('notary') && 'changed'}`}>
+                            <label htmlFor="notary">notario</label>
+                            <input className={`card__body__item ${hasChanged.includes('notary') && 'changed'}`} autoFocus name="notary" onChange={(e) => { inputChange(e) }} value={notary} type="text" autoComplete="off" />
+                        </div>
+                        <div className={`card__body__item ${emptyFields.includes('propertyScripture') && 'error'} ${hasChanged.includes('propertyScripture') && 'changed'}`}>
+                            <label htmlFor="propertyScripture">número de escritura</label>
+                            <input className={`card__body__item ${hasChanged.includes('propertyScripture') && 'changed'}`} autoFocus name="propertyScripture" onChange={(e) => { inputChange(e) }} value={propertyScripture} type="text" autoComplete="off" />
+                        </div>
+                        <div className={`card__body__item ${emptyFields.includes('propertyBook') && 'error'} ${hasChanged.includes('propertyBook') && 'changed'}`}>
+                            <label htmlFor="propertyBook">número de libro</label>
+                            <input className={`card__body__item ${hasChanged.includes('propertyBook') && 'changed'}`} autoFocus name="propertyBook" onChange={(e) => { inputChange(e) }} value={propertyBook} type="text" autoComplete="off" />
+                        </div>
+                        <div className={`card__body__item ${emptyFields.includes('scriptureDate') && 'error'} ${hasChanged.includes('scriptureDate') && 'changed'}`}>
+                            <label htmlFor="scriptureDate">fecha de escrituración</label>
+                            <input className={`card__body__item ${hasChanged.includes('scriptureDate') && 'changed'}`} autoFocus name="scriptureDate" onChange={(e) => { inputChange(e) }} value={scriptureDate} type="text" autoComplete="off" />
+                        </div>
+                        <div className={`card__body__item ${emptyFields.includes('constitutiveScripture') && 'error'} ${hasChanged.includes('constitutiveScripture') && 'changed'}`}>
+                            <label htmlFor="constitutiveScripture">escritura de acta constitutiva</label>
+                            <input className={`card__body__item ${hasChanged.includes('constitutiveScripture') && 'changed'}`} autoFocus name="constitutiveScripture" onChange={(e) => { inputChange(e) }} value={constitutiveScripture} type="text" autoComplete="off" />
+                        </div>
+                        <div className={`card__body__item ${emptyFields.includes('constitutiveVolume') && 'error'} ${hasChanged.includes('constitutiveVolume') && 'changed'}`}>
+                            <label htmlFor="constitutiveVolume">volumen de acta constitutiva</label>
+                            <input className={`card__body__item ${hasChanged.includes('constitutiveVolume') && 'changed'}`} autoFocus name="constitutiveVolume" onChange={(e) => { inputChange(e) }} value={constitutiveVolume} type="text" autoComplete="off" />
+                        </div>
 
 
                     </div>

@@ -1,24 +1,23 @@
 import React from 'react'
 
+const dateOptions = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+}
+
 export const Payment = ({ payment, index }) => {
 
     const { date, payedAt, amount, type, wasLate, ogPaymentDate, hadProrogation } = payment;
 
     const displayType = type === 'preReservation' ? 'Pre apartado' : type === 'payment' ? 'Abono' : type === 'deposit' ? 'Enganche' : 'Liquidación';
 
-    const dateOptions = {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    }
-
     const dispDate = new Date(payedAt ? payedAt : date).toLocaleDateString('es-MX', dateOptions);
     const state = hadProrogation ? 'en prórroga' : wasLate ? 'retardado' : 'en tiempo';
     const stateClass = hadProrogation ? 'warning' : wasLate ? 'danger' : 'success';
 
     return (
-
 
         <div className={`left ${index > 1 ? 'mt-5' : 'mt-2'} `}>
 

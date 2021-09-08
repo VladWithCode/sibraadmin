@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { floatingButtonSet } from '../../actions/floatingButton';
+import { historyGetLot } from '../../actions/historyActions';
 import { getLot } from '../../actions/lot';
 import { modalEnable, modalUpdate } from '../../actions/modal';
 import { redirectSet } from '../../actions/redirect';
@@ -9,6 +10,16 @@ import { setTempError, uiFinishLoading, uiStartLoading } from '../../actions/ui'
 import { redTypes } from '../../types/reduxTypes';
 import { staticURL } from '../../url';
 import { ClientShort } from '../clients/ClientShort';
+import { Record } from '../history-globals/Record';
+
+
+const dateOptions = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+}
+
 
 export const Payment = () => {
 
@@ -17,15 +28,18 @@ export const Payment = () => {
 
     const { historyActions: { lot: currentLot }, clients } = useSelector(state => state);
 
-    const { area, isCorner, lotNumber, measures, manzana, price, record } = currentLot;
+    const { record } = currentLot;
 
     const currentClient = clients.find(c => c._id === record?.customer);
+
+    const [prorogation, setProrogation] = useState();
 
 
     useEffect(() => {
 
         dispatch(floatingButtonSet('pencil', redTypes.projectCreate));
         dispatch(redirectSet(redTypes.history, `/historial/abonar/${projectId}/lote/${lotId}`));
+        dispatch(historyGetLot(lotId));
 
     }, [dispatch, projectId, lotId]);
 
@@ -34,14 +48,15 @@ export const Payment = () => {
     const [formValues, setFormValues] = useState({
         amount: '',
         type: '',
-        markAsNextPayment: false
+        markAsNextPayment: false,
+        prorogateTo: ''
     })
 
-    const { amount, markedAsNextPayment } = formValues;
+    const { amount, markedAsNextPayment, prorogateTo } = formValues;
 
     const inputChange = e => {
         checkEmptyField(e);
-        setFormValues({ ...formValues, amount: e.target.value });
+        setFormValues({ ...formValues, [e.target.name]: e.target.value });
     }
 
     const pay = async () => {
@@ -129,6 +144,81 @@ export const Payment = () => {
 
     }
 
+    const postProrogation = async () => {
+
+        if (prorogateTo === '') {
+            const tempEmptyFields = emptyFields;
+
+            if (tempEmptyFields.includes('prorogateTo')) {
+                const index = tempEmptyFields.indexOf('prorogateTo');
+
+                tempEmptyFields.splice(index, 1);
+            } else {
+                tempEmptyFields.push('prorogateTo');
+            }
+
+            setEmptyFields(tempEmptyFields);
+            dispatch(setTempError('Debe ingresar una fecha para la prórroga'));
+
+            return;
+        }
+
+        const data = {
+            prorogateTo
+        }
+
+        console.log("esta es la fecha", data);
+
+        const url = `${staticURL}/records/${record._id}/prorogate`;
+
+        dispatch(uiStartLoading());
+
+        const res = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                console.log(response);
+                return response.json();
+            })
+            .then((data) => {
+                console.log(data);
+                return data;
+            })
+            .catch(err => {
+                console.log(err);
+                // dispatch(uiFinishLoading());
+            });
+
+        if (res) {
+            if (res.status === 'OK') {
+                const modalInfo = {
+                    title: `Prórroga programada con éxito`,
+                    text: `El pago se ha programado para el ${new Date(prorogateTo).toLocaleDateString('es-MX', dateOptions)}`,
+                    link: `/historial`,
+                    okMsg: 'Continuar',
+                    closeMsg: null,
+                    type: redTypes.history
+                }
+
+                dispatch(modalUpdate(modalInfo));
+                dispatch(modalEnable());
+                dispatch(getLot(lotId));
+
+            } else {
+                dispatch(setTempError('Hubo un problema con la base de datos'));
+
+                return;
+            }
+        }
+
+        dispatch(uiFinishLoading());
+
+    }
+
     const checkEmptyField = e => {
 
         if (e.target.value?.trim().length > 0) {
@@ -169,72 +259,30 @@ export const Payment = () => {
                 <div className="left">
                     <h3> Pagar lote </h3>
                 </div>
-            </div>
 
-            <div className="card mb-2">
-                <div className="card__header">
-                    <img src="../assets/img/lots.png" alt="" />
-                    <h4>Información General del Lote</h4>
-                </div>
-                <div className="card__body">
-                    <div className="right">
-                        <div className="card__body__item">
-                            <span>Número de Lote</span>
-                            <p> {lotNumber} </p>
+                <div className="options" >
+
+                    {
+                        prorogation ? (
+                            <input type="checkbox" value={true} onClick={() => setProrogation(!prorogation)} id="preReserve" name="action" defaultChecked />
+                        ) : (
+                            <input type="checkbox" value={true} onClick={() => setProrogation(!prorogation)} id="preReserve" name="action" />
+                        )
+                    }
+
+                    <label htmlFor="preReserve">
+                        <div className="option">
+                            Solicitar prórroga
                         </div>
-                        <div className="card__body__item">
-                            <span>Número de Manzana</span>
-                            <p> {manzana} </p>
-                        </div>
-                        <div className="card__body__item">
-                            <span>Esquina</span>
-                            <p> {isCorner ? 'Sí' : 'No'} </p>
-                        </div>
-                        <div className="card__body__item">
-                            <span>Área</span>
-                            <p> {area}m<sup>2</sup> </p>
-                        </div>
-                        <div className="card__body__item">
-                            <span >Precio</span>
-                            <p className="price"> ${price?.toLocaleString()} </p>
-                        </div>
+                    </label>
 
-                    </div>
-                    <div className="left">
-                        <h4>Medidas</h4>
-
-                        {
-                            measures && (
-                                measures.length > 0 && (
-
-                                    measures.map((measure) => (
-                                        <div key={measure._id} className="card__body__item">
-                                            <span>
-                                                {measure.title}
-                                            </span>
-                                            <p>
-                                                {measure.value}m<sup>2</sup>
-                                            </p>
-                                        </div>
-                                    )
-                                    )
-
-                                )
-                            )
-                        }
-
-
-                    </div>
                 </div>
             </div>
 
-            {
-                currentClient && (
-                    <ClientShort client={currentClient} />
-                )
-            }
 
-            <div className="card edit mt-2">
+
+
+            <div className="card edit my-2">
 
                 <div className="card__header">
                     <img src="../assets/img/payment.png" alt="" />
@@ -243,26 +291,41 @@ export const Payment = () => {
                 <div className="card__body">
                     <div className="right">
 
-                        <div className={`card__body__item ${emptyFields.includes('amount') && 'error'}`}>
-                            <label htmlFor="amount">Cantidad del pago</label>
-                            <input autoFocus name="amount" type="number" autoComplete="off" value={amount} onChange={inputChange} />
-                        </div>
+                        {
+                            prorogation ? (
+                                <div className={`card__body__item ${emptyFields.includes('prorogateTo') && 'error'}`}>
+                                    <label htmlFor="prorogateTo">Fecha límite de pago</label>
+                                    <input autoFocus name="prorogateTo" type="date" autoComplete="off" value={prorogateTo} onChange={inputChange} />
+                                </div>
+                            )
+                                :
+                                (
+                                    <>
+                                        <div className={`card__body__item ${emptyFields.includes('amount') && 'error'}`}>
+                                            <label htmlFor="amount">Cantidad del pago</label>
+                                            <input autoFocus name="amount" type="number" autoComplete="off" value={amount} onChange={inputChange} />
+                                        </div>
 
-                        <div className={`card__body__item ${emptyFields.includes('markedAsNextPayment') && 'error'}`}>
-                            <label >acción</label>
-                            <div className="options">
+                                        <div className={`card__body__item ${emptyFields.includes('markedAsNextPayment') && 'error'}`}>
+                                            <label >acción</label>
+                                            <div className="options">
 
-                                <input type="radio" name="markedAsNextPayment" onClick={() => setFormValues({ ...formValues, amount: record.paymentInfo.minimumPaymentAmount, markedAsNextPayment: true })} id="no" />
-                                <label htmlFor="no">
-                                    Pagar mensualidad
-                                </label>
+                                                <input type="radio" name="markedAsNextPayment" onClick={() => setFormValues({ ...formValues, amount: record.paymentInfo.minimumPaymentAmount, markedAsNextPayment: true })} id="no" />
+                                                <label htmlFor="no">
+                                                    Pagar mensualidad
+                                                </label>
 
-                                <input defaultChecked type="radio" name="markedAsNextPayment" onClick={() => setFormValues({ ...formValues, amount: '', markedAsNextPayment: false })} id="yes" />
-                                <label htmlFor="yes">
-                                    Abonar
-                                </label>
-                            </div>
-                        </div>
+                                                <input defaultChecked type="radio" name="markedAsNextPayment" onClick={() => setFormValues({ ...formValues, amount: '', markedAsNextPayment: false })} id="yes" />
+                                                <label htmlFor="yes">
+                                                    Abonar
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </>
+                                )
+                        }
+
+
 
 
                     </div>
@@ -275,13 +338,23 @@ export const Payment = () => {
                 </div>
             </div>
 
+            {
+                record._id && (
+                    <Record record={record} payment={true} />
+                )
+            }
 
+            {
+                currentClient && (
+                    <ClientShort client={currentClient} />
+                )
+            }
 
             <div className="form-buttons">
                 <button className="cancel" onClick={cancel} >
                     Cancelar
                 </button>
-                <button className="next" onClick={pay}>
+                <button className="next" onClick={() => prorogation ? postProrogation() : pay()}>
                     Realizar Pago
                 </button>
             </div>

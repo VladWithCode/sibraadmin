@@ -18,6 +18,7 @@ import { consultingReducer, consultingLotsReducer, consultingClients } from '../
 import { paymentReducer } from '../reducers/paymentsReducer';
 import { recordReducer } from '../reducers/recordsReducer';
 import { historyActionsReducer } from '../reducers/historyActionReducer';
+import { templatesReducer } from '../reducers/templatesReducer';
 
 const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
@@ -41,7 +42,8 @@ const reducers = combineReducers({
     projectEdit: editProjectReducer,
     paymentInfo: paymentReducer,
     records: recordReducer,
-    historyActions: historyActionsReducer
+    historyActions: historyActionsReducer,
+    templates: templatesReducer
 })
 
 export const store = createStore(

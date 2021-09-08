@@ -18,7 +18,6 @@ const initialState = {
     recordOpenedAt: '',
     reservationDate: '',
 
-
     payments: [
         {
             amount: '',
@@ -38,7 +37,9 @@ const initialState = {
 
     client: '',
     liquidate: false,
-    history: false
+    history: false,
+
+    extraCharges: []
 
 }
 
@@ -53,6 +54,12 @@ export const paymentReducer = (state = initialState, action) => {
 
         case redTypes.buyLotReset:
             return initialState
+
+        case redTypes.buyLotSetExtraCharges:
+            return {
+                ...state,
+                extraCharges: action.payload
+            }
 
         default:
             return state;

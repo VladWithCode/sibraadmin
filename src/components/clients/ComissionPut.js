@@ -16,6 +16,8 @@ export const CommissionPut = () => {
 
     const { historyActions: { lot: currentLot }, clients } = useSelector(state => state);
 
+    console.log('este es el current lot', currentLot);
+
     const { area, isCorner, lotNumber, measures, manzana, price, record } = currentLot;
 
 
@@ -24,11 +26,15 @@ export const CommissionPut = () => {
 
     useEffect(() => {
 
-        dispatch(historyGetLot())
+        if (record?._id) {
+            dispatch(historyGetLot(record?.lot));
+            dispatch(redirectSet(redTypes.history, `/historial/comision/editar/${record._id}`));
+        }
+
         dispatch(floatingButtonSet('pencil', redTypes.projectCreate));
         dispatch(redirectSet(redTypes.history, `/historial/comision/editar/${record._id}`));
 
-    }, [dispatch, record._id]);
+    }, [dispatch, record._id, record?.lot]);
 
     const [emptyFields, setEmptyFields] = useState([]);
     const [hasChanged, setHasChanged] = useState([]);

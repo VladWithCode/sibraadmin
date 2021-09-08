@@ -2,7 +2,9 @@ import { redTypes } from "../types/reduxTypes";
 
 
 const initialState = {
-    lot: { },
+    lot: {
+        record: { }
+    },
     record: {
 
         _id: '',

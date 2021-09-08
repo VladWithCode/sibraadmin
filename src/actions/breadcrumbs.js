@@ -37,6 +37,14 @@ export const breadcrumbsUpdate = (type, arr) => {
                 }
             }
 
+        case redTypes.templates:
+            return {
+                type: redTypes.breadcrumbsUpdateTemplates,
+                payload: {
+                    templates: arr
+                }
+            }
+
         default:
             return {}
     }
@@ -62,6 +70,11 @@ export const breadcrumbsClear = (type) => {
         case redTypes.settings:
             return {
                 type: redTypes.breadcrumbsClearSettings
+            }
+
+        case redTypes.templates:
+            return {
+                type: redTypes.breadcrumbsClearTemplates
             }
 
         default:

@@ -4,7 +4,7 @@ const initialState = {
     projects: null,
     clients: null,
     history: null,
-    settings: null
+    templates: null
 }
 
 export const redirectReducer = (state = initialState, action) => {
@@ -25,6 +25,12 @@ export const redirectReducer = (state = initialState, action) => {
             return {
                 ...state,
                 history: action.payload.history
+            }
+
+        case redTypes.templates:
+            return {
+                ...state,
+                templates: action.payload.templates
             }
 
         default:

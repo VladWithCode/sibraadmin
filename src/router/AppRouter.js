@@ -26,10 +26,12 @@ import { ProjectAddDocuments } from '../components/projects/ProjectAddDocuments'
 import { LotEdit } from "../components/lots/LotEdit";
 import { BuyLot } from "../components/lots/BuyLot";
 import { Payment } from "../components/lots/Payment";
-import { PayExtracharge } from "../components/history-globals/PayExtracharge";
+import { PayExtraCharge } from "../components/history-globals/PayExtraCharge";
 import { CommissionPut } from "../components/clients/ComissionPut";
 import { CancelRecord } from "../components/history-globals/CancelRecord";
 import { UpdateRecord } from "../components/history-globals/UpdateRecord";
+import { Templates } from "../components/templates/Templates";
+import { Template } from "../components/templates/Template";
 
 
 
@@ -73,7 +75,7 @@ export const AppRouter = () => {
 
                         <Route exact path="/historial/abonar/:projectId/lote/:lotId" component={Payment} ></Route>
                         <Route exact path="/historial" component={History} ></Route>
-                        <Route exact path="/historial/extras/abonar/:extraChargeId/:recordId" component={PayExtracharge} ></Route>
+                        <Route exact path="/historial/extras/abonar/:extraChargeId/:recordId" component={PayExtraCharge} ></Route>
                         <Route exact path="/historial/comision/editar/:recordId" component={CommissionPut} ></Route>
 
                         <Route exact path="/historial/cancelar/:recordId" component={CancelRecord} ></Route>
@@ -81,6 +83,10 @@ export const AppRouter = () => {
                         <Route exact path="/historial/editar/:recordId" component={UpdateRecord} ></Route>
 
                         <Route exact path="/ajustes" component={Settings} ></Route>
+
+                        <Route exact path="/plantillas" component={Templates} ></Route>
+
+                        <Route exact path="/plantillas/:projectId" component={Template} ></Route>
 
                         <Redirect to="/proyectos" ></Redirect>
 

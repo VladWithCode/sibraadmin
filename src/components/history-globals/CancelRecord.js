@@ -9,6 +9,7 @@ import { setTempError, uiFinishLoading, uiStartLoading } from '../../actions/ui'
 import { redTypes } from '../../types/reduxTypes';
 import { staticURL } from '../../url';
 import { ClientShort } from '../clients/ClientShort';
+import { Record } from './Record';
 
 export const CancelRecord = () => {
 
@@ -169,70 +170,7 @@ export const CancelRecord = () => {
                 </div>
             </div>
 
-            <div className="card mb-2">
-                <div className="card__header">
-                    <img src="../assets/img/lots.png" alt="" />
-                    <h4>Información General del Lote</h4>
-                </div>
-                <div className="card__body">
-                    <div className="right">
-                        <div className="card__body__item">
-                            <span>Número de Lote</span>
-                            <p> {lotNumber} </p>
-                        </div>
-                        <div className="card__body__item">
-                            <span>Número de Manzana</span>
-                            <p> {manzana} </p>
-                        </div>
-                        <div className="card__body__item">
-                            <span>Esquina</span>
-                            <p> {isCorner ? 'Sí' : 'No'} </p>
-                        </div>
-                        <div className="card__body__item">
-                            <span>Área</span>
-                            <p> {area}m<sup>2</sup> </p>
-                        </div>
-                        <div className="card__body__item">
-                            <span >Precio</span>
-                            <p className="price"> ${price?.toLocaleString()} </p>
-                        </div>
-
-                    </div>
-                    <div className="left">
-                        <h4>Medidas</h4>
-
-                        {
-                            measures && (
-                                measures.length > 0 && (
-
-                                    measures.map((measure) => (
-                                        <div key={measure._id} className="card__body__item">
-                                            <span>
-                                                {measure.title}
-                                            </span>
-                                            <p>
-                                                {measure.value}m<sup>2</sup>
-                                            </p>
-                                        </div>
-                                    )
-                                    )
-
-                                )
-                            )
-                        }
-
-
-                    </div>
-                </div>
-            </div>
-
-            {
-                currentClient && (
-                    <ClientShort client={currentClient} />
-                )
-            }
-
-            <div className="card edit mt-2">
+            <div className="card edit my-2">
 
                 <div className="card__header">
                     <img src="../assets/img/payment.png" alt="" />
@@ -275,7 +213,17 @@ export const CancelRecord = () => {
                 </div>
             </div>
 
+            {
+                record._id && (
+                    <Record record={record} />
+                )
+            }
 
+            {
+                currentClient && (
+                    <ClientShort client={currentClient} />
+                )
+            }
 
             <div className="form-buttons">
                 <button className="cancel" onClick={cancel} >

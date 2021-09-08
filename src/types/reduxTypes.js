@@ -59,6 +59,11 @@ export const redTypes = {
     breadcrumbsClearClients: '[Breadcrumbs] ClearClients',
     breadcrumbsClearHistory: '[Breadcrumbs] ClearHistory',
     breadcrumbsClearSettings: '[Breadcrumbs] ClearSettings',
+
+    breadcrumbsUpdateTemplates: '[Breadcrumbs] UpdateTemplates',
+    breadcrumbsClearTemplates: '[Breadcrumbs] ClearTemplates',
+
+
     breadcrumbsOpen: '[Breadcrumbs] OpenLink',
 
     redirectProjects: '[Redirect] SetLinkProjects',
@@ -87,6 +92,7 @@ export const redTypes = {
 
     buyLotSet: '[BuyLot] Set',
     buyLotReset: '[BuyLot] Reset',
+    buyLotSetExtraCharges: '[BuyLot] SetExtraCharges',
 
     newLotsSet: '[NewLots] Set',
 
@@ -98,6 +104,16 @@ export const redTypes = {
     historySetPayment: '[History] Set Payment',
     historySetExtraPayment: '[History] Set ExtraPayment',
 
+    // TEMPLATES ACTIONS
+    templatesSetAll: '[Templates] Set All',
+    templateSet: '[Template] Set',
+    templatesGet: '[Templates] Get',
+    templateUpdate: '[Template] Update',
+    templatesSetView: '[Templates] Set View',
+    templatesEditParaph: '[Templates] Edit Paraph',
+    templatesAddParaph: '[Templates] Add Paraph',
+    templatesDeleteParaph: '[Templates] Delete Paraph',
+
     projects: 'projects',
     payments: 'payments',
     project: 'project',
@@ -106,6 +122,7 @@ export const redTypes = {
     aval: 'aval',
     clients: 'clients',
     history: 'history',
+    templates: 'templates',
     lot: 'lot',
     lotReserved: 'lotReserved',
     settings: 'settings',

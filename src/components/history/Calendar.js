@@ -24,15 +24,18 @@ export const CalendarComponent = () => {
         setEvents(
             records.map((record) => {
                 if (record.state === 'reserved' || record.state === 'prereserved') {
+
+                    const eventdate = moment(record.paymentInfo.hasProrogation ? record.paymentInfo.prorogatedTo : record.paymentInfo.nextPaymentDate).toDate()
+
                     return ({
                         lotId: record.lot,
                         projectId: record.project,
                         title: record.customer.fullName,
-                        start: moment(record.paymentInfo.nextPaymentDate).toDate(),
-                        end: moment(record.paymentInfo.nextPaymentDate).toDate(),
+                        start: eventdate,
+                        end: eventdate,
                         bgcolor: '#fafafa',
                         isLate: record.paymentInfo.isLate,
-                        hasProrogation: record.paymentInfo.isLate,
+                        hasProrogation: record.paymentInfo.hasProrogation,
                         allDay: true,
                         phoneNumber: record.customer.phoneNumber,
                         event: 'Pago del lote'
@@ -47,8 +50,8 @@ export const CalendarComponent = () => {
     const eventStyleGetter = ({ event, isLate, hasProrogation, isSelected }) => {
 
         const style = {
-            backgroundColor: isLate ? 'tomato' : hasProrogation ? '#FF9800' : 'white',
-            color: 'black'
+            backgroundColor: isLate ? 'tomato' : hasProrogation ? '#FF9800' : '#448AFF',
+            color: 'white'
         }
 
         return { style }

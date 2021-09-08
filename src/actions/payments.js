@@ -11,3 +11,8 @@ export const buyLotSet = payment => ({
 export const buyLotReset = () => ({
     type: redTypes.buyLotReset
 })
+
+export const buyLotSetExtraCharges = extraCharges => ({
+    type: redTypes.buyLotSetExtraCharges,
+    payload: extraCharges
+})

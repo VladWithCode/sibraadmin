@@ -470,6 +470,7 @@ export const Create3 = () => {
             ))
         }
 
+        console.log('projectDocument', projectDocument);
 
         const response = await uploadProjectDocument(projectDocument, lots);
 

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom'
 import { floatingButtonSet } from '../../actions/floatingButton';
-import { getLot } from '../../actions/lot';
 import { modalEnable, modalUpdate } from '../../actions/modal';
 import { redirectSet } from '../../actions/redirect';
 import { setTempError, uiFinishLoading, uiStartLoading } from '../../actions/ui';
@@ -10,7 +9,7 @@ import { redTypes } from '../../types/reduxTypes';
 import { staticURL } from '../../url';
 import { ClientShort } from '../clients/ClientShort';
 
-export const PayExtracharge = () => {
+export const PayExtraCharge = () => {
 
     const dispatch = useDispatch();
     const { extraChargeId, recordId } = useParams();

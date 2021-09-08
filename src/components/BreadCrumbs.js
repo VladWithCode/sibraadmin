@@ -9,7 +9,7 @@ export const BreadCrumbs = ({ type }) => {
 
     const dispatch = useDispatch();
 
-    const { projects, clients, history, settings } = useSelector(state => state.breadcrumbs);
+    const { projects, clients, history, settings, templates } = useSelector(state => state.breadcrumbs);
 
     const hanldeClick = (link, type) => {
         dispatch(redirectSet(type, link))
@@ -42,13 +42,13 @@ export const BreadCrumbs = ({ type }) => {
                 </div>
             )
 
-        case redTypes.history:
+        case redTypes.templates:
             return (
                 <div className="breadcrumbs">
                     {
-                        history.map((e, index) => (
-                            index !== history.length && (
-                                <Link onClick={() => hanldeClick(e.link)} className="breadcrumbs__item" key={`lot:${e.dispName}`} to={e.link} ><i>&gt;</i><span>{e.dispName}</span> </Link>
+                        templates.map((e, index) => (
+                            index !== templates.length && (
+                                <Link onClick={() => hanldeClick(e.link, redTypes.templates)} className="breadcrumbs__item" key={`lot:${e.dispName}`} to={e.link} ><i>&gt;</i><span>{e.dispName}</span> </Link>
                             )
                         ))
                     }

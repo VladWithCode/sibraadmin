@@ -26,6 +26,7 @@ const initialState = {
         //     link: '/ajustes'
         // }
     ],
+    templates: []
 }
 
 export const breadcrumbsReducer = (state = initialState, action) => {
@@ -101,6 +102,18 @@ export const breadcrumbsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 settings: []
+            }
+
+        case redTypes.breadcrumbsUpdateTemplates:
+            return {
+                ...state,
+                templates: action.payload.templates
+            }
+
+        case redTypes.breadcrumbsClearTemplates:
+            return {
+                ...state,
+                templates: []
             }
 
         default:
