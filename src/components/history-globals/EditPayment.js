@@ -1,21 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { historySetExtraPayment, historySetPayment } from '../../actions/historyActions';
 
-const dateOptions = {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-}
+
 
 export const EditPayment = ({ payment, hasChanged, index, extraCharge, extraChargeId }) => {
 
-    console.log('amos a ver: ', hasChanged);
-
     const dispatch = useDispatch();
 
-    const { date, payedAt, type, amount } = payment;
+    const { date, payedAt, type, amount, _id } = payment;
 
     const displayType = type === 'preReservation' ? 'Pre apartado' : type === 'payment' ? 'Abono' : type === 'deposit' ? 'Enganche' : 'Liquidación';
 
@@ -26,7 +19,8 @@ export const EditPayment = ({ payment, hasChanged, index, extraCharge, extraChar
         !extraCharge ?
             {
                 amount,
-                payedAt: payedAt?.split('T')[0]
+                payedAt: payedAt?.split('T')[0],
+                _id
             }
             :
             {

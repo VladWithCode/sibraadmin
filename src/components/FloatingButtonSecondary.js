@@ -15,13 +15,13 @@ export const FloatingButtonSecondary = () => {
 
     useEffect(() => {
 
-        dispatch(buyLotReset())
+        dispatch(buyLotReset());
 
         // type === redTypes.lotReserved && (
         //     dispatch((historyGetLot(lotId)))
         // )
 
-    }, [dispatch, lotId, type])
+    }, [dispatch, lotId, type, projectId])
 
     return (
 

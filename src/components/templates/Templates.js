@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink, Redirect } from 'react-router-dom';
-import { breadcrumbsClear } from '../../actions/breadcrumbs';
+import { NavLink } from 'react-router-dom';
 import { redirectSet } from '../../actions/redirect';
+import { templatesGet, templatesGetVariables } from '../../actions/templates';
 import { useForm } from '../../hooks/useForm';
 import { redTypes } from '../../types/reduxTypes';
 
@@ -27,7 +27,9 @@ export const Templates = () => {
 
     const dispProjects = foundProjects.length >= 1 ? foundProjects : projects;
 
-
+    useEffect(() => {
+        dispatch(templatesGetVariables());
+    }, [dispatch])
 
     return (
         <div className="app-screen projects-screen">
@@ -42,7 +44,7 @@ export const Templates = () => {
 
             <div className="projects">
 
-                <NavLink className='projects__card default-template' to={`./proyectos/ver/`} >
+                <NavLink onClick={() => dispatch(templatesGet())} className='projects__card default-template' to={`/plantillas/default`} >
 
                     <div className="main-info">
                         <h4>
@@ -63,9 +65,10 @@ export const Templates = () => {
                         return (
 
                             <NavLink
-                                onClick={() =>
-                                    dispatch(redirectSet(redTypes.templates, `/plantillas/${_id}`))
-                                }
+                                onClick={() => {
+                                    dispatch(redirectSet(redTypes.templates, `/plantillas/${_id}`));
+                                    dispatch(templatesGet(_id));
+                                }}
                                 key={_id}
                                 className='templates__card'
                                 to={`/plantillas/${_id}`} >

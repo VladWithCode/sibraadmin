@@ -24,7 +24,7 @@ export const PriceHistory = ({ priceHistory }) => {
                         return (
                             <div key={_id} className="right">
 
-                                <div className={`card__header ${index > 1 ? 'mt-4' : 'mt-2'}  `}>
+                                <div className={`card__header ${index > 1 ? 'mt-4' : 'mt-1'}  `}>
                                     <h4> Precio {index + 1} </h4>
                                 </div>
 

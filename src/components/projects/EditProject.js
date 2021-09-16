@@ -15,7 +15,6 @@ import { ModalLotType } from './ModalLotType';
 import { ModalConfirmLotTypes } from './ModalConfirmLotTypes';
 import { modalEnable, modalUpdate } from '../../actions/modal';
 import { uiStartLoading, uiFinishLoading } from '../../actions/ui';
-import { projectSet } from '../../actions/project';
 import { staticURL } from '../../url';
 
 export const EditProject = () => {

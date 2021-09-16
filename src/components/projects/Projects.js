@@ -12,7 +12,7 @@ import { projectReset } from '../../actions/project';
 
 export const Projects = React.memo(({ history: { location: { pathname } } }) => {
 
-    const { redirect, projects, clients, records } = useSelector(state => state);
+    const { redirect, projects } = useSelector(state => state);
 
     const [searchInput, handleInputChange] = useForm({ inputSearch: '' });
 
@@ -37,7 +37,7 @@ export const Projects = React.memo(({ history: { location: { pathname } } }) => 
 
         dispatch(floatingButtonSet('plus', redTypes.projects));
         dispatch(getProjects());
-        dispatch(lotTypesSet(true, { }));
+        dispatch(lotTypesSet(true, {}));
         dispatch(projectReset());
 
         dispatch(getClients())

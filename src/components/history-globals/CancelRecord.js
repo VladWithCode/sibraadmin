@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { floatingButtonSet } from '../../actions/floatingButton';
-import { getLot } from '../../actions/lot';
 import { modalEnable, modalUpdate } from '../../actions/modal';
 import { redirectSet } from '../../actions/redirect';
 import { setTempError, uiFinishLoading, uiStartLoading } from '../../actions/ui';
@@ -18,7 +17,7 @@ export const CancelRecord = () => {
 
     const { historyActions: { lot: currentLot }, clients } = useSelector(state => state);
 
-    const { area, isCorner, lotNumber, measures, manzana, price, record } = currentLot;
+    const { record } = currentLot;
 
     const currentClient = clients.find(c => c._id === record?.customer);
 
@@ -215,7 +214,7 @@ export const CancelRecord = () => {
 
             {
                 record._id && (
-                    <Record record={record} />
+                    <Record record={record} payment={true} />
                 )
             }
 

@@ -4,13 +4,11 @@ import { useForm } from '../../hooks/useForm'
 import { redTypes } from '../../types/reduxTypes'
 import { redirectSet } from '../../actions/redirect';
 import { useParams } from 'react-router-dom';
-import { setTempError, uiFinishLoading, uiStartLoading } from '../../actions/ui';
 import { getClients } from '../../actions/consults';
-import { staticURL } from '../../url';
 import { modalEnable, modalUpdate } from '../../actions/modal';
 import { ClientShort } from '../clients/ClientShort';
-import { buyLotSet } from '../../actions/payments';
-import { getLot } from '../../actions/lot';
+import { buyLotSet, submitPayment } from '../../actions/payments';
+import { BuyExtraCharges } from './BuyExtraCharges';
 
 export const BuyLot = () => {
 
@@ -42,7 +40,6 @@ export const BuyLot = () => {
 
     const [extraInfo, setExtraInfo] = useState(() => {
 
-        console.log('cargando state');
 
         return {
             client: paymentInfo?.client,
@@ -80,7 +77,7 @@ export const BuyLot = () => {
 
     const { depositAmount, lotPrice, recordOpenedAt, reservationDate, preReservationDate, preReservationAmount, payedTo, amount, payedAt, lapseToPay } = formFields;
 
-    const [emptyFields, setEmptyFields] = useState([]);
+    const [emptyFields] = useState([]);
 
     useEffect(() => {
 
@@ -89,201 +86,13 @@ export const BuyLot = () => {
 
     }, [dispatch, projectId, lotId])
 
-
-    const checkEmptyField = e => {
-
-        if (e.target.value?.trim().length > 0) {
-            const tempEmptyFields = emptyFields;
-
-            if (tempEmptyFields.includes(e.target.name)) {
-                const index = tempEmptyFields.indexOf(e.target.name);
-
-                tempEmptyFields.splice(index, 1);
-            }
-
-            setEmptyFields(tempEmptyFields);
-        }
-
-    }
-
-    const checkEmptyFields = () => {
-
-        const tempEmptyFields = []
-
-        for (let key in formFields) {
-            if (key !== 'intNumber' && key !== 'matLastname' && key !== 'avMatLastname' && key !== 'maritalState' && key !== 'occupation' && key !== 'township' && key !== 'state' && key !== 'pob' && key !== 'dob' && key !== 'nationality') {
-                if (formFields[key].toString().trim() === "") {
-                    tempEmptyFields.push(key);
-                    dispatch(setTempError('Los campos en rojo son obligatorios'))
-                }
-            }
-        }
-
-
-        setEmptyFields(tempEmptyFields);
-
-        return tempEmptyFields.length === 0 ? false : true;
-    }
-
-    const submitPayment = async () => {
-
-        const state = extraInfo.liquidate ? 'liquidated' : extraInfo.preReserved ? 'preReserved' : "reserved"
-
-        const data = {
-            customerId: extraInfo.client,
-            projectId,
-            lotId,
-            state,
-            paymentInfo: {
-                depositAmount: +depositAmount
-            }
-        }
-
-        if (payedTo.length > 1) {
-            data.commissionInfo = {
-                payedTo: payedTo,
-                amount: +amount,
-                payedAt: payedAt || null
-            }
-        }
-
-        if (extraInfo.liquidate) {
-
-            data.paymentInfo = {
-                lotPrice,
-                reservationDate,
-                depositAmount: +depositAmount
-            }
-
-        } else if (extraInfo.preReserved) {
-            data.paymentInfo = {
-                preReservationAmount: +preReservationAmount,
-                preReservationDate,
-                lotPrice: +lotPrice,
-                depositAmount: +depositAmount
-            }
-
-        } else if (extraInfo.history) {
-
-            let counter = +depositAmount;
-
-
-
-            data.payments =
-                payments.map(p => {
-
-                    counter += (+p.amount)
-
-                    let type = 'payment'
-
-                    if (+counter === +lotPrice) {
-                        type = 'liquidation'
-                    }
-
-                    return {
-                        amount: +p.amount,
-                        ogPaymentDate: p.paymentDate,
-                        payedAt: p.payedDate,
-                        type
-                    }
-                })
-
-            data.payments.push({
-                amount: +depositAmount,
-                payedAt: reservationDate,
-                type: 'deposit'
-            })
-
-            data.paymentInfo = {
-                depositAmount,
-                minimumPaymentAmount: (+lotPrice - depositAmount) / (+lapseToPay),
-                lotPrice,
-                recordOpenedAt,
-                reservationDate,
-                paymentsDate: extraInfo.paymentsDate,
-                lapseType: extraInfo.lapseType,
-                lapseToPay
-            }
-
-        } else {
-            data.paymentInfo = {
-                depositAmount,
-                minimumPaymentAmount: (+lotPrice - depositAmount) / (+lapseToPay),
-                lotPrice,
-                recordOpenedAt,
-                reservationDate,
-                paymentsDate: extraInfo.paymentsDate,
-                lapseType: extraInfo.lapseType,
-                lapseToPay
-            }
-        }
-
-
-        dispatch(uiStartLoading());
-        const res = await postData(data);
-        dispatch(uiFinishLoading());
-
-        console.log(data);
-
-        if (res?.status === 'OK') {
-
-            const modalInfo = {
-                title: `Compra registrada con éxito con éxito`,
-                text: null,
-                link: `/proyectos/ver/${projectId}/lote/${lotId}`,
-                okMsg: 'Continuar',
-                closeMsg: null,
-                type: redTypes.projectCreate
-            }
-
-            dispatch(modalUpdate(modalInfo));
-            dispatch(modalEnable());
-            dispatch(getLot(lotId));
-
-        } else {
-            dispatch(setTempError('Ha ocurrido un error en la base de datos'))
-        }
-
-        // console.log(res);
-
-    }
-
-    const postData = data => {
-
-        const url = `${staticURL}/records`
-
-        console.log('pagando a: ', url);
-
-        const res = fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-            .then(response => {
-                return response.json();
-            })
-            .then((resData) => {
-                console.log('resData', resData);
-                return resData;
-            })
-            .catch(err => {
-                console.log(err);
-                // dispatch(uiFinishLoading());
-            });
-
-        return res;
-
-    }
-
     const onPaymentChange = (e, index, key) => {
 
         const newPayments = payments.map(p => p);
 
         newPayments[index][key] = e.target.value;
 
-        console.log(newPayments);
+        // console.log(newPayments);
 
         setPayments(newPayments);
 
@@ -498,36 +307,17 @@ export const BuyLot = () => {
                                                     <label >Tipo de Pagos</label>
                                                     <div className="options">
 
-                                                        {
-                                                            extraInfo.lapseType === 'mensual' ?
-                                                                (
-                                                                    <>
-                                                                        <input type="radio" name="lapseType" onClick={() => onExtraInfoChange({ lapseType: 'mensual' })} id="mensual" defaultChecked />
-                                                                        <label htmlFor="mensual">
-                                                                            Mensual
-                                                                        </label>
 
-                                                                        <input type="radio" name="lapseType" onClick={() => onExtraInfoChange({ lapseType: 'semanal' })} id="semanal" />
-                                                                        <label htmlFor="semanal">
-                                                                            Semanal
-                                                                        </label>
-                                                                    </>
-                                                                )
-                                                                :
-                                                                (
-                                                                    <>
-                                                                        <input type="radio" name="lapseType" onClick={() => onExtraInfoChange({ lapseType: 'mensual' })} id="mensual" />
-                                                                        <label htmlFor="mensual">
-                                                                            Mensual
-                                                                        </label>
+                                                        <input type="radio" name="lapseType" onClick={() => onExtraInfoChange({ lapseType: 'mensual' })} id="mensual" />
+                                                        <label htmlFor="mensual">
+                                                            Mensual
+                                                        </label>
 
-                                                                        <input type="radio" name="lapseType" onClick={() => onExtraInfoChange({ lapseType: 'semanal' })} id="semanal" defaultChecked />
-                                                                        <label htmlFor="semanal">
-                                                                            Semanal
-                                                                        </label>
-                                                                    </>
-                                                                )
-                                                        }
+                                                        <input type="radio" name="lapseType" onClick={() => onExtraInfoChange({ lapseType: 'semanal' })} id="semanal" />
+                                                        <label htmlFor="semanal">
+                                                            Semanal
+                                                        </label>
+
 
 
                                                     </div>
@@ -662,6 +452,12 @@ export const BuyLot = () => {
                     )
                 }
 
+                {
+                    paymentInfo.extraCharges && (
+                        <BuyExtraCharges extraCharges={paymentInfo.extraCharges} />
+                    )
+                }
+
             </div>
 
             {
@@ -674,7 +470,7 @@ export const BuyLot = () => {
                 <button className="cancel" onClick={cancel} >
                     Cancelar
                 </button>
-                <button className="next" onClick={submitPayment}>
+                <button className="next" onClick={() => dispatch(submitPayment(paymentInfo, { projectId, lotId, clientId: client._id, lotPrice: +paymentInfo?.lotPrice > 0 ? paymentInfo?.lotPrice : lot.price }))}>
                     Realizar Pago
                 </button>
             </div>

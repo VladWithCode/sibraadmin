@@ -3,7 +3,7 @@ import { redTypes } from "../types/reduxTypes";
 
 const initialState = {
     lot: {
-        record: { }
+        record: {}
     },
     record: {
 
@@ -132,6 +132,16 @@ export const historyActionsReducer = (state = initialState, action) => {
             const extraPaymentIndex = extraCharge.payments.findIndex(p => p._id === extraPayment._id);
 
             extraCharge.payments.splice(extraPaymentIndex, 1, extraPayment);
+
+            return {
+                ...state
+            }
+
+        case redTypes.historySetExtraPayBefore:
+
+            const tempExtraCharge = state.record.extraCharges.find(e => e._id === action.payload.extraChargeId);
+
+            tempExtraCharge.payBefore = action.payload.payBefore;
 
             return {
                 ...state

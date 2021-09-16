@@ -39,7 +39,9 @@ const initialState = {
     liquidate: false,
     history: false,
 
-    extraCharges: []
+    extraCharges: [],
+
+    emptyFields: []
 
 }
 
@@ -53,7 +55,10 @@ export const paymentReducer = (state = initialState, action) => {
             };
 
         case redTypes.buyLotReset:
-            return initialState
+            return {
+                ...initialState,
+                extraCharges: state.extraCharges
+            }
 
         case redTypes.buyLotSetExtraCharges:
             return {

@@ -79,7 +79,7 @@ export const CalendarComponent = () => {
         <div className="app-screen projects-screen">
 
             <div className="app-screen__title projects-screen-top">
-                <h1 className="app-screen__title" >Historiales</h1>
+                <h1 className="app-screen__title" >Calendario de Pagos</h1>
             </div>
             <div className="history">
                 <div className="card calendar">

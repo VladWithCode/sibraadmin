@@ -29,6 +29,10 @@ export const redTypes = {
     lotCreate: '[Lot] Create',
     lotEdit: '[Lot] Edit',
 
+    lotAddBinding: '[Lot] Add Binding',
+    lotDeleteBinding: '[Lot] Delete Binding',
+    lotSetBindings: '[Lot] Set Bindings',
+
     startLoading: '[UI] StartLoading',
     stopLoading: '[UI] StopLoaging',
     editPageSet: '[UI] SetEditPage',
@@ -85,6 +89,8 @@ export const redTypes = {
     lotTypesModalConfirmReset: '[LotTypesModalConfirm] Reset',
     lotReset: '[Lot] Reset',
 
+
+
     recordsSet: '[Records] Set',
 
     lotTypesSet: '[LotTypes] Set',
@@ -93,6 +99,9 @@ export const redTypes = {
     buyLotSet: '[BuyLot] Set',
     buyLotReset: '[BuyLot] Reset',
     buyLotSetExtraCharges: '[BuyLot] SetExtraCharges',
+    buyLotSetExtraCharge: '[BuyLot] SetExtraCharge',
+
+    buyLotPost: '[BuyLot] Post',
 
     newLotsSet: '[NewLots] Set',
 
@@ -103,6 +112,7 @@ export const redTypes = {
     historySetRecordInfo: '[History] Set RecordInfo',
     historySetPayment: '[History] Set Payment',
     historySetExtraPayment: '[History] Set ExtraPayment',
+    historySetExtraPayBefore: '[History] Set ExtraPayBefore',
 
     // TEMPLATES ACTIONS
     templatesSetAll: '[Templates] Set All',
@@ -114,6 +124,18 @@ export const redTypes = {
     templatesEditParaph: '[Templates] Edit Paraph',
     templatesAddParaph: '[Templates] Add Paraph',
     templatesDeleteParaph: '[Templates] Delete Paraph',
+
+    templatesGetDefault: '[Templates] Get Default',
+    templatesGetVariables: '[Templates] Get Variables',
+
+    templatesUpdate: '[Templates] Update',
+
+    paymentSetInfo: '[Payment] Set Info',
+    extraPaymentSetInfo: '[ExtraPayment] Set info ',
+    paymentsGetTemplates: '[Payments] Get Templates',
+    paymentRestart: '[Payment] Restart',
+    extraPaymentRestart: '[ExtraPayment] Restart',
+    paymentTemplateSet: '[Payments] Set Template',
 
     projects: 'projects',
     payments: 'payments',

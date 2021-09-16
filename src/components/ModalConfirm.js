@@ -31,6 +31,10 @@ export const ModalConfirm = () => {
         if (type === redTypes.history) {
             dispatch(redirectSet(redTypes.history, `/historial`));
         }
+        if (type === redTypes.templates) {
+            dispatch(redirectSet(redTypes.templates, `/plantillas`));
+        }
+
 
         if (resetClient) {
             dispatch(modalReset());

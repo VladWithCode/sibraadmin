@@ -11,11 +11,12 @@ import { BreadCrumbs } from '../BreadCrumbs';
 import { FloatingButton } from '../FloatingButton';
 import { LotsList } from '../lots/LotsList';
 import { staticURLDocs } from '../../url';
-import { projectCreate, projectSet, projectSetServices } from '../../actions/project';
+import { projectSet, projectSetServices } from '../../actions/project';
 import { lotTypesSet } from '../../actions/lotTypes';
 import { ProjectExtraCharges } from './ProjectExtraCharges';
+import { buyLotSetExtraCharges } from '../../actions/payments';
 
-export const Project = React.memo(({ history: { location: { pathname } } }) => {
+export const Project = React.memo(() => {
 
     const { projectId } = useParams();
     const dispatch = useDispatch();
@@ -59,7 +60,9 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
 
         dispatch(lotTypesSet(false, project.lotTypes));
 
-        dispatch(getLots(_id))
+        dispatch(getLots(_id));
+
+        dispatch(buyLotSetExtraCharges(extraCharges));
 
         const modalInfo = {
             title: 'Editar proyecto',
@@ -76,7 +79,7 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
 
 
 
-    }, [dispatch, _id, name, project, projects, projectId]);
+    }, [dispatch, _id, name, project, projects, projectId, extraCharges]);
 
     const handleOpen = (path) => {
         const url = `${staticURLDocs}${path}`;
@@ -94,16 +97,16 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
                 <div className="project__header">
                     <div className="left">
                         <h3> {name} </h3>
-                        <span> {associationName} </span>
+                        <span className="span" > {associationName} </span>
                     </div>
                     <div className="right">
                         <div className="item">
                             <p> {totalLots} </p>
-                            <span>Lotes totales</span>
+                            <span className="span" >Lotes totales</span>
                         </div>
                         <div className="item total">
                             <p> {deliveredLots} </p>
-                            <span>Lotes Entregados</span>
+                            <span className="span" >Lotes Entregados</span>
                         </div>
                     </div>
                 </div>
@@ -197,8 +200,8 @@ export const Project = React.memo(({ history: { location: { pathname } } }) => {
                         </div>
                         <div className="card__body__list">
                             {
-                                files?.map(({ name, staticPath }) => (
-                                    <div onClick={() => { handleOpen(staticPath) }} key={name} className="card__body__list__doc">
+                                files?.map(({ name, staticPath, _id }) => (
+                                    <div onClick={() => { handleOpen(staticPath) }} key={_id} className="card__body__list__doc">
                                         <p>
                                             {name}
                                         </p>

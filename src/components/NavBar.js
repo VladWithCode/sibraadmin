@@ -29,7 +29,7 @@ export const NavBar = () => {
                     <span>Clientes</span>
                 </NavLink>
                 <NavLink to={`${history ? history : '/historial'}`} activeClassName="active" className="link">
-                    <svg><use href="/../assets/svg/history.svg#history" ></use></svg>
+                    <svg><use href="/../assets/svg/calendar.svg#calendar" ></use></svg>
                     <span>Hitorial</span>
                 </NavLink>
                 <NavLink to={`${templates ? templates : '/plantillas'}`} activeClassName="active" className="link">

@@ -28,8 +28,8 @@ html {
 body {
     font-family: 'Montserrat', sans-serif;
     color: $color-text;
-    line-height: 1.2;
-    font-size: 1.3rem;
+    // line-height: 1.2;
+    // font-size: 1.3rem;
     background-color: $color-bc;
 
     &::-webkit-scrollbar {
@@ -102,10 +102,11 @@ h5 {
 
 p,
 li,
-span,
+span.span,
 input {
     font-size: 1.5rem;
 }
+
 
 p {
     color: $black;
@@ -283,7 +284,7 @@ a {
 }
 
 input,
-textarea {
+textarea.styles {
     color: $color-text-light;
     font-family: 'Montserrat', sans-serif;
     font-size: 1.7rem;

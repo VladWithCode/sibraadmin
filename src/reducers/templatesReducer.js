@@ -1,70 +1,11 @@
+// import { EditorState } from "draft-js";
 import { redTypes } from "../types/reduxTypes";
 
 
 const initialState = {
+    variables: [],
     ogTemplates: [],
-    currentTemplates: [
-        {
-            _id: '123',
-            type: 'recibo de pago',
-            project: '610844145401dc21adfdd054',
-
-            paraphs: [
-                {
-                    _id: '123',
-                    content: 'Hola panita',
-                    hasChanged: false,
-                    delete: false
-                }
-            ],
-
-            signatures: [
-                'Claudia Pulgarín'
-            ],
-
-            variables: [
-                {
-                    _id: '789',
-                    title: 'cliente'
-                },
-                {
-                    _id: '4654',
-                    title: 'notario'
-                }
-            ]
-
-        },
-        {
-            _id: '3123',
-            type: 'recibo',
-            project: '610844145401dc21adfdd054',
-
-            paraphs: [
-                {
-                    _id: '123',
-                    content: 'Hola pai',
-                    hasChanged: false,
-                    delete: false
-                }
-            ],
-
-            signatures: [
-                'Claudia Pulgarín'
-            ],
-
-            variables: [
-                {
-                    _id: '789',
-                    title: 'cliente'
-                },
-                {
-                    _id: '4654',
-                    title: 'notario'
-                }
-            ]
-
-        }
-    ]
+    currentTemplates: []
 }
 
 let paraphId = 0;
@@ -91,15 +32,25 @@ export const templatesReducer = (state = initialState, action) => {
 
     switch (action.type) {
 
+        case redTypes.templatesGetVariables:
+
+            return {
+                ...state,
+                variables: action.payload
+            }
+
         case redTypes.templatesSetAll:
             return {
                 ...state,
-                currentTemplates: action.payload
+                currentTemplates: action.payload,
+                ogTemplates: action.payload
             }
 
         case redTypes.templateSet:
-            let index = state.currentTemplates.findIndex(t => t._id === action.payload._id);
-            state.currentTemplates.splice(index, 1, action.payload);
+
+            const current = state.currentTemplates.find(t => t._id === action.payload._id);
+
+            current.state = { ...action.payload.state }
 
             return {
                 ...state
@@ -141,6 +92,12 @@ export const templatesReducer = (state = initialState, action) => {
             return {
                 ...state
             }
+
+        case redTypes.templatesUpdate:
+
+
+
+            return {}
 
         default:
             return state;

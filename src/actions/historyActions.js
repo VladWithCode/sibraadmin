@@ -48,6 +48,14 @@ export const historySetExtraPayment = payment => ({
     payload: payment
 })
 
+export const historySetExtraPayBefore = (extraChargeId, payBefore) => ({
+    type: redTypes.historySetExtraPayBefore,
+    payload: {
+        extraChargeId,
+        payBefore
+    }
+})
+
 export const historyPostUpdate = record => {
 
     return (dispatch) => {
@@ -112,7 +120,7 @@ export const historyPostUpdate = record => {
                     const modalInfo = {
                         title: `Historial actualizado con éxito`,
                         text: null,
-                        link: `/history`,
+                        link: `/historial`,
                         okMsg: 'Continuar',
                         closeMsg: null,
                         type: redTypes.history

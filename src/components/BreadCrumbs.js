@@ -9,7 +9,7 @@ export const BreadCrumbs = ({ type }) => {
 
     const dispatch = useDispatch();
 
-    const { projects, clients, history, settings, templates } = useSelector(state => state.breadcrumbs);
+    const { projects, clients, settings, templates } = useSelector(state => state.breadcrumbs);
 
     const hanldeClick = (link, type) => {
         dispatch(redirectSet(type, link))

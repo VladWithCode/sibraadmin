@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { modalEnable, modalUpdate } from '../../actions/modal';
-import { redTypes } from '../../types/reduxTypes';
+import { paymentOpen } from '../../actions/payments';
 import { Payment } from './Payment';
 
-export const ExtraCharge = ({ extraCharge, index, recordState, recordId }) => {
+export const ExtraCharge = ({ extraCharge, index, recordState, recordId, projectId }) => {
+
+    const dispatch = useDispatch();
 
     const { debt, title, payBefore, amountPayed, isPayed, payments, _id } = extraCharge;
 
@@ -29,6 +30,10 @@ export const ExtraCharge = ({ extraCharge, index, recordState, recordId }) => {
         })
     }
 
+    const goToPay = () => {
+        dispatch(paymentOpen(projectId));
+    }
+
     return (
         <div className="full">
             <div className="card__header my-4">
@@ -40,7 +45,7 @@ export const ExtraCharge = ({ extraCharge, index, recordState, recordId }) => {
                         )
                         : recordState !== 'cancelled' &&
                         (
-                            <Link to={`/historial/extras/abonar/${_id}/${recordId}`} className="add-ref ok">Abonar</Link>
+                            <Link onClick={goToPay} to={`/historial/extras/abonar/${_id}/${recordId}`} className="add-ref ok">Abonar</Link>
                         )
                 }
             </div>

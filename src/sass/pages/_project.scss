@@ -50,6 +50,24 @@
                     }
                 }
 
+                &.ok {
+
+                    &+label {
+                        font-weight: 400;
+                        color: $color-ok
+                    }
+
+                    &:checked+label {
+                        background-color: $color-ok;
+                        color: white;
+
+                        &:hover {
+                            background-color: darken($color-ok, 5);
+                        }
+                    }
+
+                }
+
             }
 
             & label {
@@ -183,6 +201,27 @@
 
     &.template {
         min-height: 70rem;
+    }
+
+    &__variables {
+        display: flex;
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: center;
+
+        & p {
+            padding: 1rem 2rem;
+            margin: 1rem;
+            background-color: $color-ok;
+            color: white;
+            cursor: pointer;
+            @include transition;
+
+            &:hover {
+                background-color: darken($color-ok, 10);
+            }
+        }
     }
 
 
@@ -491,6 +530,7 @@
                 display: flex;
                 flex-direction: column;
                 align-items: flex-end;
+                width: 100%;
 
                 & .card__body__item {
                     border-top: 1px solid $color-text-light;
@@ -532,6 +572,7 @@
             transition: height .4s ease-in-out;
             height: fit-content;
             position: relative;
+            flex-direction: column;
 
             & .scroll {
                 height: 12rem
@@ -588,7 +629,7 @@
             padding: 1rem;
             width: 100%;
             position: relative;
-            text-transform: capitalize;
+            // text-transform: capitalize;
             animation: .4s appear;
 
             & select {
@@ -754,7 +795,7 @@
                     margin: 0;
                     margin-left: -1rem;
                     color: $black !important;
-                    font-size: 1.5rem;
+                    // font-size: 1.5rem;
                     border-color: $color-text-light;
 
                     &:focus {
@@ -868,7 +909,7 @@
                 margin: .5rem 1.3rem;
 
                 & p {
-                    text-transform: capitalize;
+                    // text-transform: capitalize;
                     padding: 1rem;
                     border-bottom: 1px solid $color-text-light;
                     @include transition;
@@ -958,7 +999,7 @@
 
         & .paraphs {
             position: relative;
-            width: 70%;
+            width: 635px;
             max-height: 70%;
 
             // overflow-y: scroll;
@@ -1012,6 +1053,11 @@
                 background-color: $color-ok;
                 color: white;
                 cursor: pointer;
+                @include transition;
+
+                &:hover {
+                    background-color: darken($color-ok, 10);
+                }
             }
 
             & .add-par {
@@ -1155,4 +1201,32 @@ button.upload {
         }
     }
 
+}
+
+
+
+.editorClassName.rdw-editor-main {
+    border: 1px solid $color-text-light;
+    padding: .5rem 1.7rem;
+    min-height: 40rem;
+}
+
+.rdw-option-wrapper.rdw-option-disabled {
+    display: none;
+}
+
+
+.rbc-event.rbc-event-allday,
+.rbc-agenda-event-cell a {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start;
+
+    & h4 {
+        color: white;
+    }
+
+    & p {
+        color: gainsboro;
+    }
 }

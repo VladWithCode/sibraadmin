@@ -25,11 +25,11 @@ export const ExtraPaymentsEdit = ({ recordId }) => {
             <div className="card__body">
 
                 {
-                    extraCharges.map((extraCharge, index) => {
+                    extraCharges.map((extraCharge, index) => (
 
                         <ExtraPaymentEdit extraCharge={extraCharge} index={index} recordId={recordId} />
 
-                    })
+                    ))
                 }
 
             </div>

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { historyGetLot, historySetRecordInfo } from '../../actions/historyActions';
+import { staticURLDocs } from '../../url';
 import { CommissionInfo } from './CommisionInfo';
 import { ExtraCharge } from './ExtraCharge';
 import { Payment } from './Payment';
@@ -10,7 +11,7 @@ export const Record = ({ record, payment }) => {
 
     const dispatch = useDispatch();
 
-    const { lot: lotId, lotNumber, manzana, lotArea, payments, extraCharges, paymentInfo: { lotPrice, lotAmountDue, lotAmountPayed, lapseLeft, lapseType, minimumPaymentAmount, lapseToPay } } = record;
+    const { lotNumber, manzana, lotArea, payments, extraCharges, receipts, paymentInfo: { lotPrice, lotAmountDue, lotAmountPayed, lapseLeft, lapseType, minimumPaymentAmount, lapseToPay, project } } = record;
 
     const state = record.state === 'available' ? 'Disponible' : record.state === 'delivered' ? 'Entregado' : record.state === 'reserved' ? 'Comprado' : record.state === 'lotpayed' ? 'Pagado' : 'Liquidado';
 
@@ -20,7 +21,8 @@ export const Record = ({ record, payment }) => {
     const [activeSections, setActiveSections] = useState({
         payments: false,
         extraCharges: false,
-        commissionInfo: false
+        commissionInfo: false,
+        receipts: false
     })
 
     const switchActive = section => {
@@ -33,6 +35,12 @@ export const Record = ({ record, payment }) => {
     const updateLot = () => {
         dispatch(historyGetLot(record.lot));
         dispatch(historySetRecordInfo(record));
+    }
+
+    const handleOpen = (path) => {
+        const url = `${staticURLDocs}${path}`;
+
+        window.open(url, "_blank", 'top=500,left=200,frame=true,nodeIntegration=no');
     }
 
     return (
@@ -157,6 +165,31 @@ export const Record = ({ record, payment }) => {
                     }
                 </div>
 
+                <div className="card__header pointer mt-3" onClick={() => switchActive('receipts')}>
+                    <img src="../assets/img/docs.png" alt="" />
+                    <h4>Recibos</h4>
+                    <span className={`dropdown ${activeSections.receipts && 'active'} `}>v</span>
+                </div>
+
+                <div className={`full ${!activeSections.receipts && 'inactive'} `}>
+                    <div className="scroll">
+                        <div className="card__body__list">
+                            {
+                                receipts.length > 0 && (
+                                    receipts.map(({ staticPath, name, _id }, index) => (
+                                        <div onClick={() => { handleOpen(staticPath) }} key={_id}
+                                            className="card__body__list__doc">
+                                            <p>
+                                                {name ? name : index}
+                                            </p>
+                                        </div>
+                                    ))
+                                )
+                            }
+                        </div>
+                    </div>
+                </div>
+
                 {
                     extraCharges.length > 0 && (
                         <>
@@ -171,7 +204,7 @@ export const Record = ({ record, payment }) => {
                                 {
 
                                     extraCharges.map((extraCharge, index) => (
-                                        <ExtraCharge key={index} extraCharge={extraCharge} index={index + 1} recordState={record.state} recordId={record._id} />
+                                        <ExtraCharge key={index} extraCharge={extraCharge} index={index + 1} recordState={record.state} recordId={record._id} projectId={project} />
                                     ))
 
                                 }

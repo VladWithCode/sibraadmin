@@ -1,6 +1,10 @@
+import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
+import draftToHtml from "draftjs-to-html";
 import { redTypes } from "../types/reduxTypes";
 import { staticURL } from "../url";
+import { modalEnable, modalUpdate } from "./modal";
 import { uiFinishLoading, uiStartLoading } from "./ui";
+import '../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 
 
@@ -9,10 +13,9 @@ export const templatesSetAll = templates => ({
     payload: templates
 })
 
+export const templatesGet = (projectId) => {
 
-export const templatesGet = () => {
-
-    const url = `${staticURL}/templates`
+    const url = projectId ? `${staticURL}/templates/${projectId}` : `${staticURL}/templates`
 
     return (dispatch) => {
 
@@ -20,12 +23,23 @@ export const templatesGet = () => {
 
         fetch(url)
             .then(res => {
-                console.log(res);
                 return res.json();
             })
             .then(data => {
-                console.log(data);
-                dispatch(templatesSetAll(data.templates));
+
+
+                const editorTemplates = data.templates.map(template => {
+
+                    return {
+                        ...template,
+                        state: { editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(template.state.toString()))) }
+                    }
+
+                })
+
+                dispatch(templatesSetAll(editorTemplates));
+
+                return data
             })
             .catch(err => console.log(err));
 
@@ -56,11 +70,80 @@ export const templateUpdate = () => {
     console.log('Actualizar template');
 }
 
-export const templatesSetParaph = obj => {
-    console.log(obj);
+export const templatesSetParaph = obj => ({
+    type: redTypes.templatesSetParaph,
+    payload: obj
+})
 
-    return {
-        type: redTypes.templatesSetParaph,
-        payload: obj
+export const templatesUpdate = templates => {
+
+    return (dispatch) => {
+
+        dispatch(uiStartLoading());
+
+        templates.forEach((template) => {
+
+            const url = `${staticURL}/template/${template._id}`;
+
+            const templateContent = draftToHtml(convertToRaw(template.state.editorState.getCurrentContent()))
+
+            // console.log(JSON.stringify(convertToRaw(template.state.editorState.getCurrentContent())));
+
+            fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    doc: {
+                        content: templateContent,
+                        state: JSON.stringify(convertToRaw(template.state.editorState.getCurrentContent()))
+                    }
+                })
+            })
+
+                .then(res => {
+                    console.log(res);
+                    return res
+                })
+                .catch(err => console.log(err))
+
+
+        })
+
+        dispatch(uiFinishLoading());
+
+        const modalInfo = {
+            title: `Plantillas actualizadas con éxito`,
+            text: null,
+            link: `/plantillas`,
+            okMsg: 'Continuar',
+            closeMsg: null,
+            type: redTypes.templates
+        }
+
+        dispatch(modalUpdate(modalInfo));
+        dispatch(modalEnable());
+
     }
 }
+
+export const templatesGetVariables = () => {
+
+    const url = `${staticURL}/template/vars`
+
+    return (dispatch) => {
+        fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                dispatch(templatesSetVariables(data.vars))
+            })
+            .catch(err => console.log(err))
+    }
+
+}
+
+export const templatesSetVariables = (variables) => ({
+    type: redTypes.templatesGetVariables,
+    payload: variables
+})

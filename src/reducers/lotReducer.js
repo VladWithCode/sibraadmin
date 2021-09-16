@@ -2,7 +2,7 @@ import { redTypes } from "../types/reduxTypes";
 
 
 
-export const lotReducer = (state = {}, action) => {
+export const lotReducer = (state = { bindings: [] }, action) => {
 
     switch (action.type) {
         case redTypes.lotCreate:
@@ -34,6 +34,29 @@ export const lotReducer = (state = {}, action) => {
 
         case redTypes.lotReset:
             return {}
+
+        case redTypes.lotAddBinding:
+
+            state.bindings.push('');
+
+            return {
+                ...state
+            }
+
+        case redTypes.lotSetBindings:
+
+            return {
+                ...state,
+                bindings: action.payload
+            }
+
+        case redTypes.lotDeleteBinding:
+
+            state.bindings.splice(action.payload.index, 1);
+
+            return {
+                ...state
+            }
 
 
         default:

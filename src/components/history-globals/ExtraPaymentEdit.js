@@ -1,9 +1,11 @@
-import React from 'react'
-import { useSelector } from 'react-redux';
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { historySetExtraPayBefore } from '../../actions/historyActions';
 import { EditPayment } from './EditPayment';
 
-export const ExtraPaymentEdit = ([extraCharge, index, recordId]) => {
+export const ExtraPaymentEdit = ({ extraCharge, index, recordId }) => {
 
+    const dispatch = useDispatch();
 
     const { records } = useSelector(state => state);
 
@@ -14,6 +16,7 @@ export const ExtraPaymentEdit = ([extraCharge, index, recordId]) => {
     //                         amountPayed += +p.amount
     //                     })
 
+    const [payBefore, setPayBefore] = useState(extraCharge.payBefore);
 
     const hasChanged = (payment, extraChargeId) => {
 
@@ -41,14 +44,17 @@ export const ExtraPaymentEdit = ([extraCharge, index, recordId]) => {
                     <span>monto del cargo</span>
                     <p className="price" > ${extraCharge.debt.toLocaleString()} </p>
                 </div>
-                {/* <div className="card__body__item">
-                    <span>cantidad pagada</span>
-                    <p className="payed"> ${amountPayed.toLocaleString()} </p>
-                </div>
+
+            </div>
+
+            <div className="right">
                 <div className="card__body__item">
-                    <span>deuda pendiente</span>
-                    <p className="debt" > ${(extraCharge.debt - amountPayed).toLocaleString()} </p>
-                </div> */}
+                    <label htmlFor="payBefore">Fecha límite de pago</label>
+                    <input autoFocus name="payBefore" type="date" autoComplete="off" value={payBefore} onChange={e => {
+                        setPayBefore(e.target.value);
+                        dispatch(historySetExtraPayBefore(extraCharge._id, e.target.value))
+                    }} />
+                </div>
             </div>
 
             {

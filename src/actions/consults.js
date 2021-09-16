@@ -13,13 +13,11 @@ export const getProjects = () => {
 
     const url = `${staticURL}/projects/`;
 
-    console.log('obteniendo proyectos');
-
     return (dispatch) => {
         dispatch(uiStartLoading());
         fetch(url)
             .then(resp => {
-                console.log(resp);
+
                 return resp.json();
             })
             .then(data => {
@@ -34,8 +32,6 @@ export const getProjects = () => {
 export const getProject = (id) => {
 
     const url = `${staticURL}/projects/${id}`;
-
-    console.log('obteniendo proyecto');
 
     return (dispatch) => {
         dispatch(uiStartLoading());
@@ -56,7 +52,6 @@ export const getClients = () => {
 
     const url = `${staticURL}/customers/`;
 
-    console.log('obteniendo clientes');
 
     return (dispatch) => {
         dispatch(uiStartLoading());
@@ -65,7 +60,6 @@ export const getClients = () => {
             .then(data => {
                 dispatch(uiFinishLoading());
                 dispatch(loadClients(data.customers ? data.customers : []));
-                console.log(data);
             })
             .catch(err => console.log(err))
     }
@@ -76,18 +70,18 @@ export const getLots = (projectId) => {
 
     const url = `${staticURL}/lots/on-project/${projectId}`;
 
-    console.log('obteniendo lotes');
+
 
     return (dispatch) => {
         dispatch(uiStartLoading());
         fetch(url)
             .then(resp => {
-                console.log(resp);
+
                 return resp.json();
             })
             .then(data => {
                 dispatch(uiFinishLoading());
-                dispatch(loadLots(data.lots))
+                dispatch(loadLots(data.lots));
             })
             .catch(err => console.log(err))
     }
@@ -119,8 +113,6 @@ export const deleteFile = (fileName, type, id, refId, projectId) => {
 
     const data = { fileName };
 
-    console.log('a esta url: ', url);
-
     return (dispatch) => {
 
         dispatch(uiStartLoading());
@@ -136,7 +128,6 @@ export const deleteFile = (fileName, type, id, refId, projectId) => {
                 return response.json();
             })
             .then((data) => {
-                console.log('data', data);
                 dispatch(uiFinishLoading());
                 dispatch(setTempSuccessNotice(`Documento ${fileName} eliminado con éxito`));
                 type !== redTypes.project ? (
@@ -149,7 +140,7 @@ export const deleteFile = (fileName, type, id, refId, projectId) => {
                     fetch(`${staticURL}/lots/${id}`)
                         .then(response => response.json())
                         .then(data => {
-                            dispatch(setLot(data.lot))
+                            data.lot && dispatch(setLot(data.lot));
                         })
                         .catch(err => console.log(err))
                 }
@@ -180,7 +171,6 @@ export const deleteClient = (id, name) => {
                 return response.json();
             })
             .then((data) => {
-                console.log('data', data);
                 dispatch(uiFinishLoading());
                 dispatch(redirectSet(redTypes.clients, '/clientes'));
                 const modalInfo = {
@@ -211,16 +201,15 @@ export const getRecords = () => {
 
     const url = `${staticURL}/record/`;
 
-    console.log('get records');
-
     return (dispatch) => {
         dispatch(uiStartLoading());
         fetch(url)
             .then(resp => resp.json())
             .then(data => {
                 dispatch(uiFinishLoading());
-                dispatch(loadRecords(data.records));
-                console.log(data);
+                data.records && (
+                    dispatch(loadRecords(data.records))
+                )
 
             })
             .catch(err => console.log(err))

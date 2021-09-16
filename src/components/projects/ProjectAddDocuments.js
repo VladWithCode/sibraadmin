@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getProject, getProjects } from '../../actions/consults';
+import { getProject } from '../../actions/consults';
 import { useForm } from '../../hooks/useForm';
 import { redTypes } from '../../types/reduxTypes';
 import { setTempSuccessNotice, uiStartLoading, uiFinishLoading, setTempError } from '../../actions/ui';

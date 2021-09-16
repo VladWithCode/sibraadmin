@@ -68,7 +68,7 @@ export const Client = () => {
                 <div className="project__header">
                     <div className="left">
                         <h3> Cliente </h3>
-                        <span> {_id} </span>
+                        <span className="span"> {_id} </span>
                     </div>
                     <div className="right">
 
@@ -209,8 +209,8 @@ export const Client = () => {
                             <div className="scroll">
                                 <div className="card__body__list">
                                     {
-                                        files?.map(({ name, staticPath }) => (
-                                            <div onClick={() => { handleOpen(staticPath) }} key={staticPath} className="card__body__list__doc">
+                                        files?.map(({ name, staticPath, _id }) => (
+                                            <div onClick={() => { handleOpen(staticPath) }} key={_id} className="card__body__list__doc">
                                                 <p>
                                                     {name}
                                                 </p>

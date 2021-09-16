@@ -1,3 +1,5 @@
+import { convertToRaw } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -5,12 +7,14 @@ import { floatingButtonSet } from '../../actions/floatingButton';
 import { historyGetLot } from '../../actions/historyActions';
 import { getLot } from '../../actions/lot';
 import { modalEnable, modalUpdate } from '../../actions/modal';
+import { paymentSetInfo } from '../../actions/payments';
 import { redirectSet } from '../../actions/redirect';
-import { setTempError, uiFinishLoading, uiStartLoading } from '../../actions/ui';
+import { setTempError, setTempSuccessNotice, uiFinishLoading, uiStartLoading } from '../../actions/ui';
 import { redTypes } from '../../types/reduxTypes';
 import { staticURL } from '../../url';
 import { ClientShort } from '../clients/ClientShort';
 import { Record } from '../history-globals/Record';
+import { TextEditor } from '../templates/TextEditor';
 
 
 const dateOptions = {
@@ -24,39 +28,42 @@ const dateOptions = {
 export const Payment = () => {
 
     const dispatch = useDispatch();
+
     const { projectId, lotId } = useParams();
 
-    const { historyActions: { lot: currentLot }, clients } = useSelector(state => state);
+    const { historyActions: { lot: currentLot }, clients, payments } = useSelector(state => state);
 
     const { record } = currentLot;
 
     const currentClient = clients.find(c => c._id === record?.customer);
 
-    const [prorogation, setProrogation] = useState();
+    const [emptyFields, setEmptyFields] = useState([]);
 
+    const [formValues, setFormValues] = useState(payments)
+
+    const { amount, markAsNextPayment, prorogateTo, payer, prorogate, editTemplate, templates } = formValues;
+
+    const currentTemplate = templates.find(t => t.type === 'PAGO');
 
     useEffect(() => {
 
         dispatch(floatingButtonSet('pencil', redTypes.projectCreate));
         dispatch(redirectSet(redTypes.history, `/historial/abonar/${projectId}/lote/${lotId}`));
+        // 
+        // dispatch(paymentsGetTemplates(projectId));
+
+        setFormValues(payments);
+
+    }, [dispatch, projectId, lotId, payments]);
+
+    useEffect(() => {
         dispatch(historyGetLot(lotId));
-
-    }, [dispatch, projectId, lotId]);
-
-    const [emptyFields, setEmptyFields] = useState([]);
-
-    const [formValues, setFormValues] = useState({
-        amount: '',
-        type: '',
-        markAsNextPayment: false,
-        prorogateTo: ''
-    })
-
-    const { amount, markedAsNextPayment, prorogateTo } = formValues;
+    }, [lotId, dispatch])
 
     const inputChange = e => {
         checkEmptyField(e);
-        setFormValues({ ...formValues, [e.target.name]: e.target.value });
+        // setFormValues({ ...formValues, [e.target.name]: e.target.value });
+        dispatch(paymentSetInfo({ ...formValues, [e.target.name]: e.target.value }))
     }
 
     const pay = async () => {
@@ -78,19 +85,25 @@ export const Payment = () => {
             return;
         }
 
+        const templateContent = draftToHtml(convertToRaw(currentTemplate.state.editorState.getCurrentContent()));
+
         const data = {
             type: +amount >= record.paymentInfo.lotAmountDue ? 'liquidation' : 'payment',
             amount: +amount,
-            markedAsNextPayment
+            markAsNextPayment,
+            payer: payer?.trim().length > 3 || null,
+            content: (editTemplate && !prorogate) ? templateContent : null
         }
 
         dispatch(uiStartLoading());
+
+        console.log('esta es la data,', data);
 
         const res = await postPayment(data);
 
         dispatch(uiFinishLoading());
 
-        console.log(res);
+        console.log('Esta es la respuesta ', res);
 
         if (res) {
             if (res.status === 'OK') {
@@ -118,7 +131,7 @@ export const Payment = () => {
 
     const postPayment = data => {
 
-        const url = `${staticURL}/records/${record._id}/payment`;
+        const url = `${staticURL}/records/${record._id}/pay`;
 
         console.log('haciendo post jejeje', url);
 
@@ -130,9 +143,11 @@ export const Payment = () => {
             body: JSON.stringify(data)
         })
             .then(response => {
+                console.log(response);
                 return response.json();
             })
             .then((data) => {
+                console.log(data);
                 return data;
             })
             .catch(err => {
@@ -253,6 +268,15 @@ export const Payment = () => {
     }
 
 
+    const handleCopy = ({ target }) => {
+
+        navigator.clipboard.writeText(`%%${target.id.toUpperCase()}%%`);
+
+        dispatch(setTempSuccessNotice(`Variable ${target.id} copiada al porta papeles`))
+
+    }
+
+
     return (
         <div className="pb-5 project create">
             <div className="project__header">
@@ -263,10 +287,28 @@ export const Payment = () => {
                 <div className="options" >
 
                     {
-                        prorogation ? (
-                            <input type="checkbox" value={true} onClick={() => setProrogation(!prorogation)} id="preReserve" name="action" defaultChecked />
+                        prorogate ? (
+                            <input type="checkbox" value={true} onClick={() => {
+                                setFormValues(fv => ({
+                                    ...fv,
+                                    prorogate: !prorogate
+                                }));
+                                dispatch(paymentSetInfo({
+                                    ...formValues,
+                                    prorogate: !prorogate
+                                }))
+                            }} id="preReserve" name="action" defaultChecked />
                         ) : (
-                            <input type="checkbox" value={true} onClick={() => setProrogation(!prorogation)} id="preReserve" name="action" />
+                            <input type="checkbox" value={true} onClick={() => {
+                                setFormValues(fv => ({
+                                    ...fv,
+                                    prorogate: !prorogate
+                                }));
+                                dispatch(paymentSetInfo({
+                                    ...formValues,
+                                    prorogate: !prorogate
+                                }))
+                            }} id="preReserve" name="action" />
                         )
                     }
 
@@ -292,7 +334,7 @@ export const Payment = () => {
                     <div className="right">
 
                         {
-                            prorogation ? (
+                            prorogate ? (
                                 <div className={`card__body__item ${emptyFields.includes('prorogateTo') && 'error'}`}>
                                     <label htmlFor="prorogateTo">Fecha límite de pago</label>
                                     <input autoFocus name="prorogateTo" type="date" autoComplete="off" value={prorogateTo} onChange={inputChange} />
@@ -306,20 +348,31 @@ export const Payment = () => {
                                             <input autoFocus name="amount" type="number" autoComplete="off" value={amount} onChange={inputChange} />
                                         </div>
 
-                                        <div className={`card__body__item ${emptyFields.includes('markedAsNextPayment') && 'error'}`}>
+                                        <div className={`card__body__item ${emptyFields.includes('markAsNextPayment') && 'error'}`}>
                                             <label >acción</label>
                                             <div className="options">
 
-                                                <input type="radio" name="markedAsNextPayment" onClick={() => setFormValues({ ...formValues, amount: record.paymentInfo.minimumPaymentAmount, markedAsNextPayment: true })} id="no" />
+                                                <input type="radio" name="markAsNextPayment" onClick={() => {
+                                                    setFormValues(fv => ({ ...fv, amount: record.paymentInfo.minimumPaymentAmount, markAsNextPayment: true }));
+                                                    dispatch(paymentSetInfo({ ...formValues, amount: record.paymentInfo.minimumPaymentAmount, markAsNextPayment: true }))
+                                                }} id="no" />
                                                 <label htmlFor="no">
                                                     Pagar mensualidad
                                                 </label>
 
-                                                <input defaultChecked type="radio" name="markedAsNextPayment" onClick={() => setFormValues({ ...formValues, amount: '', markedAsNextPayment: false })} id="yes" />
+                                                <input defaultChecked type="radio" name="markAsNextPayment" onClick={() => {
+                                                    setFormValues(fv => ({ ...fv, amount: '', markAsNextPayment: false }));
+                                                    dispatch(paymentSetInfo({ ...formValues, amount: '', markAsNextPayment: false }))
+                                                }} id="yes" />
                                                 <label htmlFor="yes">
                                                     Abonar
                                                 </label>
                                             </div>
+                                        </div>
+
+                                        <div className={`card__body__item ${emptyFields.includes('payer') && 'error'}`}>
+                                            <label htmlFor="payer">Quién paga</label>
+                                            <input autoFocus name="payer" type="text" autoComplete="off" value={payer} onChange={inputChange} />
                                         </div>
                                     </>
                                 )
@@ -338,8 +391,80 @@ export const Payment = () => {
                 </div>
             </div>
 
+            <div className="project__header">
+                <div className="left"></div>
+
+                {
+                    !prorogate && (
+                        <div className="options" >
+
+                            {
+                                editTemplate ? (
+                                    <input className="ok" type="checkbox" value={true} onClick={() => {
+                                        setFormValues(fv => ({
+                                            ...fv,
+                                            editTemplate: !editTemplate
+                                        }));
+                                        dispatch(paymentSetInfo({ ...formValues, editTemplate: !editTemplate }))
+                                    }} id="editTemplate" defaultChecked />
+                                ) : (
+                                    <input className="ok" type="checkbox" value={false} onClick={() => {
+                                        setFormValues(fv => ({
+                                            ...fv,
+                                            editTemplate: !editTemplate
+                                        }));
+                                        dispatch(paymentSetInfo({ ...formValues, editTemplate: !editTemplate }))
+                                    }} id="editTemplate" />
+                                )
+                            }
+
+                            <label htmlFor="editTemplate">
+                                <div className="option">
+                                    Editar recibo
+                                </div>
+                            </label>
+
+                        </div>
+                    )
+                }
+
+            </div>
+
+
+
+
+
             {
-                record._id && (
+                ((editTemplate && currentTemplate) && !prorogate) && (
+
+                    <div className="card">
+                        <div className="card__body">
+
+                            <div className="paraphs">
+
+                                <TextEditor template={currentTemplate} payment={true} />
+                                <div className="my-3"></div>
+
+                            </div>
+                            <div className="variables">
+
+                                <h4>Variables de la plantilla</h4>
+
+                                {
+                                    currentTemplate.variables.sort().map(variable => (
+                                        <p onClick={handleCopy} id={variable.title} >{variable.title}</p>
+                                    ))
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+
+                )
+            }
+
+            {
+                record?._id && (
                     <Record record={record} payment={true} />
                 )
             }
@@ -354,7 +479,7 @@ export const Payment = () => {
                 <button className="cancel" onClick={cancel} >
                     Cancelar
                 </button>
-                <button className="next" onClick={() => prorogation ? postProrogation() : pay()}>
+                <button className="next" onClick={() => prorogate ? postProrogation() : pay()}>
                     Realizar Pago
                 </button>
             </div>

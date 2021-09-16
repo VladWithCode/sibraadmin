@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router';
 import { floatingButtonSet } from '../../actions/floatingButton';
 import { historyGetLot } from '../../actions/historyActions';
 import { modalEnable, modalUpdate } from '../../actions/modal';

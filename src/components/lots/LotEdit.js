@@ -9,9 +9,10 @@ import { modalEnable, modalUpdate } from '../../actions/modal';
 import { setLot } from '../../actions/consults';
 import { setTempError, uiStartLoading, uiFinishLoading, setTempSuccessNotice } from '../../actions/ui';
 import { staticURL } from '../../url';
-import { getLots, loadLots } from '../../actions/consults';
+import { getLots } from '../../actions/consults';
 import { ModalDoc } from '../ModalDoc';
 import { projectEnableSvcModal, projectUpdateSvcModal } from '../../actions/project';
+import { Bindings } from './Bindings';
 
 export const LotEdit = () => {
 
@@ -22,11 +23,9 @@ export const LotEdit = () => {
     const currentLot = lots.find(lot => lot._id === lotId);
     const currentProject = projects.find(p => p._id === projectId);
 
-
     const { lotNumber, manzana } = currentLot;
     const { name: projectName } = currentProject;
-    const { files } = lot;
-
+    const { files, bindings } = lot;
 
     const [emptyFields, setEmptyFields] = useState([]);
     const [hasChanged, setHasChanged] = useState([]);
@@ -195,13 +194,9 @@ export const LotEdit = () => {
 
     const handleChangeMeasure = (index, e, key) => {
 
-        console.log(index, e.target.name, key);
-
         checkEmptyField(e);
 
         const tempMeasuresArr = measures;
-
-        console.log(tempMeasuresArr);
 
         tempMeasuresArr[index][key] = e.target.value;
 
@@ -222,7 +217,8 @@ export const LotEdit = () => {
                 measures: measures.map(m => ({
                     title: m.title,
                     value: +m.value
-                }))
+                })),
+                bindings
             };
 
             console.log('Información enviada', data);
@@ -274,6 +270,14 @@ export const LotEdit = () => {
 
     const isFormValid = () => {
         checkEmptyFields();
+
+
+        for (const binding of bindings) {
+            if (binding.length === 0) {
+                dispatch(setTempError('No puede haber colindancias vacías'));
+                return false;
+            }
+        }
 
         if (emptyFields.length > 0) {
             return false;
@@ -456,19 +460,13 @@ export const LotEdit = () => {
                         }
                     </div>
                 </div>
-
-
-
-
-
-
             </div>
 
             <div className="card-grid mt-2">
                 <div className="card edit">
                     <div className="card__body">
                         <div className="full">
-                            <div className="mt-3 card__header">
+                            <div className=" card__header">
                                 <img src="../assets/img/docs.png" alt="" />
                                 <h4>Documentos Disponibles</h4>
                             </div>
@@ -501,6 +499,15 @@ export const LotEdit = () => {
                         </div>
                     </div>
                 </div>
+
+                {
+                    bindings && (
+                        <Bindings bindings={bindings} />
+                    )
+                }
+
+
+
             </div>
 
             <div className="form-buttons">

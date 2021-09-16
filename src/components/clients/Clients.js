@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { NavLink, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from '../../hooks/useForm';
-import { modalReset, modalUpdate } from '../../actions/modal';
+import { modalUpdate } from '../../actions/modal';
 import { getClient, getClients } from '../../actions/consults';
 import { floatingButtonSet } from '../../actions/floatingButton';
 import { redTypes } from '../../types/reduxTypes';
+import { clientReset } from '../../actions/client';
 
 export const Clients = () => {
 
@@ -31,8 +32,8 @@ export const Clients = () => {
         }
 
         dispatch(modalUpdate(modalInfo));
-
         dispatch(floatingButtonSet('plus', redTypes.clients));
+        dispatch(clientReset());
 
 
     }, [dispatch]);

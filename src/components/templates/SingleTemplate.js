@@ -1,14 +1,13 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux';
-import { templatesAddParaph } from '../../actions/templates';
 import { setTempSuccessNotice } from '../../actions/ui';
-import { Paraphs } from './Paraphs';
+import { TextEditor } from './TextEditor';
 
 export const SingleTemplate = ({ template }) => {
 
     const dispatch = useDispatch();
 
-    const { variables, paraphs, signatures, _id, type } = template;
+    const { variables, type } = template;
 
     const handleCopy = ({ target }) => {
 
@@ -18,43 +17,52 @@ export const SingleTemplate = ({ template }) => {
 
     }
 
+
     return (
-        <div className="card template">
-            <div className="card__header">
-                <img src="../assets/img/docs.png" alt="" />
-                <h4>Párrafos de {type}</h4>
-            </div>
+        <>
+            <div className="card template">
+                <div className="card__header">
+                    <img src="../assets/img/docs.png" alt="" />
+                    <h4>Contenido de {type}</h4>
+                </div>
 
-            <div className="card__body">
+                <div className="card__body">
 
-                <div className="paraphs">
+                    {/* <div className="paraphs">
                     {
                         paraphs.map((paraph, index) => (
                             <Paraphs key={index + +paraph._id} paraph={paraph} index={index + 1} templateId={_id} />
                         ))
                     }
+                </div> */}
+                    <div className="paraphs">
+                        {
+                            template?.content && (
+                                <TextEditor template={template} />
+                            )
+                        }
+                    </div>
+                    <div className="variables">
+
+                        <h4>Variables de la plantilla</h4>
+
+                        {
+                            variables.sort().map(variable => (
+                                <p onClick={handleCopy} id={variable.title} >{variable.title}</p>
+                            ))
+                        }
+
+                    </div>
+
+
+
                 </div>
-                <div className="variables">
-                    <button
-                        onClick={() => dispatch(templatesAddParaph(_id))}
-                        className="add-par ok">
-                        Agregar párrafo
-                    </button>
 
-                    <h4>Variables Disponibles</h4>
 
-                    {
-                        variables.map(variable => (
-                            <p onClick={handleCopy} id={variable.title} >{variable.title}</p>
-                        ))
-                    }
-
-                </div>
 
             </div>
 
 
-
-        </div>
+        </>
     )
 }

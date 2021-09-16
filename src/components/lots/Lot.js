@@ -13,6 +13,8 @@ import { FloatingButtonSecondary } from '../FloatingButtonSecondary';
 import { Record } from '../history-globals/Record';
 import { PriceHistory } from './PriceHistory';
 import { ClientShort } from '../clients/ClientShort';
+import { paymentOpen } from '../../actions/payments';
+import { Cancellations } from '../history-globals/Cancellations';
 
 export const Lot = () => {
 
@@ -24,7 +26,7 @@ export const Lot = () => {
 
     const currentProject = projects.find(p => p._id === projectId);
 
-    const { area, isCorner, lotNumber, measures, state, manzana, files, priceHistory } = currentLot;
+    const { area, isCorner, lotNumber, measures, state, manzana, files, priceHistory, bindings, cancellations } = currentLot;
 
     const [currentClient, setCurrentClient] = useState(clients.find(c => c._id === currentLot.record));
 
@@ -64,10 +66,11 @@ export const Lot = () => {
         dispatch(breadcrumbsUpdate(redTypes.projects, breadcrumbs));
         dispatch(floatingButtonSet('pencil', redTypes.projectEdit));
         dispatch(redirectSet(redTypes.projects, `/proyectos/ver/${projectId}/lote/${lotId}`));
-        dispatch(getLot(currentLot._id));
+        dispatch(getLot(lotId));
         dispatch(secondaryFloatingButtonSet('bill', state === 'reserved' ? redTypes.lotReserved : null, projectId, lotId));
+        dispatch(paymentOpen(projectId));
 
-    }, [dispatch]);
+    }, [currentLot._id, dispatch, lotId, lotNumber, name, projectId, state]);
 
     useEffect(() => {
         setCurrentClient(clients.find(c => c._id === currentLot.customer));
@@ -137,7 +140,9 @@ export const Lot = () => {
 
                         </div>
                         <div className="left">
-                            <h4>Medidas</h4>
+                            <div className="card__header">
+                                <h4>Medidas</h4>
+                            </div>
                             {
                                 measures.length > 0 && (
 
@@ -152,6 +157,31 @@ export const Lot = () => {
                                         </div>
                                     )
                                     )
+
+                                )
+                            }
+
+
+                            {
+                                bindings.length > 0 && (
+
+                                    <>
+                                        <div className="card__header mt-3">
+                                            <h4>Colinancias</h4>
+                                        </div>
+
+                                        {bindings.map((binding, index) => (
+                                            <div key={`binding-${index}`} className="card__body__item">
+                                                <span>
+                                                    Colinancia {index + 1}
+                                                </span>
+                                                <p>
+                                                    {binding}
+                                                </p>
+                                            </div>
+                                        )
+                                        )}
+                                    </>
 
                                 )
                             }
@@ -185,8 +215,8 @@ export const Lot = () => {
                         </div>
                         <div className="card__body__list">
                             {
-                                files?.map(({ name, staticPath }) => (
-                                    <div onClick={() => { handleOpen(staticPath) }} key={name} className="card__body__list__doc">
+                                files?.map(({ name, staticPath, _id }) => (
+                                    <div onClick={() => { handleOpen(staticPath) }} key={_id} className="card__body__list__doc">
                                         <p>
                                             {name}
                                         </p>
@@ -236,6 +266,23 @@ export const Lot = () => {
                             </div>
                             <PriceHistory priceHistory={priceHistory} />
                         </>
+                    )
+                }
+
+                {
+                    cancellations && (
+
+                        cancellations.length > 0 && (
+                            <>
+                                <div className="project__header">
+                                    <div className="left">
+                                        <h3> Cancelaciones </h3>
+                                    </div>
+                                </div>
+                                <Cancellations cancellations={cancellations} />
+                            </>
+                        )
+
                     )
                 }
 
