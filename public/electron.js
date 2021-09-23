@@ -17,9 +17,9 @@ function createWindow() {
         //BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
         mainWindow.webContents.openDevTools();
     }
-    if (!isDev) {
-        mainWindow.webPreferences.devTools = false;
-    }
+    // if (!isDev) {
+    //     mainWindow.webPreferences.devTools = false;
+    // }
     mainWindow.setMenu(null);
     mainWindow.on('closed', () => mainWindow = null);
 }
