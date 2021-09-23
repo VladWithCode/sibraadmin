@@ -24,11 +24,13 @@ export const PayExtraCharge = () => {
 
     const currentClient = clients.find(c => c._id === record?.customer);
 
-    const { extraCharges } = projects.find(p => p._id === record.project);
+    // const { extraCharges } = projects.find(p => p._id === record?.project);
 
-    const currentExtraCharges = extraCharges.find(e => e._id === extraChargeId);
+    // const currentExtraCharges = extraCharges.find(e => e._id === extraChargeId);
 
-    const { amount: extraAmount, title } = currentExtraCharges;
+    const [currentExtraCharges, setCurrentExtraCharges] = useState({});
+
+    // const { amount: extraAmount, title } = currentExtraCharges;
 
     const [emptyFields, setEmptyFields] = useState([]);
 
@@ -36,7 +38,9 @@ export const PayExtraCharge = () => {
 
     const { amount1, date, payer1, editTemplate, templates } = formValues;
 
-    const currentTemplate = templates.find(t => t.type === (currentExtraCharges?.title.toLowerCase() === 'escrituras' ? 'ESCRITURAS' : 'CARGO'));
+    // const currentTemplate = templates.find(t => t.type === (currentExtraCharges?.title.toLowerCase() === 'escrituras' ? 'ESCRITURAS' : 'CARGO'));
+
+    const [currentTemplate, setCurrentTemplate] = useState(templates.find(t => t.type === (currentExtraCharges?.title?.toLowerCase() === 'escrituras' ? 'ESCRITURAS' : 'CARGO')))
 
     useEffect(() => {
 
@@ -47,6 +51,16 @@ export const PayExtraCharge = () => {
 
     }, [dispatch, extraChargeId, recordId, payments]);
 
+    useEffect(() => {
+
+        const currentProject = projects.find(p => p._id === record?.project);
+
+        const currentExtraCharges = currentProject?.extraCharges.find(e => e._id === extraChargeId);
+
+        setCurrentExtraCharges(currentExtraCharges);
+        setCurrentTemplate(templates.find(t => t.type === (currentExtraCharges?.title?.toLowerCase() === 'escrituras' ? 'ESCRITURAS' : 'CARGO')))
+
+    }, [extraChargeId, projects, record?.project, templates])
 
 
     const inputChange = e => {
@@ -105,12 +119,23 @@ export const PayExtraCharge = () => {
             return;
         }
 
-        const templateContent = draftToHtml(convertToRaw(currentTemplate.state.editorState.getCurrentContent()));
+        // const templateContent = draftToHtml(convertToRaw(currentTemplate.state.editorState.getCurrentContent())).replaceAll(' ', '&nbsp;');
+
+        const exp = new RegExp(/<([a-z]+)\s?(style=".*?")?>(<([a-z]+)\s?(style=".*?")?>(.*?)<\/\4>)<\/\1>/gi);
+
+        const strContent = currentTemplate && draftToHtml(convertToRaw(currentTemplate.state.editorState.getCurrentContent()));
+
+        const tempContent = strContent?.replace(exp, (str, g1, g2, g3, g4, g5, g6) => {
+
+            return `<${g1}${g2 ? ' ' + g2 : ''}>${!g3 ? '' : `<${g4}${g5 ? ' ' + g5 : ''}>${g6.replaceAll(' ', '&nbsp;')}</${g4}>`}</${g1}>`
+        })
+
+        const templateContent = tempContent?.replaceAll('<p></p>', '<p><br></p>');
 
         const data = {
-            amount1: +amount1,
+            amount: +amount1,
             date: date || null,
-            payer: payer1.trim().length > 3 || null,
+            payer: payer1 ? (payer1.trim().length > 3 || null) : null,
             content: editTemplate ? templateContent : null
         }
 
@@ -119,8 +144,6 @@ export const PayExtraCharge = () => {
         const res = await postPayment(data);
 
         dispatch(uiFinishLoading());
-
-        console.log(res);
 
         if (res) {
             if (res.status === 'OK') {
@@ -359,11 +382,11 @@ export const PayExtraCharge = () => {
                     <div className="right">
                         <div className="card__body__item">
                             <span>Nombre del cargo</span>
-                            <p> {title} </p>
+                            <p> {currentExtraCharges?.title} </p>
                         </div>
                         <div className="card__body__item">
                             <span>Precio del cargo</span>
-                            <p> ${extraAmount.toLocaleString()} </p>
+                            <p> ${currentExtraCharges?.amount?.toLocaleString()} </p>
                         </div>
 
                     </div>

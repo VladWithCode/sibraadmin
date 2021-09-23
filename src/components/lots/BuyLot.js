@@ -444,6 +444,10 @@ export const BuyLot = () => {
                                             <label htmlFor={`payedDate${index}`}>Fecha cuando fue pagado</label>
                                             <input name={`payedDate${index}`} type="date" autoComplete="off" onChange={e => onPaymentChange(e, index, 'payedDate')} value={payment.payedDate} />
                                         </div>
+                                        <div className={`card__body__item ${emptyFields.includes(`payer${index}`) && 'error'}`}>
+                                            <label htmlFor={`payer${index}`}>Pagado por</label>
+                                            <input name={`payer${index}`} type="text" autoComplete="off" onChange={e => onPaymentChange(e, index, 'payer')} value={payment.payer} />
+                                        </div>
                                     </div>
                                 ))
                             }

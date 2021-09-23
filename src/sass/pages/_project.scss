@@ -11,6 +11,14 @@
         align-items: center;
         text-transform: capitalize;
 
+        & span {
+            font-size: 1.5rem;
+        }
+
+        & label {
+            font-size: 1.2rem;
+        }
+
         & .options {
 
             display: flex;
@@ -488,7 +496,8 @@
             right: 0;
             top: 0;
             color: $color-success;
-            border-bottom: 1px solid $color-success;
+            // border-bottom: 1px solid $color-success;
+            border: none;
             padding: 1rem;
         }
 
@@ -585,7 +594,7 @@
             & .commission {
                 position: absolute;
                 right: 0;
-                top: 2rem;
+                top: 0;
                 color: $color-success;
                 border-bottom: 1px solid $color-success;
                 padding: 1rem;
@@ -630,7 +639,19 @@
             width: 100%;
             position: relative;
             // text-transform: capitalize;
+
             animation: .4s appear;
+
+            &.late {
+                background-color: $color-danger;
+                border-color: $white;
+
+                & span,
+                & p {
+                    color: $white;
+                }
+
+            }
 
             & select {
                 position: absolute;
@@ -920,6 +941,7 @@
                         color: $color-ok;
                     }
                 }
+
             }
 
             &__doc {
@@ -999,7 +1021,8 @@
 
         & .paraphs {
             position: relative;
-            width: 635px;
+            // width: 635px;
+            width: 6.4in;
             max-height: 70%;
 
             // overflow-y: scroll;
@@ -1229,4 +1252,8 @@ button.upload {
     & p {
         color: gainsboro;
     }
+}
+
+.editorClassName.rdw-editor-main {
+    // font-size: letter;
 }

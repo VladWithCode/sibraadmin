@@ -100,11 +100,13 @@ export const paymentOpen = projectId => {
             })
             .then(data => {
 
+                console.log(data.templates);
+
                 const editorTemplates = data.templates.map(template => {
 
                     return {
                         ...template,
-                        state: { editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(template.state.toString()))) }
+                        state: { editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(template.state?.toString()))) }
                     }
 
                 })
@@ -272,7 +274,8 @@ export const submitPayment = (paymentInfo, lotInfo) => {
                             amount: +p.amount,
                             ogPaymentDate: p.paymentDate,
                             payedAt: p.payedDate,
-                            type
+                            type,
+                            payer: p.payer ? (p.payer.length > 0 ? p.payer : null) : null
                         }
                     })
 

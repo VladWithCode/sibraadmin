@@ -46,6 +46,8 @@ export const payments = (state = initialState, action) => {
 
         case redTypes.paymentRestart:
 
+            console.log('aaaaaaaaaaayudaaaa');
+
             return {
                 ...initialState,
                 templates: action.payload

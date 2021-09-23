@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux';
 import { redTypes } from '../types/reduxTypes';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { buyLotReset } from '../actions/payments';
+import { buyLotReset, paymentOpen } from '../actions/payments';
 
-export const FloatingButtonSecondary = () => {
+export const FloatingButtonSecondary = ({ pay }) => {
 
     const dispatch = useDispatch();
 
@@ -17,10 +17,6 @@ export const FloatingButtonSecondary = () => {
 
         dispatch(buyLotReset());
 
-        // type === redTypes.lotReserved && (
-        //     dispatch((historyGetLot(lotId)))
-        // )
-
     }, [dispatch, lotId, type, projectId])
 
     return (
@@ -28,7 +24,10 @@ export const FloatingButtonSecondary = () => {
         <>
             {
                 type !== redTypes.projectCreate && (
-                    <Link to={link} className="floating-btn floating-btn-secondary" >
+                    <Link to={link} onClick={() => {
+                        console.log('Holi');
+                        dispatch(paymentOpen(projectId));
+                    }} className="floating-btn floating-btn-secondary" >
                         <svg><use href={`../assets/svg/${iconName}.svg#${iconName}`} ></use></svg>
                     </Link>
                 )

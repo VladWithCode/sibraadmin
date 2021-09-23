@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useState } from 'react';
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -8,15 +10,13 @@ import { templateSet } from '../../actions/templates';
 
 export const TextEditor = ({ template, payment }) => {
 
-    const { content, _id: templateId, state: templateState } = template;
+    const { _id: templateId, state: templateState } = template;
 
     const dispatch = useDispatch();
 
     const { templates: { currentTemplates } } = useSelector(state => state);
 
     const [state, setstate] = useState(templateState);
-
-    // console.log('este es el templateState: ', convertFromRaw(JSON.parse(templateState.toString())));
 
     useEffect(() => {
 
@@ -38,6 +38,7 @@ export const TextEditor = ({ template, payment }) => {
     }, [currentTemplates, templateId, payment])
 
     const onEditorStateChange = (editorState) => {
+
         setstate({ editorState })
 
         !payment ? (
@@ -60,7 +61,6 @@ export const TextEditor = ({ template, payment }) => {
 
     const { editorState } = state;
 
-    // console.log(draftToHtml(convertToRaw(content.editorState.getCurrentContent())));
 
     return (
 

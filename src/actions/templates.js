@@ -27,12 +27,13 @@ export const templatesGet = (projectId) => {
             })
             .then(data => {
 
+                console.log(data);
 
                 const editorTemplates = data.templates.map(template => {
 
                     return {
                         ...template,
-                        state: { editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(template.state.toString()))) }
+                        state: { editorState: !template.state ? EditorState.createEmpty() : EditorState.createWithContent(convertFromRaw(JSON.parse(template.state?.toString()))) }
                     }
 
                 })
@@ -85,9 +86,18 @@ export const templatesUpdate = templates => {
 
             const url = `${staticURL}/template/${template._id}`;
 
-            const templateContent = draftToHtml(convertToRaw(template.state.editorState.getCurrentContent()))
+            // const templateContent = draftToHtml(convertToRaw(template.state.editorState.getCurrentContent())).replaceAll(' ', '&nbsp;');
 
-            // console.log(JSON.stringify(convertToRaw(template.state.editorState.getCurrentContent())));
+            const exp = new RegExp(/<([a-z]+)\s?(style=".*?")?>(<([a-z]+)\s?(style=".*?")?>(.*?)<\/\4>)<\/\1>/gi);
+
+            const strContent = draftToHtml(convertToRaw(template.state.editorState.getCurrentContent()));
+
+            const tempContent = strContent.replace(exp, (str, g1, g2, g3, g4, g5, g6) => {
+
+                return `<${g1}${g2 ? ' ' + g2 : ''}>${!g3 ? '' : `<${g4}${g5 ? ' ' + g5 : ''}>${g6.replaceAll(' ', '&nbsp;')}</${g4}>`}</${g1}>`
+            })
+
+            const templateContent = tempContent.replaceAll('<p></p>', '<p><br></p>');
 
             fetch(url, {
                 method: 'PUT',

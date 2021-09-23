@@ -85,7 +85,18 @@ export const Payment = () => {
             return;
         }
 
-        const templateContent = draftToHtml(convertToRaw(currentTemplate.state.editorState.getCurrentContent()));
+        // const templateContent = currentTemplate ? draftToHtml(convertToRaw(currentTemplate?.state?.editorState.getCurrentContent())).replaceAll(' ', '&nbsp;') : null;
+
+        const exp = new RegExp(/<([a-z]+)\s?(style=".*?")?>(<([a-z]+)\s?(style=".*?")?>(.*?)<\/\4>)<\/\1>/gi);
+
+        const strContent = currentTemplate ? draftToHtml(convertToRaw(currentTemplate.state.editorState.getCurrentContent())) : null;
+
+        const tempContent = strContent?.replace(exp, (str, g1, g2, g3, g4, g5, g6) => {
+
+            return `<${g1}${g2 ? ' ' + g2 : ''}>${!g3 ? '' : `<${g4}${g5 ? ' ' + g5 : ''}>${g6.replaceAll(' ', '&nbsp;')}</${g4}>`}</${g1}>`
+        })
+
+        const templateContent = tempContent?.replaceAll('<p></p>', '<p><br></p>');
 
         const data = {
             type: +amount >= record.paymentInfo.lotAmountDue ? 'liquidation' : 'payment',

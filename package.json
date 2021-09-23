@@ -75,9 +75,10 @@
       "icon": "setup/favicon.ico"
     },
     "files": [
-      "assets/**/*",
+      
       "build/**/*",
       "build/assets/**/*",
+      "assets/**/*",
       "node_modules/**/*",
       "package.json"
     ],

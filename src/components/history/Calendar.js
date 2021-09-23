@@ -6,6 +6,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { messages } from '../../helpers/calendarSetup';
 import { CalendarEvent } from './CalendarEvent';
 import { useSelector } from 'react-redux';
+import { LateRecords } from './LateRecords';
 
 moment.locale('es-mx');
 
@@ -19,13 +20,21 @@ export const CalendarComponent = () => {
 
     const [events, setEvents] = useState([]);
 
+    const [late, setLate] = useState([]);
+
     useEffect(() => {
+
+        const lateRecords = [];
 
         setEvents(
             records.map((record) => {
                 if (record.state === 'reserved' || record.state === 'prereserved') {
 
                     const eventdate = moment(record.paymentInfo.hasProrogation ? record.paymentInfo.prorogatedTo : record.paymentInfo.nextPaymentDate).toDate()
+
+                    if (record.paymentInfo.isLate) {
+                        lateRecords.push(record)
+                    }
 
                     return ({
                         lotId: record.lot,
@@ -44,6 +53,8 @@ export const CalendarComponent = () => {
                 return null
             })
         )
+
+        setLate(lateRecords);
 
     }, [records])
 
@@ -81,7 +92,7 @@ export const CalendarComponent = () => {
             <div className="app-screen__title projects-screen-top">
                 <h1 className="app-screen__title" >Calendario de Pagos</h1>
             </div>
-            <div className="history">
+            <div className="history project">
                 <div className="card calendar">
                     <Calendar
                         localizer={localizer}
@@ -99,6 +110,19 @@ export const CalendarComponent = () => {
                         }}
                     />
                 </div>
+
+
+
+                {
+                    late.length > 0 && (
+                        <>
+                            <div className="project__header">
+                                <h3>Pagos retrasados</h3>
+                            </div>
+                            <LateRecords lateRecords={late} />
+                        </>
+                    )
+                }
 
             </div>
         </div>

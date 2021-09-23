@@ -10,6 +10,8 @@ export const ProjectExtraCharges = ({ extraCharges }) => {
 
     }
 
+    console.log(extraCharges);
+
     return (
         <div className="card mt-2">
             <div className="card__body">
@@ -22,8 +24,8 @@ export const ProjectExtraCharges = ({ extraCharges }) => {
                 {
                     extraCharges.map(({ description, _id, createdAt, title, updatedAt, amount }, index) => {
 
-                        const dispCreatedAt = new Date(createdAt).toLocaleDateString('es-MX', dateOptions);
-                        const dispUpdatedAt = new Date(updatedAt).toLocaleDateString('es-MX', dateOptions);
+                        const dispCreatedAt = new Date(createdAt.split('T')[0]).toLocaleDateString('es-MX', dateOptions);
+                        const dispUpdatedAt = new Date(updatedAt && updatedAt.split('T')[0]).toLocaleDateString('es-MX', dateOptions);
 
                         return (
                             <div className={`right ${index > 1 ? 'mt-5' : 'mt-3'} `} key={_id} >
@@ -46,10 +48,14 @@ export const ProjectExtraCharges = ({ extraCharges }) => {
                                     <span>Fecha de registro</span>
                                     <p> {dispCreatedAt} </p>
                                 </div>
-                                <div className="card__body__item">
-                                    <span>última Fecha de actualización</span>
-                                    <p> {dispUpdatedAt} </p>
-                                </div>
+                                {
+                                    updatedAt && (
+                                        <div className="card__body__item">
+                                            <span>última Fecha de actualización</span>
+                                            <p> {dispUpdatedAt} </p>
+                                        </div>
+                                    )
+                                }
                             </div>
                         )
                     })

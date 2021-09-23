@@ -13,7 +13,6 @@ import { FloatingButtonSecondary } from '../FloatingButtonSecondary';
 import { Record } from '../history-globals/Record';
 import { PriceHistory } from './PriceHistory';
 import { ClientShort } from '../clients/ClientShort';
-import { paymentOpen } from '../../actions/payments';
 import { Cancellations } from '../history-globals/Cancellations';
 
 export const Lot = () => {
@@ -68,9 +67,8 @@ export const Lot = () => {
         dispatch(redirectSet(redTypes.projects, `/proyectos/ver/${projectId}/lote/${lotId}`));
         dispatch(getLot(lotId));
         dispatch(secondaryFloatingButtonSet('bill', state === 'reserved' ? redTypes.lotReserved : null, projectId, lotId));
-        dispatch(paymentOpen(projectId));
 
-    }, [currentLot._id, dispatch, lotId, lotNumber, name, projectId, state]);
+    }, [dispatch, lotId, lotNumber, name, projectId, state]);
 
     useEffect(() => {
         setCurrentClient(clients.find(c => c._id === currentLot.customer));
@@ -90,7 +88,7 @@ export const Lot = () => {
         <>
 
             <BreadCrumbs type={redTypes.projects} />
-            <FloatingButtonSecondary />
+            <FloatingButtonSecondary pay />
 
             <div className="project">
 

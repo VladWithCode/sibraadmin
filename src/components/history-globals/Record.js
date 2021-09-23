@@ -11,7 +11,7 @@ export const Record = ({ record, payment }) => {
 
     const dispatch = useDispatch();
 
-    const { lotNumber, manzana, lotArea, payments, extraCharges, receipts, paymentInfo: { lotPrice, lotAmountDue, lotAmountPayed, lapseLeft, lapseType, minimumPaymentAmount, lapseToPay, project } } = record;
+    const { lotNumber, manzana, lotArea, payments, extraCharges, receipts, paymentInfo: { lotPrice, lotAmountDue, lotAmountPayed, lapseLeft, lapseType, minimumPaymentAmount, lapseToPay }, lot } = record;
 
     const state = record.state === 'available' ? 'Disponible' : record.state === 'delivered' ? 'Entregado' : record.state === 'reserved' ? 'Comprado' : record.state === 'lotpayed' ? 'Pagado' : 'Liquidado';
 
@@ -159,7 +159,7 @@ export const Record = ({ record, payment }) => {
                     {
                         payments.length > 0 && (
                             payments.map((payment, index) => (
-                                <Payment key={index} payment={payment} index={index} />
+                                <Payment key={index} payment={payment} index={index} paymentId={payment._id} recordId={record._id} lotId={lot} />
                             ))
                         )
                     }
@@ -176,14 +176,17 @@ export const Record = ({ record, payment }) => {
                         <div className="card__body__list">
                             {
                                 receipts.length > 0 && (
-                                    receipts.map(({ staticPath, name, _id }, index) => (
-                                        <div onClick={() => { handleOpen(staticPath) }} key={_id}
-                                            className="card__body__list__doc">
-                                            <p>
-                                                {name ? name : index}
-                                            </p>
-                                        </div>
-                                    ))
+                                    receipts.map(({ staticPath, name, _id }, index) => {
+
+                                        return (
+                                            <div onClick={() => { handleOpen(staticPath) }} key={_id}
+                                                className="card__body__list__doc">
+                                                <p>
+                                                    {name ? name : index}
+                                                </p>
+                                            </div>
+                                        )
+                                    })
                                 )
                             }
                         </div>
@@ -203,9 +206,11 @@ export const Record = ({ record, payment }) => {
                             <div className={`full ${!activeSections.extraCharges && 'inactive'} `}>
                                 {
 
+
                                     extraCharges.map((extraCharge, index) => (
-                                        <ExtraCharge key={index} extraCharge={extraCharge} index={index + 1} recordState={record.state} recordId={record._id} projectId={project} />
+                                        <ExtraCharge key={index} extraCharge={extraCharge} index={index + 1} recordState={record.state} record={record} />
                                     ))
+
 
                                 }
                             </div>
@@ -240,7 +245,7 @@ export const Record = ({ record, payment }) => {
 
                         (
                             <div className={`full ${!activeSections.commissionInfo && 'inactive'} `}>
-                                <div className="right">
+                                <div className="right mt-5">
                                     <CommissionInfo recordId={record._id} commissionInfo={record.commissionInfo} />
                                 </div>
                                 {
