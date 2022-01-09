@@ -47,7 +47,7 @@
   },
   "devDependencies": {
     "electron": "^12.0.5",
-    "electron-builder": "^22.10.5"
+    "electron-builder": "^22.14.5"
   },
   "eslintConfig": {
     "extends": [
@@ -75,7 +75,6 @@
       "icon": "setup/favicon.ico"
     },
     "files": [
-      
       "build/**/*",
       "build/assets/**/*",
       "assets/**/*",
