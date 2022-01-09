@@ -1,141 +1,133 @@
 .modal-hidden {
-    opacity: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  & .modal {
     visibility: hidden;
-    pointer-events: none;
+  }
 
-    & .modal {
-        visibility: hidden;
-    }
-
-    display: none;
+  display: none;
 }
 
 .modal-bc {
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.25);
-    top: 0;
-    left: 0;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.25);
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: appear 0.3s;
+  animation-fill-mode: backwards;
+  z-index: 10;
+
+  & .modal {
+    background-color: white;
+    border-radius: 0.5rem;
+    padding: 3rem;
+    // min-height: 400px;
+    // min-width: 600px;
+    min-height: 350px;
+    min-width: 550px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    animation: appear .3s;
+    justify-content: space-around;
+    animation: popUp 0.4s;
     animation-fill-mode: backwards;
-    z-index: 10;
 
-    & .modal {
-        background-color: white;
-        border-radius: .5rem;
-        padding: 3rem;
-        // min-height: 400px;
-        // min-width: 600px;
-        min-height: 350px;
-        min-width: 550px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-around;
-        animation: popUp .4s;
-        animation-fill-mode: backwards;
-
-        &__title {
-            text-align: center;
-        }
-
-        &__text {
-            font-size: 1.5rem;
-        }
-
-        & form,
-        & form.modal__form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        &__input {
-            margin-bottom: 6rem;
-
-            &__field {
-
-                & span {
-                    font-size: 1.5rem
-                }
-
-                & input {
-                    margin-left: 2rem;
-                    padding: 1rem;
-                    outline: none;
-                    border: none;
-                    border-bottom: 1px solid $color-text;
-                }
-            }
-        }
-
-        &__btns {
-            display: flex;
-            width: 100%;
-            justify-content: center;
-
-            &__link {
-                color: white;
-                border: 1px solid;
-                cursor: pointer;
-                @include transition;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                min-height: 4rem;
-                min-width: 10rem;
-                max-height: 4rem;
-                max-width: 15rem;
-
-                &.btn {
-                    font-size: 1.5rem;
-                    font-weight: 400;
-                }
-
-                &.btn-err {
-                    color: $color-danger;
-                    border-color: $color-danger;
-
-                    &:hover {
-                        background-color: $color-danger;
-                        color: white;
-                    }
-
-                }
-
-                &.btn-ok {
-                    background-color: $color-ok;
-                    border-color: $color-ok;
-
-                    &:hover {
-                        background-color: darken($color-ok, 10);
-                        border-color: $color-ok;
-                    }
-                }
-
-
-            }
-
-        }
-
+    &__title {
+      text-align: center;
     }
+
+    &__text {
+      font-size: 1.5rem;
+    }
+
+    & form,
+    & form.modal__form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &__input {
+      margin-bottom: 6rem;
+
+      &__field {
+        & span {
+          font-size: 1.5rem;
+        }
+
+        & input {
+          margin-left: 2rem;
+          padding: 1rem;
+          outline: none;
+          border: none;
+          border-bottom: 1px solid $color-text;
+        }
+      }
+    }
+
+    &__btns {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+
+      &__link {
+        color: white;
+        border: 1px solid;
+        cursor: pointer;
+        @include transition;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 4rem;
+        min-width: 10rem;
+        max-height: 4rem;
+        max-width: 15rem;
+
+        &.btn {
+          font-size: 1.5rem;
+          font-weight: 400;
+        }
+
+        &.btn-err {
+          color: $color-danger;
+          border-color: $color-danger;
+
+          &:hover {
+            background-color: $color-danger;
+            color: white;
+          }
+        }
+
+        &.btn-ok {
+          background-color: $color-ok;
+          border-color: $color-ok;
+
+          &:hover {
+            background-color: darken($color-ok, 10);
+            border-color: $color-ok;
+          }
+        }
+      }
+    }
+  }
 }
 
-
-
 .modal-animate-hide {
-    animation: fadeOut .5s;
+  animation: fadeOut 0.5s;
+  animation-fill-mode: backwards;
+  visibility: visible;
+
+  & .modal {
+    animation: fadeOut 3s;
     animation-fill-mode: backwards;
     visibility: visible;
-
-    & .modal {
-        animation: fadeOut 3s;
-        animation-fill-mode: backwards;
-        visibility: visible;
-    }
+  }
 }

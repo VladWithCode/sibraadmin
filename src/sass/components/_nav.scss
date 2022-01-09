@@ -1,124 +1,110 @@
 nav {
-    position: fixed;
-    left: 0;
-    top: 0;
-    height: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 2rem;
+  box-shadow: 10px 0 8px rgba(0, 0, 0, 0.02);
+  transition: 0.2s all linear;
+  background-color: $color-bc-2;
+
+  overflow: hidden;
+  // width: 20rem;
+  width: 5rem;
+
+  z-index: 10;
+
+  & .icons-container {
+    height: 85%;
     display: flex;
-    align-items: flex-end;
-    padding-bottom: 2rem;
-    box-shadow: 10px 0 8px rgba(0, 0, 0, 0.02);
-    transition: .2s all linear;
-    background-color: $color-bc-2;
+    flex-direction: column;
 
-    overflow: hidden;
-    // width: 20rem;
-    width: 5rem;
+    & .link {
+      width: 20rem;
+      padding: 1.5rem 0 1.5rem 1rem;
 
-    z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
 
+      & span {
+        margin-left: 2rem;
+      }
 
-    & .icons-container {
-        height: 85%;
-        display: flex;
-        flex-direction: column;
+      &.settings {
+        margin-top: auto;
+      }
 
-        & .link {
-            width: 20rem;
-            padding: 1.5rem 0 1.5rem 1rem;
+      & svg {
+        height: 3rem;
+        width: 3rem;
+        transition: 0.3s all linear;
+      }
 
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-
-            & span {
-                margin-left: 2rem;
-            }
-
-
-            &.settings {
-                margin-top: auto;
-            }
-
-            & svg {
-                height: 3rem;
-                width: 3rem;
-                transition: .3s all linear;
-
-
-
-
-            }
-
-            &:hover {
-
-                svg,
-                span {
-                    color: $color-ok;
-
-                }
-            }
-
-            &.active {
-
-                & svg,
-                span {
-                    color: $color-success;
-                }
-            }
-
+      &:hover {
+        svg,
+        span {
+          color: $color-ok;
         }
+      }
+
+      &.active {
+        & svg,
+        span {
+          color: $color-success;
+        }
+      }
+    }
+  }
+
+  & .expand-btn {
+    position: fixed;
+    left: 0.8rem;
+    top: 2rem;
+    // transform: translate(0, -0%);
+    background-color: white;
+    border-radius: 50%;
+    padding: 0.8rem;
+    transition: 0.2s all linear;
+
+    & svg {
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: 0.2s all linear;
+      transform: rotate(-90deg);
     }
 
-    & .expand-btn {
-        position: fixed;
-        left: .8rem;
-        top: 2rem;
-        // transform: translate(0, -0%);
-        background-color: white;
-        border-radius: 50%;
-        padding: .8rem;
-        transition: .2s all linear;
-
-        & svg {
-            width: 2rem;
-            height: 2rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: .2s all linear;
-            transform: rotate(-90deg);
-        }
-
-        &:hover {
-            & svg {
-                transform: rotate(-90deg) scale(1.1);
-                color: $color-ok;
-            }
-        }
+    &:hover {
+      & svg {
+        transform: rotate(-90deg) scale(1.1);
+        color: $color-ok;
+      }
     }
-
+  }
 }
 
 nav.expand {
-    width: 20rem;
+  width: 20rem;
 
+  & .expand-btn {
+    left: 18rem;
+    // @include shadow-light;
+    color: $color-ok;
 
-    & .expand-btn {
-        left: 18rem;
-        // @include shadow-light;
-        color: $color-ok;
-
-
-        & svg {
-            transform: rotate(90deg);
-        }
-
-        &:hover {
-            & svg {
-                transform: rotate(90deg) scale(1.1);
-                color: $color-ok;
-            }
-        }
+    & svg {
+      transform: rotate(90deg);
     }
 
+    &:hover {
+      & svg {
+        transform: rotate(90deg) scale(1.1);
+        color: $color-ok;
+      }
+    }
+  }
 }

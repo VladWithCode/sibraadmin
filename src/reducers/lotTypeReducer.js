@@ -1,11 +1,11 @@
 import { redTypes } from "../types/reduxTypes";
 
 const initialState = {
-    active: false,
-    beenClosed: false,
-    lotTypes: [],
-    modalConfirm: {}
-}
+  active: false,
+  beenClosed: false,
+  lotTypes: [],
+  modalConfirm: {},
+};
 
 // const initialState1 = {
 //     active: false,
@@ -30,132 +30,138 @@ const initialState = {
 // }
 
 export const lotTypesReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case redTypes.lotTypesReset:
+      return initialState;
 
-    switch (action.type) {
+    case redTypes.lotTypesSet:
+      console.log("setLotTypes: ", action.payload);
+      return {
+        ...state,
+        lotTypes: action.payload,
+      };
 
-        case redTypes.lotTypesReset:
-            return initialState;
+    case redTypes.lotTypesCreate:
+      const newList = state.lotTypes
+        ? {
+            ...state,
+            lotTypes: [...state.lotTypes, action.payload],
+          }
+        : {
+            ...state,
+            lotTypes: [action.payload],
+          };
 
-        case redTypes.lotTypesSet:
-            console.log('setLotTypes: ', action.payload);
-            return {
-                ...state,
-                lotTypes: action.payload
-            };
+      return newList;
 
-        case redTypes.lotTypesCreate:
+    case redTypes.lotTypesEdit:
+      const lotType = state.lotTypes.find(
+        (lot) => lot.type === action.payload.type
+      );
 
-            const newList = state.lotTypes ? {
-                ...state,
-                lotTypes: [...state.lotTypes,
-                action.payload
-                ]
-            } : {
-                ...state,
-                lotTypes: [action.payload]
-            }
+      lotType.pricePerM = action.payload.pricePerM
+        ? action.payload.pricePerM
+        : lotType.pricePerM;
 
-            return newList;
+      lotType.cornerPrice = action.payload.cornerPrice
+        ? action.payload.cornerPrice
+        : lotType.cornerPrice;
 
-        case redTypes.lotTypesEdit:
-            const lotType = state.lotTypes.find(lot => lot.type === action.payload.type);
+      lotType.sameArea = action.payload.sameArea
+        ? action.payload.sameArea
+        : lotType.sameArea;
 
-            lotType.pricePerM = action.payload.pricePerM ? action.payload.pricePerM : lotType.pricePerM;
+      lotType.type = action.payload.newType
+        ? action.payload.newType
+        : lotType.type;
 
-            lotType.cornerPrice = action.payload.cornerPrice ? action.payload.cornerPrice : lotType.cornerPrice;
+      lotType.area = action.payload.area ? action.payload.area : lotType.area;
 
-            lotType.sameArea = action.payload.sameArea ? action.payload.sameArea : lotType.sameArea;
+      return state;
 
-            lotType.type = action.payload.newType ? action.payload.newType : lotType.type;
+    case redTypes.lotTypesDelete:
+      const newLotTypes = state.lotTypes.filter(
+        (lotType) => lotType.type !== action.payload.type
+      );
 
-            lotType.area = action.payload.area ? action.payload.area : lotType.area;
+      if (newLotTypes.length > 0) {
+        return {
+          ...state,
+          lotTypes: newLotTypes,
+        };
+      }
 
-            return state;
+      return {
+        ...state,
+        lotTypes: [],
+      };
 
-        case redTypes.lotTypesDelete:
-            const newLotTypes = state.lotTypes.filter(lotType => lotType.type !== action.payload.type)
+    case redTypes.lotTypesModalEnable:
+      return {
+        ...state,
+        active: true,
+      };
 
-            if (newLotTypes.length > 0) {
-                return {
-                    ...state,
-                    lotTypes: newLotTypes
-                };
-            }
+    case redTypes.lotTypesModalDisable:
+      return {
+        ...state,
+        active: false,
+        beenClosed: true,
+      };
 
-            return {
-                ...state,
-                lotTypes: []
-            };
+    case redTypes.lotTypesModalConfirmReset:
+      return {
+        ...state,
+        modalConfirm: {
+          ...state.modalConfirm,
+          active: false,
+          beenClosed: false,
+        },
+      };
 
-        case redTypes.lotTypesModalEnable:
-            return {
-                ...state,
-                active: true,
-            }
+    case redTypes.lotTypesModalConfirmUpdate:
+      return {
+        ...state,
+        modalConfirm: {
+          ...state.modalConfirm,
+          title: action.payload.title,
+          text: action.payload.text,
+          okMsg: action.payload.okMsg,
+          closeMsg: action.payload.closeMsg,
+          action: action.payload.action,
+          type: action.payload.type,
+        },
+        // modalConfirm: {
+        //     ...state.modalConfirm,
+        //     title: action.payload.title ? action.payload.title : state.modalConfirm.title,
+        //     text: action.payload.text ? action.payload.text : state.modalConfirm.text,
+        //     okMsg: action.payload.okMsg ? action.payload.okMsg : state.modalConfirm.okMsg,
+        //     closeMsg: action.payload.closeMsg ? action.payload.closeMsg : state.modalConfirm.closeMsg,
+        //     action: action.payload.action,
+        //     type: action.payload.type ? action.payload.type : state.modalConfirm.type,
+        // }
+      };
 
-        case redTypes.lotTypesModalDisable:
-            return {
-                ...state,
-                active: false,
-                beenClosed: true,
-            }
+    case redTypes.lotTypesModalConfirmEnable:
+      return {
+        ...state,
+        modalConfirm: {
+          ...state.modalConfirm,
+          active: true,
+        },
+      };
 
-        case redTypes.lotTypesModalConfirmReset:
-            return {
-                ...state,
-                modalConfirm: {
-                    ...state.modalConfirm,
-                    active: false,
-                    beenClosed: false
-                }
-            }
+    case redTypes.lotTypesModalConfirmDisable:
+      return {
+        ...state,
+        modalConfirm: {
+          ...state.modalConfirm,
+          active: false,
+          beenClosed: true,
+        },
+      };
 
-        case redTypes.lotTypesModalConfirmUpdate:
-            return {
-                ...state,
-                modalConfirm: {
-                    ...state.modalConfirm,
-                    title: action.payload.title,
-                    text: action.payload.text,
-                    okMsg: action.payload.okMsg,
-                    closeMsg: action.payload.closeMsg,
-                    action: action.payload.action,
-                    type: action.payload.type
-                }
-                // modalConfirm: {
-                //     ...state.modalConfirm,
-                //     title: action.payload.title ? action.payload.title : state.modalConfirm.title,
-                //     text: action.payload.text ? action.payload.text : state.modalConfirm.text,
-                //     okMsg: action.payload.okMsg ? action.payload.okMsg : state.modalConfirm.okMsg,
-                //     closeMsg: action.payload.closeMsg ? action.payload.closeMsg : state.modalConfirm.closeMsg,
-                //     action: action.payload.action,
-                //     type: action.payload.type ? action.payload.type : state.modalConfirm.type,
-                // }
-            }
-
-        case redTypes.lotTypesModalConfirmEnable:
-            return {
-                ...state,
-                modalConfirm: {
-                    ...state.modalConfirm,
-                    active: true,
-                }
-            }
-
-        case redTypes.lotTypesModalConfirmDisable:
-            return {
-                ...state,
-                modalConfirm: {
-                    ...state.modalConfirm,
-                    active: false,
-                    beenClosed: true
-                }
-            }
-
-
-
-        default:
-            return state;
-    }
-
-}
+    default:
+      return state;
+  }
+};

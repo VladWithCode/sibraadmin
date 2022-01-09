@@ -1,9 +1,5 @@
-import React from 'react';
+import React from "react";
 
 export const Settings = () => {
-    return (
-        <h1>
-            Ajustes    
-        </h1>
-    )
-}
+  return <h1>Ajustes</h1>;
+};

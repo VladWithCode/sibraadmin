@@ -1,144 +1,133 @@
 .lot_types {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .lot_types_list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 3rem;
-    
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 3rem;
 
-    &__item {
-        @include shadow-light;
-        padding: 2rem;
-        border-radius: .5rem;
-        @include transition;
-        animation: .4s appear ease-in-out;
-        display: flex;
-        flex-direction: column;
-        
-        justify-content: space-between;
+  &__item {
+    @include shadow-light;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    @include transition;
+    animation: 0.4s appear ease-in-out;
+    display: flex;
+    flex-direction: column;
 
-        &:hover {
-            @include shadow;
-        }
+    justify-content: space-between;
 
-        & h3 {
-            font-size: 2.3rem;
-            color: $color-ok;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        &__content {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-
-            & span {
-                margin: .7rem;
-
-                & strong {
-                    margin-left: 1rem;
-                    // text-decoration: underline;
-                    font-weight: 400;
-                    color: $color-ok;
-                }
-            }
-
-        }
-
-        &__btns {
-            margin-top: 2rem;
-            align-self: flex-end;
-
-            & span {
-                border-bottom: 1px solid transparent;
-                @include transition;
-                padding: 1rem 2rem .5rem 2rem;
-                cursor: pointer;
-            }
-
-            & .edit {
-                color: $color-success;
-
-                &:hover {
-                    border-color: $color-success;
-                }
-            }
-
-            & .delete {
-                color: $color-danger;
-                &:hover {
-                    border-color: $color-danger;
-                }
-            }
-        }
+    &:hover {
+      @include shadow;
     }
 
+    & h3 {
+      font-size: 2.3rem;
+      color: $color-ok;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    &__content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      & span {
+        margin: 0.7rem;
+
+        & strong {
+          margin-left: 1rem;
+          // text-decoration: underline;
+          font-weight: 400;
+          color: $color-ok;
+        }
+      }
+    }
+
+    &__btns {
+      margin-top: 2rem;
+      align-self: flex-end;
+
+      & span {
+        border-bottom: 1px solid transparent;
+        @include transition;
+        padding: 1rem 2rem 0.5rem 2rem;
+        cursor: pointer;
+      }
+
+      & .edit {
+        color: $color-success;
+
+        &:hover {
+          border-color: $color-success;
+        }
+      }
+
+      & .delete {
+        color: $color-danger;
+        &:hover {
+          border-color: $color-danger;
+        }
+      }
+    }
+  }
 }
 
 .modal__input__field {
-    animation: .4s appear ease-in-out;
+  animation: 0.4s appear ease-in-out;
 
+  &.mt-3 {
+    display: flex;
+    align-items: center;
+  }
 
-    &.mt-3 {
+  & .options {
+    display: flex;
+    margin-left: 3rem;
+    width: 70%;
+
+    & label {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      height: 4rem;
+      width: 4rem;
+      margin-right: 2rem;
+      @include transition;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1px solid transparent;
+
+      &:hover {
+        border-color: $color-success;
+      }
+
+      & .option {
+        height: 4rem;
+        width: 4rem;
+        padding: 1rem;
         display: flex;
         align-items: center;
+        justify-content: center;
+      }
     }
 
-    & .options {
-        display: flex;
-        margin-left: 3rem;
-        width: 70%;
+    & input[type="radio"] {
+      display: none;
 
+      &:not(:checked) + label {
+        background-color: transparent;
+      }
 
-
-        & label {
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-evenly;
-            height: 4rem;
-            width: 4rem;
-            margin-right: 2rem;
-            @include transition;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 1px solid transparent;
-
-            &:hover {
-                border-color: $color-success;
-            }
-
-            & .option {
-                height: 4rem;
-                width: 4rem;
-                padding: 1rem;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-
-            }
-
-        }
-
-        & input[type="radio"] {
-            display: none;
-
-            &:not(:checked)+label {
-                background-color: transparent;
-
-            }
-
-            &:checked+label {
-                color: white;
-                background-color: $color-success;
-            }
-
-        }
+      &:checked + label {
+        color: white;
+        background-color: $color-success;
+      }
     }
-
+  }
 }

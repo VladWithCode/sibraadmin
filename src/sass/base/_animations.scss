@@ -1,94 +1,90 @@
 @keyframes moveInLeft {
-    0% {
-        opacity: 0%;
-        transform: translateX(-10rem);
-    }
+  0% {
+    opacity: 0%;
+    transform: translateX(-10rem);
+  }
 
-    60% {
-        transform: translateX(1rem);
-    }
+  60% {
+    transform: translateX(1rem);
+  }
 
-    80% {
-        transform: translateX(-1rem);
-    }
+  80% {
+    transform: translateX(-1rem);
+  }
 
-    100% {
-        opacity: 1;
-        transform: translate(0);
-    }
+  100% {
+    opacity: 1;
+    transform: translate(0);
+  }
 }
 
 @keyframes moveInRight {
-    0% {
-        opacity: 0%;
-        transform: translateX(10rem);
-    }
+  0% {
+    opacity: 0%;
+    transform: translateX(10rem);
+  }
 
-    60% {
-        transform: translateX(-1rem);
-    }
+  60% {
+    transform: translateX(-1rem);
+  }
 
-    80% {
-        transform: translateX(1rem);
-    }
+  80% {
+    transform: translateX(1rem);
+  }
 
-    100% {
-        opacity: 1;
-        transform: translate(0);
-    }
+  100% {
+    opacity: 1;
+    transform: translate(0);
+  }
 }
 
 @keyframes moveInBottom {
-    0% {
-        opacity: 0;
-        transform: translateY(3rem);
-    }
+  0% {
+    opacity: 0;
+    transform: translateY(3rem);
+  }
 
-    100% {
-        opacity: 1;
-        transform: translate(0);
-    }
+  100% {
+    opacity: 1;
+    transform: translate(0);
+  }
 }
 
 @keyframes popUp {
-    0% {
-        opacity: 0;
-        transform: scale(0);
-    }
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
 
+  50% {
+    transform: scale(1.2);
+  }
 
-    50% {
-        transform: scale(1.2);
-    }
-
-
-    100% {
-        transform: scale(1);
-        opacity: 1;
-        transform: translate(0);
-    }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    transform: translate(0);
+  }
 }
 
 @keyframes appear {
-    0% {
-        opacity: 0;
-    }
+  0% {
+    opacity: 0;
+  }
 
-    100% {
-        opacity: 1;
-    }
+  100% {
+    opacity: 1;
+  }
 }
 
 @keyframes fadeOut {
-    from {
-        opacity: 1;
-    }
-    to {
-        opacity: 0;
-    }
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
-
-
 
 // [data-aos="moveInLeft"] {
 //     opacity: 0;

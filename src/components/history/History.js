@@ -1,21 +1,18 @@
-import React, { useEffect } from 'react'
-import { useDispatch } from 'react-redux';
-import { getRecords } from '../../actions/consults';
-import { CalendarComponent } from './Calendar';
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getRecords } from "../../actions/consults";
+import { CalendarComponent } from "./Calendar";
 
 export const History = () => {
+  const dispatch = useDispatch();
 
-    const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getRecords());
+  }, [dispatch]);
 
-    useEffect(() => {
-
-        dispatch(getRecords());
-
-    }, [dispatch])
-
-    return (
-        <div>
-            <CalendarComponent></CalendarComponent>
-        </div>
-    )
-}
+  return (
+    <div>
+      <CalendarComponent></CalendarComponent>
+    </div>
+  );
+};

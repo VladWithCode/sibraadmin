@@ -1,256 +1,236 @@
 .app-screen {
-    padding: 0 2rem 5rem 0;
+  padding: 0 2rem 5rem 0;
 
-    &__title {
-        margin: 3rem 2rem 4rem 2rem;
-        font-weight: 400;
-        width: 100%;
-    }
-
+  &__title {
+    margin: 3rem 2rem 4rem 2rem;
+    font-weight: 400;
+    width: 100%;
+  }
 }
 
 .projects-screen-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 95%;
+  margin-top: 7rem;
+
+  & .search {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    max-width: 95%;
-    margin-top: 7rem;
+    border-radius: 10rem;
+    // @include shadow-nav;
+    padding: 1rem 2rem;
+    background-color: $color-bc-2;
 
-    & .search {
-        display: flex;
-        align-items: center;
-        border-radius: 10rem;
-        // @include shadow-nav;
-        padding: 1rem 2rem;
-        background-color: $color-bc-2;
-
-        & svg {
-            height: 2rem;
-            width: 2rem;
-            margin-right: 1rem;
-            cursor: pointer;
-        }
-
-        & input {
-            border: none;
-            outline: none;
-            height: 3rem;
-            font-size: 1.8rem;
-            position: relative;
-
-
-
-        }
+    & svg {
+      height: 2rem;
+      width: 2rem;
+      margin-right: 1rem;
+      cursor: pointer;
     }
+
+    & input {
+      border: none;
+      outline: none;
+      height: 3rem;
+      font-size: 1.8rem;
+      position: relative;
+    }
+  }
 }
 
 .projects,
 .clients,
 .templates {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 26rem;
+  grid-gap: 2rem;
+  justify-content: start;
+  padding: 0 3rem 0 4rem;
+
+  @include respond(tab-land) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &__card {
+    background-color: $color-bc-2;
+    // @include gradient-ok;
+    grid-column: span 1;
+    overflow: hidden;
     width: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 26rem;
-    grid-gap: 2rem;
-    justify-content: start;
-    padding: 0 3rem 0 4rem;
+    height: 100%;
+    @include shadow-light;
+    @include transition;
+    animation: 0.5s appear;
+    border-radius: $border-radius;
+    padding: 3rem 2rem 3.8rem 2rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 
-    @include respond(tab-land) {
-        grid-template-columns: repeat(2, 1fr);
+    & .lots-info {
+      position: absolute;
+      left: 2.5rem;
+      top: 0;
+      height: 12rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      visibility: hidden;
+      @include transition;
+
+      & span {
+        pointer-events: none;
+        // font-weight: 700;
+        color: $white;
+        font-size: 1.5rem;
+
+        &:nth-child(2) {
+          margin: 1rem 0;
+        }
+
+        & strong {
+          font-size: 1.8rem;
+        }
+      }
     }
 
-    &__card {
-        background-color: $color-bc-2;
-        // @include gradient-ok;
-        grid-column: span 1;
-        overflow: hidden;
-        width: 100%;
-        height: 100%;
-        @include shadow-light;
-        @include transition;
-        animation: .5s appear;
-        border-radius: $border-radius;
-        padding: 3rem 2rem 3.8rem 2rem;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-
-        & .lots-info {
-            position: absolute;
-            left: 2.5rem;
-            top: 0;
-            height: 12rem;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: center;
-            visibility: hidden;
-            @include transition;
-
-            & span {
-                pointer-events: none;
-                // font-weight: 700;
-                color: $white;
-                font-size: 1.5rem;
-
-                &:nth-child(2) {
-                    margin: 1rem 0;
-                }
-
-                & strong {
-                    font-size: 1.8rem;
-                }
-
-            }
-        }
-
-        & .available-lots,
-        & .association {
-            color: $color-text-light;
-            font-weight: 400;
-        }
-
-        & .available-lots {
-            position: absolute;
-            top: 2rem;
-            right: 2rem;
-
-        }
-
-        & .main-info {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-
-            & .association {
-                font-size: 1.5rem;
-            }
-
-            & h4 {
-                height: 20%;
-                display: flex;
-                align-items: center;
-                padding: 0 2rem;
-                font-weight: 700;
-                color: $black;
-                padding: 0;
-                font-size: 2.5rem;
-                margin: 1rem 0 2rem 0;
-            }
-
-            & .description {
-                color: $color-text-light;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                display: -webkit-box;
-                -webkit-line-clamp: 1;
-                -webkit-box-orient: vertical;
-            }
-        }
-
-        &:before {
-            content: '';
-            position: absolute;
-            height: 12rem;
-            width: 50%;
-            border-radius: 0 0 50rem 0;
-            @include gradient-ok;
-            top: 0;
-            left: 0;
-            @include transition;
-            transform: translateX(-31rem);
-        }
-
-        &:hover {
-
-            & .lots-info {
-                visibility: visible;
-            }
-
-            &:before {
-                transform: translateX(0);
-            }
-
-        }
-
-        &.default-template {
-
-            &:before {
-                height: 10rem;
-                width: 100%;
-                top: 0;
-                left: 0;
-                transform: translateY(-10rem);
-                border-radius: 0;
-            }
-
-            &:hover {
-
-                &:before {
-                    transform: translateY(0);
-                }
-
-            }
-
-        }
-
-    }
-}
-
-.templates {
-
-    grid-template-columns: repeat(5, 1fr);
-    grid-auto-rows: 10rem;
-
-    margin-top: 2rem;
-
-    @include respond(tab-land) {
-        grid-template-columns: repeat(3, 1fr);
+    & .available-lots,
+    & .association {
+      color: $color-text-light;
+      font-weight: 400;
     }
 
-    &__card {
-        padding: 2rem;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-
-        &:before {
-            height: 2rem;
-            width: 100%;
-            top: 0;
-            left: 0;
-            transform: translateY(-2rem);
-            border-radius: 0;
-        }
-
-        &:hover {
-
-            &:before {
-                transform: translateY(0);
-            }
-
-        }
+    & .available-lots {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
     }
 
     & .main-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+
+      & .association {
+        font-size: 1.5rem;
+      }
+
+      & h4 {
+        height: 20%;
         display: flex;
-        flex-direction: column;
-        justify-content: center;
         align-items: center;
-        padding: 1rem 0;
+        padding: 0 2rem;
+        font-weight: 700;
+        color: $black;
+        padding: 0;
+        font-size: 2.5rem;
+        margin: 1rem 0 2rem 0;
+      }
 
-
-        & .association {
-            font-size: 1.5rem;
-        }
-
-        & h4 {
-            padding-top: 1.5rem;
-            text-align: center;
-        }
+      & .description {
+        color: $color-text-light;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+      }
     }
 
+    &:before {
+      content: "";
+      position: absolute;
+      height: 12rem;
+      width: 50%;
+      border-radius: 0 0 50rem 0;
+      @include gradient-ok;
+      top: 0;
+      left: 0;
+      @include transition;
+      transform: translateX(-31rem);
+    }
 
+    &:hover {
+      & .lots-info {
+        visibility: visible;
+      }
 
+      &:before {
+        transform: translateX(0);
+      }
+    }
+
+    &.default-template {
+      &:before {
+        height: 10rem;
+        width: 100%;
+        top: 0;
+        left: 0;
+        transform: translateY(-10rem);
+        border-radius: 0;
+      }
+
+      &:hover {
+        &:before {
+          transform: translateY(0);
+        }
+      }
+    }
+  }
+}
+
+.templates {
+  grid-template-columns: repeat(5, 1fr);
+  grid-auto-rows: 10rem;
+
+  margin-top: 2rem;
+
+  @include respond(tab-land) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  &__card {
+    padding: 2rem;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    &:before {
+      height: 2rem;
+      width: 100%;
+      top: 0;
+      left: 0;
+      transform: translateY(-2rem);
+      border-radius: 0;
+    }
+
+    &:hover {
+      &:before {
+        transform: translateY(0);
+      }
+    }
+  }
+
+  & .main-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 0;
+
+    & .association {
+      font-size: 1.5rem;
+    }
+
+    & h4 {
+      padding-top: 1.5rem;
+      text-align: center;
+    }
+  }
 }

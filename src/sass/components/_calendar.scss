@@ -1,124 +1,115 @@
 .calendar {
-    height: 80vh;
-    width: 90%;
-    margin: 0 auto !important;
-    background-color: white;
+  height: 80vh;
+  width: 90%;
+  margin: 0 auto !important;
+  background-color: white;
 
-    & .rbc {
-        &-calendar {
-            height: 100%;
-        }
-
-        &-toolbar {
-            position: relative;
-            height: 14rem;
-            align-items: flex-end;
-            justify-content: space-between;
-            padding: 1rem 2rem;
-            background-color: $color-bc;
-
-            &-label {
-                position: absolute;
-                top: 2rem;
-                left: 50%;
-                transform: translateX(-50%);
-                text-transform: uppercase;
-                font-weight: 700;
-                font-size: 3.3rem;
-                color: $color-ok;
-            }
-        }
-
-        &-btn-group {
-
-            &:first-of-type {
-
-                & button {
-
-                    &:nth-child(2),
-                    &:nth-child(3) {
-                        position: absolute;
-                        top: 2.1rem;
-                        background-color: $white;
-                        border: none;
-                        color: $color-ok;
-                        font-size: 2rem;
-                        font-weight: 700;
-                        @include transition;
-                        border-radius: 10rem;
-                        height: 4rem;
-                        width: 4rem;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-
-                        &:hover {
-                            @include shadow-light;
-                        }
-                    }
-
-                    &:nth-child(2) {
-                        left: 20vw;
-
-                        @include respond(tab-port) {
-                            left: 10vw;
-                        }
-                    }
-
-                    &:nth-child(3) {
-                        right: 20vw;
-
-                        @include respond(tab-port) {
-                            right: 10vw;
-                        }
-                    }
-                }
-            }
-
-            &:last-of-type {}
-        }
-
-        &-time-content {
-            &::-webkit-scrollbar {
-                width: 1rem;
-            }
-
-            &::-webkit-scrollbar-track {
-                background-color: lighten($color-text-light, 20);
-                border-radius: 4px;
-            }
-
-            &::-webkit-scrollbar-thumb {
-                background-color: lighten($color-ok, 10);
-                border-radius: 4px;
-
-                &:hover {
-                    background-color: $color-ok;
-                }
-
-            }
-        }
-
-        &-agenda {
-
-            &-table {
-
-
-                & .rbc-header {
-                    font-size: 1.6rem;
-
-                    &:nth-child(1),
-                    &:nth-child(2) {}
-
-
-                }
-
-            }
-        }
-
-        &-agenda-date-cell {
-            background-color: lighten($color-ok, 10);
-        }
-
+  & .rbc {
+    &-calendar {
+      height: 100%;
     }
+
+    &-toolbar {
+      position: relative;
+      height: 14rem;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background-color: $color-bc;
+
+      &-label {
+        position: absolute;
+        top: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        text-transform: uppercase;
+        font-weight: 700;
+        font-size: 3.3rem;
+        color: $color-ok;
+      }
+    }
+
+    &-btn-group {
+      &:first-of-type {
+        & button {
+          &:nth-child(2),
+          &:nth-child(3) {
+            position: absolute;
+            top: 2.1rem;
+            background-color: $white;
+            border: none;
+            color: $color-ok;
+            font-size: 2rem;
+            font-weight: 700;
+            @include transition;
+            border-radius: 10rem;
+            height: 4rem;
+            width: 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:hover {
+              @include shadow-light;
+            }
+          }
+
+          &:nth-child(2) {
+            left: 20vw;
+
+            @include respond(tab-port) {
+              left: 10vw;
+            }
+          }
+
+          &:nth-child(3) {
+            right: 20vw;
+
+            @include respond(tab-port) {
+              right: 10vw;
+            }
+          }
+        }
+      }
+
+      &:last-of-type {
+      }
+    }
+
+    &-time-content {
+      &::-webkit-scrollbar {
+        width: 1rem;
+      }
+
+      &::-webkit-scrollbar-track {
+        background-color: lighten($color-text-light, 20);
+        border-radius: 4px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: lighten($color-ok, 10);
+        border-radius: 4px;
+
+        &:hover {
+          background-color: $color-ok;
+        }
+      }
+    }
+
+    &-agenda {
+      &-table {
+        & .rbc-header {
+          font-size: 1.6rem;
+
+          &:nth-child(1),
+          &:nth-child(2) {
+          }
+        }
+      }
+    }
+
+    &-agenda-date-cell {
+      background-color: lighten($color-ok, 10);
+    }
+  }
 }

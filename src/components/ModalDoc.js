@@ -1,63 +1,64 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { deleteFile, deleteClient } from '../actions/consults';
-import { redTypes } from '../types/reduxTypes'
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteFile, deleteClient } from "../actions/consults";
+import { redTypes } from "../types/reduxTypes";
 
-import { projectDisableSvcModal } from '../actions/project';
+import { projectDisableSvcModal } from "../actions/project";
 
 export const ModalDoc = React.memo(({ fileName, type, id, projectId }) => {
+  const dispatch = useDispatch();
 
+  const {
+    modalServices: { active, beenClosed, title, text, okMsg, closeMsg, refId },
+  } = useSelector((state) => state.project);
 
-    const dispatch = useDispatch();
+  const handleClose = () => {
+    dispatch(projectDisableSvcModal());
+  };
 
-    const { modalServices: { active, beenClosed, title, text, okMsg, closeMsg, refId } } = useSelector(state => state.project);
+  const handleDeleteFile = (e) => {
+    e?.preventDefault();
 
-    const handleClose = () => {
-        dispatch(projectDisableSvcModal());
+    if (type === redTypes.clientDelete) {
+      dispatch(deleteClient(id, fileName, projectId));
+    } else {
+      dispatch(deleteFile(fileName, type, id, refId, projectId));
     }
 
-    const handleDeleteFile = (e) => {
-        e?.preventDefault();
+    dispatch(projectDisableSvcModal());
+  };
 
-        if (type === redTypes.clientDelete) {
-            dispatch(deleteClient(id, fileName, projectId))
+  return (
+    <>
+      {
+        <div
+          className={` ${!active ? "modal-hidden" : "modal-bc"} ${
+            beenClosed && !active ? "modal-bc modal-animate-hide" : ""
+          }`}
+        >
+          <div className="modal">
+            <h3 className="modal__title">{title}</h3>
 
-        } else {
-            dispatch(deleteFile(fileName, type, id, refId, projectId));
-        }
+            <p className="modal__text">{text}</p>
 
-        dispatch(projectDisableSvcModal());
+            <div className="modal__btns">
+              <p
+                onClick={handleClose}
+                className="modal__btns__link btn btn-err mr-2"
+              >
+                {closeMsg}
+              </p>
 
-    }
-
-
-    return (
-        <>
-            {
-                <div className={` ${!active ? 'modal-hidden' : 'modal-bc'} ${beenClosed && !active ? 'modal-bc modal-animate-hide' : ''}`} >
-                    <div className="modal">
-                        <h3 className="modal__title">
-                            {title}
-                        </h3>
-
-                        <p className="modal__text">
-                            {text}
-                        </p>
-
-                        <div className="modal__btns">
-                            <p onClick={handleClose} className="modal__btns__link btn btn-err mr-2">
-                                {closeMsg}
-                            </p>
-
-                            <p
-                                onClick={handleDeleteFile}
-                                className="modal__btns__link btn btn-ok">
-                                {okMsg}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            }
-        </>
-    )
-})
+              <p
+                onClick={handleDeleteFile}
+                className="modal__btns__link btn btn-ok"
+              >
+                {okMsg}
+              </p>
+            </div>
+          </div>
+        </div>
+      }
+    </>
+  );
+});

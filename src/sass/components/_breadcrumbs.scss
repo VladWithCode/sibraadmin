@@ -1,42 +1,40 @@
 .breadcrumbs {
-    width: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  padding: 1rem 0 1rem 2rem;
+  margin: 0;
+  background-color: darken($color-bc, 5);
+  position: fixed;
+  z-index: 3;
+
+  &__item {
+    color: $color-text-light;
     display: flex;
-    justify-content: flex-start;
-    padding: 1rem 0 1rem 2rem;
-    margin: 0;
-    background-color: darken($color-bc, 5);
-    position: fixed;
-    z-index: 3;
+    align-items: center;
+    justify-content: center;
+    margin: 2rem 0;
+    line-height: 0;
+    font-weight: 700;
+    text-transform: capitalize;
 
-    &__item {
-        color: $color-text-light;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 2rem 0;
-        line-height: 0;
-        font-weight: 700;
-        text-transform: capitalize;
-
-        & i {
-            margin: 0 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            line-height: 0;
-        }
-
-        & span {
-            @include transition;
-        }
-
-        &:hover {
-
-            & span,
-            & i {
-                color: $color-ok;
-            }
-
-        }
+    & i {
+      margin: 0 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 0;
     }
+
+    & span {
+      @include transition;
+    }
+
+    &:hover {
+      & span,
+      & i {
+        color: $color-ok;
+      }
+    }
+  }
 }

@@ -1,47 +1,46 @@
 .create {
+  & .form-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2.5rem;
 
-    & .form-buttons {
-        width: 100%;
-        display: flex;
-        justify-content: flex-end;
-        margin-top: 2.5rem;
+    & button {
+      color: $white;
+      font-weight: 400;
+      cursor: pointer;
+      @include transition;
+      border: 1px solid;
+      font-size: 1.5rem;
+      border-radius: 10rem;
 
-        & button {
-            color: $white;
-            font-weight: 400;
-            cursor: pointer;
-            @include transition;
-            border: 1px solid;
-            font-size: 1.5rem;
-            border-radius: 10rem;
+      &.cancel {
+        background-color: $color-danger;
+        border-color: $color-danger;
 
-            &.cancel {
-                background-color: $color-danger;
-                border-color: $color-danger;
-
-                &:hover {
-                    background-color: darken($color-danger, 10);
-                }
-            }
-
-            &.next {
-                background-color: $color-ok;
-                border-color: $color-ok;
-                margin-left: 2rem;
-
-                &:hover {
-                    background-color: darken($color-ok, 10);
-                }
-            }
+        &:hover {
+          background-color: darken($color-danger, 10);
         }
+      }
+
+      &.next {
+        background-color: $color-ok;
+        border-color: $color-ok;
+        margin-left: 2rem;
+
+        &:hover {
+          background-color: darken($color-ok, 10);
+        }
+      }
     }
+  }
 }
 
 button.cancel {
-    background-color: $color-danger;
-    border-color: $color-danger;
+  background-color: $color-danger;
+  border-color: $color-danger;
 
-    &:hover {
-        background-color: darken($color-danger, 10);
-    }
+  &:hover {
+    background-color: darken($color-danger, 10);
+  }
 }

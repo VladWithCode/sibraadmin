@@ -1,93 +1,100 @@
-import React, { useEffect, useState } from 'react';
-import { NavLink, Redirect } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { useForm } from '../../hooks/useForm';
-import { modalUpdate } from '../../actions/modal';
-import { getClient, getClients } from '../../actions/consults';
-import { floatingButtonSet } from '../../actions/floatingButton';
-import { redTypes } from '../../types/reduxTypes';
-import { clientReset } from '../../actions/client';
+import React, { useEffect, useState } from "react";
+import { NavLink, Redirect } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useForm } from "../../hooks/useForm";
+import { modalUpdate } from "../../actions/modal";
+import { getClient, getClients } from "../../actions/consults";
+import { floatingButtonSet } from "../../actions/floatingButton";
+import { redTypes } from "../../types/reduxTypes";
+import { clientReset } from "../../actions/client";
 
 export const Clients = () => {
+  const dispatch = useDispatch();
+  const { clients, redirect } = useSelector((state) => state);
 
-    const dispatch = useDispatch();
-    const { clients, redirect } = useSelector(state => state);
+  const [searchInput, handleInputChange] = useForm({ inputSearch: "" });
 
-    const [searchInput, handleInputChange] = useForm({ inputSearch: '' });
+  const { inputSearch } = searchInput;
 
-    const { inputSearch } = searchInput;
+  const [foundClients, setFoundClients] = useState([]);
 
-    const [foundClients, setFoundClients] = useState([])
+  useEffect(() => {
+    dispatch(getClients());
 
-    useEffect(() => {
-        dispatch(getClients());
+    const modalInfo = {
+      title: "Crear nuevo cliente",
+      text: "¿Desea crear un cliente nuevo?",
+      link: "/clientes/nuevo",
+      okMsg: "Sí",
+      closeMsg: "No",
+      resetClient: true,
+    };
 
-        const modalInfo = {
-            title: 'Crear nuevo cliente',
-            text: '¿Desea crear un cliente nuevo?',
-            link: '/clientes/nuevo',
-            okMsg: 'Sí',
-            closeMsg: 'No',
-            resetClient: true
-        }
+    dispatch(modalUpdate(modalInfo));
+    dispatch(floatingButtonSet("plus", redTypes.clients));
+    dispatch(clientReset());
+  }, [dispatch]);
 
-        dispatch(modalUpdate(modalInfo));
-        dispatch(floatingButtonSet('plus', redTypes.clients));
-        dispatch(clientReset());
+  const handleSearch = (e) => {
+    e.preventDefault();
+    handleInputChange(e);
+    const search = e.target.value;
+    setFoundClients(
+      clients.filter((p) =>
+        `${p.names} ${p.patLastname} ${p.matLastname} ${p.id}`
+          .toLowerCase()
+          .includes(search.toLowerCase())
+      )
+    );
+  };
 
+  const dispClients = foundClients.length >= 1 ? foundClients : clients;
 
-    }, [dispatch]);
+  return (
+    <>
+      <div className="app-screen projects-screen">
+        <div className="app-screen__title projects-screen-top">
+          <h1 className="app-screen__title">Clientes</h1>
+          <form className="search">
+            <svg>
+              <use href={`../assets/svg/search.svg#search`}></use>
+            </svg>
+            <input
+              onChange={handleSearch}
+              value={inputSearch}
+              placeholder="Nombre/RFC"
+              type="text"
+              name="inputSearch"
+            />
+          </form>
+        </div>
 
-    const handleSearch = (e) => {
-        e.preventDefault();
-        handleInputChange(e);
-        const search = e.target.value;
-        setFoundClients(clients.filter(p => (`${p.names} ${p.patLastname} ${p.matLastname} ${p.id}`.toLowerCase().includes(search.toLowerCase()))));
-    }
+        <div className="clients">
+          {dispClients?.map(
+            ({ _id, names, patLastname, matLastname, phoneNumber, rfc }) => {
+              const name = `${names} ${patLastname && patLastname} ${
+                matLastname && matLastname
+              }`;
 
-    const dispClients = foundClients.length >= 1 ? foundClients : clients;
+              return (
+                <NavLink
+                  onClick={() => dispatch(getClient(_id))}
+                  key={_id}
+                  to={`./clientes/ver/${_id}`}
+                  className="clients__card"
+                >
+                  <h4 className="name">{name}</h4>
+                  <span className="rfc">{rfc} </span>
 
-    return (
-
-
-        <>
-            <div className="app-screen projects-screen">
-
-                <div className="app-screen__title projects-screen-top">
-                    <h1 className="app-screen__title" >Clientes</h1>
-                    <form className="search">
-                        <svg  ><use href={`../assets/svg/search.svg#search`} ></use></svg>
-                        <input onChange={handleSearch} value={inputSearch} placeholder="Nombre/RFC" type="text" name="inputSearch" />
-                    </form>
-                </div>
-
-                <div className="clients">
-                    {
-                        dispClients?.map(({ _id, names, patLastname, matLastname, phoneNumber, rfc }) => {
-
-                            const name = `${names} ${patLastname && patLastname} ${matLastname && matLastname}`
-
-                            return (
-                                <NavLink onClick={() => dispatch(getClient(_id))} key={_id} to={`./clientes/ver/${_id}`} className="clients__card" >
-                                    <h4 className="name">{name}</h4>
-                                    <span className="rfc">{rfc} </span>
-
-                                    <p className="phone">Tel. {phoneNumber}</p>
-                                </NavLink>
-                            )
-
-                        })
-                    }
-                </div>
-
-            </div>
-
-            {
-                redirect.clients && <Redirect to={redirect.clients} />
+                  <p className="phone">Tel. {phoneNumber}</p>
+                </NavLink>
+              );
             }
+          )}
+        </div>
+      </div>
 
-
-        </>
-
-    )
-}
+      {redirect.clients && <Redirect to={redirect.clients} />}
+    </>
+  );
+};

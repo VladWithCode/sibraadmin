@@ -1,16 +1,13 @@
 import { redTypes } from "../types/reduxTypes";
 
-
-const initialState = []
+const initialState = [];
 
 export const recordReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case redTypes.recordsSet:
+      return action.payload;
 
-    switch (action.type) {
-        case redTypes.recordsSet:
-            return action.payload;
-
-        default:
-            return state;
-    }
-
-}
+    default:
+      return state;
+  }
+};

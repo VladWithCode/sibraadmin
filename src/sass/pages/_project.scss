@@ -1,1259 +1,1195 @@
 .project {
-    @include animation(appear, .5s, 0);
-    margin: 0 auto;
-    width: 90%;
-    padding: 6rem 0;
+  @include animation(appear, 0.5s, 0);
+  margin: 0 auto;
+  width: 90%;
+  padding: 6rem 0;
 
-    &__header {
-        margin: 4rem 0 2rem 0;
+  &__header {
+    margin: 4rem 0 2rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-transform: capitalize;
+
+    & span {
+      font-size: 1.5rem;
+    }
+
+    & label {
+      font-size: 1.2rem;
+    }
+
+    & .options {
+      display: flex;
+
+      & input[type="radio"],
+      & input[type="checkbox"] {
+        display: none;
+
+        &:not(:checked) + label {
+          background-color: transparent;
+        }
+
+        &:checked + label {
+          color: white;
+          background-color: $color-success;
+
+          &:hover {
+            background-color: darken($color-success, 5);
+          }
+        }
+      }
+
+      & input[type="checkbox"] {
+        & + label {
+          font-weight: 400;
+          color: $color-danger;
+        }
+
+        &:checked + label {
+          background-color: $color-danger;
+
+          &:hover {
+            background-color: darken($color-danger, 5);
+          }
+        }
+
+        &.ok {
+          & + label {
+            font-weight: 400;
+            color: $color-ok;
+          }
+
+          &:checked + label {
+            background-color: $color-ok;
+            color: white;
+
+            &:hover {
+              background-color: darken($color-ok, 5);
+            }
+          }
+        }
+      }
+
+      & label {
+        // border-radius: 10rem;
+        padding: 1rem 1.5rem;
+        cursor: pointer;
+        @include transition;
+
+        &:hover {
+          color: $color-success;
+        }
+
+        // &:nth-of-type(2) {
+        //     margin: 0 2rem;
+        // }
+
+        margin-right: 2rem;
+
+        &:last-of-type {
+          margin: 0;
+        }
+      }
+    }
+
+    & .right {
+      display: flex;
+
+      &.lots {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        text-transform: capitalize;
+        flex-direction: column;
 
         & span {
-            font-size: 1.5rem;
+          font-weight: 700;
+          color: $color-ok;
+          text-align: right;
+
+          &:first-of-type {
+            margin-bottom: 1rem;
+            color: $color-success;
+          }
         }
-
-        & label {
-            font-size: 1.2rem;
-        }
-
-        & .options {
-
-            display: flex;
-
-            & input[type="radio"],
-            & input[type="checkbox"] {
-                display: none;
-
-                &:not(:checked)+label {
-                    background-color: transparent;
-
-                }
-
-                &:checked+label {
-                    color: white;
-                    background-color: $color-success;
-
-                    &:hover {
-                        background-color: darken($color-success, 5);
-                    }
-                }
-
-            }
-
-            & input[type="checkbox"] {
-
-                &+label {
-                    font-weight: 400;
-                    color: $color-danger
-                }
-
-                &:checked+label {
-                    background-color: $color-danger;
-
-                    &:hover {
-                        background-color: darken($color-danger, 5);
-                    }
-                }
-
-                &.ok {
-
-                    &+label {
-                        font-weight: 400;
-                        color: $color-ok
-                    }
-
-                    &:checked+label {
-                        background-color: $color-ok;
-                        color: white;
-
-                        &:hover {
-                            background-color: darken($color-ok, 5);
-                        }
-                    }
-
-                }
-
-            }
-
-            & label {
-                // border-radius: 10rem;
-                padding: 1rem 1.5rem;
-                cursor: pointer;
-                @include transition;
-
-                &:hover {
-                    color: $color-success;
-                }
-
-                // &:nth-of-type(2) {
-                //     margin: 0 2rem;
-                // }
-
-                margin-right: 2rem;
-
-                &:last-of-type {
-                    margin: 0;
-                }
-            }
-        }
-
-        & .right {
-            display: flex;
-
-            &.lots {
-                display: flex;
-                flex-direction: column;
-
-                & span {
-                    font-weight: 700;
-                    color: $color-ok;
-                    text-align: right;
-
-                    &:first-of-type {
-                        margin-bottom: 1rem;
-                        color: $color-success;
-                    }
-
-                }
-            }
-
-        }
-
-        & .right,
-        & .left {
-            height: 100%;
-
-            & h3 {
-                color: $black;
-                margin-bottom: .3rem;
-            }
-
-            & span {
-                color: $color-text-light;
-            }
-
-            & .item {
-
-                padding: 1rem 1.5rem;
-                border-radius: .5rem;
-
-                & p {
-                    color: $black;
-                    font-weight: 700;
-                    text-align: right;
-                    font-size: 1.5rem;
-                    margin-bottom: .5rem;
-                }
-
-                &.total {
-                    @include gradient-ok;
-                    color: $white;
-                    margin-left: 1.6rem;
-
-                    & p,
-                    & span {
-                        color: $white;
-                    }
-                }
-
-                &.state {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    @include gradient-ok;
-                    padding: 2.5rem 4rem;
-
-                    margin-left: 2rem;
-
-                    & p,
-                    & span {
-                        color: $white;
-                        line-height: 0;
-
-                    }
-
-                    &.available {
-                        @include gradient-ok;
-                    }
-
-                    &.delivered {
-                        @include gradient-success;
-                    }
-
-                    &.liquidated,
-                    &.reserved {
-                        @include gradient-warning;
-                    }
-
-                }
-            }
-
-
-
-        }
-
+      }
     }
+
+    & .right,
+    & .left {
+      height: 100%;
+
+      & h3 {
+        color: $black;
+        margin-bottom: 0.3rem;
+      }
+
+      & span {
+        color: $color-text-light;
+      }
+
+      & .item {
+        padding: 1rem 1.5rem;
+        border-radius: 0.5rem;
+
+        & p {
+          color: $black;
+          font-weight: 700;
+          text-align: right;
+          font-size: 1.5rem;
+          margin-bottom: 0.5rem;
+        }
+
+        &.total {
+          @include gradient-ok;
+          color: $white;
+          margin-left: 1.6rem;
+
+          & p,
+          & span {
+            color: $white;
+          }
+        }
+
+        &.state {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          @include gradient-ok;
+          padding: 2.5rem 4rem;
+
+          margin-left: 2rem;
+
+          & p,
+          & span {
+            color: $white;
+            line-height: 0;
+          }
+
+          &.available {
+            @include gradient-ok;
+          }
+
+          &.delivered {
+            @include gradient-success;
+          }
+
+          &.liquidated,
+          &.reserved {
+            @include gradient-warning;
+          }
+        }
+      }
+    }
+  }
 }
 
 .card {
-    @include card;
-    // margin: 1rem 0;
-    // max-width: 90%;
-    grid-column: span 1;
-    overflow: hidden;
-    padding: 2rem;
+  @include card;
+  // margin: 1rem 0;
+  // max-width: 90%;
+  grid-column: span 1;
+  overflow: hidden;
+  padding: 2rem;
+  position: relative;
+
+  &.template {
+    min-height: 70rem;
+  }
+
+  &__variables {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+
+    & p {
+      padding: 1rem 2rem;
+      margin: 1rem;
+      background-color: $color-ok;
+      color: white;
+      cursor: pointer;
+      @include transition;
+
+      &:hover {
+        background-color: darken($color-ok, 10);
+      }
+    }
+  }
+
+  & .add {
+    width: 100;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-top: -2rem;
+    margin-bottom: 1rem;
+
+    & button.upload {
+      padding: 0;
+      background-color: transparent;
+      color: $color-success;
+      padding: 0.5rem;
+      border: none;
+      border-bottom: 0.1rem solid $color-success;
+    }
+  }
+
+  &.edit {
+    border: 0.2rem solid $color-ok;
+  }
+
+  &.half {
+    width: 50%;
+  }
+
+  &.scroll,
+  & .scroll {
+    overflow-y: scroll;
+    @include animation(0.4s, appear, 0);
     position: relative;
+    max-height: 28rem;
 
-    &.template {
-        min-height: 70rem;
+    &::-webkit-scrollbar {
+      width: 1rem;
     }
 
-    &__variables {
-        display: flex;
-        width: 100%;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        align-items: center;
+    &::-webkit-scrollbar-track {
+      background-color: lighten($color-text-light, 20);
+      border-radius: 4px;
+    }
 
-        & p {
-            padding: 1rem 2rem;
-            margin: 1rem;
-            background-color: $color-ok;
-            color: white;
-            cursor: pointer;
-            @include transition;
+    &::-webkit-scrollbar-thumb {
+      background-color: lighten($color-ok, 10);
+      border-radius: 4px;
 
-            &:hover {
-                background-color: darken($color-ok, 10);
-            }
+      &:hover {
+        background-color: $color-ok;
+      }
+    }
+
+    & span.empty {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  &-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    grid-gap: 2rem;
+    width: 100%;
+    overflow: hidden;
+
+    & .card {
+      min-height: 24rem;
+    }
+
+    &.tall {
+      grid-template-rows: 45rem;
+    }
+
+    &.manzanas {
+      grid-template-rows: 25rem;
+      overflow: visible;
+
+      & .card {
+        height: 100%;
+      }
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    position: relative;
+    width: 100%;
+    text-transform: capitalize;
+
+    &.pointer {
+      cursor: pointer;
+    }
+
+    & .dropdown,
+    & .cancel,
+    & .links {
+      position: absolute;
+      right: 0;
+      top: 60%;
+
+      @include transition;
+      cursor: pointer;
+      text-transform: capitalize;
+    }
+
+    & .dropdown {
+      font-weight: 700;
+      font-size: 1.8rem;
+      transform: rotate(180deg);
+
+      &:hover {
+        transform: rotate(140deg);
+        color: $color-ok;
+      }
+
+      &.active {
+        color: $color-ok;
+        transform: rotate(0deg);
+      }
+    }
+
+    & .cancel {
+      top: 50%;
+      color: $color-danger;
+      transform: translateY(-50%);
+      border-bottom: 1px solid $color-danger;
+
+      &:hover {
+        filter: brightness(1.4);
+      }
+
+      &.cancelled {
+        border: none;
+        background-color: $color-danger;
+        color: $white;
+        padding: 1rem 2rem;
+        font-weight: 400;
+      }
+    }
+
+    & .links {
+      display: flex;
+      top: 30%;
+
+      & .danger,
+      & .edit {
+        border-bottom: 1px solid;
+      }
+
+      & .edit {
+        color: $color-ok;
+        margin-right: 3rem;
+      }
+
+      & .danger {
+        color: $color-danger;
+      }
+    }
+
+    & .state {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      margin: 0;
+      font-size: 1.4rem;
+      border-right: 1px solid;
+      border-bottom: 1px solid;
+      padding: 0 0.5rem 0.3rem 0;
+      text-transform: uppercase;
+      line-height: 1;
+      cursor: default;
+
+      &.warning {
+        color: $color-warning;
+        border-color: $color-warning;
+      }
+
+      &.danger {
+        color: $color-danger;
+        border-color: $color-danger;
+      }
+
+      &.success {
+        color: $color-success;
+        border-color: $color-success;
+      }
+    }
+
+    & .add-ref {
+      position: absolute;
+      right: 0;
+      top: -0.5rem;
+      background-color: $color-success;
+      @include transition;
+      padding: 1rem 1.5rem;
+      border-radius: 0;
+      font-size: 1.4rem;
+
+      color: white;
+
+      &.delete,
+      &.ok {
+        background-color: transparent;
+        color: $color-danger;
+        padding: 0.5rem;
+        border: none;
+        border-bottom: 1px solid;
+
+        &:hover {
+          color: darken($color-danger, 10);
+          background-color: transparent;
         }
+
+        &.payment {
+          font-size: 2rem;
+          border: none;
+          top: -1.2rem;
+        }
+      }
+
+      &.ok {
+        color: $color-ok;
+
+        &:hover {
+          color: darken($color-ok, 15);
+          background-color: transparent;
+        }
+      }
+
+      &:hover {
+        background-color: darken($color-success, 10);
+      }
     }
 
+    & img {
+      width: 3rem;
+      height: 3rem;
+    }
 
-    & .add {
-        width: 100;
+    & h4 {
+      line-height: 0;
+      margin-left: 1rem;
+      color: $black;
+    }
+
+    & .commission {
+      position: absolute;
+      right: 0;
+      top: 0;
+      color: $color-success;
+      // border-bottom: 1px solid $color-success;
+      border: none;
+      padding: 1rem;
+    }
+
+    & .delete {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      color: $color-danger;
+      text-transform: capitalize;
+      font-size: 1.5rem;
+      @include transition;
+      cursor: pointer;
+
+      &.deleted {
+        color: $color-ok;
+      }
+    }
+  }
+
+  &__body {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    & .right,
+    & .left,
+    & .full .right,
+    & .full .left {
+      flex: 0 1 calc(50% - 3rem);
+
+      & .scroll {
+        height: 12rem;
+      }
+
+      & .file-form {
         display: flex;
-        justify-content: flex-start;
-        align-items: flex-start;
-        margin-top: -2rem;
-        margin-bottom: 1rem;
+        flex-direction: column;
+        align-items: flex-end;
+        width: 100%;
+
+        & .card__body__item {
+          border-top: 1px solid $color-text-light;
+        }
 
         & button.upload {
-            padding: 0;
-            background-color: transparent;
-            color: $color-success;
-            padding: .5rem;
-            border: none;
-            border-bottom: .1rem solid $color-success;
+          background-color: $color-success;
+          border-color: $color-success;
+          font-size: 1.4rem;
+          margin-top: 1rem;
+          border-radius: 0;
+
+          &:hover {
+            background-color: darken($color-success, 10);
+          }
+
+          &:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+
+            &:hover {
+              background-color: $color-success;
+            }
+          }
         }
+      }
     }
 
-    &.edit {
-        border: .2rem solid $color-ok;
+    & .full {
+      flex: 0 1 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      overflow: hidden;
+      transition: height 0.4s ease-in-out;
+      height: fit-content;
+      position: relative;
+      flex-direction: column;
+
+      & .scroll {
+        height: 12rem;
+      }
+
+      &.inactive {
+        height: 0;
+      }
+
+      & .commission {
+        position: absolute;
+        right: 0;
+        top: 0;
+        color: $color-success;
+        border-bottom: 1px solid $color-success;
+        padding: 1rem;
+      }
+
+      & .left {
+        &.deleted {
+          @include transition;
+
+          & .payment {
+            @include transition;
+            opacity: 0.3;
+          }
+        }
+
+        &.changed {
+          position: relative;
+
+          &::after {
+            @include transition;
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 85%;
+            bottom: 0;
+            left: 0;
+            background-color: rgba($color-ok, 0.1);
+          }
+        }
+      }
     }
 
-    &.half {
-        width: 50%;
+    & .right {
     }
 
-    &.scroll,
-    & .scroll {
+    &__item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid $color-text-light;
+      padding: 1rem;
+      width: 100%;
+      position: relative;
+      // text-transform: capitalize;
+
+      animation: 0.4s appear;
+
+      &.late {
+        background-color: $color-danger;
+        border-color: $white;
+
+        & span,
+        & p {
+          color: $white;
+        }
+      }
+
+      & select {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        text-align: right;
+        padding: 1rem 1.5rem;
+        border: none;
+        background-color: transparent;
+        font-size: 1.32rem;
+      }
+
+      & button.delete-area {
+        position: absolute;
+        left: 0;
+        background-color: white;
+        font-weight: 700;
+        padding: 0;
+        border: none;
+        background-color: $color-danger;
+        font-size: 1.8rem;
+        height: 2rem;
+        width: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 0;
+        border-radius: 0;
+        z-index: 4;
+
+        &:hover {
+          background-color: darken($color-danger, 15);
+        }
+
+        &.measure {
+          left: -2rem;
+        }
+      }
+
+      & label {
+        pointer-events: none;
+      }
+
+      & span,
+      label {
+        text-transform: uppercase;
+        color: $color-text-light;
+        font-weight: 700;
+        font-size: 1.3rem;
+        z-index: 2;
+        cursor: default;
+      }
+
+      & input {
+        position: absolute;
+        background-color: transparent;
+        width: 100%;
+        height: 100%;
+        bottom: -0.2rem;
+        left: 0;
+        border: none;
+        padding-left: 60%;
+        padding-right: 1rem;
+        font-size: 1.5rem;
+        color: $black;
+        font-weight: 400;
+        text-align: right;
+        z-index: 3;
+        // transition: .2s all ease-in-out;
+
+        &:-webkit-autofill {
+          background-color: transparent !important;
+        }
+
+        &:focus {
+          border: none;
+          outline: none;
+          border-bottom: 0.5rem solid $color-ok;
+        }
+
+        &:invalid {
+          border-bottom: 0.5rem solid $color-warning;
+        }
+
+        &:invalid:focus {
+          border-bottom: 0.5rem solid $color-danger;
+        }
+
+        &.changed {
+          color: $color-ok;
+        }
+      }
+
+      & p {
+        color: $black;
+        cursor: default;
+
+        &.price {
+          color: $color-ok;
+          font-weight: 700;
+        }
+
+        &.debt {
+          color: $color-warning;
+        }
+
+        &.payed {
+          color: $color-success;
+        }
+      }
+
+      &.description {
+        border: none;
+        flex-direction: column;
+        width: 105%;
+        align-items: flex-start;
+
+        & button.delete {
+          color: $color-danger;
+          padding: 0;
+          border: none;
+          background-color: transparent;
+          position: absolute;
+          right: 2rem;
+          top: 1.2rem;
+        }
+
+        & .paraph {
+          cursor: text;
+          width: 100%;
+        }
+
+        & span {
+          color: $black !important;
+          margin: 1rem 0 1rem 0;
+        }
+
+        & p {
+          // font-size: 1.3rem;
+          color: $color-text-light;
+        }
+
+        &.extra {
+          & textarea {
+            height: 100px;
+          }
+        }
+
+        & textarea {
+          &.changed {
+            color: $color-ok !important;
+          }
+
+          resize: none;
+          width: 100%;
+          height: 200px;
+          padding: 1.5rem;
+          margin: 0;
+          margin-left: -1rem;
+          color: $black !important;
+          // font-size: 1.5rem;
+          border-color: $color-text-light;
+
+          &:focus {
+            outline-color: $color-ok;
+          }
+        }
+
+        &.error {
+          & span {
+            color: $color-danger !important;
+          }
+
+          & textarea {
+            border-color: $color-danger;
+
+            &:focus {
+              outline-color: $color-danger;
+            }
+          }
+        }
+      }
+
+      &.error {
+        border-color: lighten($color-danger, 15);
+
+        & label {
+          color: lighten($color-danger, 15);
+        }
+
+        & input {
+          color: $color-danger !important;
+
+          &:focus {
+            border-color: $color-danger;
+          }
+        }
+      }
+
+      &.warning {
+        border-color: lighten($color-warning, 15);
+
+        & label {
+          color: lighten($color-warning, 15);
+        }
+
+        & input {
+          color: $color-warning !important;
+
+          &:focus {
+            border-color: $color-warning;
+          }
+        }
+      }
+
+      & .options {
+        position: absolute;
+        right: 0;
+        top: 0;
+        display: flex;
+        justify-content: flex-end;
+        pointer-events: none;
+
+        & input[type="radio"] {
+          display: none;
+          pointer-events: none;
+
+          &:not(:checked) + label {
+            background-color: transparent;
+            color: $color-text;
+          }
+
+          &:checked + label {
+            color: white;
+            background-color: $color-success;
+
+            &:hover {
+              background-color: darken($color-success, 5);
+            }
+          }
+        }
+
+        & label {
+          padding: 1rem 1.5rem;
+          cursor: pointer !important;
+          @include transition;
+          pointer-events: all;
+
+          &:hover {
+            color: $color-success;
+          }
+        }
+      }
+    }
+
+    &__list {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+
+      &__item {
+        cursor: pointer;
+        margin: 0.5rem 1.3rem;
+
+        & p {
+          // text-transform: capitalize;
+          padding: 1rem;
+          border-bottom: 1px solid $color-text-light;
+          @include transition;
+        }
+
+        &:hover {
+          & p {
+            color: $color-ok;
+          }
+        }
+      }
+
+      &__doc {
+        cursor: pointer;
+        margin: 1rem;
+
+        & p {
+          text-transform: uppercase;
+          padding: 1rem 1.5rem;
+          border: 1px solid $color-text-light;
+          @include transition;
+          border-radius: 0.4rem;
+        }
+
+        &:hover {
+          & p {
+            color: $color-ok;
+            border-color: $color-ok;
+          }
+        }
+      }
+
+      &__lotType {
+        width: 100%;
+        margin: 2rem 0;
+        padding: 0 1rem;
+
+        & .header {
+          margin-bottom: 1rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          & .edit-btns {
+            & button {
+              background-color: transparent;
+              border-radius: 0;
+              padding: 0.5rem 1rem;
+              border: none;
+              border-bottom: 0.1rem solid;
+            }
+
+            & .edit {
+              color: $color-success;
+              margin-right: 2rem;
+            }
+
+            & .delete {
+              color: $color-danger;
+            }
+          }
+
+          & h4 {
+            color: $black;
+            text-transform: uppercase;
+            padding: 0.5rem 5rem 0.5rem 0.5rem;
+            border-bottom: 0.4rem solid $color-ok;
+            width: fit-content;
+          }
+        }
+
+        & .body {
+          padding: 0 3rem;
+
+          & .prices,
+          & .measures {
+            & h5 {
+              margin: 1.5rem 0 0 0;
+              text-transform: uppercase;
+            }
+          }
+        }
+      }
+    }
+
+    & .paraphs {
+      position: relative;
+      // width: 635px;
+      width: 6.4in;
+      max-height: 70%;
+
+      // overflow-y: scroll;
+      &.scroll {
         overflow-y: scroll;
-        @include animation(.4s, appear, 0);
+        @include animation(0.4s, appear, 0);
         position: relative;
         max-height: 28rem;
 
         &::-webkit-scrollbar {
-            width: 1rem;
+          width: 1rem;
         }
 
         &::-webkit-scrollbar-track {
-            background-color: lighten($color-text-light, 20);
-            border-radius: 4px;
+          background-color: lighten($color-text-light, 20);
+          border-radius: 4px;
         }
 
         &::-webkit-scrollbar-thumb {
-            background-color: lighten($color-ok, 10);
-            border-radius: 4px;
+          background-color: lighten($color-ok, 10);
+          border-radius: 4px;
 
-            &:hover {
-                background-color: $color-ok;
-            }
-
+          &:hover {
+            background-color: $color-ok;
+          }
         }
-
-        & span.empty {
-            position: absolute;
-            top: 30%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
+      }
     }
 
-    &-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: auto;
-        grid-gap: 2rem;
-        width: 100%;
-        overflow: hidden;
+    & .variables {
+      width: 20%;
+      // background-color: red;
+      position: absolute;
+      right: 3rem;
+      top: 3rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
 
-        & .card {
-            min-height: 24rem;
+      & h4 {
+        margin: 4rem 0 2rem auto;
+        font-size: 2rem;
+      }
+
+      & p {
+        padding: 1rem 2rem;
+        margin: 1rem 0 1rem auto;
+        background-color: $color-ok;
+        color: white;
+        cursor: pointer;
+        @include transition;
+
+        &:hover {
+          background-color: darken($color-ok, 10);
         }
+      }
 
-        &.tall {
-            grid-template-rows: 45rem;
+      & .add-par {
+        // align-self: flex-end;
+        background-color: $color-success;
+        @include transition;
+        padding: 1rem 1.5rem;
+        border-radius: 0;
+        font-size: 1.4rem;
+
+        &.ok {
+          background-color: transparent;
+          color: $color-ok;
+          padding: 0.5rem;
+          border: none;
+          border-bottom: 1px solid;
+
+          &:hover {
+            color: darken($color-ok, 15);
+            background-color: transparent;
+          }
         }
+      }
+    }
+  }
 
-        &.manzanas {
-            grid-template-rows: 25rem;
-            overflow: visible;
+  &__form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 3rem;
 
-            & .card {
-                height: 100%;
-            }
-        }
-
+    & .order {
+      & span {
+      }
     }
 
-    &__header {
+    & .order,
+    & .search .item {
+      & select {
+        appearance: none;
+        background-color: transparent;
+        border: none;
+        font-family: inherit;
+        cursor: inherit;
+        line-height: inherit;
+        color: $color-text;
+        outline-color: $color-text-light;
+        outline: none;
+        border-bottom: 1px solid $color-ok;
+        margin-left: 0.5rem;
+        padding: 0 1rem;
+        text-align: center;
+        @include transition;
+        cursor: pointer;
+        font-weight: 700;
+
+        &:hover,
+        &:focus {
+          border-bottom: 0.3rem solid $color-ok;
+        }
+
+        & option {
+          text-align: center;
+          background-color: $color-bc;
+        }
+      }
+    }
+
+    & .search {
+      display: flex;
+      align-items: center;
+
+      & .item {
         display: flex;
         align-items: center;
-        margin-bottom: 2rem;
-        position: relative;
-        width: 100%;
-        text-transform: capitalize;
 
-        &.pointer {
-            cursor: pointer;
+        &:first-of-type {
+          margin-right: 2rem;
         }
 
-
-
-        & .dropdown,
-        & .cancel,
-        & .links {
-            position: absolute;
-            right: 0;
-            top: 60%;
-
-            @include transition;
-            cursor: pointer;
-            text-transform: capitalize;
-
-
-
+        & label {
+          font-size: 1.5rem;
         }
 
-        & .dropdown {
-            font-weight: 700;
-            font-size: 1.8rem;
-            transform: rotate(180deg);
+        & input {
+          margin-left: 0.5rem;
+          border: none;
+          border-bottom: 1px solid $color-ok;
+          padding: 0 1rem;
+          text-align: center;
+          width: 8rem;
+          outline: none;
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: $color-text;
+          @include transition;
 
-            &:hover {
-                transform: rotate(140deg);
-                color: $color-ok;
-            }
-
-            &.active {
-                color: $color-ok;
-                transform: rotate(0deg);
-            }
+          &:hover,
+          &:focus {
+            border-bottom: 0.3rem solid $color-ok;
+          }
         }
-
-        & .cancel {
-            top: 50%;
-            color: $color-danger;
-            transform: translateY(-50%);
-            border-bottom: 1px solid $color-danger;
-
-            &:hover {
-                filter: brightness(1.4);
-            }
-
-            &.cancelled {
-                border: none;
-                background-color: $color-danger;
-                color: $white;
-                padding: 1rem 2rem;
-                font-weight: 400;
-            }
-
-        }
-
-        & .links {
-            display: flex;
-            top: 30%;
-
-            & .danger,
-            & .edit {
-                border-bottom: 1px solid;
-            }
-
-            & .edit {
-                color: $color-ok;
-                margin-right: 3rem;
-            }
-
-            & .danger {
-                color: $color-danger;
-            }
-        }
-
-        & .state {
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            margin: 0;
-            font-size: 1.4rem;
-            border-right: 1px solid;
-            border-bottom: 1px solid;
-            padding: 0 .5rem .3rem 0;
-            text-transform: uppercase;
-            line-height: 1;
-            cursor: default;
-
-            &.warning {
-                color: $color-warning;
-                border-color: $color-warning;
-            }
-
-            &.danger {
-                color: $color-danger;
-                border-color: $color-danger;
-            }
-
-            &.success {
-                color: $color-success;
-                border-color: $color-success;
-            }
-        }
-
-        & .add-ref {
-            position: absolute;
-            right: 0;
-            top: -.5rem;
-            background-color: $color-success;
-            @include transition;
-            padding: 1rem 1.5rem;
-            border-radius: 0;
-            font-size: 1.4rem;
-
-            color: white;
-
-            &.delete,
-            &.ok {
-                background-color: transparent;
-                color: $color-danger;
-                padding: .5rem;
-                border: none;
-                border-bottom: 1px solid;
-
-                &:hover {
-                    color: darken($color-danger, 10);
-                    background-color: transparent;
-                }
-
-                &.payment {
-                    font-size: 2rem;
-                    border: none;
-                    top: -1.2rem;
-                }
-            }
-
-            &.ok {
-                color: $color-ok;
-
-                &:hover {
-                    color: darken($color-ok, 15);
-                    background-color: transparent;
-                }
-            }
-
-            &:hover {
-                background-color: darken($color-success, 10);
-            }
-        }
-
-        & img {
-            width: 3rem;
-            height: 3rem;
-        }
-
-        & h4 {
-            line-height: 0;
-            margin-left: 1rem;
-            color: $black;
-        }
-
-        & .commission {
-            position: absolute;
-            right: 0;
-            top: 0;
-            color: $color-success;
-            // border-bottom: 1px solid $color-success;
-            border: none;
-            padding: 1rem;
-        }
-
-        & .delete {
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            color: $color-danger;
-            text-transform: capitalize;
-            font-size: 1.5rem;
-            @include transition;
-            cursor: pointer;
-
-            &.deleted {
-                color: $color-ok;
-            }
-        }
-
+      }
     }
-
-    &__body {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-
-        & .right,
-        & .left,
-        & .full .right,
-        & .full .left {
-            flex: 0 1 calc(50% - 3rem);
-
-            & .scroll {
-                height: 12rem
-            }
-
-
-            & .file-form {
-                display: flex;
-                flex-direction: column;
-                align-items: flex-end;
-                width: 100%;
-
-                & .card__body__item {
-                    border-top: 1px solid $color-text-light;
-                }
-
-                & button.upload {
-                    background-color: $color-success;
-                    border-color: $color-success;
-                    font-size: 1.4rem;
-                    margin-top: 1rem;
-                    border-radius: 0;
-
-                    &:hover {
-                        background-color: darken($color-success, 10);
-                    }
-
-                    &:disabled {
-                        cursor: not-allowed;
-                        opacity: .6;
-
-                        &:hover {
-                            background-color: $color-success;
-                        }
-                    }
-
-                }
-
-            }
-        }
-
-
-
-        & .full {
-            flex: 0 1 100%;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            overflow: hidden;
-            transition: height .4s ease-in-out;
-            height: fit-content;
-            position: relative;
-            flex-direction: column;
-
-            & .scroll {
-                height: 12rem
-            }
-
-            &.inactive {
-                height: 0;
-            }
-
-            & .commission {
-                position: absolute;
-                right: 0;
-                top: 0;
-                color: $color-success;
-                border-bottom: 1px solid $color-success;
-                padding: 1rem;
-            }
-
-            & .left {
-                &.deleted {
-                    @include transition;
-
-                    & .payment {
-                        @include transition;
-                        opacity: .3;
-                    }
-                }
-
-                &.changed {
-                    position: relative;
-
-                    &::after {
-                        @include transition;
-                        content: '';
-                        position: absolute;
-                        width: 100%;
-                        height: 85%;
-                        bottom: 0;
-                        left: 0;
-                        background-color: rgba($color-ok, .1);
-                    }
-                }
-            }
-
-        }
-
-        & .right {}
-
-        &__item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid $color-text-light;
-            padding: 1rem;
-            width: 100%;
-            position: relative;
-            // text-transform: capitalize;
-
-            animation: .4s appear;
-
-            &.late {
-                background-color: $color-danger;
-                border-color: $white;
-
-                & span,
-                & p {
-                    color: $white;
-                }
-
-            }
-
-            & select {
-                position: absolute;
-                bottom: 0;
-                right: 0;
-                text-align: right;
-                padding: 1rem 1.5rem;
-                border: none;
-                background-color: transparent;
-            }
-
-            & button.delete-area {
-                position: absolute;
-                left: 0;
-                background-color: white;
-                font-weight: 700;
-                padding: 0;
-                border: none;
-                background-color: $color-danger;
-                font-size: 1.8rem;
-                height: 2rem;
-                width: 2rem;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                line-height: 0;
-                border-radius: 0;
-                z-index: 4;
-
-                &:hover {
-                    background-color: darken($color-danger, 15);
-                }
-
-                &.measure {
-                    left: -2rem;
-                }
-            }
-
-            & label {
-                pointer-events: none;
-            }
-
-            & span,
-            label {
-                text-transform: uppercase;
-                color: $color-text-light;
-                font-weight: 700;
-                font-size: 1.3rem;
-                z-index: 2;
-                cursor: default;
-            }
-
-            & input {
-                position: absolute;
-                background-color: transparent;
-                width: 100%;
-                height: 100%;
-                bottom: -.2rem;
-                left: 0;
-                border: none;
-                padding-left: 60%;
-                padding-right: 1rem;
-                font-size: 1.5rem;
-                color: $black;
-                font-weight: 400;
-                text-align: right;
-                z-index: 3;
-                // transition: .2s all ease-in-out;
-
-                &:-webkit-autofill {
-                    background-color: transparent !important;
-                }
-
-                &:focus {
-                    border: none;
-                    outline: none;
-                    border-bottom: .5rem solid $color-ok;
-                }
-
-                &:invalid {
-                    border-bottom: .5rem solid $color-warning;
-                }
-
-                &:invalid:focus {
-                    border-bottom: .5rem solid $color-danger;
-                }
-
-                &.changed {
-                    color: $color-ok;
-                }
-
-            }
-
-            & p {
-                color: $black;
-                cursor: default;
-
-                &.price {
-                    color: $color-ok;
-                    font-weight: 700;
-                }
-
-                &.debt {
-                    color: $color-warning;
-                }
-
-                &.payed {
-                    color: $color-success;
-                }
-
-            }
-
-
-
-            &.description {
-                border: none;
-                flex-direction: column;
-                width: 105%;
-                align-items: flex-start;
-
-                & button.delete {
-                    color: $color-danger;
-                    padding: 0;
-                    border: none;
-                    background-color: transparent;
-                    position: absolute;
-                    right: 2rem;
-                    top: 1.2rem;
-                }
-
-                & .paraph {
-                    cursor: text;
-                    width: 100%;
-                }
-
-                & span {
-                    color: $black !important;
-                    margin: 1rem 0 1rem 0;
-                }
-
-                & p {
-                    // font-size: 1.3rem;
-                    color: $color-text-light;
-                }
-
-                &.extra {
-                    & textarea {
-                        height: 100px;
-
-                    }
-                }
-
-                & textarea {
-                    &.changed {
-                        color: $color-ok !important;
-                    }
-
-                    resize: none;
-                    width: 100%;
-                    height: 200px;
-                    padding: 1.5rem;
-                    margin: 0;
-                    margin-left: -1rem;
-                    color: $black !important;
-                    // font-size: 1.5rem;
-                    border-color: $color-text-light;
-
-                    &:focus {
-                        outline-color: $color-ok;
-                    }
-                }
-
-                &.error {
-                    & span {
-                        color: $color-danger !important;
-                    }
-
-                    & textarea {
-                        border-color: $color-danger;
-
-                        &:focus {
-                            outline-color: $color-danger;
-                        }
-                    }
-
-
-                }
-            }
-
-            &.error {
-                border-color: lighten($color-danger, 15);
-
-                & label {
-                    color: lighten($color-danger, 15);
-
-                }
-
-                & input {
-                    color: $color-danger !important;
-
-                    &:focus {
-                        border-color: $color-danger;
-                    }
-
-                }
-            }
-
-            &.warning {
-                border-color: lighten($color-warning, 15);
-
-                & label {
-                    color: lighten($color-warning, 15);
-
-                }
-
-                & input {
-                    color: $color-warning !important;
-
-                    &:focus {
-                        border-color: $color-warning;
-                    }
-
-                }
-            }
-
-            & .options {
-                position: absolute;
-                right: 0;
-                top: 0;
-                display: flex;
-                justify-content: flex-end;
-                pointer-events: none;
-
-                & input[type="radio"] {
-                    display: none;
-                    pointer-events: none;
-
-                    &:not(:checked)+label {
-                        background-color: transparent;
-                        color: $color-text;
-                    }
-
-                    &:checked+label {
-                        color: white;
-                        background-color: $color-success;
-
-                        &:hover {
-                            background-color: darken($color-success, 5);
-                        }
-                    }
-
-                }
-
-                & label {
-                    padding: 1rem 1.5rem;
-                    cursor: pointer !important;
-                    @include transition;
-                    pointer-events: all;
-
-                    &:hover {
-                        color: $color-success;
-                    }
-                }
-
-
-            }
-        }
-
-        &__list {
-            display: flex;
-            flex-wrap: wrap;
-            width: 100%;
-
-            &__item {
-                cursor: pointer;
-                margin: .5rem 1.3rem;
-
-                & p {
-                    // text-transform: capitalize;
-                    padding: 1rem;
-                    border-bottom: 1px solid $color-text-light;
-                    @include transition;
-                }
-
-                &:hover {
-                    & p {
-                        color: $color-ok;
-                    }
-                }
-
-            }
-
-            &__doc {
-                cursor: pointer;
-                margin: 1rem;
-
-                & p {
-                    text-transform: uppercase;
-                    padding: 1rem 1.5rem;
-                    border: 1px solid $color-text-light;
-                    @include transition;
-                    border-radius: .4rem;
-                }
-
-                &:hover {
-                    & p {
-                        color: $color-ok;
-                        border-color: $color-ok;
-                    }
-                }
-            }
-
-            &__lotType {
-                width: 100%;
-                margin: 2rem 0;
-                padding: 0 1rem;
-
-
-                & .header {
-                    margin-bottom: 1rem;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-
-                    & .edit-btns {
-
-                        & button {
-                            background-color: transparent;
-                            border-radius: 0;
-                            padding: .5rem 1rem;
-                            border: none;
-                            border-bottom: .1rem solid;
-                        }
-
-                        & .edit {
-                            color: $color-success;
-                            margin-right: 2rem;
-                        }
-
-                        & .delete {
-                            color: $color-danger;
-                        }
-                    }
-
-                    & h4 {
-                        color: $black;
-                        text-transform: uppercase;
-                        padding: .5rem 5rem .5rem .5rem;
-                        border-bottom: .4rem solid $color-ok;
-                        width: fit-content;
-                    }
-                }
-
-                & .body {
-                    padding: 0 3rem;
-
-                    & .prices,
-                    & .measures {
-                        & h5 {
-                            margin: 1.5rem 0 0 0;
-                            text-transform: uppercase;
-                        }
-                    }
-                }
-            }
-        }
-
-        & .paraphs {
-            position: relative;
-            // width: 635px;
-            width: 6.4in;
-            max-height: 70%;
-
-            // overflow-y: scroll;
-            &.scroll {
-                overflow-y: scroll;
-                @include animation(.4s, appear, 0);
-                position: relative;
-                max-height: 28rem;
-
-                &::-webkit-scrollbar {
-                    width: 1rem;
-                }
-
-                &::-webkit-scrollbar-track {
-                    background-color: lighten($color-text-light, 20);
-                    border-radius: 4px;
-                }
-
-                &::-webkit-scrollbar-thumb {
-                    background-color: lighten($color-ok, 10);
-                    border-radius: 4px;
-
-                    &:hover {
-                        background-color: $color-ok;
-                    }
-                }
-
-
-
-            }
-        }
-
-        & .variables {
-            width: 20%;
-            // background-color: red;
-            position: absolute;
-            right: 3rem;
-            top: 3rem;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-
-            & h4 {
-                margin: 4rem 0 2rem auto;
-                font-size: 2rem;
-            }
-
-            & p {
-                padding: 1rem 2rem;
-                margin: 1rem 0 1rem auto;
-                background-color: $color-ok;
-                color: white;
-                cursor: pointer;
-                @include transition;
-
-                &:hover {
-                    background-color: darken($color-ok, 10);
-                }
-            }
-
-            & .add-par {
-                // align-self: flex-end;
-                background-color: $color-success;
-                @include transition;
-                padding: 1rem 1.5rem;
-                border-radius: 0;
-                font-size: 1.4rem;
-
-                &.ok {
-                    background-color: transparent;
-                    color: $color-ok;
-                    padding: .5rem;
-                    border: none;
-                    border-bottom: 1px solid;
-
-                    &:hover {
-                        color: darken($color-ok, 15);
-                        background-color: transparent;
-                    }
-
-
-                }
-            }
-        }
-
+  }
+
+  &__lot-list {
+    & .lot-list {
+      height: 50rem;
     }
-
-    &__form {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 3rem;
-
-        & .order {
-
-            & span {}
-
-
-        }
-
-        & .order,
-        & .search .item {
-            & select {
-                appearance: none;
-                background-color: transparent;
-                border: none;
-                font-family: inherit;
-                cursor: inherit;
-                line-height: inherit;
-                color: $color-text;
-                outline-color: $color-text-light;
-                outline: none;
-                border-bottom: 1px solid $color-ok;
-                margin-left: .5rem;
-                padding: 0 1rem;
-                text-align: center;
-                @include transition;
-                cursor: pointer;
-                font-weight: 700;
-
-                &:hover,
-                &:focus {
-                    border-bottom: .3rem solid $color-ok;
-                }
-
-                & option {
-                    text-align: center;
-                    background-color: $color-bc;
-                }
-            }
-        }
-
-        & .search {
-            display: flex;
-            align-items: center;
-
-            & .item {
-                display: flex;
-                align-items: center;
-
-                &:first-of-type {
-                    margin-right: 2rem;
-                }
-
-                & label {
-                    font-size: 1.5rem;
-                }
-
-                & input {
-                    margin-left: .5rem;
-                    border: none;
-                    border-bottom: 1px solid $color-ok;
-                    padding: 0 1rem;
-                    text-align: center;
-                    width: 8rem;
-                    outline: none;
-                    font-size: 1.5rem;
-                    font-weight: 700;
-                    color: $color-text;
-                    @include transition;
-
-                    &:hover,
-                    &:focus {
-                        border-bottom: .3rem solid $color-ok;
-                    }
-                }
-            }
-        }
-    }
-
-    &__lot-list {
-
-        & .lot-list {
-            height: 50rem;
-        }
-    }
-
-
-
+  }
 }
 
 button.upload {
-    background-color: $color-success;
-    border-color: $color-success;
-    font-size: 1.4rem;
-    margin-top: 1rem;
-    border-radius: 0;
+  background-color: $color-success;
+  border-color: $color-success;
+  font-size: 1.4rem;
+  margin-top: 1rem;
+  border-radius: 0;
+
+  &:hover {
+    background-color: darken($color-success, 10);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
 
     &:hover {
-        background-color: darken($color-success, 10);
+      background-color: $color-success;
     }
-
-    &:disabled {
-        cursor: not-allowed;
-        opacity: .6;
-
-        &:hover {
-            background-color: $color-success;
-        }
-    }
-
+  }
 }
 
-
-
 .editorClassName.rdw-editor-main {
-    border: 1px solid $color-text-light;
-    padding: .5rem 1.7rem;
-    min-height: 40rem;
+  border: 1px solid $color-text-light;
+  padding: 0.5rem 1.7rem;
+  min-height: 40rem;
 }
 
 .rdw-option-wrapper.rdw-option-disabled {
-    display: none;
+  display: none;
 }
-
 
 .rbc-event.rbc-event-allday,
 .rbc-agenda-event-cell a {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-start;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start;
 
-    & h4 {
-        color: white;
-    }
+  & h4 {
+    color: white;
+  }
 
-    & p {
-        color: gainsboro;
-    }
+  & p {
+    color: gainsboro;
+  }
 }
 
 .editorClassName.rdw-editor-main {
-    // font-size: letter;
+  // font-size: letter;
 }

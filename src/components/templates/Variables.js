@@ -1,9 +1,5 @@
-import React from 'react'
+import React from "react";
 
 export const Variables = () => {
-    return (
-        <div>
-
-        </div>
-    )
-}
+  return <div></div>;
+};

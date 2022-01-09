@@ -1,41 +1,40 @@
 .floating-btn {
-    position: fixed;
-    right: 2.5rem;
-    bottom: 2.5rem;
-    background-color: $color-success;
-    color: white;
-    padding: 1.6rem;
-    border-radius: 50%;
-    @include shadow-light;
+  position: fixed;
+  right: 2.5rem;
+  bottom: 2.5rem;
+  background-color: $color-success;
+  color: white;
+  padding: 1.6rem;
+  border-radius: 50%;
+  @include shadow-light;
+  @include transition;
+  @include animation(0.4s, moveInBottom, 0.3s);
+  cursor: pointer;
+  z-index: 2;
+
+  animation: appear 0.5s;
+  animation-fill-mode: backwards;
+
+  & svg {
+    height: 3rem;
+    width: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     @include transition;
-    @include animation(.4s, moveInBottom, .3s);
-    cursor: pointer;
-    z-index: 2;
+  }
 
-    animation: appear .5s;
-    animation-fill-mode: backwards;
+  &:hover {
+    @include shadow;
 
-    & svg {
-        height: 3rem;
-        width: 3rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        @include transition;
+    svg {
+      transform: scale(1.1);
     }
+  }
 
-    &:hover {
-        @include shadow;
-
-        svg {
-            transform: scale(1.1);
-        }
-    }
-
-    &-secondary {
-        background-color: white;
-        color: $color-success;
-        bottom: 11rem;
-    }
-
+  &-secondary {
+    background-color: white;
+    color: $color-success;
+    bottom: 11rem;
+  }
 }

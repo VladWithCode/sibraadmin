@@ -1,106 +1,106 @@
 // import { EditorState } from "draft-js";
 import { redTypes } from "../types/reduxTypes";
 
-
 const initialState = {
-    variables: [],
-    ogTemplates: [],
-    currentTemplates: []
-}
+  variables: [],
+  ogTemplates: [],
+  currentTemplates: [],
+};
 
 let paraphId = 0;
 let signatureId = 0;
 
-const addId = type => {
+const addId = (type) => {
+  switch (type) {
+    case "p":
+      paraphId += 1;
+      return +paraphId;
 
-    switch (type) {
-        case 'p':
-            paraphId += 1;
-            return +paraphId;
+    case "s":
+      signatureId += 1;
+      return +signatureId;
 
-        case 's':
-            signatureId += 1;
-            return +signatureId;
-
-        default:
-            return 0;
-    }
-
-}
+    default:
+      return 0;
+  }
+};
 
 export const templatesReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case redTypes.templatesGetVariables:
+      return {
+        ...state,
+        variables: action.payload,
+      };
 
-    switch (action.type) {
+    case redTypes.templatesSetAll:
+      return {
+        ...state,
+        currentTemplates: action.payload,
+        ogTemplates: action.payload,
+      };
 
-        case redTypes.templatesGetVariables:
+    case redTypes.templateSet:
+      const current = state.currentTemplates.find(
+        (t) => t._id === action.payload._id
+      );
 
-            return {
-                ...state,
-                variables: action.payload
-            }
+      current.state = { ...action.payload.state };
 
-        case redTypes.templatesSetAll:
-            return {
-                ...state,
-                currentTemplates: action.payload,
-                ogTemplates: action.payload
-            }
+      return {
+        ...state,
+      };
 
-        case redTypes.templateSet:
+    case redTypes.templatesAddParaph:
+      let template = state.currentTemplates.find(
+        (t) => t._id === action.payload
+      );
 
-            const current = state.currentTemplates.find(t => t._id === action.payload._id);
+      template.paraphs.push({
+        _id: addId("p").toString(),
+        content: "",
+        hasChanged: false,
+        delete: false,
+      });
 
-            current.state = { ...action.payload.state }
+      return {
+        ...state,
+      };
 
-            return {
-                ...state
-            }
+    case redTypes.templatesDeleteParaph:
+      let currentTemplate = state.currentTemplates.find(
+        (t) => t._id === action.payload.templateId
+      );
 
-        case redTypes.templatesAddParaph:
-            let template = state.currentTemplates.find(t => t._id === action.payload);
+      const paraphIndex = currentTemplate.paraphs.indexOf(
+        (p) => p._id === action.payload.paraphId
+      );
 
-            template.paraphs.push({
-                _id: addId('p').toString(),
-                content: '',
-                hasChanged: false,
-                delete: false
-            });
+      console.log(currentTemplate.paraphs);
+      currentTemplate.paraphs.splice(paraphIndex, 1);
+      console.log(currentTemplate.paraphs);
 
-            return {
-                ...state
-            }
+      return {
+        ...state,
+      };
 
-        case redTypes.templatesDeleteParaph:
-            let currentTemplate = state.currentTemplates.find(t => t._id === action.payload.templateId);
+    case redTypes.templatesSetParaph:
+      let currentTemplat = state.currentTemplates.find(
+        (t) => t._id === action.payload.templateId
+      );
 
-            const paraphIndex = currentTemplate.paraphs.indexOf(p => p._id === action.payload.paraphId);
+      currentTemplat.paraphs.find(
+        (p) => p._id === action.payload.paraphId
+      ).content = action.payload.content;
 
-            console.log(currentTemplate.paraphs);
-            currentTemplate.paraphs.splice(paraphIndex, 1);
-            console.log(currentTemplate.paraphs);
+      return {
+        ...state,
+      };
 
-            return {
-                ...state
-            }
+    case redTypes.templatesUpdate:
+      return {};
 
-        case redTypes.templatesSetParaph:
-
-            let currentTemplat = state.currentTemplates.find(t => t._id === action.payload.templateId);
-
-            currentTemplat.paraphs.find(p => p._id === action.payload.paraphId).content = action.payload.content
-
-            return {
-                ...state
-            }
-
-        case redTypes.templatesUpdate:
-
-
-
-            return {}
-
-        default:
-            return state;
-    }
-
-}
+    default:
+      return state;
+  }
+};

@@ -1,55 +1,52 @@
 .manzanas {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: 3rem;
-    max-width: 1200px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 3rem;
+  max-width: 1200px;
 
-    &__card {
-        @include card;
-        display: flex;
-        flex-direction: column;
+  &__card {
+    @include card;
+    display: flex;
+    flex-direction: column;
 
-
-
-        & h3 {
-            color: $color-ok;
-            margin-bottom: 3rem;
-            text-align: center;
-        }
-
-        & .form-field {
-            display: flex;
-            margin: 1rem 0 !important;
-
-            & input {
-                width: 7rem;
-                text-align: center;
-                padding: .5rem 0;
-                margin: 0;
-            }
-
-            &.error {
-                & label {
-                    color: $color-danger;
-                }
-
-                & input {
-                    color: $color-danger;
-                    border-color: $color-danger;
-                }
-            }
-
-            &.warning {
-                & label {
-                    color: $color-warning;
-                }
-
-                & input {
-                    color: $color-warning;
-                    border-color: $color-warning;
-                }
-            }
-        }
-
+    & h3 {
+      color: $color-ok;
+      margin-bottom: 3rem;
+      text-align: center;
     }
+
+    & .form-field {
+      display: flex;
+      margin: 1rem 0 !important;
+
+      & input {
+        width: 7rem;
+        text-align: center;
+        padding: 0.5rem 0;
+        margin: 0;
+      }
+
+      &.error {
+        & label {
+          color: $color-danger;
+        }
+
+        & input {
+          color: $color-danger;
+          border-color: $color-danger;
+        }
+      }
+
+      &.warning {
+        & label {
+          color: $color-warning;
+        }
+
+        & input {
+          color: $color-warning;
+          border-color: $color-warning;
+        }
+      }
+    }
+  }
 }

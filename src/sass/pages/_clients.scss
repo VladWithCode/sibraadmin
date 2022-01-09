@@ -1,68 +1,61 @@
 .clients {
+  grid-auto-rows: 22rem;
 
-    grid-auto-rows: 22rem;
+  &__card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
 
-    &__card {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        position: relative;
-
-        & h4 {
-            position: absolute;
-            font-weight: 700;
-            color: $black;
-            font-size: 2.5rem;
-            top: 45%;
-            left: 2rem;
-            transform: translateY(-50%);
-        }
-
-        & span.rfc {
-            position: absolute;
-            color: $color-text-light !important;
-            @include transition;
-            top: 60%;
-            left: 2rem;
-            transform: translateY(-50%);
-
-            &:hover {
-                color: $black;
-
-            }
-
-        }
-
-        & p.phone {
-            position: absolute;
-            right: 2rem;
-            bottom: 2rem;
-            color: $color-ok;
-            font-weight: 700;
-            // margin-top: 2rem;
-        }
-
-
-        &:before {
-            z-index: 1;
-            content: '';
-            position: absolute;
-            height: 20rem;
-            width: 100%;
-            border-radius: 50%;
-            @include gradient-ok;
-            left: 50%;
-            @include transition;
-            transform: translate(-50%, -105%);
-
-        }
-
-        &:hover {
-            &:before {
-                transform: translate(-50%, -68%) scale(1);
-            }
-        }
+    & h4 {
+      position: absolute;
+      font-weight: 700;
+      color: $black;
+      font-size: 2.5rem;
+      top: 45%;
+      left: 2rem;
+      transform: translateY(-50%);
     }
 
+    & span.rfc {
+      position: absolute;
+      color: $color-text-light !important;
+      @include transition;
+      top: 60%;
+      left: 2rem;
+      transform: translateY(-50%);
 
+      &:hover {
+        color: $black;
+      }
+    }
+
+    & p.phone {
+      position: absolute;
+      right: 2rem;
+      bottom: 2rem;
+      color: $color-ok;
+      font-weight: 700;
+      // margin-top: 2rem;
+    }
+
+    &:before {
+      z-index: 1;
+      content: "";
+      position: absolute;
+      height: 20rem;
+      width: 100%;
+      border-radius: 50%;
+      @include gradient-ok;
+      left: 50%;
+      @include transition;
+      transform: translate(-50%, -105%);
+    }
+
+    &:hover {
+      &:before {
+        transform: translate(-50%, -68%) scale(1);
+      }
+    }
+  }
 }

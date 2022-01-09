@@ -1,170 +1,155 @@
 .project-create {
-    width: 90%;
-    margin: 5rem auto;
-    padding-bottom: 6rem;
-    animation: .4s appear;
-    animation-fill-mode: backwards;
-    @include transition;
+  width: 90%;
+  margin: 5rem auto;
+  padding-bottom: 6rem;
+  animation: 0.4s appear;
+  animation-fill-mode: backwards;
+  @include transition;
 
-    & form {
-        width: 100%;
+  & form {
+    width: 100%;
 
-        & .section-title {
-            margin: 4rem 0 2rem 0;
+    & .section-title {
+      margin: 4rem 0 2rem 0;
+    }
 
+    & .form-field {
+      // font-size: 2rem;
+      display: flex;
+      align-items: center;
+      margin: 2rem 0;
+
+      &.desc {
+        flex-direction: column;
+        align-items: flex-start;
+
+        & label {
+          margin-bottom: 1rem;
         }
 
-        & .form-field {
+        & textarea {
+          resize: none;
+          width: 500px;
+          height: 200px;
+          padding: 1.5rem;
+          color: $color-ok;
+        }
+      }
+
+      & label {
+        margin-right: 3rem;
+      }
+
+      & input {
+        border: none;
+        outline: none;
+        // font-size: 2rem;
+        border-bottom: 1px solid $color-text;
+        // padding: 0 1rem;
+        text-align: center;
+        color: $color-ok;
+      }
+
+      &.svcs {
+        flex-direction: column;
+        align-items: flex-start;
+
+        & ul {
+          width: 800px;
+          display: flex;
+          flex-wrap: wrap;
+          margin-left: -3rem;
+
+          & li {
             // font-size: 2rem;
-            display: flex;
-            align-items: center;
-            margin: 2rem 0;
-
-            &.desc {
-                flex-direction: column;
-                align-items: flex-start;
-
-                & label {
-                    margin-bottom: 1rem;
-                }
-
-                & textarea {
-                    resize: none;
-                    width: 500px;
-                    height: 200px;
-                    padding: 1.5rem;
-                    color: $color-ok;
-                }
-            }
-
-            & label {
-                margin-right: 3rem;
-            }
-
-            & input {
-                border: none;
-                outline: none;
-                // font-size: 2rem;
-                border-bottom: 1px solid $color-text;
-                // padding: 0 1rem;
-                text-align: center;
-                color: $color-ok;
-            }
-
-
-            &.svcs {
-                flex-direction: column;
-                align-items: flex-start;
-
-                & ul {
-                    width: 800px;
-                    display: flex;
-                    flex-wrap: wrap;
-                    margin-left: -3rem;
-
-                    & li {
-                        // font-size: 2rem;
-                        list-style: none;
-                        cursor: pointer;
-                        @include transition;
-                        border-bottom: 1px solid transparent;
-                        padding-bottom: 1rem;
-                        text-align: center;
-                        margin: 1rem 3rem;
-                        text-transform: capitalize;
-
-                        &:hover {
-                            color: $color-ok;
-                            border-color: $color-ok;
-                        }
-                    }
-                }
-
-            }
-
-            &.docs {
-                flex-direction: column;
-                align-items: flex-start;
-
-
-                & .docs__list {
-                    width: 100%;
-                    display: flex;
-                    flex-wrap: wrap;
-                    justify-content: flex-start;
-                    margin-left: -3rem;
-
-                    & .doc {
-                        border-radius: .5rem;
-                        border: 1px solid $color-text;
-                        padding: 1rem;
-                        margin: 1rem 3rem;
-                        cursor: pointer;
-                        @include transition;
-
-                        &:hover {
-                            color: $color-ok;
-                            border-color: $color-ok;
-                        }
-                    }
-
-                }
-            }
-
-            & .add {
-                color: $color-success;
-                cursor: pointer;
-                margin-bottom: 2rem;
-                text-decoration: underline;
-                @include transition;
-
-                &:hover {
-                    color: darken($color-success, 5);
-                }
-            }
-
-        }
-
-    }
-
-    &-btns {
-        display: flex;
-        justify-content: flex-end;
-        margin-top: 2rem;
-        animation: .6s appear;
-
-
-        & .btn {
+            list-style: none;
             cursor: pointer;
-            padding: 1rem 2rem;
-            border: 1px solid transparent;
-            color: white;
-            // font-size: 1.8rem;
-            font-weight: 400;
+            @include transition;
+            border-bottom: 1px solid transparent;
+            padding-bottom: 1rem;
+            text-align: center;
+            margin: 1rem 3rem;
+            text-transform: capitalize;
 
-            &-cancel {
-                background-color: $color-danger;
-                margin-right: 2rem;
-
-                &:hover {
-                    background-color: darken($color-danger, 10);
-                }
+            &:hover {
+              color: $color-ok;
+              border-color: $color-ok;
             }
-
-            &-next {
-                background-color: $color-ok;
-
-                &:hover {
-                    background-color: darken($color-ok, 10);
-                }
-            }
-
-
-
+          }
         }
+      }
 
+      &.docs {
+        flex-direction: column;
+        align-items: flex-start;
 
+        & .docs__list {
+          width: 100%;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: flex-start;
+          margin-left: -3rem;
+
+          & .doc {
+            border-radius: 0.5rem;
+            border: 1px solid $color-text;
+            padding: 1rem;
+            margin: 1rem 3rem;
+            cursor: pointer;
+            @include transition;
+
+            &:hover {
+              color: $color-ok;
+              border-color: $color-ok;
+            }
+          }
+        }
+      }
+
+      & .add {
+        color: $color-success;
+        cursor: pointer;
+        margin-bottom: 2rem;
+        text-decoration: underline;
+        @include transition;
+
+        &:hover {
+          color: darken($color-success, 5);
+        }
+      }
     }
+  }
 
+  &-btns {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+    animation: 0.6s appear;
 
+    & .btn {
+      cursor: pointer;
+      padding: 1rem 2rem;
+      border: 1px solid transparent;
+      color: white;
+      // font-size: 1.8rem;
+      font-weight: 400;
+
+      &-cancel {
+        background-color: $color-danger;
+        margin-right: 2rem;
+
+        &:hover {
+          background-color: darken($color-danger, 10);
+        }
+      }
+
+      &-next {
+        background-color: $color-ok;
+
+        &:hover {
+          background-color: darken($color-ok, 10);
+        }
+      }
+    }
+  }
 }

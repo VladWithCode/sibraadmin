@@ -1,90 +1,86 @@
 .lot {
+  & .project__header {
+    height: 20rem;
+  }
 
-    & .project__header {
-        height: 20rem;
+  &__body {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5rem;
+
+    & h2 {
+      margin-top: 0;
     }
 
-    &__body {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 5rem;
+    &__svcs {
+      margin-bottom: 4rem;
+      & ul {
+        list-style-position: inside;
+        text-transform: capitalize;
+        width: 80%;
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
 
-        & h2 {
-            margin-top: 0;
+        & li {
+          margin-top: 1rem;
+          font-size: 2rem;
         }
+      }
 
-        &__svcs {
-            margin-bottom: 4rem;
-            & ul {
-
-                list-style-position: inside;
-                text-transform: capitalize;
-                width: 80%;
-                display: grid;
-                grid-template-columns: repeat(1, 1fr);
-
-                & li {
-                    margin-top: 1rem;
-                    font-size: 2rem;
-                }
-            }
-
-            &.item {
-                margin-top: 4rem;
-            }
-        }
-        
-        &__resume {
-            text-align: right;
-
-            & .status {
-                font-size: 3rem;
-                margin-bottom: 4rem;
-
-                &.available {
-                    color: $color-ok;
-                }
-                &.sold {
-                    color: $color-success;
-                }
-                &.pending {
-                    color: $color-warning;
-                }
-            }
-
-            & .item {
-                
-                & p {
-                    margin: 1rem 0;
-                }
-            }
-
-            & .price {
-                & span {
-                    color: $color-ok;
-                }
-            }
-
-            & .paid {
-                & span {
-                    color: $color-success;
-                }
-            }
-
-            & .remaining {
-                & span {
-                    color: $color-warning;
-                }
-            }
-
-        }
-
-        & .docs {
-            margin: 5rem 0 2rem 0;
-        }
-
-        &__docs {
-            margin-bottom: 6rem;
-        }
+      &.item {
+        margin-top: 4rem;
+      }
     }
+
+    &__resume {
+      text-align: right;
+
+      & .status {
+        font-size: 3rem;
+        margin-bottom: 4rem;
+
+        &.available {
+          color: $color-ok;
+        }
+        &.sold {
+          color: $color-success;
+        }
+        &.pending {
+          color: $color-warning;
+        }
+      }
+
+      & .item {
+        & p {
+          margin: 1rem 0;
+        }
+      }
+
+      & .price {
+        & span {
+          color: $color-ok;
+        }
+      }
+
+      & .paid {
+        & span {
+          color: $color-success;
+        }
+      }
+
+      & .remaining {
+        & span {
+          color: $color-warning;
+        }
+      }
+    }
+
+    & .docs {
+      margin: 5rem 0 2rem 0;
+    }
+
+    &__docs {
+      margin-bottom: 6rem;
+    }
+  }
 }
