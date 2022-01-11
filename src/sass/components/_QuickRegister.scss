@@ -1,0 +1,140 @@
+.quick-register {
+  padding-top: 3rem;
+  width: 40rem;
+
+  &__header {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid $color-ok;
+    margin-bottom: 1rem;
+  }
+
+  &__body {
+    padding: 0.5rem 2rem;
+  }
+
+  &__form {
+    margin-bottom: 0.8rem;
+  }
+
+  &__title {
+    color: $black;
+    font-size: 2.5rem;
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  &__notice {
+    text-align: right;
+    font-size: 1rem;
+    color: $color-text-light;
+    font-weight: 600;
+    padding-right: 1rem;
+
+    span {
+      color: lighten($color-danger, 15%);
+    }
+  }
+
+  &__input-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border-bottom: 1px solid $color-text-light;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+
+    &[data-required] label::after {
+      content: '*';
+      padding: 0 0.15rem;
+      color: lighten($color-danger, 15%);
+    }
+
+    &:last-child {
+      margin: 0;
+      border: 0;
+    }
+  }
+
+  &__label {
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  &__input {
+    display: block;
+    border: 0;
+    text-align: right;
+    padding: 0 0.5rem;
+    font-size: 1.35rem;
+    color: $black;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+
+  &__btn {
+    font-size: 1.35rem;
+    padding: 1rem 2rem;
+    color: $black;
+    background-color: $color-bc;
+    margin-left: 1rem;
+    border: 2px solid transparent;
+    @include shadow-light;
+    @include transition;
+
+    &:first-child {
+      margin-left: auto;
+    }
+
+    &--next {
+      color: $white;
+      background-color: $color-primary;
+
+      &:hover {
+        border-color: $color-primary;
+        background-color: transparent;
+        color: $color-primary;
+      }
+    }
+
+    &--finish {
+      color: $white;
+      background-color: $color-ok;
+
+      &:hover {
+        border-color: $color-ok;
+        background-color: transparent;
+        color: $color-ok;
+      }
+
+      &:active {
+        border-color: transparent;
+        background-color: darken($color-ok, 15%);
+        color: $white;
+      }
+    }
+
+    &--cancel {
+      color: $white;
+      background-color: $color-danger;
+
+      &:hover {
+        border-color: $color-danger;
+        background-color: transparent;
+        color: $color-danger;
+      }
+
+      &:active {
+        border-color: transparent;
+        background-color: darken($color-danger, 15%);
+        color: $white;
+      }
+    }
+  }
+}

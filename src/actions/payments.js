@@ -4,15 +4,15 @@ import {
   convertFromRaw,
   convertToRaw,
   EditorState,
-} from "draft-js";
-import draftToHtml from "draftjs-to-html";
-import { redTypes } from "../types/reduxTypes";
-import { staticURL } from "../url";
-import { getLot } from "./lot";
-import { modalEnable, modalUpdate } from "./modal";
-import { setTempError, uiFinishLoading, uiStartLoading } from "./ui";
+} from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+import { redTypes } from '../types/reduxTypes';
+import { staticURL } from '../url';
+import { getLot } from './lot';
+import { modalEnable, modalUpdate } from './modal';
+import { setTempError, uiFinishLoading, uiStartLoading } from './ui';
 
-export const buyLotSet = (payment) => ({
+export const buyLotSet = payment => ({
   type: redTypes.buyLotSet,
   payload: payment,
 });
@@ -21,24 +21,24 @@ export const buyLotReset = () => ({
   type: redTypes.buyLotReset,
 });
 
-export const buyLotSetExtraCharges = (extraCharges) => ({
+export const buyLotSetExtraCharges = extraCharges => ({
   type: redTypes.buyLotSetExtraCharges,
   payload: extraCharges,
 });
 
-export const paymentsGetTemplates = (projectId) => {
+export const paymentsGetTemplates = projectId => {
   const url = `${staticURL}/templates/${projectId}`;
 
-  return (dispatch) => {
+  return dispatch => {
     dispatch(uiStartLoading());
 
     fetch(url)
-      .then((res) => {
+      .then(res => {
         console.log(res);
         return res.json();
       })
-      .then((data) => {
-        const editorTemplates = data.templates.map((template) => {
+      .then(data => {
+        const editorTemplates = data.templates.map(template => {
           console.log(template);
 
           const blocks = convertFromHTML(template.content);
@@ -62,23 +62,23 @@ export const paymentsGetTemplates = (projectId) => {
 
         dispatch(paymentsSetTemplates(editorTemplates));
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
 
     dispatch(uiFinishLoading());
   };
 };
 
-const paymentsSetTemplates = (templates) => ({
+const paymentsSetTemplates = templates => ({
   type: redTypes.paymentsGetTemplates,
   payload: templates,
 });
 
-export const paymentSetInfo = (paymentInfo) => ({
+export const paymentSetInfo = paymentInfo => ({
   type: redTypes.paymentSetInfo,
   payload: paymentInfo,
 });
 
-export const extraPaymentSetInfo = (extraPaymentInfo) => ({
+export const extraPaymentSetInfo = extraPaymentInfo => ({
   type: redTypes.extraPaymentSetInfo,
   payload: extraPaymentInfo,
 });
@@ -88,23 +88,23 @@ export const extraPaymentSetInfo = (extraPaymentInfo) => ({
 //     payload: p
 // })
 
-export const paymentOpen = (projectId) => {
+export const paymentOpen = projectId => {
   const url = `${staticURL}/templates/${projectId}`;
 
-  console.log("a ver si no crashea");
+  console.log('a ver si no crashea');
 
-  return (dispatch) => {
+  return dispatch => {
     dispatch(uiStartLoading());
 
     fetch(url)
-      .then((res) => {
+      .then(res => {
         console.log(res);
         return res.json();
       })
-      .then((data) => {
+      .then(data => {
         console.log(data.templates);
 
-        const editorTemplates = data.templates.map((template) => {
+        const editorTemplates = data.templates.map(template => {
           return {
             ...template,
             state: {
@@ -119,23 +119,23 @@ export const paymentOpen = (projectId) => {
 
         return data.templates;
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
 
     dispatch(uiFinishLoading());
   };
 };
 
-const paymentRestart = (templates) => ({
+const paymentRestart = templates => ({
   type: redTypes.paymentRestart,
   payload: templates,
 });
 
-export const paymentTemplateSet = (template) => ({
+export const paymentTemplateSet = template => ({
   type: redTypes.paymentTemplateSet,
   payload: template,
 });
 
-const isFormValid = (paymentInfo) => {
+const isFormValid = paymentInfo => {
   const {
     liquidate,
     preReserved,
@@ -152,21 +152,21 @@ const isFormValid = (paymentInfo) => {
   } = paymentInfo;
 
   if (+depositAmount === 0) {
-    return "No puede haber un enganche de $0 (cero pesos)";
+    return 'No puede haber un enganche de $0 (cero pesos)';
   }
 
   if (liquidate) {
     if (!reservationDate) {
-      return "Necesita proporcionar una fecha de compra";
+      return 'Necesita proporcionar una fecha de compra';
     }
   }
 
   if (preReserved) {
     if (+preReservationAmount === 0) {
-      return "El monto de preapartado no puede ser $0 (cero pesos)";
+      return 'El monto de preapartado no puede ser $0 (cero pesos)';
     }
     if (!preReservationDate) {
-      return "Necesita proporcionar una fecha de preapartado";
+      return 'Necesita proporcionar una fecha de preapartado';
     }
   }
 
@@ -177,7 +177,7 @@ const isFormValid = (paymentInfo) => {
       //                 payedAt: p.payedDate
 
       if (+payment.amount === 0 || !payment.ogPaymentDate || !payment.payedAt) {
-        return "Uno o varios pagos proporcionados están incompletos";
+        return 'Uno o varios pagos proporcionados están incompletos';
       }
     }
   } else {
@@ -188,19 +188,19 @@ const isFormValid = (paymentInfo) => {
     //             lapseToPay
 
     if (!recordOpenedAt) {
-      return "Necesita proporcionar una fecha de inicio de historial";
+      return 'Necesita proporcionar una fecha de inicio de historial';
     }
     if (!reservationDate) {
-      return "Necesita proporcionar una fecha de apartado";
+      return 'Necesita proporcionar una fecha de apartado';
     }
     if (!lapseType) {
-      return "Necesita seleccionar alguna modalidad de pago (semanal/mensual)";
+      return 'Necesita seleccionar alguna modalidad de pago (semanal/mensual)';
     }
     if (!paymentsDate) {
-      return "Necesita elegir un día de pago";
+      return 'Necesita elegir un día de pago';
     }
     if (!lapseToPay) {
-      return "Necesita elegir un número de pagos";
+      return 'Necesita elegir un número de pagos';
     }
   }
 
@@ -208,7 +208,7 @@ const isFormValid = (paymentInfo) => {
 };
 
 export const submitPayment = (paymentInfo, lotInfo) => {
-  return (dispatch) => {
+  return dispatch => {
     const isValid = isFormValid(paymentInfo);
 
     if (isValid) {
@@ -236,10 +236,10 @@ export const submitPayment = (paymentInfo, lotInfo) => {
       const { projectId, lotId, lotPrice } = lotInfo;
 
       const state = liquidate
-        ? "liquidated"
+        ? 'liquidated'
         : preReserved
-        ? "preReserved"
-        : "reserved";
+        ? 'preReserved'
+        : 'reserved';
 
       const data = {
         customerId: client,
@@ -276,13 +276,13 @@ export const submitPayment = (paymentInfo, lotInfo) => {
       } else if (history) {
         let counter = +depositAmount;
 
-        data.payments = payments.map((p) => {
+        data.payments = payments.map(p => {
           counter += +p.amount;
 
-          let type = "payment";
+          let type = 'payment';
 
           if (+counter === +lotPrice) {
-            type = "liquidation";
+            type = 'liquidation';
           }
 
           return {
@@ -297,7 +297,7 @@ export const submitPayment = (paymentInfo, lotInfo) => {
         data.payments.push({
           amount: +depositAmount,
           payedAt: reservationDate,
-          type: "deposit",
+          type: 'deposit',
         });
 
         data.paymentInfo = {
@@ -331,43 +331,41 @@ export const submitPayment = (paymentInfo, lotInfo) => {
 const postData = (data, lotInfo) => {
   const { projectId, lotId } = lotInfo;
 
-  console.log("esta es la data", data);
-
-  return (dispatch) => {
+  return dispatch => {
     const url = `${staticURL}/records`;
 
     fetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     })
-      .then((response) => {
+      .then(response => {
         return response.json();
       })
-      .then((resData) => {
-        if (resData?.status === "OK") {
+      .then(resData => {
+        if (resData?.status === 'OK') {
           const modalInfo = {
             title: `Compra registrada con éxito con éxito`,
             text: null,
             link: `/proyectos/ver/${projectId}/lote/${lotId}`,
-            okMsg: "Continuar",
+            okMsg: 'Continuar',
             closeMsg: null,
             type: redTypes.projectCreate,
           };
 
           dispatch(modalUpdate(modalInfo));
           dispatch(modalEnable());
-          dispatch(getLot(lotId));
+          return dispatch(getLot(lotId));
         } else {
-          dispatch(setTempError("Ha ocurrido un error en la base de datos"));
+          dispatch(setTempError('Ha ocurrido un error en la base de datos'));
         }
-        console.log("Esta es la respuesta", resData);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
-        // dispatch(uiFinishLoading());
+        dispatch(uiFinishLoading());
+        return;
       });
   };
 };
