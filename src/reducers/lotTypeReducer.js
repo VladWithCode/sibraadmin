@@ -1,4 +1,4 @@
-import { redTypes } from "../types/reduxTypes";
+import { redTypes } from '../types/reduxTypes';
 
 const initialState = {
   active: false,
@@ -6,36 +6,12 @@ const initialState = {
   lotTypes: [],
   modalConfirm: {},
 };
-
-// const initialState1 = {
-//     active: false,
-//     beenClosed: false,
-//     lotTypes: [
-//         {
-//             type: 'a',
-//             pricePerM: 200,
-//             sameArea: false,
-//             cornerPrice: 800
-//         },
-//         {
-//             type: 'b',
-//             pricePerM: 200,
-//             sameArea: true,
-//             cornerPrice: 800,
-//             area: 96
-//         }
-
-//     ],
-//     modalConfirm: {}
-// }
-
 export const lotTypesReducer = (state = initialState, action) => {
   switch (action.type) {
     case redTypes.lotTypesReset:
       return initialState;
 
     case redTypes.lotTypesSet:
-      console.log("setLotTypes: ", action.payload);
       return {
         ...state,
         lotTypes: action.payload,
@@ -56,7 +32,7 @@ export const lotTypesReducer = (state = initialState, action) => {
 
     case redTypes.lotTypesEdit:
       const lotType = state.lotTypes.find(
-        (lot) => lot.type === action.payload.type
+        lot => lot.type === action.payload.type
       );
 
       lotType.pricePerM = action.payload.pricePerM
@@ -81,7 +57,7 @@ export const lotTypesReducer = (state = initialState, action) => {
 
     case redTypes.lotTypesDelete:
       const newLotTypes = state.lotTypes.filter(
-        (lotType) => lotType.type !== action.payload.type
+        lotType => lotType.type !== action.payload.type
       );
 
       if (newLotTypes.length > 0) {
@@ -131,15 +107,6 @@ export const lotTypesReducer = (state = initialState, action) => {
           action: action.payload.action,
           type: action.payload.type,
         },
-        // modalConfirm: {
-        //     ...state.modalConfirm,
-        //     title: action.payload.title ? action.payload.title : state.modalConfirm.title,
-        //     text: action.payload.text ? action.payload.text : state.modalConfirm.text,
-        //     okMsg: action.payload.okMsg ? action.payload.okMsg : state.modalConfirm.okMsg,
-        //     closeMsg: action.payload.closeMsg ? action.payload.closeMsg : state.modalConfirm.closeMsg,
-        //     action: action.payload.action,
-        //     type: action.payload.type ? action.payload.type : state.modalConfirm.type,
-        // }
       };
 
     case redTypes.lotTypesModalConfirmEnable:

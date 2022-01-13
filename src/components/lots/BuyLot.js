@@ -155,6 +155,8 @@ export const BuyLot = () => {
   // Floating window
   const [activeFloating, setActiveFloating] = useState(false);
 
+  console.log(lot);
+
   return (
     <div className='pb-5 project create'>
       {activeFloating && (
@@ -171,6 +173,9 @@ export const BuyLot = () => {
       <div className='project__header'>
         <div className='left'>
           <h3> Compra de Lote </h3>
+          <p className='small'>
+            Lote {lot.lotNumber} - Manzana {lot.manzana}
+          </p>
         </div>
         {state !== 'preReserved' && (
           <div className='options'>
@@ -435,7 +440,15 @@ export const BuyLot = () => {
                     {+lapseToPay > 0 && +depositAmount > 0 && (
                       <div className={`card__body__item`}>
                         <label htmlFor='lapseToPay'>Cantidad por pago</label>
-                        <p>{(+lotPrice - depositAmount) / +lapseToPay}</p>
+                        <p>
+                          {(() => {
+                            const value = Math.ceil(
+                              (+lotPrice - depositAmount) / +lapseToPay
+                            );
+
+                            return `$${value.toLocaleString()}`;
+                          })()}
+                        </p>
                       </div>
                     )}
                   </>
@@ -457,7 +470,6 @@ export const BuyLot = () => {
                     return;
                   }
                   setClient(clients.find(c => c._id === target.value));
-                  console.log(client);
                   return;
                 }}
                 name='buyer'

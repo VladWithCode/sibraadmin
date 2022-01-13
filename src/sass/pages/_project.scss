@@ -11,6 +11,12 @@
     align-items: center;
     text-transform: capitalize;
 
+    .small {
+      margin-top: 0.4rem;
+      font-size: 1.25rem;
+      color: $color-text;
+    }
+
     & span {
       font-size: 1.5rem;
     }
@@ -22,8 +28,8 @@
     & .options {
       display: flex;
 
-      & input[type="radio"],
-      & input[type="checkbox"] {
+      & input[type='radio'],
+      & input[type='checkbox'] {
         display: none;
 
         &:not(:checked) + label {
@@ -40,7 +46,7 @@
         }
       }
 
-      & input[type="checkbox"] {
+      & input[type='checkbox'] {
         & + label {
           font-weight: 400;
           color: $color-danger;
@@ -584,7 +590,7 @@
 
           &::after {
             @include transition;
-            content: "";
+            content: '';
             position: absolute;
             width: 100%;
             height: 85%;
@@ -843,7 +849,7 @@
         justify-content: flex-end;
         pointer-events: none;
 
-        & input[type="radio"] {
+        & input[type='radio'] {
           display: none;
           pointer-events: none;
 

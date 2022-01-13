@@ -34,13 +34,10 @@ export const paymentsGetTemplates = projectId => {
 
     fetch(url)
       .then(res => {
-        console.log(res);
         return res.json();
       })
       .then(data => {
         const editorTemplates = data.templates.map(template => {
-          console.log(template);
-
           const blocks = convertFromHTML(template.content);
 
           const blocksContent = ContentState.createFromBlockArray(...blocks);
@@ -91,19 +88,14 @@ export const extraPaymentSetInfo = extraPaymentInfo => ({
 export const paymentOpen = projectId => {
   const url = `${staticURL}/templates/${projectId}`;
 
-  console.log('a ver si no crashea');
-
   return dispatch => {
     dispatch(uiStartLoading());
 
     fetch(url)
       .then(res => {
-        console.log(res);
         return res.json();
       })
       .then(data => {
-        console.log(data.templates);
-
         const editorTemplates = data.templates.map(template => {
           return {
             ...template,

@@ -97,7 +97,7 @@ export const Payment = ({
         <span>Cantidad</span>
         <p className='price'> ${amount.toLocaleString()} </p>
       </div>
-      <div className='card__body__item'>
+      <div className='card__body__item text-capitalize'>
         <span>Fecha de pago</span>
         <p> {dispDate} </p>
       </div>
@@ -117,10 +117,12 @@ export const Payment = ({
         )}
       </div>
 
-      <div className='card__body__item'>
-        <span>Fecha original</span>
-        <p> {dateToReadableString(new Date(ogPaymentDate))} </p>
-      </div>
+      {ogPaymentDate && (
+        <div className='card__body__item text-capitalize'>
+          <span>Fecha original</span>
+          <p> {dateToReadableString(new Date(ogPaymentDate))} </p>
+        </div>
+      )}
     </div>
   );
 };

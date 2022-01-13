@@ -1,5 +1,7 @@
 export const dateToReadableString = date => {
-  Intl.DateTimeFormat('ex-MX', {
+  if (Date(date).toString() === 'Invalid Date') return '';
+
+  return Intl.DateTimeFormat('es-MX', {
     day: 'numeric',
     month: 'long',
     weekday: 'long',

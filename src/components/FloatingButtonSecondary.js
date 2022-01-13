@@ -1,15 +1,15 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { redTypes } from "../types/reduxTypes";
-import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { buyLotReset, paymentOpen } from "../actions/payments";
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { redTypes } from '../types/reduxTypes';
+import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { buyLotReset, paymentOpen } from '../actions/payments';
 
 export const FloatingButtonSecondary = ({ pay }) => {
   const dispatch = useDispatch();
 
   const { iconName, type, projectId, lotId } = useSelector(
-    (state) => state.secFloatingButton
+    state => state.secFloatingButton
   );
 
   const link =
@@ -27,11 +27,9 @@ export const FloatingButtonSecondary = ({ pay }) => {
         <Link
           to={link}
           onClick={() => {
-            console.log("Holi");
             dispatch(paymentOpen(projectId));
           }}
-          className="floating-btn floating-btn-secondary"
-        >
+          className='floating-btn floating-btn-secondary'>
           <svg>
             <use href={`../assets/svg/${iconName}.svg#${iconName}`}></use>
           </svg>
