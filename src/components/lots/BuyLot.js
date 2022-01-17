@@ -154,7 +154,7 @@ export const BuyLot = () => {
 
   // Floating window
   const [activeFloating, setActiveFloating] = useState(false);
-y
+
   return (
     <div className='pb-5 project create'>
       {activeFloating && (
@@ -233,7 +233,6 @@ y
           </div>
         )}
       </div>
-
       <div className='card edit mt-4'>
         <div className='card__header'>
           <img src='../assets/img/payment.png' alt='' />

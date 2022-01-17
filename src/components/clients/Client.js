@@ -36,7 +36,6 @@ export const Client = () => {
     nationality,
     records,
   } = client;
-  // const { col, extNumber, intNumber, street, zip } = address;
 
   const activeRecords = records?.filter(rec => rec.state !== 'cancelled');
 

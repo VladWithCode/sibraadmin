@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { floatingButtonSet } from "../../actions/floatingButton";
-import { modalEnable, modalUpdate } from "../../actions/modal";
-import { redirectSet } from "../../actions/redirect";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { floatingButtonSet } from '../../actions/floatingButton';
+import { modalEnable, modalUpdate } from '../../actions/modal';
+import { redirectSet } from '../../actions/redirect';
 import {
   setTempError,
   uiFinishLoading,
   uiStartLoading,
-} from "../../actions/ui";
-import { redTypes } from "../../types/reduxTypes";
-import { staticURL } from "../../url";
-import { ClientShort } from "../clients/ClientShort";
-import { Record } from "./Record";
+} from '../../actions/ui';
+import { redTypes } from '../../types/reduxTypes';
+import { staticURL } from '../../url';
+import { ClientShort } from '../clients/ClientShort';
+import { Record } from './Record';
 
 export const CancelRecord = () => {
   const dispatch = useDispatch();
@@ -21,28 +21,28 @@ export const CancelRecord = () => {
   const {
     historyActions: { lot: currentLot },
     clients,
-  } = useSelector((state) => state);
+  } = useSelector(state => state);
 
   const { record } = currentLot;
 
-  const currentClient = clients.find((c) => c._id === record?.customer);
+  const currentClient = clients.find(c => c._id === record?.customer);
 
   useEffect(() => {
-    dispatch(floatingButtonSet("pencil", redTypes.projectCreate));
+    dispatch(floatingButtonSet('pencil', redTypes.projectCreate));
     dispatch(redirectSet(redTypes.history, `/historial/cancelar/${recordId}`));
   }, [dispatch, recordId]);
 
   const [emptyFields, setEmptyFields] = useState([]);
 
   const [formValues, setFormValues] = useState({
-    refundedAmount: "",
-    type: "",
+    refundedAmount: '',
+    type: '',
     markAsNextPayment: false,
   });
 
   const { refundedAmount, cancelledAt, reason } = formValues;
 
-  const inputChange = (e) => {
+  const inputChange = e => {
     checkEmptyField(e);
     setFormValues({ ...formValues, refundedAmount: e.target.value });
   };
@@ -51,18 +51,18 @@ export const CancelRecord = () => {
     if (+refundedAmount === 0) {
       const tempEmptyFields = emptyFields;
 
-      if (tempEmptyFields.includes("refundedAmount")) {
-        const index = tempEmptyFields.indexOf("refundedAmount");
+      if (tempEmptyFields.includes('refundedAmount')) {
+        const index = tempEmptyFields.indexOf('refundedAmount');
 
         tempEmptyFields.splice(index, 1);
       } else {
-        tempEmptyFields.push("refundedAmount");
+        tempEmptyFields.push('refundedAmount');
       }
 
       setEmptyFields(tempEmptyFields);
       dispatch(
         setTempError(
-          "Debe ingresar una cantidad que se le reembolsó al cliente"
+          'Debe ingresar una cantidad que se le reembolsó al cliente'
         )
       );
 
@@ -77,7 +77,7 @@ export const CancelRecord = () => {
 
     dispatch(uiStartLoading());
 
-    console.log("esta es la data: ", data);
+    console.log('esta es la data: ', data);
 
     const res = await cancelRecord(data);
 
@@ -86,45 +86,43 @@ export const CancelRecord = () => {
     console.log(res);
 
     if (res) {
-      if (res.status === "OK") {
+      if (res.status === 'OK') {
         const modalInfo = {
           title: `Historial cancelado con exito`,
           text: `Se ha cancelado el historial`,
-          link: `/historial`,
-          okMsg: "Continuar",
+          link: `/proyectos/ver/${record.project}/lote/${record.lot}`,
+          okMsg: 'Continuar',
           closeMsg: null,
-          type: redTypes.history,
+          type: redTypes.project,
         };
 
         dispatch(modalUpdate(modalInfo));
         dispatch(modalEnable());
       } else {
-        dispatch(setTempError("Hubo un problema con la base de datos"));
+        dispatch(setTempError('Hubo un problema con la base de datos'));
 
         return;
       }
     }
   };
 
-  const cancelRecord = (data) => {
+  const cancelRecord = data => {
     const url = `${staticURL}/records/${recordId}/cancel`;
 
-    console.log("haciendo post jejeje", url);
-
     const res = fetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     })
-      .then((response) => {
+      .then(response => {
         return response.json();
       })
-      .then((data) => {
+      .then(data => {
         return data;
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
         // dispatch(uiFinishLoading());
       });
@@ -132,7 +130,7 @@ export const CancelRecord = () => {
     return res;
   };
 
-  const checkEmptyField = (e) => {
+  const checkEmptyField = e => {
     if (e.target.value?.trim().length > 0) {
       const tempEmptyFields = emptyFields;
 
@@ -148,12 +146,12 @@ export const CancelRecord = () => {
 
   const cancel = () => {
     const modalInfo = {
-      title: "Abortar",
-      text: "¿Desea abortar la cancelación del historial?",
-      link: `/historial`,
-      okMsg: "Sí",
-      closeMsg: "No",
-      type: redTypes.history,
+      title: 'Abortar',
+      text: '¿Desea abortar la cancelación del historial?',
+      link: `/proyectos/ver/${record.project}/lote/${record.lot}`,
+      okMsg: 'Sí',
+      closeMsg: 'No',
+      type: redTypes.project,
     };
 
     dispatch(modalUpdate(modalInfo));
@@ -161,33 +159,32 @@ export const CancelRecord = () => {
   };
 
   return (
-    <div className="pb-5 project create">
-      <div className="project__header">
-        <div className="left">
+    <div className='pb-5 project create'>
+      <div className='project__header'>
+        <div className='left'>
           <h3> Cancelar historial </h3>
         </div>
       </div>
 
-      <div className="card edit my-2">
-        <div className="card__header">
-          <img src="../assets/img/payment.png" alt="" />
+      <div className='card edit my-2'>
+        <div className='card__header'>
+          <img src='../assets/img/payment.png' alt='' />
           <h4>Cancelación de historial</h4>
         </div>
-        <div className="card__body">
-          <div className="right">
+        <div className='card__body'>
+          <div className='right'>
             <div
               className={`card__body__item ${
-                emptyFields.includes("refundedAmount") && "error"
-              }`}
-            >
-              <label htmlFor="refundedAmount">
+                emptyFields.includes('refundedAmount') && 'error'
+              }`}>
+              <label htmlFor='refundedAmount'>
                 Cantidad devuelta al cliente
               </label>
               <input
                 autoFocus
-                name="refundedAmount"
-                type="number"
-                autoComplete="off"
+                name='refundedAmount'
+                type='number'
+                autoComplete='off'
                 value={refundedAmount}
                 onChange={inputChange}
               />
@@ -195,15 +192,14 @@ export const CancelRecord = () => {
 
             <div
               className={`card__body__item ${
-                emptyFields.includes("cancelledAt") && "error"
-              }`}
-            >
-              <label htmlFor="cancelledAt">Fecha de cancelación</label>
+                emptyFields.includes('cancelledAt') && 'error'
+              }`}>
+              <label htmlFor='cancelledAt'>Fecha de cancelación</label>
               <input
                 autoFocus
-                name="cancelledAt"
-                type="date"
-                autoComplete="off"
+                name='cancelledAt'
+                type='date'
+                autoComplete='off'
                 value={cancelledAt}
                 onChange={inputChange}
               />
@@ -211,21 +207,20 @@ export const CancelRecord = () => {
 
             <div
               className={`card__body__item ${
-                emptyFields.includes("reason") && "error"
-              }`}
-            >
-              <label htmlFor="reason">motivo de cancelación</label>
+                emptyFields.includes('reason') && 'error'
+              }`}>
+              <label htmlFor='reason'>motivo de cancelación</label>
               <input
                 autoFocus
-                name="reason"
-                type="text"
-                autoComplete="off"
+                name='reason'
+                type='text'
+                autoComplete='off'
                 value={reason}
                 onChange={inputChange}
               />
             </div>
           </div>
-          <div className="left"></div>
+          <div className='left'></div>
         </div>
       </div>
 
@@ -233,11 +228,11 @@ export const CancelRecord = () => {
 
       {currentClient && <ClientShort client={currentClient} />}
 
-      <div className="form-buttons">
-        <button className="cancel" onClick={cancel}>
+      <div className='form-buttons'>
+        <button className='cancel' onClick={cancel}>
           Cancelar
         </button>
-        <button className="next" onClick={onSubmit}>
+        <button className='next' onClick={onSubmit}>
           Confirmar Cancelación
         </button>
       </div>

@@ -5,7 +5,8 @@ import {
   historyGetLot,
   historySetRecordInfo,
 } from '../../actions/historyActions';
-import { staticURLDocs } from '../../url';
+import { setTempError, setTempSuccessNotice } from '../../actions/ui';
+import { staticURL, staticURLDocs } from '../../url';
 import { CommissionInfo } from './CommisionInfo';
 import { ExtraCharge } from './ExtraCharge';
 import { Payment } from './Payment';
@@ -66,6 +67,41 @@ export const Record = ({ record, payment }) => {
     dispatch(historySetRecordInfo(record));
   };
 
+  const markAsDelivered = () => {
+    fetch(`${staticURL}/lot/${record.lot}`, {
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        doc: {
+          state: 'delivered',
+        },
+      }),
+    })
+      .then(res => res.json())
+      .then(res => {
+        if (res.status !== 'OK') {
+          console.log(res.error);
+          return dispatch(
+            setTempError(
+              res.message || 'Ocurrio un error al actualizar el lote'
+            )
+          );
+        }
+
+        dispatch(setTempSuccessNotice('El lote se actualizo con exito'));
+        return updateLot();
+      })
+      .catch(err =>
+        dispatch(
+          setTempError(
+            'Ocurrio un error al intentar conectarse con el servidor'
+          )
+        )
+      );
+  };
+
   const handleOpen = path => {
     const url = `${staticURLDocs}${path}`;
 
@@ -80,21 +116,27 @@ export const Record = ({ record, payment }) => {
     <div className='card mb-3'>
       <div className='card__header'>
         <img src='../assets/img/info.png' alt='' />
-        <h4>Lote en {projectName} </h4>
+        <h4>Lote en {projectName}</h4>
         {record.state !== 'cancelled' ? (
           <div className='links'>
             {!payment && (
               <>
-                {record.state !== 'liquidated' ? (
-                  <Link
-                    onClick={updateLot}
-                    to={`/historial/editar/${record._id}`}
-                    className='edit'>
-                    editar
-                  </Link>
-                ) : (
-                  <p className='edit'>Entregar</p>
-                )}
+                <Link
+                  onClick={updateLot}
+                  to={`/historial/editar/${record._id}`}
+                  className='edit'>
+                  editar
+                </Link>
+                <p
+                  style={{
+                    fontSize: '1.75rem',
+                    marginRight: '3rem',
+                    color: '#14e95f',
+                    borderBottom: '1px solid',
+                  }}
+                  onClick={markAsDelivered}>
+                  Marcar como Entregado
+                </p>
                 <Link
                   onClick={updateLot}
                   to={`/historial/cancelar/${record._id}`}

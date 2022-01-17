@@ -325,10 +325,6 @@ export const ClientEdit = () => {
   };
 
   const isFormValid = () => {
-    checkEmptyFields();
-    isEmailValid(email);
-    isNumberValid(phoneNumber, 'phoneNumber');
-
     const validNumbers = [];
 
     refsArr.forEach((ref, index) => {
@@ -343,8 +339,8 @@ export const ClientEdit = () => {
     }
 
     if (
-      !isNumberValid(phoneNumber, 'phoneNumber') ||
-      !isEmailValid(email) ||
+      (phoneNumber && !isNumberValid(phoneNumber, 'phoneNumber')) ||
+      (email && !isEmailValid(email)) ||
       checkEmptyFields(formFields)
     ) {
       return false;
@@ -373,7 +369,8 @@ export const ClientEdit = () => {
         key !== 'state' &&
         key !== 'pob' &&
         key !== 'dob' &&
-        key !== 'nationality'
+        key !== 'nationality' &&
+        key !== 'rfc'
       ) {
         if (formFields[key].toString().trim() === '') {
           tempEmptyFields.push(key);
@@ -394,7 +391,8 @@ export const ClientEdit = () => {
           key !== 'email' &&
           key !== 'intNumber' &&
           key !== 'zip' &&
-          key !== 'files'
+          key !== 'files' &&
+          key !== 'rfc'
         ) {
           if (ref[key]) {
             if (ref[key].toString().trim() === '') {

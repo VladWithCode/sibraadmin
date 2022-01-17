@@ -31,6 +31,8 @@ export const UpdateRecord = () => {
     c => c._id === currentLot.record?.customer
   );
 
+  console.log(records);
+
   const currentRecord = records.find(r => r._id === recordId);
 
   const [emptyFields, setEmptyFields] = useState([]);
@@ -93,10 +95,10 @@ export const UpdateRecord = () => {
     const modalInfo = {
       title: 'Cancelar edición',
       text: '¿Desea cancelar la edición del historial?',
-      link: `/historial`,
+      link: `/proyectos/ver/${currentRecord.project}/lote/${currentRecord.lot}`,
       okMsg: 'Sí',
       closeMsg: 'No',
-      type: redTypes.history,
+      type: redTypes.project,
     };
 
     dispatch(modalUpdate(modalInfo));

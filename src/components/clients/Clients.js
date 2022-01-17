@@ -19,6 +19,10 @@ export const Clients = () => {
   const [foundClients, setFoundClients] = useState([]);
 
   useEffect(() => {
+    dispatch(clientReset());
+  });
+
+  useEffect(() => {
     dispatch(getClients());
 
     const modalInfo = {
@@ -32,7 +36,6 @@ export const Clients = () => {
 
     dispatch(modalUpdate(modalInfo));
     dispatch(floatingButtonSet('plus', redTypes.clients));
-    dispatch(clientReset());
   }, [dispatch]);
 
   const handleSearch = e => {
@@ -80,7 +83,7 @@ export const Clients = () => {
                 <NavLink
                   onClick={() => dispatch(getClient(_id))}
                   key={_id}
-                  to={`./clientes/ver/${_id}`}
+                  to={`/clientes/ver/${_id}`}
                   className='clients__card'>
                   <h4 className='name'>{name}</h4>
                   <span className='rfc'>{rfc} </span>
