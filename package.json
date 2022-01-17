@@ -36,11 +36,11 @@
     "web-vitals": "^1.1.1"
   },
   "scripts": {
-    "start": "PORT=3030 react-scripts --openssl-legacy-provider start",
-    "build": "react-scripts --openssl-legacy-provider build",
+    "start": "react-scripts start",
+    "build": "react-scripts",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron-dev": "concurrently \"cross-env BROWSER=none npm start\" \"wait-on http://localhost:3030 && electron .\"",
+    "electron-dev": "concurrently \"cross-env BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron .\"",
     "dist": "electron-builder build",
     "build-installer": "electron-builder",
     "electron:build": "npm run build && electron-builder -c.extraMetadata.main=build/electron.js"

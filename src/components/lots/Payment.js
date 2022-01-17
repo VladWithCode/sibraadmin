@@ -1,31 +1,31 @@
-import { convertToRaw } from "draft-js";
-import draftToHtml from "draftjs-to-html";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { floatingButtonSet } from "../../actions/floatingButton";
-import { historyGetLot } from "../../actions/historyActions";
-import { getLot } from "../../actions/lot";
-import { modalEnable, modalUpdate } from "../../actions/modal";
-import { paymentSetInfo } from "../../actions/payments";
-import { redirectSet } from "../../actions/redirect";
+import { convertToRaw } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { floatingButtonSet } from '../../actions/floatingButton';
+import { historyGetLot } from '../../actions/historyActions';
+import { getLot } from '../../actions/lot';
+import { modalEnable, modalUpdate } from '../../actions/modal';
+import { paymentSetInfo } from '../../actions/payments';
+import { redirectSet } from '../../actions/redirect';
 import {
   setTempError,
   setTempSuccessNotice,
   uiFinishLoading,
   uiStartLoading,
-} from "../../actions/ui";
-import { redTypes } from "../../types/reduxTypes";
-import { staticURL } from "../../url";
-import { ClientShort } from "../clients/ClientShort";
-import { Record } from "../history-globals/Record";
-import { TextEditor } from "../templates/TextEditor";
+} from '../../actions/ui';
+import { redTypes } from '../../types/reduxTypes';
+import { staticURL } from '../../url';
+import { ClientShort } from '../clients/ClientShort';
+import { Record } from '../history-globals/Record';
+import { TextEditor } from '../templates/TextEditor';
 
 const dateOptions = {
-  weekday: "long",
-  year: "numeric",
-  month: "long",
-  day: "numeric",
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
 };
 
 export const Payment = () => {
@@ -37,11 +37,11 @@ export const Payment = () => {
     historyActions: { lot: currentLot },
     clients,
     payments,
-  } = useSelector((state) => state);
+  } = useSelector(state => state);
 
   const { record } = currentLot;
 
-  const currentClient = clients.find((c) => c._id === record?.customer);
+  const currentClient = clients.find(c => c._id === record?.customer);
 
   const [emptyFields, setEmptyFields] = useState([]);
 
@@ -57,10 +57,10 @@ export const Payment = () => {
     templates,
   } = formValues;
 
-  const currentTemplate = templates.find((t) => t.type === "PAGO");
+  const currentTemplate = templates.find(t => t.type === 'PAGO');
 
   useEffect(() => {
-    dispatch(floatingButtonSet("pencil", redTypes.projectCreate));
+    dispatch(floatingButtonSet('pencil', redTypes.projectCreate));
     dispatch(
       redirectSet(
         redTypes.history,
@@ -77,7 +77,7 @@ export const Payment = () => {
     dispatch(historyGetLot(lotId));
   }, [lotId, dispatch]);
 
-  const inputChange = (e) => {
+  const inputChange = e => {
     checkEmptyField(e);
     // setFormValues({ ...formValues, [e.target.name]: e.target.value });
     dispatch(
@@ -89,16 +89,16 @@ export const Payment = () => {
     if (+amount === 0) {
       const tempEmptyFields = emptyFields;
 
-      if (tempEmptyFields.includes("amount")) {
-        const index = tempEmptyFields.indexOf("amount");
+      if (tempEmptyFields.includes('amount')) {
+        const index = tempEmptyFields.indexOf('amount');
 
         tempEmptyFields.splice(index, 1);
       } else {
-        tempEmptyFields.push("amount");
+        tempEmptyFields.push('amount');
       }
 
       setEmptyFields(tempEmptyFields);
-      dispatch(setTempError("Debe ingresar una cantidad de pago"));
+      dispatch(setTempError('Debe ingresar una cantidad de pago'));
 
       return;
     }
@@ -118,22 +118,22 @@ export const Payment = () => {
     const tempContent = strContent?.replace(
       exp,
       (str, g1, g2, g3, g4, g5, g6) => {
-        return `<${g1}${g2 ? " " + g2 : ""}>${
+        return `<${g1}${g2 ? ' ' + g2 : ''}>${
           !g3
-            ? ""
-            : `<${g4}${g5 ? " " + g5 : ""}>${g6.replaceAll(
-                " ",
-                "&nbsp;"
+            ? ''
+            : `<${g4}${g5 ? ' ' + g5 : ''}>${g6.replaceAll(
+                ' ',
+                '&nbsp;'
               )}</${g4}>`
         }</${g1}>`;
       }
     );
 
-    const templateContent = tempContent?.replaceAll("<p></p>", "<p><br></p>");
+    const templateContent = tempContent?.replaceAll('<p></p>', '<p><br></p>');
 
     const data = {
       type:
-        +amount >= record.paymentInfo.lotAmountDue ? "liquidation" : "payment",
+        +amount >= record.paymentInfo.lotAmountDue ? 'liquidation' : 'payment',
       amount: +amount,
       markAsNextPayment,
       payer: payer?.trim().length > 3 || null,
@@ -142,57 +142,51 @@ export const Payment = () => {
 
     dispatch(uiStartLoading());
 
-    console.log("esta es la data,", data);
-
     const res = await postPayment(data);
 
     dispatch(uiFinishLoading());
 
-    console.log("Esta es la respuesta ", res);
-
     if (res) {
-      if (res.status === "OK") {
+      if (res.status === 'OK') {
         const modalInfo = {
-          title: `Pago realizado con éxito`,
+          title: 'Pago realizado con éxito',
           text: `pago por la cantidad de $${amount}`,
-          link: `/historial`,
-          okMsg: "Continuar",
+          link: `/proyectos/ver/${projectId}/lote/${lotId}`,
+          okMsg: 'Continuar',
           closeMsg: null,
-          type: redTypes.history,
+          type: redTypes.project,
         };
 
         dispatch(modalUpdate(modalInfo));
         dispatch(modalEnable());
         dispatch(getLot(lotId));
       } else {
-        dispatch(setTempError("Hubo un problema con la base de datos"));
+        dispatch(
+          setTempError(res.message || 'Hubo un problema con la base de datos')
+        );
 
         return;
       }
     }
   };
 
-  const postPayment = (data) => {
+  const postPayment = data => {
     const url = `${staticURL}/records/${record._id}/pay`;
 
-    console.log("haciendo post jejeje", url);
-
     const res = fetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     })
-      .then((response) => {
-        console.log(response);
+      .then(response => {
         return response.json();
       })
-      .then((data) => {
-        console.log(data);
+      .then(data => {
         return data;
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
         // dispatch(uiFinishLoading());
       });
@@ -201,19 +195,19 @@ export const Payment = () => {
   };
 
   const postProrogation = async () => {
-    if (prorogateTo === "") {
+    if (prorogateTo === '') {
       const tempEmptyFields = emptyFields;
 
-      if (tempEmptyFields.includes("prorogateTo")) {
-        const index = tempEmptyFields.indexOf("prorogateTo");
+      if (tempEmptyFields.includes('prorogateTo')) {
+        const index = tempEmptyFields.indexOf('prorogateTo');
 
         tempEmptyFields.splice(index, 1);
       } else {
-        tempEmptyFields.push("prorogateTo");
+        tempEmptyFields.push('prorogateTo');
       }
 
       setEmptyFields(tempEmptyFields);
-      dispatch(setTempError("Debe ingresar una fecha para la prórroga"));
+      dispatch(setTempError('Debe ingresar una fecha para la prórroga'));
 
       return;
     }
@@ -222,41 +216,37 @@ export const Payment = () => {
       prorogateTo,
     };
 
-    console.log("esta es la fecha", data);
-
     const url = `${staticURL}/records/${record._id}/prorogate`;
 
     dispatch(uiStartLoading());
 
     const res = await fetch(url, {
-      method: "PUT",
+      method: 'PUT',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     })
-      .then((response) => {
-        console.log(response);
+      .then(response => {
         return response.json();
       })
-      .then((data) => {
-        console.log(data);
+      .then(data => {
         return data;
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
         // dispatch(uiFinishLoading());
       });
 
     if (res) {
-      if (res.status === "OK") {
+      if (res.status === 'OK') {
         const modalInfo = {
           title: `Prórroga programada con éxito`,
           text: `El pago se ha programado para el ${new Date(
             prorogateTo
-          ).toLocaleDateString("es-MX", dateOptions)}`,
+          ).toLocaleDateString('es-MX', dateOptions)}`,
           link: `/historial`,
-          okMsg: "Continuar",
+          okMsg: 'Continuar',
           closeMsg: null,
           type: redTypes.history,
         };
@@ -265,7 +255,7 @@ export const Payment = () => {
         dispatch(modalEnable());
         dispatch(getLot(lotId));
       } else {
-        dispatch(setTempError("Hubo un problema con la base de datos"));
+        dispatch(setTempError('Hubo un problema con la base de datos'));
 
         return;
       }
@@ -274,7 +264,7 @@ export const Payment = () => {
     dispatch(uiFinishLoading());
   };
 
-  const checkEmptyField = (e) => {
+  const checkEmptyField = e => {
     if (e.target.value?.trim().length > 0) {
       const tempEmptyFields = emptyFields;
 
@@ -290,11 +280,11 @@ export const Payment = () => {
 
   const cancel = () => {
     const modalInfo = {
-      title: "Cancelar pago",
-      text: "¿Desea cancelar el pago del lote?",
+      title: 'Cancelar pago',
+      text: '¿Desea cancelar el pago del lote?',
       link: `/historial`,
-      okMsg: "Sí",
-      closeMsg: "No",
+      okMsg: 'Sí',
+      closeMsg: 'No',
       type: redTypes.history,
     };
 
@@ -311,19 +301,19 @@ export const Payment = () => {
   };
 
   return (
-    <div className="pb-5 project create">
-      <div className="project__header">
-        <div className="left">
+    <div className='pb-5 project create'>
+      <div className='project__header'>
+        <div className='left'>
           <h3> Pagar lote </h3>
         </div>
 
-        <div className="options">
+        <div className='options'>
           {prorogate ? (
             <input
-              type="checkbox"
+              type='checkbox'
               value={true}
               onClick={() => {
-                setFormValues((fv) => ({
+                setFormValues(fv => ({
                   ...fv,
                   prorogate: !prorogate,
                 }));
@@ -334,16 +324,16 @@ export const Payment = () => {
                   })
                 );
               }}
-              id="preReserve"
-              name="action"
+              id='preReserve'
+              name='action'
               defaultChecked
             />
           ) : (
             <input
-              type="checkbox"
+              type='checkbox'
               value={true}
               onClick={() => {
-                setFormValues((fv) => ({
+                setFormValues(fv => ({
                   ...fv,
                   prorogate: !prorogate,
                 }));
@@ -354,36 +344,35 @@ export const Payment = () => {
                   })
                 );
               }}
-              id="preReserve"
-              name="action"
+              id='preReserve'
+              name='action'
             />
           )}
 
-          <label htmlFor="preReserve">
-            <div className="option">Solicitar prórroga</div>
+          <label htmlFor='preReserve'>
+            <div className='option'>Solicitar prórroga</div>
           </label>
         </div>
       </div>
 
-      <div className="card edit my-2">
-        <div className="card__header">
-          <img src="../assets/img/payment.png" alt="" />
+      <div className='card edit my-2'>
+        <div className='card__header'>
+          <img src='../assets/img/payment.png' alt='' />
           <h4>Información del pago</h4>
         </div>
-        <div className="card__body">
-          <div className="right">
+        <div className='card__body'>
+          <div className='right'>
             {prorogate ? (
               <div
                 className={`card__body__item ${
-                  emptyFields.includes("prorogateTo") && "error"
-                }`}
-              >
-                <label htmlFor="prorogateTo">Fecha límite de pago</label>
+                  emptyFields.includes('prorogateTo') && 'error'
+                }`}>
+                <label htmlFor='prorogateTo'>Fecha límite de pago</label>
                 <input
                   autoFocus
-                  name="prorogateTo"
-                  type="date"
-                  autoComplete="off"
+                  name='prorogateTo'
+                  type='date'
+                  autoComplete='off'
                   value={prorogateTo}
                   onChange={inputChange}
                 />
@@ -392,15 +381,14 @@ export const Payment = () => {
               <>
                 <div
                   className={`card__body__item ${
-                    emptyFields.includes("amount") && "error"
-                  }`}
-                >
-                  <label htmlFor="amount">Cantidad del pago</label>
+                    emptyFields.includes('amount') && 'error'
+                  }`}>
+                  <label htmlFor='amount'>Cantidad del pago</label>
                   <input
                     autoFocus
-                    name="amount"
-                    type="number"
-                    autoComplete="off"
+                    name='amount'
+                    type='number'
+                    autoComplete='off'
                     value={amount}
                     onChange={inputChange}
                   />
@@ -408,16 +396,15 @@ export const Payment = () => {
 
                 <div
                   className={`card__body__item ${
-                    emptyFields.includes("markAsNextPayment") && "error"
-                  }`}
-                >
+                    emptyFields.includes('markAsNextPayment') && 'error'
+                  }`}>
                   <label>acción</label>
-                  <div className="options">
+                  <div className='options'>
                     <input
-                      type="radio"
-                      name="markAsNextPayment"
+                      type='radio'
+                      name='markAsNextPayment'
                       onClick={() => {
-                        setFormValues((fv) => ({
+                        setFormValues(fv => ({
                           ...fv,
                           amount: record.paymentInfo.minimumPaymentAmount,
                           markAsNextPayment: true,
@@ -430,45 +417,44 @@ export const Payment = () => {
                           })
                         );
                       }}
-                      id="no"
+                      id='no'
                     />
-                    <label htmlFor="no">Pagar mensualidad</label>
+                    <label htmlFor='no'>Pagar mensualidad</label>
 
                     <input
                       defaultChecked
-                      type="radio"
-                      name="markAsNextPayment"
+                      type='radio'
+                      name='markAsNextPayment'
                       onClick={() => {
-                        setFormValues((fv) => ({
+                        setFormValues(fv => ({
                           ...fv,
-                          amount: "",
+                          amount: '',
                           markAsNextPayment: false,
                         }));
                         dispatch(
                           paymentSetInfo({
                             ...formValues,
-                            amount: "",
+                            amount: '',
                             markAsNextPayment: false,
                           })
                         );
                       }}
-                      id="yes"
+                      id='yes'
                     />
-                    <label htmlFor="yes">Abonar</label>
+                    <label htmlFor='yes'>Abonar</label>
                   </div>
                 </div>
 
                 <div
                   className={`card__body__item ${
-                    emptyFields.includes("payer") && "error"
-                  }`}
-                >
-                  <label htmlFor="payer">Quién paga</label>
+                    emptyFields.includes('payer') && 'error'
+                  }`}>
+                  <label htmlFor='payer'>Quién paga</label>
                   <input
                     autoFocus
-                    name="payer"
-                    type="text"
-                    autoComplete="off"
+                    name='payer'
+                    type='text'
+                    autoComplete='off'
                     value={payer}
                     onChange={inputChange}
                   />
@@ -476,22 +462,22 @@ export const Payment = () => {
               </>
             )}
           </div>
-          <div className="left"></div>
+          <div className='left'></div>
         </div>
       </div>
 
-      <div className="project__header">
-        <div className="left"></div>
+      <div className='project__header'>
+        <div className='left'></div>
 
         {!prorogate && (
-          <div className="options">
+          <div className='options'>
             {editTemplate ? (
               <input
-                className="ok"
-                type="checkbox"
+                className='ok'
+                type='checkbox'
                 value={true}
                 onClick={() => {
-                  setFormValues((fv) => ({
+                  setFormValues(fv => ({
                     ...fv,
                     editTemplate: !editTemplate,
                   }));
@@ -502,16 +488,16 @@ export const Payment = () => {
                     })
                   );
                 }}
-                id="editTemplate"
+                id='editTemplate'
                 defaultChecked
               />
             ) : (
               <input
-                className="ok"
-                type="checkbox"
+                className='ok'
+                type='checkbox'
                 value={false}
                 onClick={() => {
-                  setFormValues((fv) => ({
+                  setFormValues(fv => ({
                     ...fv,
                     editTemplate: !editTemplate,
                   }));
@@ -522,28 +508,28 @@ export const Payment = () => {
                     })
                   );
                 }}
-                id="editTemplate"
+                id='editTemplate'
               />
             )}
 
-            <label htmlFor="editTemplate">
-              <div className="option">Editar recibo</div>
+            <label htmlFor='editTemplate'>
+              <div className='option'>Editar recibo</div>
             </label>
           </div>
         )}
       </div>
 
       {editTemplate && currentTemplate && !prorogate && (
-        <div className="card">
-          <div className="card__body">
-            <div className="paraphs">
+        <div className='card'>
+          <div className='card__body'>
+            <div className='paraphs'>
               <TextEditor template={currentTemplate} payment={true} />
-              <div className="my-3"></div>
+              <div className='my-3'></div>
             </div>
-            <div className="variables">
+            <div className='variables'>
               <h4>Variables de la plantilla</h4>
 
-              {currentTemplate.variables.sort().map((variable) => (
+              {currentTemplate.variables.sort().map(variable => (
                 <p onClick={handleCopy} id={variable.title}>
                   {variable.title}
                 </p>
@@ -557,14 +543,13 @@ export const Payment = () => {
 
       {currentClient && <ClientShort client={currentClient} />}
 
-      <div className="form-buttons">
-        <button className="cancel" onClick={cancel}>
+      <div className='form-buttons'>
+        <button className='cancel' onClick={cancel}>
           Cancelar
         </button>
         <button
-          className="next"
-          onClick={() => (prorogate ? postProrogation() : pay())}
-        >
+          className='next'
+          onClick={() => (prorogate ? postProrogation() : pay())}>
           Realizar Pago
         </button>
       </div>

@@ -48,6 +48,7 @@ export const AppRouter = () => {
 
         <div className='app'>
           <Switch>
+            <Route exact path='/' component={Projects}></Route>
             <Route exact path='/proyectos' component={Projects}></Route>
             <Route
               exact

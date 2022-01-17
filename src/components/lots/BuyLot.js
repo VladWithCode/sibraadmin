@@ -154,9 +154,7 @@ export const BuyLot = () => {
 
   // Floating window
   const [activeFloating, setActiveFloating] = useState(false);
-
-  console.log(lot);
-
+y
   return (
     <div className='pb-5 project create'>
       {activeFloating && (

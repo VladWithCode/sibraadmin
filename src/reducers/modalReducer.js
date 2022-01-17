@@ -1,17 +1,19 @@
-import { redTypes } from "../types/reduxTypes";
+import { redTypes } from '../types/reduxTypes';
 
 const initialState = {
   active: false,
   beenClosed: false,
-  title: "",
-  text: "",
-  link: "",
-  okMsg: "",
-  closeMsg: "",
+  title: '',
+  text: '',
+  link: '',
+  okMsg: '',
+  closeMsg: '',
   input: null,
   input2: null,
   type: null,
   resetClient: false,
+  okCallback: null,
+  cancelCallback: null,
 };
 
 export const modalReducer = (state = initialState, action) => {
@@ -30,6 +32,8 @@ export const modalReducer = (state = initialState, action) => {
         resetClient: action.payload.resetClient
           ? action.payload.resetClient
           : false,
+        okCallback: action.payload.okCallback,
+        cancelCallback: action.payload.cancelCallback,
       };
 
     case redTypes.modalEnable:

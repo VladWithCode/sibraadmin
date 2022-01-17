@@ -1012,13 +1012,14 @@
 
     & .variables {
       width: 20%;
-      // background-color: red;
+      max-height: 100%;
       position: absolute;
       right: 3rem;
       top: 3rem;
       display: flex;
       flex-direction: column;
       align-items: flex-end;
+      overflow-y: auto;
 
       & h4 {
         margin: 4rem 0 2rem auto;

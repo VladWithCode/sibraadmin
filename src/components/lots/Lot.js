@@ -23,11 +23,11 @@ export const Lot = () => {
 
   const { lots, projects, lot: tempLot, clients } = useSelector(state => state);
 
+  const currentProject = projects.find(p => p._id === projectId);
+
   const [currentLot, setCurrentLot] = useState(
     tempLot._id ? tempLot : lots.find(lot => lot._id === lotId)
   );
-
-  const currentProject = projects.find(p => p._id === projectId);
 
   const {
     area,

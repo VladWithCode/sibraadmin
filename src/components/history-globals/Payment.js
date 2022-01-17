@@ -63,8 +63,6 @@ export const Payment = ({
       ? `${staticURL}/record/${recordId}/payment/${paymentId}/receipt`
       : `${staticURL}/record/${recordId}/charge/${chargeId}/payment/${paymentId}/receipt`;
 
-    console.log(url);
-
     dispatch(uiStartLoading());
     const res = await fetch(url, {
       method: 'POST',
