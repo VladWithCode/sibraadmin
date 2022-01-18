@@ -20,6 +20,7 @@ export const Cancellations = ({ cancellations }) => {
             priceOnCancellation,
             refundedAmount,
             cancelledBy: { curp, email, fullName, rfc, phoneNumber },
+            reason,
           },
           index
         ) => {
@@ -66,7 +67,10 @@ export const Cancellations = ({ cancellations }) => {
                   <div className='card__body__item'>
                     <span>Precio cuando fue cancelado</span>
                     <p className='price'>
-                      ${priceOnCancellation.toLocaleString()}
+                      $
+                      {priceOnCancellation
+                        ? priceOnCancellation.toLocaleString()
+                        : 0}
                     </p>
                   </div>
 
@@ -81,8 +85,17 @@ export const Cancellations = ({ cancellations }) => {
 
                   <div className='card__body__item'>
                     <span>Cantidad devuelta al cliente</span>
-                    <p className='debt'>${refundedAmount.toLocaleString()}</p>
+                    <p className='debt'>
+                      ${refundedAmount ? refundedAmount.toLocaleString() : 0}
+                    </p>
                   </div>
+
+                  {reason && (
+                    <div className='card__body__item'>
+                      <span>Razón de cancelación</span>
+                      <p className='debt'>{reason}</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

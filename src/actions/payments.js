@@ -97,6 +97,15 @@ export const paymentOpen = projectId => {
       })
       .then(data => {
         const editorTemplates = data.templates.map(template => {
+          if (!template.state) {
+            return {
+              ...template,
+              state: {
+                editorState: EditorState.createEmpty(),
+              },
+            };
+          }
+
           return {
             ...template,
             state: {
@@ -111,7 +120,10 @@ export const paymentOpen = projectId => {
 
         return data.templates;
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err);
+        dispatch(uiFinishLoading());
+      });
 
     dispatch(uiFinishLoading());
   };

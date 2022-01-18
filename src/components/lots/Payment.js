@@ -243,7 +243,7 @@ export const Payment = () => {
           text: `El pago se ha programado para el ${new Date(
             prorogateTo
           ).toLocaleDateString('es-MX', dateOptions)}`,
-          link: `/historial`,
+          link: `/proyectos/ver/${projectId}/lote/${lotId}`,
           okMsg: 'Continuar',
           closeMsg: null,
           type: redTypes.history,
@@ -280,7 +280,7 @@ export const Payment = () => {
     const modalInfo = {
       title: 'Cancelar pago',
       text: '¿Desea cancelar el pago del lote?',
-      link: `/historial`,
+      link: `/proyectos/ver/${projectId}/lote/${lotId}`,
       okMsg: 'Sí',
       closeMsg: 'No',
       type: redTypes.history,

@@ -37,18 +37,19 @@ export const CancelRecord = () => {
   const [formValues, setFormValues] = useState({
     refundedAmount: '',
     type: '',
+    reason: '',
     markAsNextPayment: false,
   });
 
   const { refundedAmount, cancelledAt, reason } = formValues;
 
-  const inputChange = e => {
-    checkEmptyField(e);
-    setFormValues({ ...formValues, refundedAmount: e.target.value });
+  const inputChange = ({ target }) => {
+    checkEmptyField({ target });
+    setFormValues({ ...formValues, [target.name]: target.value });
   };
 
   const onSubmit = async () => {
-    if (+refundedAmount === 0) {
+    if (+refundedAmount < 0) {
       const tempEmptyFields = emptyFields;
 
       if (tempEmptyFields.includes('refundedAmount')) {
@@ -77,32 +78,26 @@ export const CancelRecord = () => {
 
     dispatch(uiStartLoading());
 
-    console.log('esta es la data: ', data);
-
     const res = await cancelRecord(data);
 
     dispatch(uiFinishLoading());
 
-    console.log(res);
+    if (res?.status === 'OK') {
+      const modalInfo = {
+        title: `Historial cancelado con exito`,
+        text: `Se ha cancelado el historial`,
+        link: `/proyectos/ver/${record.project}/lote/${record.lot}`,
+        okMsg: 'Continuar',
+        closeMsg: null,
+        type: redTypes.project,
+      };
 
-    if (res) {
-      if (res.status === 'OK') {
-        const modalInfo = {
-          title: `Historial cancelado con exito`,
-          text: `Se ha cancelado el historial`,
-          link: `/proyectos/ver/${record.project}/lote/${record.lot}`,
-          okMsg: 'Continuar',
-          closeMsg: null,
-          type: redTypes.project,
-        };
+      dispatch(modalUpdate(modalInfo));
+      dispatch(modalEnable());
+    } else {
+      dispatch(setTempError('Hubo un problema con la base de datos'));
 
-        dispatch(modalUpdate(modalInfo));
-        dispatch(modalEnable());
-      } else {
-        dispatch(setTempError('Hubo un problema con la base de datos'));
-
-        return;
-      }
+      return;
     }
   };
 
@@ -124,7 +119,7 @@ export const CancelRecord = () => {
       })
       .catch(err => {
         console.log(err);
-        // dispatch(uiFinishLoading());
+        dispatch(uiFinishLoading());
       });
 
     return res;
@@ -181,7 +176,6 @@ export const CancelRecord = () => {
                 Cantidad devuelta al cliente
               </label>
               <input
-                autoFocus
                 name='refundedAmount'
                 type='number'
                 autoComplete='off'
@@ -196,7 +190,6 @@ export const CancelRecord = () => {
               }`}>
               <label htmlFor='cancelledAt'>Fecha de cancelación</label>
               <input
-                autoFocus
                 name='cancelledAt'
                 type='date'
                 autoComplete='off'
@@ -211,7 +204,6 @@ export const CancelRecord = () => {
               }`}>
               <label htmlFor='reason'>motivo de cancelación</label>
               <input
-                autoFocus
                 name='reason'
                 type='text'
                 autoComplete='off'

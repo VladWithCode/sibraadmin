@@ -372,7 +372,7 @@ export const ClientEdit = () => {
         key !== 'nationality' &&
         key !== 'rfc'
       ) {
-        if (formFields[key].toString().trim() === '') {
+        if (formFields[key]?.toString().trim() === '') {
           tempEmptyFields.push(key);
           dispatch(setTempError('Los campos en rojo son obligatorios'));
         }
