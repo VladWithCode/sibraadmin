@@ -55,6 +55,7 @@ export const Payment = () => {
     prorogate,
     editTemplate,
     templates,
+    payedAt,
   } = formValues;
 
   const currentTemplate = templates.find(t => t.type === 'PAGO');
@@ -77,12 +78,10 @@ export const Payment = () => {
     dispatch(historyGetLot(lotId));
   }, [lotId, dispatch]);
 
-  const inputChange = e => {
-    checkEmptyField(e);
-    // setFormValues({ ...formValues, [e.target.name]: e.target.value });
-    dispatch(
-      paymentSetInfo({ ...formValues, [e.target.name]: e.target.value })
-    );
+  const inputChange = ({ target }) => {
+    checkEmptyField({ target });
+    setFormValues({ ...formValues, [target.name]: target.value });
+    dispatch(paymentSetInfo({ ...formValues, [target.name]: target.value }));
   };
 
   const pay = async () => {
@@ -102,8 +101,6 @@ export const Payment = () => {
 
       return;
     }
-
-    // const templateContent = currentTemplate ? draftToHtml(convertToRaw(currentTemplate?.state?.editorState.getCurrentContent())).replaceAll(' ', '&nbsp;') : null;
 
     const exp = new RegExp(
       /<([a-z]+)\s?(style=".*?")?>(<([a-z]+)\s?(style=".*?")?>(.*?)<\/\4>)<\/\1>/gi
@@ -138,6 +135,7 @@ export const Payment = () => {
       markAsNextPayment,
       payer: payer?.trim().length > 3 || null,
       content: editTemplate && !prorogate ? templateContent : null,
+      payedAt: payedAt,
     };
 
     dispatch(uiStartLoading());
@@ -451,12 +449,20 @@ export const Payment = () => {
                   }`}>
                   <label htmlFor='payer'>Quién paga</label>
                   <input
-                    autoFocus
                     name='payer'
                     type='text'
                     autoComplete='off'
                     value={payer}
                     onChange={inputChange}
+                  />
+                </div>
+                <div className='card__body__item'>
+                  <label htmlFor='payedAt'>Fecha del Pago</label>
+                  <input
+                    onChange={inputChange}
+                    type='date'
+                    name='payedAt'
+                    value={payedAt}
                   />
                 </div>
               </>

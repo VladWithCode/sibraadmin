@@ -97,7 +97,9 @@ export const Lot = () => {
     dispatch(
       secondaryFloatingButtonSet(
         'bill',
-        state === 'reserved' ? redTypes.lotReserved : null,
+        state === 'reserved' || state === 'delivered' || 'payed' || 'liquidated'
+          ? redTypes.lotReserved
+          : null,
         projectId,
         lotId
       )

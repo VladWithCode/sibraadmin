@@ -222,6 +222,32 @@ export const getRecords = () => {
   };
 };
 
+export const getRecord = id => {
+  return dispatch => {
+    dispatch(uiStartLoading());
+    fetch(staticURL + '/record/' + id)
+      .then(res => res.json())
+      .then(data => {
+        dispatch(uiFinishLoading());
+
+        if (data.status !== 'OK') {
+          return dispatch(
+            setTempError(
+              data.message || 'Ocurrio un error al recuperar el historial'
+            )
+          );
+        }
+
+        return dispatch(loadRecord(data.record));
+      });
+  };
+};
+
+const loadRecord = record => ({
+  type: redTypes.recordsSet,
+  payload: record,
+});
+
 const loadRecords = records => ({
   type: redTypes.recordsSet,
   payload: records,

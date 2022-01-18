@@ -67,7 +67,7 @@ export const historyPostUpdate = record => {
 
       return;
     }
-
+    /* 
     if (
       +record.paymentInfo.lapseToPay <
         record.payments.filter(p => !p.delete).length ||
@@ -78,7 +78,7 @@ export const historyPostUpdate = record => {
 
       return;
     }
-
+ */
     const url = `${staticURL}/record/${record._id}`;
 
     const extraChargesUpdated = [];

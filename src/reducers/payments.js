@@ -1,15 +1,15 @@
-import { redTypes } from "../types/reduxTypes";
+import { redTypes } from '../types/reduxTypes';
 
 const initialState = {
-  amount: "",
-  type: "",
+  amount: '',
+  type: '',
   markAsNextPayment: false,
-  prorogateTo: "",
+  prorogateTo: '',
   editTemplate: false,
   prorogate: false,
   templates: [],
-  date: "",
-  amount1: "",
+  date: '',
+  amount1: '',
 };
 
 export const payments = (state = initialState, action) => {
@@ -17,12 +17,7 @@ export const payments = (state = initialState, action) => {
     case redTypes.paymentSetInfo:
       return {
         ...state,
-        amount: action.payload.amount,
-        type: action.payload.type,
-        markAsNextPayment: action.payload.markAsNextPayment,
-        prorogateTo: action.payload.prorogateTo,
-        editTemplate: action.payload.editTemplate,
-        prorogate: action.payload.prorogate,
+        ...action.payload,
       };
 
     case redTypes.extraPaymentSetInfo:
@@ -39,15 +34,13 @@ export const payments = (state = initialState, action) => {
       };
 
     case redTypes.paymentRestart:
-      console.log("aaaaaaaaaaayudaaaa");
-
       return {
         ...initialState,
         templates: action.payload,
       };
 
     case redTypes.paymentTemplateSet:
-      const current = state.templates.find((t) => t._id === action.payload._id);
+      const current = state.templates.find(t => t._id === action.payload._id);
 
       current.state = action.payload.state;
 

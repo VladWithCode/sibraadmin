@@ -31,8 +31,6 @@ export const UpdateRecord = () => {
     c => c._id === currentLot.record?.customer
   );
 
-  console.log(records);
-
   const currentRecord = records.find(r => r._id === recordId);
 
   const [emptyFields, setEmptyFields] = useState([]);
@@ -72,8 +70,6 @@ export const UpdateRecord = () => {
       },
     });
   }, [dispatch, recordId, record]);
-
-  console.log('estos son los formValues: ', currentRecord);
 
   const checkEmptyField = e => {
     const tempEmptyFields = emptyFields;
@@ -123,7 +119,7 @@ export const UpdateRecord = () => {
         };
 
     if (input.target) {
-      checkEmptyField(input);
+      // checkEmptyField(input);
 
       if (input.target.name === 'lapseType') {
         tempFormValues.paymentInfo.paymentsDate =

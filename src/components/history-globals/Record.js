@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { getRecord } from '../../actions/consults';
 import {
   historyGetLot,
   historySetRecordInfo,
@@ -39,9 +40,9 @@ export const Record = ({ record, payment }) => {
       : record.state === 'delivered'
       ? 'Entregado'
       : record.state === 'reserved'
-      ? 'Comprado'
+      ? 'Pago Pendiente'
       : record.state === 'lotpayed'
-      ? 'Pagado'
+      ? 'Cargos Extra Pendientes'
       : 'Liquidado';
 
   const { projects } = useSelector(state => state);
@@ -65,6 +66,7 @@ export const Record = ({ record, payment }) => {
   const updateLot = () => {
     dispatch(historyGetLot(record.lot));
     dispatch(historySetRecordInfo(record));
+    dispatch(getRecord);
   };
 
   const markAsDelivered = () => {
@@ -127,16 +129,18 @@ export const Record = ({ record, payment }) => {
                   className='edit'>
                   editar
                 </Link>
-                <p
-                  style={{
-                    fontSize: '1.75rem',
-                    marginRight: '3rem',
-                    color: '#14e95f',
-                    borderBottom: '1px solid',
-                  }}
-                  onClick={markAsDelivered}>
-                  Marcar como Entregado
-                </p>
+                {record.state !== 'delivered' && (
+                  <p
+                    style={{
+                      fontSize: '16px',
+                      marginRight: '3rem',
+                      color: '#14e95f',
+                      borderBottom: '1px solid',
+                    }}
+                    onClick={markAsDelivered}>
+                    Marcar como Entregado
+                  </p>
+                )}
                 <Link
                   onClick={updateLot}
                   to={`/historial/cancelar/${record._id}`}
@@ -167,7 +171,6 @@ export const Record = ({ record, payment }) => {
           <div className='card__body__item'>
             <span>Área del lote</span>
             <p>
-              {' '}
               {lotArea}m<sup>2</sup>{' '}
             </p>
           </div>
