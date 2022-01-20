@@ -22,7 +22,7 @@ export const CreateClient = () => {
 
   const { refs } = client;
 
-  const [refsArr, setrefsArr] = useState(refs);
+  const [refsArr, setrefsArr] = useState([]);
 
   const [formFields, handleInputChange] = useForm(client);
 
@@ -83,88 +83,74 @@ export const CreateClient = () => {
   };
 
   const handleCreateClient = async () => {
-    if (isWrong.length > 0) {
-      dispatch(setTempWarning('Hay campos con información inválida'));
-    }
+    dispatch(uiStartLoading());
 
-    if (isFormValid() && isWrong.length === 0) {
-      dispatch(uiStartLoading());
-
-      const client = {
-        names,
-        patLastname,
-        matLastname,
-        _id,
-        curp,
-        maritalState,
-        occupation,
-        township,
-        state,
-        pob,
-        dob,
-        nationality,
-        email,
-        phoneNumber,
+    const client = {
+      names,
+      patLastname,
+      matLastname,
+      _id,
+      curp,
+      maritalState,
+      occupation,
+      township,
+      state,
+      pob,
+      dob,
+      nationality,
+      email,
+      phoneNumber,
+      address: {
+        col,
+        street,
+        intNumber,
+        extNumber,
+        zip,
+      },
+      refs: refsArr.map(ref => ({
+        names: ref.names,
+        patLastname: ref.patLastname,
+        matLastname: ref.matLastname,
+        phoneNumber: ref.phoneNumber,
+        email: ref.email,
         address: {
-          col,
-          street,
-          intNumber,
-          extNumber,
-          zip,
+          col: ref.col,
+          street: ref.street,
+          extNumber: ref.extNumber,
+          intNumber: ref.intNumber,
+          zip: ref.zip,
         },
-        // aval: {
-        //     names: avNames,
-        //     patLastname: avPatLastname,
-        //     matLastname: avMatLastname,
-        //     phoneNumber: avPhoneNumber
-        // }
-        refs: refsArr.map(ref => ({
-          names: ref.names,
-          patLastname: ref.patLastname,
-          matLastname: ref.matLastname,
-          phoneNumber: ref.phoneNumber,
-          email: ref.email,
-          address: {
-            col: ref.col,
-            street: ref.street,
-            extNumber: ref.extNumber,
-            intNumber: ref.intNumber,
-            zip: ref.zip,
-          },
-        })),
+      })),
+    };
+
+    const res = await uploadClient(client);
+
+    dispatch(uiFinishLoading());
+
+    if (res.status === 'OK') {
+      const modalInfo = {
+        title: `Cliente ${names} registrado con éxito`,
+        text: 'Continúa para agregar documentos',
+        link: `/clientes/docs/${res.customer._id}`,
+        okMsg: 'Continuar',
+        closeMsg: null,
+        type: redTypes.clientEdit,
       };
 
-      const res = await uploadClient(client);
+      dispatch(modalUpdate(modalInfo));
+      dispatch(modalEnable());
+      dispatch(getClients());
+      dispatch(clientSet(res.customer));
+    } else if (res.err?.code === 11000) {
+      const repeated = isDuplicated(client);
+      const { isRepeated, key, dispName } = repeated;
 
-      dispatch(uiFinishLoading());
+      dispatch(setTempError(`Hubo un error al registrar al cliente`));
 
-      if (res.status === 'OK') {
-        const modalInfo = {
-          title: `Cliente ${names} registrado con éxito`,
-          text: 'Continúa para agregar documentos',
-          link: `/clientes/docs/${res.customer._id}`,
-          okMsg: 'Continuar',
-          closeMsg: null,
-          type: redTypes.clientEdit,
-        };
-
-        dispatch(modalUpdate(modalInfo));
-        dispatch(modalEnable());
-        dispatch(getClients());
-        dispatch(clientSet(res.customer));
-      } else if (res.err?.code === 11000) {
-        const repeated = isDuplicated(client);
-        const { isRepeated, key, dispName } = repeated;
-
-        dispatch(setTempError(`Hubo un error al registrar al cliente`));
-
-        if (isRepeated) {
-          setEmptyFields([key]);
-          dispatch(setTempError(`Ya hay un cliente con el mismo ${dispName}`));
-        }
+      if (isRepeated) {
+        setEmptyFields([key]);
+        dispatch(setTempError(`Ya hay un cliente con el mismo ${dispName}`));
       }
-
-      // dispatch(redirectSet(redTypes.clients, `/clientes/docs`));
     }
   };
 

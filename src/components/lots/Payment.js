@@ -144,28 +144,25 @@ export const Payment = () => {
 
     dispatch(uiFinishLoading());
 
-    if (res) {
-      if (res.status === 'OK') {
-        const modalInfo = {
-          title: 'Pago realizado con éxito',
-          text: `pago por la cantidad de $${amount}`,
-          link: `/proyectos/ver/${projectId}/lote/${lotId}`,
-          okMsg: 'Continuar',
-          closeMsg: null,
-          type: redTypes.project,
-        };
-
-        dispatch(modalUpdate(modalInfo));
-        dispatch(modalEnable());
-        dispatch(getLot(lotId));
-      } else {
-        dispatch(
-          setTempError(res.message || 'Hubo un problema con la base de datos')
-        );
-
-        return;
-      }
+    if (res.status !== 'OK') {
+      return dispatch(
+        setTempError(res.message || 'Hubo un problema con la base de datos')
+      );
     }
+
+    dispatch(
+      modalUpdate({
+        title: 'Pago realizado con éxito',
+        text: `pago por la cantidad de $${amount}`,
+        link: `/proyectos/ver/${projectId}/lote/${lotId}`,
+        okMsg: 'Continuar',
+        closeMsg: null,
+        type: redTypes.project,
+      })
+    );
+
+    dispatch(modalEnable());
+    dispatch(getLot(lotId));
   };
 
   const postPayment = data => {
@@ -186,7 +183,7 @@ export const Payment = () => {
       })
       .catch(err => {
         console.log(err);
-        // dispatch(uiFinishLoading());
+        dispatch(uiFinishLoading());
       });
 
     return res;

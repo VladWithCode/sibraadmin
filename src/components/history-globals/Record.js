@@ -40,7 +40,7 @@ export const Record = ({ record, payment }) => {
       : record.state === 'delivered'
       ? 'Entregado'
       : record.state === 'reserved'
-      ? 'Pago Pendiente'
+      ? 'Pago de Lote Pendiente'
       : record.state === 'lotpayed'
       ? 'Cargos Extra Pendientes'
       : 'Liquidado';

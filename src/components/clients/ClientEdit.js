@@ -97,11 +97,12 @@ export const ClientEdit = () => {
       attribute === 'extNumber' ||
       attribute === 'zip'
     ) {
+      const client = clients.find(c => c._id === clientId);
+
       if (value) {
         if (
-          clients.find(c => c._id === clientId).address &&
-          value.toString() ===
-            clients.find(c => c._id === clientId).address[attribute].toString()
+          client.address &&
+          value.toString() === client.address[attribute]?.toString()
         ) {
           if (tempHasChanged.includes(attribute)) {
             const index = tempHasChanged.indexOf(attribute);
@@ -115,10 +116,7 @@ export const ClientEdit = () => {
         }
       }
 
-      if (
-        clients.find(c => c._id === clientId).address &&
-        value === clients.find(c => c._id === clientId).address[attribute]
-      ) {
+      if (client.address && value === client.address[attribute]) {
         if (tempHasChanged.includes(attribute)) {
           const index = tempHasChanged.indexOf(attribute);
 
@@ -130,7 +128,7 @@ export const ClientEdit = () => {
         }
       }
     } else {
-      if (value === clients.find(c => c._id === clientId)[attribute]) {
+      if (value === client[attribute]) {
         if (tempHasChanged.includes(attribute)) {
           const index = tempHasChanged.indexOf(attribute);
 
