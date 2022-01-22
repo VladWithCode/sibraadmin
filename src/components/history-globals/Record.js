@@ -12,7 +12,7 @@ import { CommissionInfo } from './CommisionInfo';
 import { ExtraCharge } from './ExtraCharge';
 import { Payment } from './Payment';
 
-export const Record = ({ record, payment }) => {
+export const Record = ({ record, payment, key }) => {
   const dispatch = useDispatch();
 
   const {
@@ -115,7 +115,7 @@ export const Record = ({ record, payment }) => {
   };
 
   return (
-    <div className='card mb-3'>
+    <div className='card mb-3' key={key}>
       <div className='card__header'>
         <img src='../assets/img/info.png' alt='' />
         <h4>Lote en {projectName}</h4>

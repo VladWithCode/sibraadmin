@@ -41,7 +41,9 @@ export const Client = () => {
 
   useEffect(() => {
     dispatch(getClient(clientId));
+  }, []);
 
+  useEffect(() => {
     const modalInfo = {
       title: 'Editar Cliente',
       text: `¿Desea editar al cliente ${names} ${patLastname}?`,
@@ -66,9 +68,7 @@ export const Client = () => {
     dispatch(breadcrumbsUpdate(redTypes.clients, breadcrumbs));
     dispatch(redirectSet(redTypes.clients, `/clientes/ver/${clientId}`));
     dispatch(floatingButtonSet('pencil', redTypes.clientEdit));
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
+  }, [dispatch, client]);
 
   const handleOpen = path => {
     const url = `${staticURLDocs}${path}`;
@@ -79,6 +79,10 @@ export const Client = () => {
       'top=500,left=200,frame=true,nodeIntegration=no'
     );
   };
+
+  if (!client._id) {
+    return <>Cargando...</>;
+  }
 
   return (
     <>

@@ -9,7 +9,6 @@ import { clientSet } from '../../actions/client';
 import { getClients } from '../../actions/consults';
 import {
   setTempError,
-  setTempWarning,
   uiStartLoading,
   uiFinishLoading,
 } from '../../actions/ui';
@@ -193,89 +192,6 @@ export const CreateClient = () => {
     };
   };
 
-  const isFormValid = () => {
-    checkEmptyFields();
-    isEmailValid(email);
-    isNumberValid(phoneNumber, 'phoneNumber');
-
-    const validNumbers = [];
-
-    refsArr.forEach((ref, index) => {
-      const isValid = isNumberValid(ref.phoneNumber, `phoneNumber${index}`);
-      if (!isValid) {
-        validNumbers.push(isValid);
-      }
-    });
-
-    if (checkEmptyFields()) {
-      return false;
-    }
-
-    if (
-      !isNumberValid(phoneNumber, 'phoneNumber') ||
-      !isEmailValid(email) ||
-      checkEmptyFields(formFields)
-    ) {
-      return false;
-    }
-
-    if (validNumbers.length > 0) {
-      return false;
-    }
-
-    return true;
-  };
-
-  const checkEmptyFields = () => {
-    const tempEmptyFields = [];
-
-    for (let key in formFields) {
-      if (
-        key !== 'intNumber' &&
-        key !== 'matLastname' &&
-        key !== 'avMatLastname' &&
-        key !== 'maritalState' &&
-        key !== 'occupation' &&
-        key !== 'township' &&
-        key !== 'state' &&
-        key !== 'pob' &&
-        key !== 'dob' &&
-        key !== 'nationality' &&
-        key !== 'address'
-      ) {
-        if (formFields[key].toString().trim() === '') {
-          tempEmptyFields.push(key);
-          dispatch(setTempError('Los campos en rojo son obligatorios'));
-        }
-      }
-    }
-
-    refsArr.forEach((ref, index) => {
-      for (let key in ref) {
-        if (
-          key !== 'intNumber' &&
-          key !== 'matLastname' &&
-          key !== 'col' &&
-          key !== 'street' &&
-          key !== 'extNumber' &&
-          key !== 'email' &&
-          key !== 'intNumber' &&
-          key !== 'zip' &&
-          key !== 'address'
-        ) {
-          if (ref[key].toString().trim() === '') {
-            tempEmptyFields.push(`${key}${index}`);
-            dispatch(setTempError('Los campos en rojo son obligatorios'));
-          }
-        }
-      }
-    });
-
-    setEmptyFields(tempEmptyFields);
-
-    return tempEmptyFields.length === 0 ? false : true;
-  };
-
   const checkEmptyField = e => {
     if (e.target.value?.trim().length > 0) {
       const tempEmptyFields = emptyFields;
@@ -290,50 +206,6 @@ export const CreateClient = () => {
     }
   };
 
-  const isEmailValid = email => {
-    const expReg =
-      /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
-    const isValid = expReg.test(email.toLowerCase());
-    const wrongFields = isWrong;
-
-    if (isValid) {
-      if (wrongFields.includes('email')) {
-        const index = wrongFields.indexOf('email');
-        wrongFields.splice(index, 1);
-      }
-    } else {
-      if (!wrongFields.includes('email')) {
-        wrongFields.push('email');
-      }
-
-      dispatch(setTempWarning('Correo Electrónico no válido'));
-    }
-
-    setIsWrong(wrongFields);
-
-    return isValid;
-  };
-
-  const isNumberValid = (number, name) => {
-    const isValid = number?.length === 10 ? true : false;
-
-    const wrongFields = isWrong;
-
-    if (isValid) {
-      if (wrongFields.includes(name)) {
-        const index = wrongFields.indexOf(name);
-        wrongFields.splice(index, 1);
-      }
-    } else {
-      if (!wrongFields.includes(name)) {
-        wrongFields.push(name);
-      }
-    }
-
-    setIsWrong(wrongFields);
-    return isValid;
-  };
-
   const uploadClient = client => {
     const data = {
       doc: client,
@@ -341,7 +213,7 @@ export const CreateClient = () => {
 
     const url = `${staticURL}/customers/`;
 
-    // dispatch(uiStartLoading());
+    dispatch(uiStartLoading());
 
     const res = fetch(url, {
       method: 'POST',
@@ -350,17 +222,14 @@ export const CreateClient = () => {
       },
       body: JSON.stringify(data),
     })
-      .then(response => {
-        return response.json();
-      })
-      .then(data => {
-        console.log('data', data);
-        return data;
-      })
+      .then(res => res.json())
+      .then(data => data)
       .catch(err => {
         console.log(err);
-        // dispatch(uiFinishLoading());
+        dispatch(uiFinishLoading());
       });
+
+    dispatch(uiFinishLoading());
 
     return res;
   };
@@ -592,10 +461,7 @@ export const CreateClient = () => {
               <label htmlFor='email'>Email</label>
               <input
                 name='email'
-                onChange={e => {
-                  handleChange(e);
-                  // isEmailValid(e.target.value)
-                }}
+                onChange={handleChange}
                 value={email}
                 type='email'
               />
@@ -609,10 +475,7 @@ export const CreateClient = () => {
                 minLength='10'
                 maxLength='10'
                 name='phoneNumber'
-                onChange={e => {
-                  handleChange(e);
-                  isNumberValid(e.target.value, 'phoneNumber');
-                }}
+                onChange={handleChange}
                 value={phoneNumber}
                 type='number'
               />
@@ -684,30 +547,6 @@ export const CreateClient = () => {
             </div>
           </form>
           <div className='left'>
-            {/* <div className="card__header">
-                            <img src="../assets/img/aval.png" alt="" />
-                            <h4>Información del Aval</h4>
-                        </div>
-                        <div className={`card__body__item ${emptyFields.includes('avNames') && 'error'}`}>
-                            <label htmlFor="avNames">Nombre(s)</label>
-                            <input autoFocus name="avNames" onChange={handleChange} value={avNames} type="text" autoComplete="off" />
-                        </div>
-                        <div className={`card__body__item ${emptyFields.includes('avPatLastname') && 'error'}`}>
-                            <label htmlFor="avPatLastname">Apellido Paterno</label>
-                            <input name="avPatLastname" onChange={handleChange} value={avPatLastname} type="text" autoComplete="off" />
-                        </div>
-                        <div className={`card__body__item ${emptyFields.includes('avMatLastname') && 'error'}`}>
-                            <label htmlFor="avMatLastname">Apellido Materno</label>
-                            <input name="avMatLastname" onChange={handleChange} value={avMatLastname} type="text" autoComplete="off" />
-                        </div>
-                        <div className={`card__body__item ${emptyFields.includes('avPhoneNumber') && 'error'} ${isWrong.includes('avPhoneNumber') && 'warning'}`}>
-                            <label htmlFor="avPhoneNumber">Número de contacto</label>
-                            <input name="avPhoneNumber" onChange={(e) => {
-                                handleChange(e);
-                                isNumberValid(e.target.value, 'avPhoneNumber')
-                            }} value={avPhoneNumber} type="number" autoComplete="off" />
-                        </div> */}
-
             <div className='card__header'>
               <img src='../assets/img/aval.png' alt='' />
               <h4>Referencias</h4>
@@ -781,10 +620,7 @@ export const CreateClient = () => {
                   </label>
                   <input
                     name={`phoneNumber${index}`}
-                    onChange={e => {
-                      handleChangeRef(index, e, 'phoneNumber');
-                      isNumberValid(e.target.value, `phoneNumber${index}`);
-                    }}
+                    onChange={e => handleChangeRef(index, e, 'phoneNumber')}
                     value={ref.phoneNumber}
                     type='number'
                     autoComplete='off'

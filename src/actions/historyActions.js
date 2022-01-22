@@ -11,8 +11,6 @@ export const historySetLot = lot => ({
 export const historyGetLot = lotId => {
   const url = `${staticURL}/lots/${lotId}`;
 
-  console.log('obteniendo lote: ', lotId);
-
   return dispatch => {
     dispatch(uiStartLoading());
     fetch(url)
@@ -21,9 +19,6 @@ export const historyGetLot = lotId => {
       })
       .then(data => {
         dispatch(uiFinishLoading());
-
-        console.log(data);
-        console.log('Lote obtenido: ', data.lot);
 
         dispatch(historySetLot(data.lot));
       })
@@ -67,18 +62,7 @@ export const historyPostUpdate = record => {
 
       return;
     }
-    /* 
-    if (
-      +record.paymentInfo.lapseToPay <
-        record.payments.filter(p => !p.delete).length ||
-      +record.paymentInfo.lapseToPay < 0
-    ) {
-      dispatch(setTempError('El número de pagos no es válido'));
-      dispatch(uiFinishLoading());
 
-      return;
-    }
- */
     const url = `${staticURL}/record/${record._id}`;
 
     const extraChargesUpdated = [];
@@ -127,7 +111,6 @@ export const historyPostUpdate = record => {
           dispatch(modalEnable());
           dispatch(uiFinishLoading());
         }
-        let response = await resp.json();
       })
       .catch(err => console.log(err));
 

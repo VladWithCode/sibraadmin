@@ -26,6 +26,9 @@ export const ModalConfirm = () => {
 
   const handleClose = () => {
     dispatch(modalDisable());
+
+    if (cancelCallback && typeof cancelCallback === 'function')
+      return cancelCallback();
   };
 
   const handleOk = () => {

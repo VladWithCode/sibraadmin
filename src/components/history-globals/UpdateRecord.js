@@ -33,7 +33,7 @@ export const UpdateRecord = () => {
 
   const currentRecord = records.find(r => r._id === recordId);
 
-  const [emptyFields, setEmptyFields] = useState([]);
+  const [emptyFields] = useState([]);
 
   const [formValues, setFormValues] = useState({
     payments: record.payments,
@@ -70,22 +70,6 @@ export const UpdateRecord = () => {
       },
     });
   }, [dispatch, recordId, record]);
-
-  const checkEmptyField = e => {
-    const tempEmptyFields = emptyFields;
-
-    if (e.target.value?.trim().length > 0) {
-      if (tempEmptyFields.includes(e.target.name)) {
-        const index = tempEmptyFields.indexOf(e.target.name);
-
-        tempEmptyFields.splice(index, 1);
-      }
-    } else {
-      tempEmptyFields.push(e.target.name);
-    }
-
-    setEmptyFields(tempEmptyFields);
-  };
 
   const cancel = () => {
     const modalInfo = {
