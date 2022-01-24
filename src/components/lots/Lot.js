@@ -261,7 +261,7 @@ export const Lot = () => {
           </>
         )}
 
-        {currentLot?.record && typeof currentLot?.record !== 'string' && (
+        {currentLot?.record && typeof currentLot.record !== 'string' && (
           <>
             <div className='project__header'>
               <div className='left'>

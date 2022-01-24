@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getRecord } from '../../actions/consults';
 import {
   historyGetLot,
   historySetRecordInfo,
@@ -14,6 +13,14 @@ import { Payment } from './Payment';
 
 export const Record = ({ record, payment, key }) => {
   const dispatch = useDispatch();
+
+  const [_record, setRecord] = useState(record);
+  const setRecordField = (f, v) => {
+    setRecord({
+      ..._record,
+      [f]: v,
+    });
+  };
 
   const {
     lotNumber,
@@ -32,22 +39,22 @@ export const Record = ({ record, payment, key }) => {
       lapseToPay,
     },
     lot,
-  } = record;
+  } = _record;
 
   const state =
-    record.state === 'available'
+    _record.state === 'available'
       ? 'Disponible'
-      : record.state === 'delivered'
+      : _record.state === 'delivered'
       ? 'Entregado'
-      : record.state === 'reserved'
+      : _record.state === 'reserved'
       ? 'Pago de Lote Pendiente'
-      : record.state === 'lotpayed'
+      : _record.state === 'lotpayed'
       ? 'Cargos Extra Pendientes'
       : 'Liquidado';
 
   const { projects } = useSelector(state => state);
 
-  const { name: projectName } = projects.find(p => p._id === record.project);
+  const { name: projectName } = projects.find(p => p._id === _record.project);
 
   const [activeSections, setActiveSections] = useState({
     payments: false,
@@ -64,13 +71,12 @@ export const Record = ({ record, payment, key }) => {
   };
 
   const updateLot = () => {
-    dispatch(historyGetLot(record.lot));
-    dispatch(historySetRecordInfo(record));
-    dispatch(getRecord);
+    dispatch(historyGetLot(lot));
+    dispatch(historySetRecordInfo(_record));
   };
 
   const markAsDelivered = () => {
-    fetch(`${staticURL}/lot/${record.lot}`, {
+    fetch(`${staticURL}/lot/${lot}`, {
       method: 'put',
       headers: {
         'Content-Type': 'application/json',
@@ -92,6 +98,8 @@ export const Record = ({ record, payment, key }) => {
           );
         }
 
+        setRecordField('state', res.lot.state);
+        updateLot();
         dispatch(setTempSuccessNotice('El lote se actualizo con exito'));
         return updateLot();
       })
@@ -119,17 +127,17 @@ export const Record = ({ record, payment, key }) => {
       <div className='card__header'>
         <img src='../assets/img/info.png' alt='' />
         <h4>Lote en {projectName}</h4>
-        {record.state !== 'cancelled' ? (
+        {_record.state !== 'cancelled' ? (
           <div className='links'>
             {!payment && (
               <>
                 <Link
                   onClick={updateLot}
-                  to={`/historial/editar/${record._id}`}
+                  to={`/historial/editar/${_record._id}`}
                   className='edit'>
                   editar
                 </Link>
-                {record.state !== 'delivered' && (
+                {_record.state !== 'delivered' && (
                   <p
                     style={{
                       fontSize: '16px',
@@ -143,7 +151,7 @@ export const Record = ({ record, payment, key }) => {
                 )}
                 <Link
                   onClick={updateLot}
-                  to={`/historial/cancelar/${record._id}`}
+                  to={`/historial/cancelar/${_record._id}`}
                   className='danger'>
                   cancelar venta
                 </Link>
@@ -184,9 +192,9 @@ export const Record = ({ record, payment, key }) => {
             <span>pagado</span>
             <p className='payed'> ${lotAmountPayed.toLocaleString()} </p>
           </div>
-          {record.state !== 'delivered' &&
-            record.state !== 'lotpayed' &&
-            record.state !== 'liquidated' && (
+          {_record.state !== 'delivered' &&
+            _record.state !== 'lotpayed' &&
+            _record.state !== 'liquidated' && (
               <>
                 <div className='card__body__item'>
                   <span>deuda restante</span>
@@ -232,7 +240,7 @@ export const Record = ({ record, payment, key }) => {
                 payment={payment}
                 index={index}
                 paymentId={payment._id}
-                recordId={record._id}
+                recordId={_record._id}
                 lotId={lot}
               />
             ))}
@@ -242,7 +250,7 @@ export const Record = ({ record, payment, key }) => {
           className='card__header pointer mt-3'
           onClick={() => switchActive('receipts')}>
           <img src='../assets/img/docs.png' alt='' />
-          <h4>Recibos</h4>
+          <h4>Generar Recibo</h4>
           <span className={`dropdown ${activeSections.receipts && 'active'} `}>
             v
           </span>
@@ -290,8 +298,8 @@ export const Record = ({ record, payment, key }) => {
                   key={index}
                   extraCharge={extraCharge}
                   index={index + 1}
-                  recordState={record.state}
-                  record={record}
+                  recordState={_record.state}
+                  record={_record}
                 />
               ))}
             </div>
@@ -303,7 +311,7 @@ export const Record = ({ record, payment, key }) => {
           onClick={() => switchActive('commissionInfo')}>
           <img src='../assets/img/user.png' alt='' />
           <h4>Comisión</h4>
-          {record?.commissionInfo ? (
+          {_record?.commissionInfo ? (
             <span
               className={`dropdown ${
                 activeSections.commissionInfo && 'active'
@@ -314,7 +322,7 @@ export const Record = ({ record, payment, key }) => {
             !payment && (
               <Link
                 onClick={updateLot}
-                to={`/historial/comision/editar/${record._id}`}
+                to={`/historial/comision/editar/${_record._id}`}
                 className={`commission`}>
                 Editar
               </Link>
@@ -322,19 +330,19 @@ export const Record = ({ record, payment, key }) => {
           )}
         </div>
 
-        {record?.commissionInfo && (
+        {_record?.commissionInfo && (
           <div
             className={`full ${!activeSections.commissionInfo && 'inactive'} `}>
             <div className='right mt-5'>
               <CommissionInfo
-                recordId={record._id}
-                commissionInfo={record.commissionInfo}
+                recordId={_record._id}
+                commissionInfo={_record.commissionInfo}
               />
             </div>
             {!payment && (
               <Link
                 onClick={updateLot}
-                to={`/historial/comision/editar/${record._id}`}
+                to={`/historial/comision/editar/${_record._id}`}
                 className={`commission`}>
                 Editar
               </Link>

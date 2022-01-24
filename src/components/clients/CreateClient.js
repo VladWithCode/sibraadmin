@@ -288,7 +288,7 @@ export const CreateClient = () => {
           <h4>Información General del Cliente</h4>
         </div>
         <div className='card__body'>
-          <form className='right'>
+          <form className='left'>
             <div
               className={`card__body__item ${
                 emptyFields.includes('names') && 'error'

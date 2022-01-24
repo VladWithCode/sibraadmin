@@ -75,7 +75,7 @@ export const UpdateRecord = () => {
     const modalInfo = {
       title: 'Cancelar edición',
       text: '¿Desea cancelar la edición del historial?',
-      link: `/proyectos/ver/${currentRecord.project}/lote/${currentRecord.lot}`,
+      link: `/proyectos/ver/${record.project}/lote/${record.lot}`,
       okMsg: 'Sí',
       closeMsg: 'No',
       type: redTypes.project,

@@ -370,6 +370,7 @@ export const BuyLot = () => {
                             onExtraInfoChange({ lapseType: 'mensual' })
                           }
                           id='mensual'
+                          defaultChecked={true}
                         />
                         <label htmlFor='mensual'>Mensual</label>
 
@@ -473,11 +474,15 @@ export const BuyLot = () => {
                 id='buyer'
                 value={client?._id}
                 data-customer-select>
-                <option value>&nbsp;</option>
-                <option value='add'>Agregar Cliente</option>
+                <option value key='blankOpt'>
+                  &nbsp;
+                </option>
+                <option value='add' key='addOpt'>
+                  Agregar Cliente
+                </option>
                 {clients?.map(c => {
                   return (
-                    <option key={c.rfc} value={c._id}>
+                    <option key={c._id} value={c._id}>
                       {c.fullName}
                     </option>
                   );
@@ -543,88 +548,82 @@ export const BuyLot = () => {
           </div>
         </div>
 
-        {extraInfo.history && (
-          <div className='card edit'>
-            <div className='card__header'>
-              <img src='../assets/img/docs.png' alt='' />
-              <h4>Registro de pagos</h4>
-              <button onClick={addPayment} className='add-ref'>
-                Agregar pago
-              </button>
-            </div>
-
-            {payments.map((payment, index) => (
-              <div key={index}>
-                <div className='card__header mt-4'>
-                  <h4>Pago {index + 1}</h4>
-                  {index !== 0 && (
-                    <button
-                      onClick={() => deletePayment(index)}
-                      className='add-ref delete payment'>
-                      &times;
-                    </button>
-                  )}
-                </div>
-                <div
-                  className={`card__body__item ${
-                    emptyFields.includes(`amount${index}`) && 'error'
-                  }`}>
-                  <label htmlFor={`amount${index}`}>Cantidad de pago</label>
-                  <input
-                    name={`amount${index}`}
-                    type='number'
-                    autoComplete='off'
-                    onChange={e => onPaymentChange(e, index, 'amount')}
-                    value={payment.amount}
-                  />
-                </div>
-                <div
-                  className={`card__body__item ${
-                    emptyFields.includes(`paymentDate${index}`) && 'error'
-                  }`}>
-                  <label htmlFor={`paymentDate${index}`}>
-                    Fecha programada
-                  </label>
-                  <input
-                    name={`paymentDate${index}`}
-                    type='date'
-                    autoComplete='off'
-                    onChange={e => onPaymentChange(e, index, 'paymentDate')}
-                    value={payment.paymentDate}
-                  />
-                </div>
-                <div
-                  className={`card__body__item ${
-                    emptyFields.includes(`payedDate${index}`) && 'error'
-                  }`}>
-                  <label htmlFor={`payedDate${index}`}>
-                    Fecha cuando fue pagado
-                  </label>
-                  <input
-                    name={`payedDate${index}`}
-                    type='date'
-                    autoComplete='off'
-                    onChange={e => onPaymentChange(e, index, 'payedDate')}
-                    value={payment.payedDate}
-                  />
-                </div>
-                <div
-                  className={`card__body__item ${
-                    emptyFields.includes(`payer${index}`) && 'error'
-                  }`}>
-                  <label htmlFor={`payer${index}`}>Pagado por</label>
-                  <input
-                    name={`payer${index}`}
-                    type='text'
-                    autoComplete='off'
-                    onChange={e => onPaymentChange(e, index, 'payer')}
-                    value={payment.payer}
-                  />
-                </div>
-              </div>
-            ))}
+        <div className='card edit'>
+          <div className='card__header'>
+            <img src='../assets/img/docs.png' alt='' />
+            <h4>Registro de pagos</h4>
+            <button onClick={addPayment} className='add-ref'>
+              Agregar pago
+            </button>
           </div>
-        )}
+
+          {payments.map((payment, index) => (
+            <div key={index}>
+              <div className='card__header mt-4'>
+                <h4>Pago {index + 1}</h4>
+                <button
+                  onClick={() => deletePayment(index)}
+                  className='add-ref delete payment'>
+                  &times;
+                </button>
+              </div>
+              <div
+                className={`card__body__item ${
+                  emptyFields.includes(`amount${index}`) && 'error'
+                }`}>
+                <label htmlFor={`amount${index}`}>Cantidad de pago</label>
+                <input
+                  name={`amount${index}`}
+                  type='number'
+                  autoComplete='off'
+                  onChange={e => onPaymentChange(e, index, 'amount')}
+                  value={payment.amount}
+                />
+              </div>
+              <div
+                className={`card__body__item ${
+                  emptyFields.includes(`paymentDate${index}`) && 'error'
+                }`}>
+                <label htmlFor={`paymentDate${index}`}>Fecha programada</label>
+                <input
+                  name={`paymentDate${index}`}
+                  type='date'
+                  autoComplete='off'
+                  onChange={e => onPaymentChange(e, index, 'paymentDate')}
+                  value={payment.paymentDate}
+                />
+              </div>
+              <div
+                className={`card__body__item ${
+                  emptyFields.includes(`payedDate${index}`) && 'error'
+                }`}>
+                <label htmlFor={`payedDate${index}`}>
+                  Fecha cuando fue pagado
+                </label>
+                <input
+                  name={`payedDate${index}`}
+                  type='date'
+                  autoComplete='off'
+                  onChange={e => onPaymentChange(e, index, 'payedDate')}
+                  value={payment.payedDate}
+                />
+              </div>
+              <div
+                className={`card__body__item ${
+                  emptyFields.includes(`payer${index}`) && 'error'
+                }`}>
+                <label htmlFor={`payer${index}`}>Pagado por</label>
+                <input
+                  name={`payer${index}`}
+                  type='text'
+                  autoComplete='off'
+                  onChange={e => onPaymentChange(e, index, 'payer')}
+                  value={payment.payer}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
 
         {paymentInfo.extraCharges && (
           <BuyExtraCharges extraCharges={paymentInfo.extraCharges} />

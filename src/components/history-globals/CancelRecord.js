@@ -167,7 +167,7 @@ export const CancelRecord = () => {
           <h4>Cancelación de historial</h4>
         </div>
         <div className='card__body'>
-          <div className='right'>
+          <div className='left'>
             <div
               className={`card__body__item ${
                 emptyFields.includes('refundedAmount') && 'error'

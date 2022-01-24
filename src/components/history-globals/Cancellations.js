@@ -36,7 +36,7 @@ export const Cancellations = ({ cancellations }) => {
               </div>
 
               <div className='card__body'>
-                <div className='right'>
+                <div className='left'>
                   <div className='card__body__item'>
                     <span>Cliente</span>
                     <p>{fullName}</p>
@@ -58,7 +58,7 @@ export const Cancellations = ({ cancellations }) => {
                   </div>
                 </div>
 
-                <div className='right'>
+                <div className='left'>
                   <div className='card__body__item'>
                     <span>Fecha de cancelación</span>
                     <p>{date}</p>

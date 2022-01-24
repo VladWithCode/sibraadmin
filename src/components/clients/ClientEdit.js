@@ -595,7 +595,7 @@ export const ClientEdit = () => {
         <div className='left'>
           <h3> Edición de Cliente </h3>
         </div>
-        <div className='right'>
+        <div className='left'>
           <button
             className='cancel'
             onClick={() => deleteClient(redTypes.clientDelete)}>

@@ -1,37 +1,27 @@
-import { redTypes } from "../types/reduxTypes";
+import { redTypes } from '../types/reduxTypes';
 
 const initialState = {
-  customerId: "",
-  lotId: "",
-  projectId: "",
-  state: "",
+  customerId: '',
+  lotId: '',
+  projectId: '',
+  state: '',
 
-  depositAmount: "",
-  lapseToPay: "",
-  lapseType: "",
-  lotPrice: "",
-  minimumPaymentAmount: "",
-  paymentsDate: "",
-  recordOpenedAt: "",
-  reservationDate: "",
+  depositAmount: '',
+  lapseToPay: '',
+  lapseType: '',
+  lotPrice: '',
+  minimumPaymentAmount: '',
+  paymentsDate: '',
+  recordOpenedAt: '',
+  reservationDate: '',
 
-  payments: [
-    {
-      amount: "",
-      ogPaymentDate: "",
-      payedAt: "",
-    },
-    {
-      amount: "",
-      payedAt: "",
-    },
-  ],
+  payments: [],
 
-  amount: "",
-  payedAt: "",
-  payedTo: "",
+  amount: '',
+  payedAt: '',
+  payedTo: '',
 
-  client: "",
+  client: '',
   liquidate: false,
   history: false,
 

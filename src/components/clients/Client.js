@@ -94,7 +94,7 @@ export const Client = () => {
             <h3> Cliente </h3>
             <span className='span'> {_id} </span>
           </div>
-          <div className='right'></div>
+          <div className='left'></div>
         </div>
 
         <div className='card'>
@@ -103,7 +103,7 @@ export const Client = () => {
             <h4>Información General del Cliente</h4>
           </div>
           <div className='card__body'>
-            <div className='right'>
+            <div className='left'>
               <div className='card__body__item'>
                 <span>Nombre(s)</span>
                 <p> {names} </p>

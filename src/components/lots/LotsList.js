@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { setLot } from "../../actions/consults";
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { setLot } from '../../actions/consults';
+import { sortByState, sortLotArray } from '../../helpers/lotHelpers';
 
 export const LotsList = React.memo(({ projectId, searchParams }) => {
-  const { lots } = useSelector((state) => state);
+  const { lots } = useSelector(state => state);
 
   const [displayLots, setDisplayLots] = useState([]);
 
@@ -13,51 +14,39 @@ export const LotsList = React.memo(({ projectId, searchParams }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    let tempDispLots = lots.map((e) => e);
+    let tempDispLots = lots.map(e => e);
+    sortLotArray(tempDispLots);
 
     switch (searchOrder) {
-      case "higher":
+      case 'higher':
         tempDispLots = tempDispLots
           .sort((a, b) => {
             return a.price - b.price;
           })
           .reverse();
-
         break;
 
-      case "lower":
+      case 'lower':
         tempDispLots = tempDispLots.sort((a, b) => {
           return a.price - b.price;
         });
-
         break;
 
-      case "available":
-        tempDispLots = tempDispLots.filter(
-          ({ state }) => state === "available"
-        );
-
+      case 'available':
+        sortByState(tempDispLots, 'available');
         break;
 
-      case "reserved":
-        tempDispLots = tempDispLots.filter(({ state }) => state === "reserved");
-
+      case 'reserved':
+        sortByState(tempDispLots, 'reserved');
         break;
 
-      case "delivered":
-        tempDispLots = tempDispLots.filter(
-          ({ state }) => state === "delivered"
-        );
-
+      case 'delivered':
+        sortByState(tempDispLots, 'delivered');
         break;
 
-      case "liquidated":
-        tempDispLots = tempDispLots.filter(
-          ({ state }) => state === "liquidated"
-        );
-
+      case 'liquidated':
+        sortByState(tempDispLots, 'liquidated');
         break;
-
       default:
         break;
     }
@@ -77,14 +66,14 @@ export const LotsList = React.memo(({ projectId, searchParams }) => {
     setDisplayLots(tempDispLots);
   }, [lots, searchOrder, searchManzana, searchLot]);
 
-  const updateLot = (_id) => {
-    dispatch(setLot(lots.find((l) => l._id === _id)));
+  const updateLot = _id => {
+    dispatch(setLot(lots.find(l => l._id === _id)));
   };
 
   return (
-    <div className="lot-list-container card__lot-list">
-      <div className="lot-list card">
-        <div className="headers">
+    <div className='lot-list-container card__lot-list'>
+      <div className='lot-list card'>
+        <div className='headers'>
           <span>Status</span>
           <span>Manzana</span>
           <span>Número de lote</span>
@@ -92,18 +81,18 @@ export const LotsList = React.memo(({ projectId, searchParams }) => {
           <span>precio</span>
         </div>
 
-        <div className="scroll">
+        <div className='scroll'>
           {displayLots.length > 0 ? (
             displayLots.map(
               ({ _id, manzana, lotNumber, area, price, state }, index) => {
                 const stateName =
-                  state === "available"
-                    ? "Disponible"
-                    : state === "delivered"
-                    ? "Entregado"
-                    : state === "reserved"
-                    ? "Comprado"
-                    : "Liquidado";
+                  state === 'available'
+                    ? 'Disponible'
+                    : state === 'delivered'
+                    ? 'Entregado'
+                    : state === 'reserved'
+                    ? 'Comprado'
+                    : 'Liquidado';
 
                 const dispPrice = price.toLocaleString();
                 const dispArea = area.toLocaleString();
@@ -113,9 +102,8 @@ export const LotsList = React.memo(({ projectId, searchParams }) => {
                   <Link
                     onClick={() => updateLot(_id)}
                     key={_id}
-                    className={`item ${state} ${gray && "gray"}`}
-                    to={`./${projectId}/lote/${_id}`}
-                  >
+                    className={`item ${state} ${gray && 'gray'}`}
+                    to={`./${projectId}/lote/${_id}`}>
                     <span className={state}>{stateName}</span>
                     <span>{manzana}</span>
                     <span>{lotNumber}</span>
@@ -128,7 +116,7 @@ export const LotsList = React.memo(({ projectId, searchParams }) => {
               }
             )
           ) : (
-            <span className="empty">No hay lotes para mostrar</span>
+            <span className='empty'>No hay lotes para mostrar</span>
           )}
         </div>
       </div>

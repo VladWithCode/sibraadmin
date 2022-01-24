@@ -10,7 +10,7 @@ export const ClientShort = ({ client }) => {
           <img src='../assets/img/user.png' alt='' />
           <h4>Información básica del cliente</h4>
         </div>
-        <div className='right'>
+        <div className='left'>
           <div className='card__body__item'>
             <span>nombre(s)</span>
             <p> {names} </p>
