@@ -49,13 +49,14 @@ export const CreateClient = () => {
 
   const [emptyFields, setEmptyFields] = useState([]);
 
+  // eslint-disable-next-line
   const [isWrong, setIsWrong] = useState([]);
 
   useEffect(() => {
     dispatch(floatingButtonSet('pencil', redTypes.projectCreate));
     dispatch(redirectSet(redTypes.clients, `/clientes/nuevo`));
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [dispatch]);
 
   // FUNCTIONS

@@ -10,6 +10,7 @@ import { staticURL } from '../url';
 import { redirectSet } from './redirect';
 import { modalEnable, modalUpdate } from './modal';
 import { projectSet } from './project';
+import makeServerRequest from '../helpers/makeServerRequest';
 
 // http://189.155.253.90:3000/api/proyects/
 
@@ -208,17 +209,13 @@ export const deleteClient = (id, name) => {
 };
 
 export const getRecords = () => {
-  const url = `${staticURL}/record/`;
-
-  return dispatch => {
+  return async dispatch => {
     dispatch(uiStartLoading());
-    fetch(url)
-      .then(resp => resp.json())
-      .then(data => {
-        dispatch(uiFinishLoading());
-        data.records && dispatch(loadRecords(data.records));
-      })
-      .catch(err => console.log(err));
+
+    const res = await makeServerRequest('/record');
+    dispatch(uiFinishLoading());
+    if (res.status !== 'OK') return null;
+    return dispatch(loadRecords(res.records));
   };
 };
 

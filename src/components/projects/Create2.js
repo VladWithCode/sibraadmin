@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { lotTypesModalConfirmReset } from "../../actions/lotTypes";
-import { manzanasSet } from "../../actions/manzanas";
-import { projectSetPage } from "../../actions/project";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { lotTypesModalConfirmReset } from '../../actions/lotTypes';
+import { manzanasSet } from '../../actions/manzanas';
+import { projectSetPage } from '../../actions/project';
 import {
   setTempError,
   setTempWarning,
   unSetError,
   unSetWarning,
-} from "../../actions/ui";
+} from '../../actions/ui';
 
 export const Create2 = () => {
   const {
     project,
     project: { lots, page, greenAreas },
     types: { lotTypes },
-  } = useSelector((state) => state);
-  const state = useSelector((state) => state);
+  } = useSelector(state => state);
+  const state = useSelector(state => state);
 
   const dispatch = useDispatch();
 
@@ -32,7 +32,7 @@ export const Create2 = () => {
   const [cornersErrors, setCornersErrors] = useState([]);
 
   let countLots = +lots;
-  state.manzanas.forEach((m) => (countLots -= +m.lots));
+  state.manzanas.forEach(m => (countLots -= +m.lots));
 
   const [remainingLots, setRemainingLots] = useState(countLots);
 
@@ -64,12 +64,12 @@ export const Create2 = () => {
 
       dispatch(manzanasSet([...state.manzanas]));
 
-      const typesErrors = state.manzanas.map((manzana) => ({
+      const typesErrors = state.manzanas.map(manzana => ({
         manzana: manzana.num,
         error: false,
       }));
 
-      const cornersErrors = state.manzanas.map((manzana) => ({
+      const cornersErrors = state.manzanas.map(manzana => ({
         manzana: manzana.num,
         error: false,
       }));
@@ -77,16 +77,16 @@ export const Create2 = () => {
       let counter = 0;
       let counterTypes = 0;
 
-      state.manzanas.forEach((manzana) => {
+      state.manzanas.forEach(manzana => {
         counter += Number(manzana.lots);
 
-        manzana.lotTypes.forEach((lotType) => {
+        manzana.lotTypes.forEach(lotType => {
           counterTypes += +lotType.quantity;
         });
 
         if (+manzana.corners > +manzana.lots) {
           setCornersErrors(
-            cornersErrors.map((cornerError) => {
+            cornersErrors.map(cornerError => {
               if (cornerError.manzana === manzana.num) {
                 cornerError.error = true;
               }
@@ -95,7 +95,7 @@ export const Create2 = () => {
           );
         } else {
           setCornersErrors(
-            cornersErrors.map((cornerError) => {
+            cornersErrors.map(cornerError => {
               if (cornerError?.manzana === manzana.num) {
                 cornerError.error = false;
               }
@@ -106,7 +106,7 @@ export const Create2 = () => {
 
         if (+counterTypes > +manzana.lots) {
           setTypesErrors(
-            typesErrors.map((typeError) => {
+            typesErrors.map(typeError => {
               if (typeError?.manzana === manzana.num) {
                 typeError.error = true;
                 typeError.completed = true;
@@ -118,7 +118,7 @@ export const Create2 = () => {
 
         if (+counterTypes === +manzana.lots) {
           setTypesErrors(
-            typesErrors.map((typeError) => {
+            typesErrors.map(typeError => {
               if (typeError?.manzana === manzana.num) {
                 typeError.error = false;
                 typeError.completed = true;
@@ -128,7 +128,7 @@ export const Create2 = () => {
           );
         } else {
           setTypesErrors(
-            typesErrors.map((typeError) => {
+            typesErrors.map(typeError => {
               if (typeError?.manzana === manzana.num) {
                 typeError.error = false;
                 typeError.completed = false;
@@ -146,10 +146,8 @@ export const Create2 = () => {
       }
     } else {
       const newArr = [];
-      const greenAreasNums = greenAreas.map((ga) => +ga.manzanaNum);
+      const greenAreasNums = greenAreas.map(ga => +ga.manzanaNum);
       let counter = 1;
-
-      console.log("areas nums", greenAreasNums);
 
       for (let i = 1; i <= +project.manzanas - greenAreasNums.length; i++) {
         while (greenAreasNums.includes(counter)) {
@@ -158,9 +156,9 @@ export const Create2 = () => {
 
         newArr.push({
           num: counter,
-          lots: "",
-          lotTypes: lotTypes.map((lotType) => ({ ...lotType, quantity: "" })),
-          corners: "",
+          lots: '',
+          lotTypes: lotTypes.map(lotType => ({ ...lotType, quantity: '' })),
+          corners: '',
           lotsErr: null,
         });
 
@@ -172,7 +170,7 @@ export const Create2 = () => {
       dispatch(manzanasSet(newArr));
 
       setTypesErrors(
-        newArr.map((manzana) => ({
+        newArr.map(manzana => ({
           manzana: manzana.num,
           error: false,
           completed: true,
@@ -180,7 +178,7 @@ export const Create2 = () => {
       );
 
       setCornersErrors(
-        newArr.map((manzana) => ({
+        newArr.map(manzana => ({
           manzana: manzana.num,
           error: false,
         }))
@@ -195,9 +193,9 @@ export const Create2 = () => {
     let counterTypes = 0;
 
     setFormValues(
-      formValues.map((manzana) => {
+      formValues.map(manzana => {
         if (manzana.num === num) {
-          manzana.lotTypes.forEach((lotType) => {
+          manzana.lotTypes.forEach(lotType => {
             counterTypes += +lotType.quantity;
           });
           manzana.lots = value;
@@ -224,7 +222,7 @@ export const Create2 = () => {
 
     if (+counterTypes > +counter) {
       setTypesErrors(
-        typesErrors.map((typeError) => {
+        typesErrors.map(typeError => {
           if (typeError?.manzana === num) {
             typeError.error = true;
             typeError.completed = true;
@@ -241,7 +239,7 @@ export const Create2 = () => {
 
     if (+counterTypes === +counter) {
       setTypesErrors(
-        typesErrors.map((typeError) => {
+        typesErrors.map(typeError => {
           if (typeError?.manzana === num) {
             typeError.error = false;
             typeError.completed = true;
@@ -259,11 +257,11 @@ export const Create2 = () => {
     let currentLots;
 
     setFormValues(
-      formValues.map((manzana) => {
+      formValues.map(manzana => {
         if (manzana.num === num) {
           currentLots = manzana.lots;
 
-          manzana.lotTypes.map((lotType) => {
+          manzana.lotTypes.map(lotType => {
             if (lotType.type === type) {
               lotType.quantity = value;
             }
@@ -278,7 +276,7 @@ export const Create2 = () => {
 
     if (+counter > +currentLots) {
       setTypesErrors(
-        typesErrors.map((typeError) => {
+        typesErrors.map(typeError => {
           if (typeError?.manzana === num) {
             typeError.error = true;
             typeError.completed = true;
@@ -293,7 +291,7 @@ export const Create2 = () => {
       );
     } else if (+counter === +currentLots) {
       setTypesErrors(
-        typesErrors.map((typeError) => {
+        typesErrors.map(typeError => {
           if (typeError?.manzana === num) {
             typeError.error = false;
             typeError.completed = true;
@@ -305,7 +303,7 @@ export const Create2 = () => {
       dispatch(unSetWarning());
     } else {
       setTypesErrors(
-        typesErrors.map((typeError) => {
+        typesErrors.map(typeError => {
           if (typeError?.manzana === num) {
             typeError.error = false;
             typeError.completed = false;
@@ -326,19 +324,19 @@ export const Create2 = () => {
   const isFormValid = () => {
     let counter = 0;
 
-    formValues.forEach((manzana) => (counter += Number(manzana.lots)));
+    formValues.forEach(manzana => (counter += Number(manzana.lots)));
 
     if (counter !== +lots) {
       dispatch(
         setTempError(`Faltan ${Number(lots) - +counter} lotes por registrar`)
       );
       setError(true);
-      return "error";
+      return 'error';
     }
 
-    if (formValues.find((manzana) => +manzana.lots === 0)) {
+    if (formValues.find(manzana => +manzana.lots === 0)) {
       dispatch(setTempError(`No puede haber manzanas sin lotes`));
-      return "error";
+      return 'error';
     }
 
     if (error) {
@@ -349,9 +347,9 @@ export const Create2 = () => {
       return false;
     }
 
-    if (typesErrors.find((typeError) => !typeError.completed)) {
+    if (typesErrors.find(typeError => !typeError.completed)) {
       dispatch(setTempWarning(`Faltan lotes por registrar`));
-      return "error";
+      return 'error';
     }
 
     return true;
@@ -359,12 +357,12 @@ export const Create2 = () => {
 
   const handleNextPage = () => {
     if (isFormValid()) {
-      if (isFormValid() !== "error") {
+      if (isFormValid() !== 'error') {
         dispatch(manzanasSet(formValues));
         dispatch(projectSetPage(page + 1));
       }
     } else {
-      dispatch(setTempError("Debe llenar todos los campos y no tener errores"));
+      dispatch(setTempError('Debe llenar todos los campos y no tener errores'));
     }
   };
 
@@ -373,7 +371,7 @@ export const Create2 = () => {
     let currentManzana;
 
     setFormValues(
-      formValues.map((manzana) => {
+      formValues.map(manzana => {
         if (manzana.num === num) {
           manzana.corners = value;
           currentManzana = manzana;
@@ -386,7 +384,7 @@ export const Create2 = () => {
 
     if (counter > currentManzana.lots) {
       setCornersErrors(
-        cornersErrors.map((cornerError) => {
+        cornersErrors.map(cornerError => {
           if (cornerError.manzana === num) {
             cornerError.error = true;
           }
@@ -400,7 +398,7 @@ export const Create2 = () => {
       );
     } else {
       setCornersErrors(
-        cornersErrors.map((cornerError) => {
+        cornersErrors.map(cornerError => {
           if (cornerError.manzana === num) {
             cornerError.error = false;
           }
@@ -414,34 +412,34 @@ export const Create2 = () => {
   };
 
   return (
-    <div className="pb-5 project create">
-      <div className="project__header">
-        <div className="left">
+    <div className='pb-5 project create'>
+      <div className='project__header'>
+        <div className='left'>
           <h3> Registro de Manzanas </h3>
         </div>
-        <div className="right lots">
-          <span className="lots">Lotes totales: {lots}</span>
-          <span className="lots">Lotes restantes: {remainingLots}</span>
+        <div className='right lots'>
+          <span className='lots'>Lotes totales: {lots}</span>
+          <span className='lots'>Lotes restantes: {remainingLots}</span>
         </div>
       </div>
 
-      <div className="card-grid">
+      <div className='card-grid'>
         {manzanas.map(({ num, lots, corners }, index) => (
-          <div className="card edit" key={num}>
-            <div className="card__header">
-              <img src="../assets/img/apple.png" alt="" />
+          <div className='card edit' key={num}>
+            <div className='card__header'>
+              <img src='../assets/img/apple.png' alt='' />
               <h4>Manzana {num}</h4>
             </div>
 
-            <div className="card__body">
-              <div className="full">
-                <div className={`${error && "error"} card__body__item `}>
+            <div className='card__body'>
+              <div className='full'>
+                <div className={`${error && 'error'} card__body__item `}>
                   <label htmlFor={`manzana${num}-lots`}>Numero de lotes:</label>
                   <input
-                    onChange={(e) => {
+                    onChange={e => {
                       handleLotsChange(e.target, num);
                     }}
-                    type="number"
+                    type='number'
                     name={`manzana${num}-lots`}
                     value={lots}
                   />
@@ -453,24 +451,23 @@ export const Create2 = () => {
                       key={type}
                       className={`${
                         typesErrors?.find(
-                          (typeError) => typeError.manzana === num
-                        )?.error && "error"
+                          typeError => typeError.manzana === num
+                        )?.error && 'error'
                       } ${
                         typesErrors?.find(
-                          (typeError) => typeError.manzana === num
+                          typeError => typeError.manzana === num
                         )?.completed
-                          ? "completed"
-                          : "warning"
-                      } card__body__item `}
-                    >
+                          ? 'completed'
+                          : 'warning'
+                      } card__body__item `}>
                       <label htmlFor={`manzana${num}-type-${type}`}>
                         Número de lotes tipo "{type.toUpperCase()}":
                       </label>
                       <input
-                        onChange={(e) =>
+                        onChange={e =>
                           handlelotTypeChange(e.target, type, num, index)
                         }
-                        type="number"
+                        type='number'
                         name={`manzana${num}-type-${type}`}
                         value={quantity}
                       />
@@ -481,16 +478,15 @@ export const Create2 = () => {
                 <div
                   className={`${
                     cornersErrors?.find(
-                      (cornerError) => cornerError.manzana === num
-                    )?.error && "error"
-                  } card__body__item `}
-                >
+                      cornerError => cornerError.manzana === num
+                    )?.error && 'error'
+                  } card__body__item `}>
                   <label htmlFor={`manzana${num}-corners`}>
                     Número de lotes en equinas
                   </label>
                   <input
-                    onChange={(e) => handleCornerChange(e.target, num)}
-                    type="number"
+                    onChange={e => handleCornerChange(e.target, num)}
+                    type='number'
                     name={`manzana${num}-corners`}
                     value={corners}
                   />
@@ -501,11 +497,11 @@ export const Create2 = () => {
         ))}
       </div>
 
-      <div className="project-create-btns mt-5">
-        <button onClick={handlePrevPage} className="btn btn-cancel">
+      <div className='project-create-btns mt-5'>
+        <button onClick={handlePrevPage} className='btn btn-cancel'>
           Anterior
         </button>
-        <button onClick={handleNextPage} className="btn btn-next">
+        <button onClick={handleNextPage} className='btn btn-next'>
           Siguiente
         </button>
       </div>
