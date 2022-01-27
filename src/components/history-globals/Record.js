@@ -101,6 +101,7 @@ export const Record = ({ record, payment, key }) => {
         setRecordField('state', res.lot.state);
         updateLot();
         dispatch(setTempSuccessNotice('El lote se actualizo con exito'));
+        dispatch(historySetRecordInfo({ ..._record, state: res.lot.state }));
         return updateLot();
       })
       .catch(err =>

@@ -186,25 +186,45 @@ export const PayExtraCharge = () => {
 
     dispatch(uiFinishLoading());
 
-    if (res) {
-      if (res.status === 'OK') {
-        const modalInfo = {
-          title: `Pago realizado con éxito`,
-          text: `pago por la cantidad de $${amount1}`,
-          link: `/proyectos/ver/${record.project}/lote/${record.lot}`,
-          okMsg: 'Continuar',
-          closeMsg: null,
-          type: redTypes.project,
-        };
+    if (!res || res?.status !== 'OK') {
+      dispatch(
+        setTempError(res?.message || 'Ocurrio un error al registrar el pago')
+      );
 
-        dispatch(modalUpdate(modalInfo));
-        dispatch(modalEnable());
-      } else {
-        dispatch(setTempError('Hubo un problema con la base de datos'));
-
-        return;
-      }
+      return;
     }
+
+    dispatch(
+      modalUpdate({
+        title: 'Pago exitoso',
+        text: `Pago por la cantidad de $${amount1}`,
+        link: `/proyectos/ver/${record.project}/lote/${record.lot}`,
+        okMsg: 'Continuar',
+        closeMsg: null,
+        type: redTypes.project,
+      })
+    );
+    dispatch(modalEnable());
+    dispatch(uiFinishLoading());
+    if (!res || res?.status !== 'OK') {
+      dispatch(
+        setTempError(res?.message || 'Ocurrio un error al registrar el pago')
+      );
+
+      return;
+    }
+
+    dispatch(
+      modalUpdate({
+        title: 'Pago exitoso',
+        text: `Pago por la cantidad de $${amount1}`,
+        link: `/proyectos/ver/${record.project}/lote/${record.lot}`,
+        okMsg: 'Continuar',
+        closeMsg: null,
+        type: redTypes.project,
+      })
+    );
+    dispatch(modalEnable());
   };
 
   const postPayment = data => {
@@ -225,7 +245,7 @@ export const PayExtraCharge = () => {
       })
       .catch(err => {
         console.log(err);
-        // dispatch(uiFinishLoading());
+        dispatch(uiFinishLoading());
       });
 
     return res;

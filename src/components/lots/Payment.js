@@ -230,7 +230,7 @@ export const Payment = () => {
       })
       .catch(err => {
         console.log(err);
-        // dispatch(uiFinishLoading());
+        dispatch(uiFinishLoading());
       });
 
     if (res) {

@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { redTypes } from "../../types/reduxTypes";
-import { lotTypesModalConfirmReset } from "../../actions/lotTypes";
-import { newLotsSet } from "../../actions/newLots";
-import { projectSet, projectSetPage } from "../../actions/project";
-// import { setTempError, setTempWarning, uiFinishLoading, uiStartLoading } from '../../actions/ui';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { redTypes } from '../../types/reduxTypes';
+import { lotTypesModalConfirmReset } from '../../actions/lotTypes';
+import { newLotsSet } from '../../actions/newLots';
+import { projectSet, projectSetPage } from '../../actions/project';
 import {
   setTempError,
   uiFinishLoading,
   uiStartLoading,
-} from "../../actions/ui";
-import { modalEnable, modalUpdate } from "../../actions/modal";
-import { staticURL } from "../../url";
+} from '../../actions/ui';
+import { modalEnable, modalUpdate } from '../../actions/modal';
+import { staticURL } from '../../url';
 
 export const Create3 = () => {
   const dispatch = useDispatch();
@@ -22,10 +21,11 @@ export const Create3 = () => {
     types: { lotTypes },
     manzanas,
     newLots,
-  } = useSelector((state) => state);
+  } = useSelector(state => state);
   const [lotsSummary, setLotsSummary] = useState([]);
   const [cornersErrors, setCornersErrors] = useState([]);
-  // const [repeatedCorners, setRepeatedCorners] = useState([]);
+
+  console.log(lotTypes);
 
   const {
     notary,
@@ -44,8 +44,8 @@ export const Create3 = () => {
   const handleNextPage = () => {
     const errors = checkCorners();
 
-    if (errors.find((manzana) => manzana.isEmpty)) {
-      dispatch(setTempError("No puede haber esquinas sin número de lote"));
+    if (errors.find(manzana => manzana.isEmpty)) {
+      dispatch(setTempError('No puede haber esquinas sin número de lote'));
     } else {
       createProjectDocument();
     }
@@ -57,26 +57,26 @@ export const Create3 = () => {
     const newLotTypes = [];
 
     if (newLots.length !== 0 && newLots.length === manzanas.length) {
-      manzanas.forEach((manzana) => {
+      manzanas.forEach(manzana => {
         const arrToCompare = newLots.find(
-          (lastLot) => lastLot.manzanaNum === manzana.num
+          lastLot => lastLot.manzanaNum === manzana.num
         );
 
         if (arrToCompare?.corners !== manzana.corners) {
           cornersChanged.push(manzana.num);
         }
 
-        manzana.lotTypes.forEach((lotType) => {
+        manzana.lotTypes.forEach(lotType => {
           if (
             !newLots
-              .find((m) => m.manzanaNum === manzana.num)
-              .lotTypes?.find((l) => l.type === lotType.type)
+              .find(m => m.manzanaNum === manzana.num)
+              .lotTypes?.find(l => l.type === lotType.type)
           ) {
             newLotTypes.push(lotType.type);
           }
 
           const comparingType = arrToCompare?.lotTypes.find(
-            (lot) => lot.type === lotType.type
+            lot => lot.type === lotType.type
           );
 
           if (comparingType) {
@@ -99,38 +99,38 @@ export const Create3 = () => {
       } else {
         const newArrJeje = [];
 
-        newLots.forEach((manzana) => {
+        newLots.forEach(manzana => {
           if (newLotTypes.length > 0) {
             const updatedLotTypes = manzanas.find(
-              (m) => m.num === manzana.manzanaNum
+              m => m.num === manzana.manzanaNum
             )?.lotTypes;
 
-            manzana.lotTypes = updatedLotTypes.map((e) => e);
+            manzana.lotTypes = updatedLotTypes.map(e => e);
 
-            manzana.lotTypes.forEach((lotType) => {
+            manzana.lotTypes.forEach(lotType => {
               lotType.inputs = [];
               for (let i = 1; i <= +lotType.quantity; i++) {
                 lotType.inputs.push({
-                  lotNum: "",
+                  lotNum: '',
                   measures: [],
-                  area: "",
+                  area: '',
                 });
               }
             });
           }
 
           if (manzanasChanged.includes(manzana.manzanaNum)) {
-            manzana.lotTypes.forEach((lotType) => {
+            manzana.lotTypes.forEach(lotType => {
               const updatedLotType = manzanas
-                .find((m) => m.num === manzana.manzanaNum)
-                .lotTypes.find((t) => t.type === lotType.type);
+                .find(m => m.num === manzana.manzanaNum)
+                .lotTypes.find(t => t.type === lotType.type);
 
               lotType.inputs = [];
               for (let i = 1; i <= +updatedLotType.quantity; i++) {
                 lotType.inputs.push({
-                  lotNum: "",
+                  lotNum: '',
                   measures: [],
-                  area: "",
+                  area: '',
                 });
               }
             });
@@ -147,7 +147,7 @@ export const Create3 = () => {
             for (let i = 1; i <= +manzana.corners; i++) {
               manzana.cornersArr.push({
                 manzanaNum: manzana.manzanaNum,
-                lotNum: "",
+                lotNum: '',
               });
             }
           }
@@ -180,26 +180,26 @@ export const Create3 = () => {
     } else {
       const tempLotsArr = [];
 
-      manzanas.forEach((manzana) => {
-        console.log("esta es", manzana);
+      manzanas.forEach(manzana => {
+        console.log('esta es', manzana);
         manzana.cornersArr = [];
         for (let i = 1; i <= +manzana.corners; i++) {
           manzana.cornersArr.push({
             manzanaNum: manzana.manzanaNum,
-            lotNum: "",
+            lotNum: '',
           });
         }
 
         const newLotTypes = [...manzana.lotTypes];
 
-        newLotTypes.forEach((lotType) => {
+        newLotTypes.forEach(lotType => {
           lotType.inputs = [];
           for (let i = 1; i <= +lotType.quantity; i++) {
             lotType.inputs.push({
-              lotNum: "",
+              lotNum: '',
               measures: [],
-              area: "",
-              price: "",
+              area: '',
+              price: '',
             });
           }
         });
@@ -237,11 +237,11 @@ export const Create3 = () => {
     const newArr = lotsSummary;
 
     newArr
-      .find((manzana) => manzana.manzanaNum === manzanaNum)
-      .lotTypes.find((lotType) => lotType.type === type)
+      .find(manzana => manzana.manzanaNum === manzanaNum)
+      .lotTypes.find(lotType => lotType.type === type)
       .inputs[lotNum].measures.push({
-        measureName: "",
-        measure: "",
+        measureName: '',
+        measure: '',
       });
 
     setLotsSummary(newArr);
@@ -254,8 +254,8 @@ export const Create3 = () => {
     const newArr = lotsSummary;
 
     newArr
-      .find((manzana) => manzana.manzanaNum === manzanaNum)
-      .lotTypes.find((lotType) => lotType.type === type)
+      .find(manzana => manzana.manzanaNum === manzanaNum)
+      .lotTypes.find(lotType => lotType.type === type)
       .inputs[lotNum].measures.splice(measureIndex, 1);
 
     setLotsSummary(newArr);
@@ -266,7 +266,7 @@ export const Create3 = () => {
     const newArr = lotsSummary;
 
     const cornersArr = newArr.find(
-      (manzana) => manzana.manzanaNum === manzanaNum
+      manzana => manzana.manzanaNum === manzanaNum
     ).cornersArr;
 
     // if (cornersArr.find(corner => corner.lotNum === target.value)) {
@@ -290,8 +290,8 @@ export const Create3 = () => {
     const newArr = lotsSummary;
 
     newArr
-      .find((manzana) => manzana.manzanaNum === manzanaNum)
-      .lotTypes.find((lotType) => lotType.type === type).inputs[
+      .find(manzana => manzana.manzanaNum === manzanaNum)
+      .lotTypes.find(lotType => lotType.type === type).inputs[
       inputIndex
     ].lotNum = target.value;
 
@@ -304,10 +304,9 @@ export const Create3 = () => {
     const newArr = lotsSummary;
 
     newArr
-      .find((manzana) => manzana.manzanaNum === manzanaNum)
-      .lotTypes.find((lotType) => lotType.type === type).inputs[
-      inputIndex
-    ].area = target.value;
+      .find(manzana => manzana.manzanaNum === manzanaNum)
+      .lotTypes.find(lotType => lotType.type === type).inputs[inputIndex].area =
+      target.value;
 
     setLotsSummary(newArr);
 
@@ -318,8 +317,8 @@ export const Create3 = () => {
     const newArr = lotsSummary;
 
     newArr
-      .find((manzana) => manzana.manzanaNum === manzanaNum)
-      .lotTypes.find((lotType) => lotType.type === type).inputs[
+      .find(manzana => manzana.manzanaNum === manzanaNum)
+      .lotTypes.find(lotType => lotType.type === type).inputs[
       inputIndex
     ].price = target.value;
 
@@ -338,8 +337,8 @@ export const Create3 = () => {
     const newArr = lotsSummary;
 
     newArr
-      .find((manzana) => manzana.manzanaNum === manzanaNum)
-      .lotTypes.find((lotType) => lotType.type === type).inputs[
+      .find(manzana => manzana.manzanaNum === manzanaNum)
+      .lotTypes.find(lotType => lotType.type === type).inputs[
       inputIndex
     ].measures[measureIndex].measure = target.value;
 
@@ -357,8 +356,8 @@ export const Create3 = () => {
     const newArr = lotsSummary;
 
     newArr
-      .find((manzana) => manzana.manzanaNum === manzanaNum)
-      .lotTypes.find((lotType) => lotType.type === type).inputs[
+      .find(manzana => manzana.manzanaNum === manzanaNum)
+      .lotTypes.find(lotType => lotType.type === type).inputs[
       inputIndex
     ].measures[measureIndex].measureName = target.value;
 
@@ -366,21 +365,21 @@ export const Create3 = () => {
     dispatch(newLotsSet(newArr));
   };
 
-  const checkCorners = (arr) => {
+  const checkCorners = arr => {
     const newArr = arr ? arr : lotsSummary;
 
     cornersErrors.splice(0, cornersErrors.length);
 
-    let tempCornerErrors = cornersErrors.map((e) => e);
+    let tempCornerErrors = cornersErrors.map(e => e);
 
-    newArr.forEach((manzana) => {
+    newArr.forEach(manzana => {
       const errObj = {
         manzanaNum: manzana.manzanaNum,
         corners: [],
         isEmpty: false,
       };
 
-      manzana.cornersArr.forEach((corner) => {
+      manzana.cornersArr.forEach(corner => {
         if (+corner.lotNum === 0) {
           errObj.isEmpty = true;
 
@@ -416,13 +415,13 @@ export const Create3 = () => {
   const createProjectDocument = async () => {
     const irregularLotsNumbers = [];
 
-    lotsSummary.forEach((manzana) => {
+    lotsSummary.forEach(manzana => {
       const obj = {
         manzana: manzana.manzanaNum,
         irregularLots: [],
       };
 
-      manzana.lotTypes.forEach((lotType) => {
+      manzana.lotTypes.forEach(lotType => {
         if (!lotType.sameArea) {
           lotType.inputs.forEach(({ lotNum }) => {
             obj.irregularLots.push(+lotNum);
@@ -435,16 +434,16 @@ export const Create3 = () => {
 
     const lots = [];
 
-    lotsSummary.forEach((manzana) => {
+    lotsSummary.forEach(manzana => {
       const corners = manzana.cornersArr.map(({ lotNum }) => +lotNum);
 
       let lotNumCounter = 1;
 
-      manzana.lotTypes.forEach((lotType) => {
+      manzana.lotTypes.forEach(lotType => {
         if (lotType.sameArea) {
           for (let i = 0; i < +lotType.quantity; i++) {
             const irregularLots = irregularLotsNumbers.find(
-              (irr) => irr.manzana === manzana.manzanaNum
+              irr => irr.manzana === manzana.manzanaNum
             ).irregularLots;
 
             while (irregularLots.includes(lotNumCounter)) {
@@ -462,7 +461,7 @@ export const Create3 = () => {
             lotNumCounter++;
           }
         } else {
-          lotType.inputs.forEach((lotInput) => {
+          lotType.inputs.forEach(lotInput => {
             const lot = {
               type: lotType.type,
               lotNumber: +lotInput.lotNum,
@@ -495,7 +494,7 @@ export const Create3 = () => {
       availableServices: services,
       manzanas: manzanas.length + greenAreas.length,
       lots: [],
-      greenAreas: greenAreas.map((ga) => +ga.manzanaNum),
+      greenAreas: greenAreas.map(ga => +ga.manzanaNum),
       lotTypes: lotTypes.map(
         ({ type, sameArea, pricePerM, area, front, side }) => ({
           code: type,
@@ -504,11 +503,11 @@ export const Create3 = () => {
           measures: sameArea
             ? [
                 {
-                  title: "Frente",
+                  title: 'Frente',
                   value: front,
                 },
                 {
-                  title: "Fondo",
+                  title: 'Fondo',
                   value: side,
                 },
               ]
@@ -517,16 +516,16 @@ export const Create3 = () => {
       ),
     };
 
-    console.log("projectDocument", projectDocument);
+    console.log('projectDocument', projectDocument);
 
     const response = await uploadProjectDocument(projectDocument, lots);
 
-    if (response?.status === "OK") {
+    if (response?.status === 'OK') {
       const modalInfo = {
         title: `Proyecto ${project.name} registrado con éxito`,
-        text: "Continúe para agregar documentos al proyecto",
+        text: 'Continúe para agregar documentos al proyecto',
         link: `/proyectos/doc/${response.project._id}`,
-        okMsg: "Continuar",
+        okMsg: 'Continuar',
         closeMsg: null,
         type: redTypes.projectCreate,
       };
@@ -534,14 +533,14 @@ export const Create3 = () => {
       dispatch(modalUpdate(modalInfo));
       dispatch(modalEnable());
     } else {
-      dispatch(setTempError("Ocurrió un error"));
+      dispatch(setTempError('Ocurrió un error'));
     }
 
     console.log(projectDocument, lots);
   };
 
   const uploadProjectDocument = async (projectDocument, lots) => {
-    console.log("Subiendo Proyecto");
+    console.log('Subiendo Proyecto');
 
     const url = `${staticURL}/project/`;
 
@@ -555,22 +554,22 @@ export const Create3 = () => {
     dispatch(uiStartLoading());
 
     const response = await fetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     })
-      .then((response) => {
+      .then(response => {
         dispatch(uiFinishLoading());
         return response.json();
       })
-      .then((data) => {
+      .then(data => {
         console.log(data);
         data.project && dispatch(projectSet(data.project));
         return data;
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
         dispatch(uiFinishLoading());
       });
@@ -579,30 +578,29 @@ export const Create3 = () => {
   };
 
   return (
-    <div className="pb-5 project create">
-      <div className="project__header">
-        <div className="left">
+    <div className='pb-5 project create'>
+      <div className='project__header'>
+        <div className='left'>
           <h3> Registro de lotes </h3>
         </div>
       </div>
 
-      <form className="manzana-lots">
+      <form className='manzana-lots'>
         {/* cornersErrors.find(manz => (manz.manzanaNum === manzanaNum) && (manz.isEmpty)) */}
 
         {lotsSummary.map(({ manzanaNum, cornersArr, lotTypes, show, lots }) => {
           const error = cornersErrors.find(
-            (manz) => manz.manzanaNum === manzanaNum && manz.isEmpty
+            manz => manz.manzanaNum === manzanaNum && manz.isEmpty
           );
 
           return (
             // show && (
             <div
               key={manzanaNum}
-              className={`manzana-lots__card card ${error && "error"}`}
-            >
-              <div className="card__header">
+              className={`manzana-lots__card card ${error && 'error'}`}>
+              <div className='card__header'>
                 <div>
-                  <img src="../assets/img/apple.png" alt="" />
+                  <img src='../assets/img/apple.png' alt='' />
                   <h4>Manzana {manzanaNum}</h4>
                 </div>
                 <p>Lotes: {lots} </p>
@@ -617,18 +615,16 @@ export const Create3 = () => {
                   // className={`form-field corners ${(error && (+corner.lotNum === 0)) && 'error'} ${(warning || isRepeated) && 'warning'}`}
                   <div
                     key={`manzana-${manzanaNum}-corner-${cornerIndex}`}
-                    className={`form-field corners `}
-                  >
+                    className={`form-field corners `}>
                     <label
-                      htmlFor={`manzana-${manzanaNum}-corner-${cornerIndex}`}
-                    >
+                      htmlFor={`manzana-${manzanaNum}-corner-${cornerIndex}`}>
                       Número de lote en esquina ({+cornerIndex + 1}):
                     </label>
                     <input
-                      onChange={(e) =>
+                      onChange={e =>
                         handleChangeCorner(e, manzanaNum, cornerIndex)
                       }
-                      type="number"
+                      type='number'
                       name={`manzana-${manzanaNum}-corner-${cornerIndex}`}
                       value={corner.lotNum}
                     />
@@ -641,23 +637,20 @@ export const Create3 = () => {
                   !sameArea &&
                   +quantity > 0 && (
                     <div
-                      className="manzana-lots__card__content"
-                      key={`${manzanaNum}-${type}`}
-                    >
+                      className='manzana-lots__card__content'
+                      key={`${manzanaNum}-${type}`}>
                       <h4>Lotes tipo "{type.toUpperCase()}"</h4>
                       {inputs.map(({ lotNum, area, measures }, inputIndex) => (
                         <div
                           key={`manzana-${manzanaNum}-${type}-${inputIndex}-lotNum`}
-                          className="manzana-lots__card__inputs"
-                        >
+                          className='manzana-lots__card__inputs'>
                           <div className={`form-field lot-num`}>
                             <label
-                              htmlFor={`manzana-${manzanaNum}-${type}-${inputIndex}-lotNum`}
-                            >
+                              htmlFor={`manzana-${manzanaNum}-${type}-${inputIndex}-lotNum`}>
                               Número de lote:
                             </label>
                             <input
-                              onChange={(e) =>
+                              onChange={e =>
                                 handleChangeLotNum(
                                   e,
                                   manzanaNum,
@@ -665,7 +658,7 @@ export const Create3 = () => {
                                   type
                                 )
                               }
-                              type="number"
+                              type='number'
                               name={`manzana-${manzanaNum}-${type}-${inputIndex}-lotNum`}
                               value={lotNum}
                             />
@@ -673,12 +666,11 @@ export const Create3 = () => {
 
                           <div className={`form-field lot-area`}>
                             <label
-                              htmlFor={`manzana-${manzanaNum}-${type}-${inputIndex}-area`}
-                            >
+                              htmlFor={`manzana-${manzanaNum}-${type}-${inputIndex}-area`}>
                               Área:
                             </label>
                             <input
-                              onChange={(e) =>
+                              onChange={e =>
                                 handleChangeArea(
                                   e,
                                   manzanaNum,
@@ -686,19 +678,18 @@ export const Create3 = () => {
                                   type
                                 )
                               }
-                              type="number"
+                              type='number'
                               name={`manzana-${manzanaNum}-${type}-${inputIndex}-area`}
                               value={area}
                             />
                           </div>
                           <div className={`form-field lot-area`}>
                             <label
-                              htmlFor={`manzana-${manzanaNum}-${type}-${inputIndex}-price`}
-                            >
+                              htmlFor={`manzana-${manzanaNum}-${type}-${inputIndex}-price`}>
                               Precio:
                             </label>
                             <input
-                              onChange={(e) =>
+                              onChange={e =>
                                 handleChangePrice(
                                   e,
                                   manzanaNum,
@@ -706,19 +697,18 @@ export const Create3 = () => {
                                   type
                                 )
                               }
-                              type="number"
+                              type='number'
                               name={`manzana-${manzanaNum}-${type}-${inputIndex}-price`}
                               value={price}
                             />
                           </div>
 
-                          <div className="btn">
+                          <div className='btn'>
                             <button
-                              onClick={(e) => {
+                              onClick={e => {
                                 addMeasure(e, manzanaNum, inputIndex, type);
                               }}
-                              className="add-measure"
-                            >
+                              className='add-measure'>
                               Agregar medida
                             </button>
                           </div>
@@ -727,16 +717,14 @@ export const Create3 = () => {
                             ({ measureName, measure }, measureIndex) => (
                               <div
                                 key={`manzana-${manzanaNum}-${type}-${measureIndex}-lotNum`}
-                                className={`lot-measure`}
-                              >
-                                <div className="name form-field">
+                                className={`lot-measure`}>
+                                <div className='name form-field'>
                                   <label
-                                    htmlFor={`manzana-${manzanaNum}-${type}-${measureIndex}-lotNum-name`}
-                                  >
+                                    htmlFor={`manzana-${manzanaNum}-${type}-${measureIndex}-lotNum-name`}>
                                     Nombre de medida:
                                   </label>
                                   <input
-                                    onChange={(e) =>
+                                    onChange={e =>
                                       handleChangeMeasureName(
                                         e,
                                         manzanaNum,
@@ -745,20 +733,19 @@ export const Create3 = () => {
                                         type
                                       )
                                     }
-                                    type="text"
+                                    type='text'
                                     name={`manzana-${manzanaNum}-${type}-${measureIndex}-lotNum-name`}
                                     value={measureName}
                                   />
                                 </div>
 
-                                <div className="measure form-field">
+                                <div className='measure form-field'>
                                   <label
-                                    htmlFor={`manzana-${manzanaNum}-${type}-${measureIndex}-lotNum-measure`}
-                                  >
+                                    htmlFor={`manzana-${manzanaNum}-${type}-${measureIndex}-lotNum-measure`}>
                                     Medida:
                                   </label>
                                   <input
-                                    onChange={(e) =>
+                                    onChange={e =>
                                       handleChangeMeasure(
                                         e,
                                         manzanaNum,
@@ -767,14 +754,14 @@ export const Create3 = () => {
                                         type
                                       )
                                     }
-                                    type="number"
+                                    type='number'
                                     name={`manzana-${manzanaNum}-${type}-${measureIndex}-lotNum-measure`}
                                     value={measure}
                                   />
                                 </div>
 
                                 <button
-                                  onClick={(e) =>
+                                  onClick={e =>
                                     deleteMeasure(
                                       e,
                                       manzanaNum,
@@ -783,8 +770,7 @@ export const Create3 = () => {
                                       type
                                     )
                                   }
-                                  className="delete-measure"
-                                >
+                                  className='delete-measure'>
                                   &times;
                                 </button>
                               </div>
@@ -801,11 +787,11 @@ export const Create3 = () => {
         })}
       </form>
 
-      <div className="project-create-btns">
-        <button onClick={handlePrevPage} className="btn btn-cancel">
+      <div className='project-create-btns'>
+        <button onClick={handlePrevPage} className='btn btn-cancel'>
           Anterior
         </button>
-        <button onClick={handleNextPage} className="btn btn-next">
+        <button onClick={handleNextPage} className='btn btn-next'>
           Crear Proyecto
         </button>
       </div>

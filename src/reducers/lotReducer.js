@@ -1,4 +1,4 @@
-import { redTypes } from "../types/reduxTypes";
+import { redTypes } from '../types/reduxTypes';
 
 export const lotReducer = (state = { bindings: [] }, action) => {
   switch (action.type) {
@@ -33,7 +33,7 @@ export const lotReducer = (state = { bindings: [] }, action) => {
       return {};
 
     case redTypes.lotAddBinding:
-      state.bindings.push("");
+      state.bindings.push('');
 
       return {
         ...state,

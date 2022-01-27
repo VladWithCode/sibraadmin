@@ -1,34 +1,34 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { redirectSet } from "../../actions/redirect";
-import { useForm } from "../../hooks/useForm";
-import { redTypes } from "../../types/reduxTypes";
-import { floatingButtonSet } from "../../actions/floatingButton";
-import { modalEnable, modalUpdate } from "../../actions/modal";
-import { setLot } from "../../actions/consults";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { redirectSet } from '../../actions/redirect';
+import { useForm } from '../../hooks/useForm';
+import { redTypes } from '../../types/reduxTypes';
+import { floatingButtonSet } from '../../actions/floatingButton';
+import { modalEnable, modalUpdate } from '../../actions/modal';
+import { setLot } from '../../actions/consults';
 import {
   setTempError,
   uiStartLoading,
   uiFinishLoading,
   setTempSuccessNotice,
-} from "../../actions/ui";
-import { staticURL } from "../../url";
-import { getLots } from "../../actions/consults";
-import { ModalDoc } from "../ModalDoc";
+} from '../../actions/ui';
+import { staticURL } from '../../url';
+import { getLots } from '../../actions/consults';
+import { ModalDoc } from '../ModalDoc';
 import {
   projectEnableSvcModal,
   projectUpdateSvcModal,
-} from "../../actions/project";
-import { Bindings } from "./Bindings";
+} from '../../actions/project';
+import { Bindings } from './Bindings';
 
 export const LotEdit = () => {
   const dispatch = useDispatch();
   const { lotId, projectId } = useParams();
-  const { lots, projects, lot } = useSelector((state) => state);
+  const { lots, projects, lot } = useSelector(state => state);
 
-  const currentLot = lots.find((lot) => lot._id === lotId);
-  const currentProject = projects.find((p) => p._id === projectId);
+  const currentLot = lots.find(lot => lot._id === lotId);
+  const currentProject = projects.find(p => p._id === projectId);
 
   const { lotNumber, manzana } = currentLot;
   const { name: projectName } = currentProject;
@@ -43,11 +43,11 @@ export const LotEdit = () => {
   });
 
   const [fileInfo, setFileInfo] = useState({
-    fileName: "",
+    fileName: '',
   });
 
   const [filesNames, handleInputFileChange, reset] = useForm({
-    fileName: "",
+    fileName: '',
   });
 
   const { fileName } = filesNames;
@@ -66,7 +66,7 @@ export const LotEdit = () => {
         `/proyectos/edit/${projectId}/lote/${lotId}`
       )
     );
-    dispatch(floatingButtonSet("pencil", redTypes.projectCreate));
+    dispatch(floatingButtonSet('pencil', redTypes.projectCreate));
 
     for (let key in formFields) {
       checkChanges(key, formFields[key]);
@@ -80,17 +80,17 @@ export const LotEdit = () => {
     const tempEmptyFields = [];
 
     for (let key in formFields) {
-      if (formFields[key].toString().trim() === "") {
+      if (formFields[key].toString().trim() === '') {
         tempEmptyFields.push(key);
-        dispatch(setTempError("Todos los campos son obligatorios"));
+        dispatch(setTempError('Todos los campos son obligatorios'));
       }
     }
 
     measures.forEach((measure, index) => {
       for (let key in measure) {
-        if (measure[key].toString().trim() === "") {
+        if (measure[key].toString().trim() === '') {
           tempEmptyFields.push(`measure-${key}${index}`);
-          dispatch(setTempError("Todos los campos son obligatorios"));
+          dispatch(setTempError('Todos los campos son obligatorios'));
         }
       }
     });
@@ -102,11 +102,11 @@ export const LotEdit = () => {
 
   const cancel = () => {
     const modalInfo = {
-      title: "Cancelar edición",
-      text: "¿Desea cancelar la edición del lote?",
+      title: 'Cancelar edición',
+      text: '¿Desea cancelar la edición del lote?',
       link: `/proyectos/ver/${projectId}/lote/${lotId}`,
-      okMsg: "Sí",
-      closeMsg: "No",
+      okMsg: 'Sí',
+      closeMsg: 'No',
       type: redTypes.projectCreate,
     };
 
@@ -116,8 +116,8 @@ export const LotEdit = () => {
 
   const addRef = () => {
     const newMeasure = {
-      title: "",
-      value: "",
+      title: '',
+      value: '',
     };
 
     setMeasures([...measures, newMeasure]);
@@ -130,7 +130,7 @@ export const LotEdit = () => {
     );
   };
 
-  const deleteMeasure = (index) => {
+  const deleteMeasure = index => {
     measures.splice(index, 1);
     setMeasures(measures);
 
@@ -142,7 +142,7 @@ export const LotEdit = () => {
     );
   };
 
-  const checkEmptyField = (e) => {
+  const checkEmptyField = e => {
     const tempEmptyFields = emptyFields;
 
     if (e.target.value?.trim().length > 0) {
@@ -160,7 +160,7 @@ export const LotEdit = () => {
     setEmptyFields(tempEmptyFields);
   };
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     handleInputChange(e);
     checkEmptyField(e);
     checkChanges(e.target.name, e.target.value);
@@ -211,45 +211,43 @@ export const LotEdit = () => {
       const data = {
         area: +area,
         price: +price,
-        measures: measures.map((m) => ({
+        measures: measures.map(m => ({
           title: m.title,
           value: +m.value,
         })),
         bindings,
       };
 
-      console.log("Información enviada", data);
-
       const url = `${staticURL}/lot/${lot._id}`;
 
       const res = await fetch(url, {
-        method: "PUT",
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           doc: data,
         }),
       })
-        .then((response) => {
+        .then(response => {
           return response.json();
         })
-        .then((data) => {
+        .then(data => {
           console.log(data);
           return data;
         })
-        .catch((err) => {
+        .catch(err => {
           return err;
         });
 
       dispatch(uiFinishLoading());
 
-      if (res.status === "OK") {
+      if (res.status === 'OK') {
         const modalInfo = {
-          title: "Lote actualizado",
-          text: "Se ha actualizado con éxito",
+          title: 'Lote actualizado',
+          text: 'Se ha actualizado con éxito',
           link: `/proyectos/ver/${projectId}/lote/${lotId}`,
-          okMsg: "Continuar",
+          okMsg: 'Continuar',
           closeMsg: null,
           type: redTypes.projectCreate,
         };
@@ -258,7 +256,7 @@ export const LotEdit = () => {
         dispatch(modalEnable());
         dispatch(getLots(projectId));
       } else {
-        dispatch(setTempError("Hubo un error al actualizar el lote"));
+        dispatch(setTempError('Hubo un error al actualizar el lote'));
       }
     }
   };
@@ -268,7 +266,7 @@ export const LotEdit = () => {
 
     for (const binding of bindings) {
       if (binding.length === 0) {
-        dispatch(setTempError("No puede haber colindancias vacías"));
+        dispatch(setTempError('No puede haber colindancias vacías'));
         return false;
       }
     }
@@ -293,24 +291,24 @@ export const LotEdit = () => {
 
     const newForm = new FormData();
 
-    newForm.set("file", file);
-    newForm.set("fileName", name);
+    newForm.set('file', file);
+    newForm.set('fileName', name);
 
     const url = `${staticURL}/lots/${lotId}/file`;
 
     await fetch(url, {
       // Your POST endpoint
-      method: "PUT",
+      method: 'PUT',
       body: newForm,
     })
       .then(
-        (response) => {
+        response => {
           console.log(response);
           return response.json();
         } // if the response is a JSON object
       )
       .then(
-        (success) => {
+        success => {
           console.log(success);
           dispatch(uiFinishLoading());
           dispatch(setTempSuccessNotice(`Archivo ${name} agregado con éxito`));
@@ -319,16 +317,16 @@ export const LotEdit = () => {
 
           dispatch(uiStartLoading());
           fetch(url2)
-            .then((resp) => {
+            .then(resp => {
               console.log(resp);
               return resp.json();
             })
-            .then((data) => {
+            .then(data => {
               dispatch(uiFinishLoading());
               console.log(data);
               dispatch(setLot(data.lot));
             })
-            .catch((err) => console.log(err));
+            .catch(err => console.log(err));
 
           // fetch(`${staticURL}/lots/${id}`)
           //     .then(response => response.json())
@@ -339,9 +337,9 @@ export const LotEdit = () => {
         } // Handle the success response object
       )
       .catch(
-        (error) => {
+        error => {
           console.log(error);
-          dispatch(setTempError("No se pudo subir el archivo"));
+          dispatch(setTempError('No se pudo subir el archivo'));
           dispatch(uiFinishLoading());
         } // Handle the error response object
       );
@@ -352,13 +350,13 @@ export const LotEdit = () => {
     inputFile.value = null;
   };
 
-  const handleDeleteFile = (fileName) => {
+  const handleDeleteFile = fileName => {
     const modalInfo = {
-      title: "Eliminar documento",
+      title: 'Eliminar documento',
       text: `¿Desea eliminar el documento: ${fileName}?`,
       input: null,
-      okMsg: "Eliminar",
-      closeMsg: "Cancelar",
+      okMsg: 'Eliminar',
+      closeMsg: 'Cancelar',
     };
 
     setFileInfo({ fileName });
@@ -368,7 +366,7 @@ export const LotEdit = () => {
   };
 
   return (
-    <div className="pb-5 project create">
+    <div className='pb-5 project create'>
       <ModalDoc
         fileName={fileInfo.fileName}
         type={redTypes.lot}
@@ -376,8 +374,8 @@ export const LotEdit = () => {
         projectId={projectId}
       />
 
-      <div className="project__header">
-        <div className="left">
+      <div className='project__header'>
+        <div className='left'>
           <h3> Edición del Lote </h3>
         </div>
         {/* <div className="right">
@@ -387,63 +385,61 @@ export const LotEdit = () => {
                 </div> */}
       </div>
 
-      <div className="card edit">
-        <div className="card__header">
-          <img src="../assets/img/lots.png" alt="" />
+      <div className='card edit'>
+        <div className='card__header'>
+          <img src='../assets/img/lots.png' alt='' />
           <h4>Información del Lote</h4>
         </div>
-        <div className="card__body">
-          <div className="right">
-            <div className="card__body__item">
+        <div className='card__body'>
+          <div className='right'>
+            <div className='card__body__item'>
               <span>Proyecto</span>
               <p> {projectName} </p>
             </div>
-            <div className="card__body__item">
+            <div className='card__body__item'>
               <span>Número de Lote</span>
               <p> {lotNumber} </p>
             </div>
-            <div className="card__body__item">
+            <div className='card__body__item'>
               <span>Número de Manzana</span>
               <p> {manzana} </p>
             </div>
             <div
               className={`card__body__item ${
-                emptyFields.includes("area") && "error"
-              } mt-5`}
-            >
-              <label htmlFor="area">Área</label>
+                emptyFields.includes('area') && 'error'
+              } mt-5`}>
+              <label htmlFor='area'>Área</label>
               <input
                 onChange={handleChange}
-                className={`${hasChanged.includes("area") && "changed"}`}
-                name="area"
-                type="number"
-                autoComplete="off"
+                className={`${hasChanged.includes('area') && 'changed'}`}
+                name='area'
+                type='number'
+                autoComplete='off'
                 value={area}
               />
             </div>
             <div
               className={`card__body__item ${
-                emptyFields.includes("price") && "error"
-              }`}
-            >
-              <label htmlFor="price">Precio</label>
+                emptyFields.includes('price') && 'error'
+              }`}>
+              <label htmlFor='price'>Precio</label>
               <input
                 onChange={handleChange}
-                className={`${hasChanged.includes("price") && "changed"}`}
+                className={`${hasChanged.includes('price') && 'changed'}`}
                 autoFocus
-                name="price"
-                type="number"
-                autoComplete="off"
+                name='price'
+                type='number'
+                autoComplete='off'
                 value={price}
               />
             </div>
           </div>
-          <div className="left">
-            <div className="card__header">
-              <img src="../assets/img/info.png" alt="" />
+          <div className='left'>
+            <div className='card__header'>
+              <img src='../assets/img/info.png' alt='' />
               <h4>Medidas</h4>
 
-              <button onClick={addRef} className="add-ref">
+              <button onClick={addRef} className='add-ref'>
                 Agregar medida
               </button>
             </div>
@@ -452,48 +448,45 @@ export const LotEdit = () => {
                 <div key={`measure${index}`}>
                   <div
                     className={`card__body__item ${
-                      emptyFields.includes(`measure-title${index}`) && "error"
-                    } mt-3`}
-                  >
+                      emptyFields.includes(`measure-title${index}`) && 'error'
+                    } mt-3`}>
                     <button
-                      onClick={(e) => deleteMeasure(index)}
-                      className="delete-area measure"
-                    >
+                      onClick={e => deleteMeasure(index)}
+                      className='delete-area measure'>
                       &times;
                     </button>
                     <label htmlFor={`measure-title${index}`}>
                       Nombre de medida
                     </label>
                     <input
-                      onChange={(e) => handleChangeMeasure(index, e, `title`)}
+                      onChange={e => handleChangeMeasure(index, e, `title`)}
                       className={`${
                         hasChanged.includes(`measure-title${index}`) &&
-                        "changed"
+                        'changed'
                       }`}
                       name={`measure-title${index}`}
-                      type="text"
-                      autoComplete="off"
+                      type='text'
+                      autoComplete='off'
                       value={measure.title}
                     />
                   </div>
                   <div
                     key={measure._id}
                     className={`card__body__item ${
-                      emptyFields.includes(`measure-value${index}`) && "error"
-                    }`}
-                  >
+                      emptyFields.includes(`measure-value${index}`) && 'error'
+                    }`}>
                     <label htmlFor={`measure-value${index}`}>
-                      Medida en m<sup>2</sup>{" "}
+                      Medida en m<sup>2</sup>{' '}
                     </label>
                     <input
-                      onChange={(e) => handleChangeMeasure(index, e, "value")}
+                      onChange={e => handleChangeMeasure(index, e, 'value')}
                       className={`${
                         hasChanged.includes(`measure-value${index}`) &&
-                        "changed"
+                        'changed'
                       }`}
                       name={`measure-value${index}`}
-                      type="text"
-                      autoComplete="off"
+                      type='text'
+                      autoComplete='off'
                       value={measure.value}
                     />
                   </div>
@@ -503,27 +496,27 @@ export const LotEdit = () => {
         </div>
       </div>
 
-      <div className="card-grid mt-2">
-        <div className="card edit">
-          <div className="card__body">
-            <div className="full">
-              <div className=" card__header">
-                <img src="../assets/img/docs.png" alt="" />
+      <div className='card-grid mt-2'>
+        <div className='card edit'>
+          <div className='card__body'>
+            <div className='full'>
+              <div className=' card__header'>
+                <img src='../assets/img/docs.png' alt='' />
                 <h4>Documentos Disponibles</h4>
               </div>
               <input
-                onInput={(e) => {
-                  onFileInput(e, "file");
+                onInput={e => {
+                  onFileInput(e, 'file');
                 }}
-                type="file"
-                name="file"
+                type='file'
+                name='file'
               />
-              <div className="file-form mt-2">
+              <div className='file-form mt-2'>
                 <div className={`card__body__item`}>
-                  <label htmlFor="fileName">Nombre del Archivo</label>
+                  <label htmlFor='fileName'>Nombre del Archivo</label>
                   <input
-                    type="text"
-                    name="fileName"
+                    type='text'
+                    name='fileName'
                     onChange={handleInputFileChange}
                     value={fileName}
                   />
@@ -532,26 +525,23 @@ export const LotEdit = () => {
                   disabled={
                     fileName.length >= 3 && filesDoc.file ? false : true
                   }
-                  className="upload"
-                  onClick={(e) => {
+                  className='upload'
+                  onClick={e => {
                     uploadFile(filesDoc.file, fileName);
-                  }}
-                >
-                  {" "}
+                  }}>
                   Subir archivo
                 </button>
               </div>
 
-              <div className="scroll mt-3">
-                <div className="card__body__list">
+              <div className='scroll mt-3'>
+                <div className='card__body__list'>
                   {files.map(({ name }) => (
                     <div
                       onClick={() => {
                         handleDeleteFile(name, redTypes.project);
                       }}
                       key={name}
-                      className="card__body__list__doc"
-                    >
+                      className='card__body__list__doc'>
                       <p>{name}</p>
                     </div>
                   ))}
@@ -564,11 +554,11 @@ export const LotEdit = () => {
         {bindings && <Bindings bindings={bindings} />}
       </div>
 
-      <div className="form-buttons">
-        <button className="cancel" onClick={cancel}>
+      <div className='form-buttons'>
+        <button className='cancel' onClick={cancel}>
           Cancelar
         </button>
-        <button className="next" onClick={handleSave}>
+        <button className='next' onClick={handleSave}>
           Guardar Cambios
         </button>
       </div>

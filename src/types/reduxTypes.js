@@ -23,7 +23,7 @@ export const redTypes = {
   getClients: '[GET] Clients',
 
   setLot: '[Lot] Set',
-
+  updateLot: '[Lot] Update',
   lotCreate: '[Lot] Create',
   lotEdit: '[Lot] Edit',
 

@@ -1,14 +1,14 @@
-import React from "react";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { NavLink, Redirect } from "react-router-dom";
-import { useForm } from "../../hooks/useForm";
-import { modalUpdate } from "../../actions/modal";
-import { getClients, getProjects, getRecords } from "../../actions/consults";
-import { floatingButtonSet } from "../../actions/floatingButton";
-import { lotTypesSet } from "../../actions/lotTypes";
-import { redTypes } from "../../types/reduxTypes";
-import { projectReset } from "../../actions/project";
+import React from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { NavLink, Redirect } from 'react-router-dom';
+import { useForm } from '../../hooks/useForm';
+import { modalUpdate } from '../../actions/modal';
+import { getClients, getProjects, getRecords } from '../../actions/consults';
+import { floatingButtonSet } from '../../actions/floatingButton';
+import { lotTypesSet } from '../../actions/lotTypes';
+import { redTypes } from '../../types/reduxTypes';
+import { projectReset } from '../../actions/project';
 
 export const Projects = React.memo(
   ({
@@ -16,9 +16,9 @@ export const Projects = React.memo(
       location: { pathname },
     },
   }) => {
-    const { redirect, projects } = useSelector((state) => state);
+    const { redirect, projects } = useSelector(state => state);
 
-    const [searchInput, handleInputChange] = useForm({ inputSearch: "" });
+    const [searchInput, handleInputChange] = useForm({ inputSearch: '' });
 
     const { inputSearch } = searchInput;
 
@@ -28,16 +28,16 @@ export const Projects = React.memo(
 
     useEffect(() => {
       const modalInfo = {
-        title: "Crear nuevo proyecto",
-        text: "¿Desea crear un proyecto nuevo?",
-        link: "/proyectos/nuevo",
-        okMsg: "Sí",
-        closeMsg: "No",
+        title: 'Crear nuevo proyecto',
+        text: '¿Desea crear un proyecto nuevo?',
+        link: '/proyectos/nuevo',
+        okMsg: 'Sí',
+        closeMsg: 'No',
       };
 
       dispatch(modalUpdate(modalInfo));
 
-      dispatch(floatingButtonSet("plus", redTypes.projects));
+      dispatch(floatingButtonSet('plus', redTypes.projects));
       dispatch(getProjects());
       dispatch(lotTypesSet(true, {}));
       dispatch(projectReset());
@@ -46,12 +46,12 @@ export const Projects = React.memo(
       dispatch(getRecords());
     }, [dispatch]);
 
-    const handleSearch = (e) => {
+    const handleSearch = e => {
       e.preventDefault();
       handleInputChange(e);
       const search = e.target.value;
       setFoundProjects(
-        projects.filter((p) =>
+        projects.filter(p =>
           p.name.toLowerCase().includes(search.toLowerCase())
         )
       );
@@ -60,23 +60,23 @@ export const Projects = React.memo(
     const dispProjects = foundProjects.length >= 1 ? foundProjects : projects;
 
     return (
-      <div className="app-screen projects-screen">
-        <div className="app-screen__title projects-screen-top">
-          <h1 className="app-screen__title">Proyectos</h1>
-          <form className="search">
+      <div className='app-screen projects-screen'>
+        <div className='app-screen__title projects-screen-top'>
+          <h1 className='app-screen__title'>Proyectos</h1>
+          <form className='search'>
             <svg>
               <use href={`../assets/svg/search.svg#search`}></use>
             </svg>
             <input
-              type="text"
-              name="inputSearch"
+              type='text'
+              name='inputSearch'
               value={inputSearch}
               onChange={handleSearch}
             />
           </form>
         </div>
 
-        <div className="projects">
+        <div className='projects'>
           {dispProjects?.map(
             ({
               name,
@@ -87,31 +87,31 @@ export const Projects = React.memo(
               reservedLots,
               liquidatedLots,
               availableLots,
+              deliveredLots,
             }) => {
               return (
                 <NavLink
                   key={_id}
-                  className="projects__card"
-                  to={`./proyectos/ver/${_id}`}
-                >
-                  <span className="available-lots">{totalLots} lotes</span>
-                  <div className="lots-info">
+                  className='projects__card'
+                  to={`./proyectos/ver/${_id}`}>
+                  <span className='available-lots'>{totalLots} lotes</span>
+                  <div className='lots-info'>
                     <span>
                       <strong>{reservedLots}</strong> apartados
                     </span>
 
                     <span>
-                      <strong>{liquidatedLots}</strong> liquidados
+                      <strong>{deliveredLots}</strong> entregados
                     </span>
 
                     <span>
                       <strong>{availableLots}</strong> disponibles
                     </span>
                   </div>
-                  <div className="main-info">
-                    <span className="association">{associationName}</span>
+                  <div className='main-info'>
+                    <span className='association'>{associationName}</span>
                     <h4>{name}</h4>
-                    <p className="description">{description}</p>
+                    <p className='description'>{description}</p>
                   </div>
                 </NavLink>
               );
