@@ -1,29 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
-import { getClient, getClients } from "../../actions/consults";
-import { useForm } from "../../hooks/useForm";
-import { redTypes } from "../../types/reduxTypes";
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { getClient, getClients } from '../../actions/consults';
+import { useForm } from '../../hooks/useForm';
+import { redTypes } from '../../types/reduxTypes';
 import {
   setTempSuccessNotice,
   uiStartLoading,
   uiFinishLoading,
   setTempError,
-} from "../../actions/ui";
-import { redirectSet } from "../../actions/redirect";
-import { floatingButtonSet } from "../../actions/floatingButton";
-import { modalUpdate, modalEnable } from "../../actions/modal";
-import { staticURL } from "../../url";
+} from '../../actions/ui';
+import { redirectSet } from '../../actions/redirect';
+import { floatingButtonSet } from '../../actions/floatingButton';
+import { modalUpdate, modalEnable } from '../../actions/modal';
+import { staticURL } from '../../url';
 import {
   projectEnableSvcModal,
   projectUpdateSvcModal,
-} from "../../actions/project";
-import { ModalDoc } from "../ModalDoc";
+} from '../../actions/project';
+import { ModalDoc } from '../ModalDoc';
 
 // floatingButtonSet
 
 export const ClientAddDocuments = () => {
-  const { client } = useSelector((state) => state);
+  const { client } = useSelector(state => state);
   const dispatch = useDispatch();
   const { clientId } = useParams();
 
@@ -34,7 +34,7 @@ export const ClientAddDocuments = () => {
   });
 
   const [filesNames, handleInputChange, reset] = useForm({
-    fileName: "",
+    fileName: '',
   });
 
   const { fileName } = filesNames;
@@ -42,27 +42,27 @@ export const ClientAddDocuments = () => {
   const [fileNames, setFileNames] = useState({});
 
   const [fileInfo, setFileInfo] = useState({
-    fileName: "",
-    type: "",
+    fileName: '',
+    type: '',
   });
 
   const types = {
-    client: "client",
-    aval: "aval",
+    client: 'client',
+    aval: 'aval',
   };
 
   useEffect(() => {
     dispatch(getClient(clientId));
     dispatch(redirectSet(redTypes.clients, `/clientes/docs/${clientId}`));
-    dispatch(floatingButtonSet("pencil", redTypes.projectCreate));
+    dispatch(floatingButtonSet('pencil', redTypes.projectCreate));
 
     const tempFileNames = {};
 
     const tempFileDocs = {};
 
     refs?.forEach((ref, index) => {
-      tempFileNames[`fileName${index}`] = "";
-      tempFileDocs[`file${index}`] = "";
+      tempFileNames[`fileName${index}`] = '';
+      tempFileDocs[`file${index}`] = '';
     });
 
     setFileNames(tempFileNames);
@@ -89,7 +89,7 @@ export const ClientAddDocuments = () => {
     if (type === types.aval) {
       setFileNames({
         ...fileNames,
-        [inputName]: "",
+        [inputName]: '',
       });
     }
 
@@ -97,34 +97,26 @@ export const ClientAddDocuments = () => {
 
     const newForm = new FormData();
 
-    newForm.set("file", file);
-    newForm.set("fileName", name);
+    newForm.set('file', file);
+    newForm.set('fileName', name);
 
     const url = `${staticURL}/customer/${clientId}/${
-      type === types.client ? "file" : `ref/${refId}/file`
+      type === types.client ? 'file' : `ref/${refId}/file`
     }`;
 
     await fetch(url, {
       // Your POST endpoint
-      method: "PUT",
+      method: 'PUT',
       body: newForm,
     })
-      .then(
-        (response) => {
-          console.log(response);
-          return response.json();
-        } // if the response is a JSON object
-      )
-      .then(
-        (success) => {
-          console.log(success);
-          dispatch(setTempSuccessNotice(`Archivo ${name} agregado con éxito`));
-        } // Handle the success response object
+      .then(res => res.json())
+      .then(() =>
+        dispatch(setTempSuccessNotice(`Archivo ${name} agregado con éxito`))
       )
       .catch(
-        (error) => {
+        error => {
           console.log(error);
-          dispatch(setTempError("Ocurrió un error con el servidor"));
+          dispatch(setTempError('Ocurrió un error con el servidor'));
         } // Handle the error response object
       );
 
@@ -133,18 +125,18 @@ export const ClientAddDocuments = () => {
     dispatch(getClient(clientId));
 
     const inputFile = document.querySelector(
-      `[name=${type === types.client ? "file" : inputFileName}]`
+      `[name=${type === types.client ? 'file' : inputFileName}]`
     );
     inputFile.value = null;
   };
 
   const handleNext = () => {
     const modalInfo = {
-      title: `Terminar registro`,
-      text: "¿Desea terminar de subir archivos?",
+      title: 'Terminar registro',
+      text: '¿Desea terminar de subir archivos?',
       link: `/clientes/ver/${clientId}`,
-      okMsg: "Terminar",
-      closeMsg: "Cancelar",
+      okMsg: 'Terminar',
+      closeMsg: 'Cancelar',
       type: redTypes.clientEdit,
     };
 
@@ -155,11 +147,11 @@ export const ClientAddDocuments = () => {
 
   const handleDeleteFile = (fileName, type, refId) => {
     const modalInfo = {
-      title: "Eliminar documento",
+      title: 'Eliminar documento',
       text: `¿Desea eliminar el documento: ${fileName}?`,
       input: null,
-      okMsg: "Eliminar",
-      closeMsg: "Cancelar",
+      okMsg: 'Eliminar',
+      closeMsg: 'Cancelar',
       refId,
     };
 
@@ -169,7 +161,7 @@ export const ClientAddDocuments = () => {
     dispatch(projectEnableSvcModal());
   };
 
-  const handleFileNameChange = (e) => {
+  const handleFileNameChange = e => {
     const tempFileNames = fileNames;
 
     tempFileNames[e.target.name] = e.target.value;
@@ -181,7 +173,7 @@ export const ClientAddDocuments = () => {
   };
 
   return (
-    <div className="pb-5 project create">
+    <div className='pb-5 project create'>
       <ModalDoc
         fileName={fileInfo.fileName}
         type={fileInfo.type}
@@ -190,54 +182,54 @@ export const ClientAddDocuments = () => {
 
       {client._id && (
         <>
-          <div className="project__header">
-            <div className="left">
+          <div className='project__header'>
+            <div className='left'>
               <h3> Subida de documentos </h3>
             </div>
           </div>
 
-          <div className="card-grid mt-4">
-            <div className="card">
-              <div className="card__header">
-                <img src="../assets/img/user.png" alt="" />
+          <div className='card-grid mt-4'>
+            <div className='card'>
+              <div className='card__header'>
+                <img src='../assets/img/user.png' alt='' />
                 <h4>Información del Cliente</h4>
               </div>
-              <div className="right">
-                <div className="card__body__item">
+              <div className='right'>
+                <div className='card__body__item'>
                   <span>Nombre(s)</span>
                   <p> {names} </p>
                 </div>
-                <div className="card__body__item">
+                <div className='card__body__item'>
                   <span>Apellido Paterno</span>
                   <p> {patLastname} </p>
                 </div>
                 {matLastname && (
-                  <div className="card__body__item">
+                  <div className='card__body__item'>
                     <span>Apellido materno</span>
                     <p> {matLastname} </p>
                   </div>
                 )}
-                <div className="card__body__item">
+                <div className='card__body__item'>
                   <span>RFC</span>
                   <p> {clientId} </p>
                 </div>
-                <div className="mt-3 card__header">
-                  <img src="../assets/img/docs.png" alt="" />
+                <div className='mt-3 card__header'>
+                  <img src='../assets/img/docs.png' alt='' />
                   <h4>Documentos Disponibles</h4>
                 </div>
                 <input
-                  onInput={(e) => {
-                    onFileInput(e, "file");
+                  onInput={e => {
+                    onFileInput(e, 'file');
                   }}
-                  type="file"
-                  name="file"
+                  type='file'
+                  name='file'
                 />
-                <div className="file-form mt-2">
+                <div className='file-form mt-2'>
                   <div className={`card__body__item`}>
-                    <label htmlFor="fileName">Nombre del Archivo</label>
+                    <label htmlFor='fileName'>Nombre del Archivo</label>
                     <input
-                      type="text"
-                      name="fileName"
+                      type='text'
+                      name='fileName'
                       onChange={handleInputChange}
                       value={fileName}
                     />
@@ -246,26 +238,24 @@ export const ClientAddDocuments = () => {
                     disabled={
                       fileName.length >= 3 && filesDoc.file ? false : true
                     }
-                    className="upload"
-                    onClick={(e) => {
+                    className='upload'
+                    onClick={e => {
                       uploadFile(filesDoc.file, fileName, types.client);
-                    }}
-                  >
-                    {" "}
+                    }}>
+                    {' '}
                     Subir archivo
                   </button>
                 </div>
 
-                <div className="scroll mt-3">
-                  <div className="card__body__list">
+                <div className='scroll mt-3'>
+                  <div className='card__body__list'>
                     {files?.map(({ name }) => (
                       <div
                         onClick={() => {
                           handleDeleteFile(name, types.client);
                         }}
                         key={name}
-                        className="card__body__list__doc"
-                      >
+                        className='card__body__list__doc'>
                         <p>{name}</p>
                       </div>
                     ))}
@@ -278,44 +268,44 @@ export const ClientAddDocuments = () => {
               const currentFileName = fileNames[`fileName${index}`];
 
               return (
-                <div className="card" key={index}>
-                  <div className="card__header">
-                    <img src="../assets/img/aval.png" alt="" />
+                <div className='card' key={index}>
+                  <div className='card__header'>
+                    <img src='../assets/img/aval.png' alt='' />
                     <h4>Referencia personal {index + 1}</h4>
                   </div>
-                  <div className="mt-3" key={ref._id}>
-                    <div className="card__body__item">
+                  <div className='mt-3' key={ref._id}>
+                    <div className='card__body__item'>
                       <span>Nombre(s)</span>
                       <p> {ref.names} </p>
                     </div>
-                    <div className="card__body__item">
+                    <div className='card__body__item'>
                       <span>Apellido Paterno</span>
                       <p> {ref.patLastname} </p>
                     </div>
                     {ref.matLastname && (
-                      <div className="card__body__item">
+                      <div className='card__body__item'>
                         <span>Apellido materno</span>
                         <p> {ref.matLastname} </p>
                       </div>
                     )}
-                    <div className="mt-3 card__header">
-                      <img src="../assets/img/docs.png" alt="" />
+                    <div className='mt-3 card__header'>
+                      <img src='../assets/img/docs.png' alt='' />
                       <h4>Documentos Disponibles</h4>
                     </div>
                     <input
-                      onInput={(e) => {
+                      onInput={e => {
                         onFileInput(e, `file${index}`);
                       }}
-                      type="file"
+                      type='file'
                       name={`file${index}`}
                     />
-                    <div className="file-form mt-2">
+                    <div className='file-form mt-2'>
                       <div className={`card__body__item`}>
                         <label htmlFor={`fileName${index}`}>
                           Nombre del Archivo
                         </label>
                         <input
-                          type="text"
+                          type='text'
                           name={`fileName${index}`}
                           onChange={handleFileNameChange}
                           value={currentFileName}
@@ -328,8 +318,8 @@ export const ClientAddDocuments = () => {
                             ? false
                             : true
                         }
-                        className="upload"
-                        onClick={(e) => {
+                        className='upload'
+                        onClick={e => {
                           uploadFile(
                             filesDoc[`file${index}`],
                             currentFileName,
@@ -338,23 +328,21 @@ export const ClientAddDocuments = () => {
                             `fileName${index}`,
                             `file${index}`
                           );
-                        }}
-                      >
-                        {" "}
+                        }}>
+                        {' '}
                         Subir archivo
                       </button>
                     </div>
 
-                    <div className="scroll mt-3">
-                      <div className="card__body__list">
+                    <div className='scroll mt-3'>
+                      <div className='card__body__list'>
                         {ref.files.map(({ name }) => (
                           <div
                             onClick={() => {
                               handleDeleteFile(name, types.aval, ref._id);
                             }}
                             key={`${ref._id}-${name}`}
-                            className="card__body__list__doc"
-                          >
+                            className='card__body__list__doc'>
                             <p>{name}</p>
                           </div>
                         ))}
@@ -366,8 +354,8 @@ export const ClientAddDocuments = () => {
             })}
           </div>
 
-          <div className="form-buttons">
-            <button onClick={handleNext} className="next">
+          <div className='form-buttons'>
+            <button onClick={handleNext} className='next'>
               Terminar registro
             </button>
           </div>

@@ -20,12 +20,8 @@ export const templatesGet = projectId => {
     dispatch(uiStartLoading());
 
     fetch(url)
-      .then(res => {
-        return res.json();
-      })
+      .then(res => res.json())
       .then(data => {
-        console.log(data);
-
         const editorTemplates = data.templates.map(template => {
           return {
             ...template,

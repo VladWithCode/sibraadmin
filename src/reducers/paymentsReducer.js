@@ -23,7 +23,7 @@ const initialState = {
 
   client: '',
   liquidate: false,
-  history: false,
+  history: true,
 
   extraCharges: [],
 

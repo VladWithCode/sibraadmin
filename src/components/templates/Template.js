@@ -13,11 +13,13 @@ export const Template = () => {
 
   const {
     projects,
-    templates: { currentTemplates },
+    templates: { currentTemplates, variables },
   } = useSelector(state => state);
   const { projectId } = useParams();
 
   const [currentTemplate, setCurrentTemplate] = useState(currentTemplates[0]);
+
+  console.log(currentTemplates);
 
   const projectName = projects.find(p => p._id === projectId)?.name;
 
@@ -25,10 +27,6 @@ export const Template = () => {
     setCurrentTemplate(currentTemplates[0]);
     dispatch(redirectSet(redTypes.templates, `/plantillas/${projectId}`));
   }, [currentTemplates, dispatch, projectId]);
-
-  const {
-    templates: { variables },
-  } = useSelector(state => state);
 
   const handleCopy = ({ target }) => {
     navigator.clipboard.writeText(`%%${target.id.toUpperCase()}%%`);
@@ -52,7 +50,7 @@ export const Template = () => {
     dispatch(modalEnable());
   };
 
-  return (
+  return currentTemplate ? (
     <div className='pb-5 project create template' key={currentTemplate._id}>
       <div className='project__header'>
         <div className='left'>
@@ -129,5 +127,7 @@ export const Template = () => {
         </div>
       </div>
     </div>
+  ) : (
+    <p>Oops</p>
   );
 };

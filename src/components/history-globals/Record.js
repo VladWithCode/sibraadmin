@@ -76,15 +76,13 @@ export const Record = ({ record, payment, key }) => {
   };
 
   const markAsDelivered = () => {
-    fetch(`${staticURL}/lot/${lot}`, {
+    fetch(`${staticURL}/record/${_record._id}`, {
       method: 'put',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        doc: {
-          state: 'delivered',
-        },
+        state: 'delivered',
       }),
     })
       .then(res => res.json())
@@ -98,19 +96,21 @@ export const Record = ({ record, payment, key }) => {
           );
         }
 
-        setRecordField('state', res.lot.state);
+        setRecordField('state', res.record.state);
         updateLot();
         dispatch(setTempSuccessNotice('El lote se actualizo con exito'));
-        dispatch(historySetRecordInfo({ ..._record, state: res.lot.state }));
+        dispatch(historySetRecordInfo({ ..._record, state: res.record.state }));
+
         return updateLot();
       })
-      .catch(err =>
+      .catch(err => {
+        console.error(err);
         dispatch(
           setTempError(
             'Ocurrio un error al intentar conectarse con el servidor'
           )
-        )
-      );
+        );
+      });
   };
 
   const handleOpen = path => {
@@ -138,7 +138,7 @@ export const Record = ({ record, payment, key }) => {
                   className='edit'>
                   editar
                 </Link>
-                {_record.state !== 'delivered' && (
+                {lot.state !== 'delivered' && (
                   <p
                     style={{
                       fontSize: '16px',
@@ -215,10 +215,12 @@ export const Record = ({ record, payment, key }) => {
                   <p> {lapseToPay} </p>
                 </div>
 
-                <div className='card__body__item'>
-                  <span>cantidad por pago</span>
-                  <p> ${minimumPaymentAmount.toLocaleString()} </p>
-                </div>
+                {minimumPaymentAmount && (
+                  <div className='card__body__item'>
+                    <span>cantidad por pago</span>
+                    <p> ${minimumPaymentAmount.toLocaleString()} </p>
+                  </div>
+                )}
               </>
             )}
         </div>

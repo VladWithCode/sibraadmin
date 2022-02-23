@@ -85,7 +85,7 @@ export const Payment = () => {
   };
 
   const pay = async () => {
-    if (+amount === 0) {
+    /* if (+amount === 0) {
       const tempEmptyFields = emptyFields;
 
       if (tempEmptyFields.includes('amount')) {
@@ -100,7 +100,7 @@ export const Payment = () => {
       dispatch(setTempError('Debe ingresar una cantidad de pago'));
 
       return;
-    }
+    } */
 
     const exp = new RegExp(
       /<([a-z]+)\s?(style=".*?")?>(<([a-z]+)\s?(style=".*?")?>(.*?)<\/\4>)<\/\1>/gi
@@ -133,7 +133,7 @@ export const Payment = () => {
         +amount >= record.paymentInfo.lotAmountDue ? 'liquidation' : 'payment',
       amount: +amount,
       markAsNextPayment,
-      payer: payer?.trim().length > 3 || null,
+      payer: payer?.trim() || null,
       content: editTemplate && !prorogate ? templateContent : null,
       payedAt: payedAt,
     };
@@ -175,12 +175,8 @@ export const Payment = () => {
       },
       body: JSON.stringify(data),
     })
-      .then(response => {
-        return response.json();
-      })
-      .then(data => {
-        return data;
-      })
+      .then(res => res.json())
+      .then(data => data)
       .catch(err => {
         console.log(err);
         dispatch(uiFinishLoading());

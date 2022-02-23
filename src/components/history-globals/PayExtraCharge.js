@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { floatingButtonSet } from '../../actions/floatingButton';
+import { getLot } from '../../actions/lot';
 import { modalEnable, modalUpdate } from '../../actions/modal';
 import { extraPaymentSetInfo, paymentSetInfo } from '../../actions/payments';
 import { redirectSet } from '../../actions/redirect';
@@ -181,9 +182,7 @@ export const PayExtraCharge = () => {
     };
 
     dispatch(uiStartLoading());
-
     const res = await postPayment(data);
-
     dispatch(uiFinishLoading());
 
     if (!res || res?.status !== 'OK') {
@@ -194,26 +193,7 @@ export const PayExtraCharge = () => {
       return;
     }
 
-    dispatch(
-      modalUpdate({
-        title: 'Pago exitoso',
-        text: `Pago por la cantidad de $${amount1}`,
-        link: `/proyectos/ver/${record.project}/lote/${record.lot}`,
-        okMsg: 'Continuar',
-        closeMsg: null,
-        type: redTypes.project,
-      })
-    );
-    dispatch(modalEnable());
-    dispatch(uiFinishLoading());
-    if (!res || res?.status !== 'OK') {
-      dispatch(
-        setTempError(res?.message || 'Ocurrio un error al registrar el pago')
-      );
-
-      return;
-    }
-
+    dispatch(getLot(record.lot));
     dispatch(
       modalUpdate({
         title: 'Pago exitoso',
@@ -227,28 +207,23 @@ export const PayExtraCharge = () => {
     dispatch(modalEnable());
   };
 
-  const postPayment = data => {
+  const postPayment = async data => {
     const url = `${staticURL}/records/${record._id}/charge/${extraChargeId}/pay`;
 
-    const res = fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then(response => {
-        return response.json();
-      })
-      .then(data => {
-        return data;
-      })
-      .catch(err => {
-        console.log(err);
-        dispatch(uiFinishLoading());
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
       });
-
-    return res;
+      const data_1 = await res.json();
+      return data_1;
+    } catch (err) {
+      console.log(err);
+      dispatch(uiFinishLoading());
+    }
   };
 
   const handleCopy = ({ target }) => {

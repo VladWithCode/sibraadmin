@@ -8,8 +8,10 @@ import { BreadCrumbs } from '../BreadCrumbs';
 import { floatingButtonSet } from '../../actions/floatingButton';
 import { modalUpdate } from '../../actions/modal';
 import { getClient } from '../../actions/consults';
+import { setTempError, setTempSuccessNotice } from '../../actions/ui';
 import { staticURLDocs } from '../../url';
 import { Record } from '../history-globals/Record';
+import makeServerRequest from '../../helpers/makeServerRequest';
 
 export const Client = () => {
   const { clientId } = useParams();
@@ -82,6 +84,27 @@ export const Client = () => {
     );
   };
 
+  const deleteCustomer = async () => {
+    const { customer, status, message, error } = makeServerRequest(
+      '/customer/' + client._id,
+      'DELETE'
+    );
+
+    if (error || status !== 'OK') {
+      dispatch(
+        setTempError(
+          error?.message ||
+            message ||
+            'Hubo un error al comunicarse con el servidor'
+        )
+      );
+
+      return;
+    }
+
+    dispatch(setTempSuccessNotice('Se elimino con exito el cliente.'));
+  };
+
   if (!client._id) {
     return <>Cargando...</>;
   }
@@ -96,7 +119,11 @@ export const Client = () => {
             <h3> Cliente </h3>
             <span className='span'> {_id} </span>
           </div>
-          <div className='left'></div>
+          <div className='left'>
+            <button className='btn btn-delete' onClick={deleteCustomer}>
+              Eliminar
+            </button>
+          </div>
         </div>
 
         <div className='card'>

@@ -338,7 +338,6 @@ export const ClientEdit = () => {
 
     if (
       (phoneNumber && !isNumberValid(phoneNumber, 'phoneNumber')) ||
-      (email && !isEmailValid(email)) ||
       checkEmptyFields(formFields)
     ) {
       return false;
@@ -368,7 +367,8 @@ export const ClientEdit = () => {
         key !== 'pob' &&
         key !== 'dob' &&
         key !== 'nationality' &&
-        key !== 'rfc'
+        key !== 'rfc' &&
+        key !== 'email'
       ) {
         if (formFields[key]?.toString().trim() === '') {
           tempEmptyFields.push(key);
@@ -426,6 +426,8 @@ export const ClientEdit = () => {
   };
 
   const isEmailValid = email => {
+    if (!email) return true;
+
     const expReg =
       /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
     const isValid = expReg.test(email.toLowerCase());

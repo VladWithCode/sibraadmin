@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   historySetExtraPayment,
   historySetPayment,
-} from "../../actions/historyActions";
+} from '../../actions/historyActions';
 
 export const EditPayment = ({
   payment,
@@ -17,13 +17,13 @@ export const EditPayment = ({
   const { date, payedAt, type, amount, _id } = payment;
 
   const displayType =
-    type === "preReservation"
-      ? "Pre apartado"
-      : type === "payment"
-      ? "Abono"
-      : type === "deposit"
-      ? "Enganche"
-      : "Liquidación";
+    type === 'preReservation'
+      ? 'Pre apartado'
+      : type === 'payment'
+      ? 'Abono'
+      : type === 'deposit'
+      ? 'Enganche'
+      : 'Liquidación';
 
   const [deletePayment, setDeletePayment] = useState(payment.delete);
 
@@ -31,12 +31,12 @@ export const EditPayment = ({
     !extraCharge
       ? {
           amount,
-          payedAt: payedAt?.split("T")[0],
+          payedAt: payedAt?.split('T')[0],
           _id,
         }
       : {
           amount,
-          date: date?.split("T")[0],
+          date: date?.split('T')[0],
           extraChargeId,
         }
   );
@@ -55,9 +55,7 @@ export const EditPayment = ({
       : dispatch(historySetPayment(tempPayment));
   };
 
-  const onInputChange = (e) => {
-    console.log(e.target);
-
+  const onInputChange = e => {
     setFormValues({
       ...formValues,
       [e.target.name]: e.target.value,
@@ -76,38 +74,36 @@ export const EditPayment = ({
 
   return (
     <div
-      className={`left ${index > 1 ? "mt-3" : "mt-2"} ${
-        deletePayment && "deleted"
-      } ${hasChanged && "changed"} `}
-    >
-      <div className="card__header">
+      className={`left ${index > 1 ? 'mt-3' : 'mt-2'} ${
+        deletePayment && 'deleted'
+      } ${hasChanged && 'changed'} `}>
+      <div className='card__header'>
         <h4>Pago</h4>
         <div
           onClick={changeDelete}
-          className={`delete ${deletePayment && "deleted"} `}
-        >
-          {deletePayment ? "recuperar" : "eliminar"}
+          className={`delete ${deletePayment && 'deleted'} `}>
+          {deletePayment ? 'recuperar' : 'eliminar'}
         </div>
       </div>
 
       {extraCharge ? (
         <>
-          <div className="payment">
-            <div className="card__body__item">
+          <div className='payment'>
+            <div className='card__body__item'>
               <span>Fecha de pago</span>
               <input
                 onChange={onInputChange}
-                type="date"
-                name="date"
+                type='date'
+                name='date'
                 value={formValues.date}
               />
             </div>
-            <div className="card__body__item">
+            <div className='card__body__item'>
               <span>Cantidad</span>
               <input
                 onChange={onInputChange}
-                type="number"
-                name="amount"
+                type='number'
+                name='amount'
                 value={formValues.amount}
               />
             </div>
@@ -115,26 +111,26 @@ export const EditPayment = ({
         </>
       ) : (
         <>
-          <div className="payment">
-            <div className="card__body__item">
+          <div className='payment'>
+            <div className='card__body__item'>
               <span>Tipo de pago</span>
               <p> {displayType} </p>
             </div>
-            <div className="card__body__item">
+            <div className='card__body__item'>
               <span>Fecha de pago</span>
               <input
                 onChange={onInputChange}
-                type="date"
-                name="payedAt"
+                type='date'
+                name='payedAt'
                 value={formValues.payedAt}
               />
             </div>
-            <div className="card__body__item">
+            <div className='card__body__item'>
               <span>Cantidad</span>
               <input
                 onChange={onInputChange}
-                type="number"
-                name="amount"
+                type='number'
+                name='amount'
                 value={formValues.amount}
               />
             </div>

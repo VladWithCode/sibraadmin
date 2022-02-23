@@ -125,6 +125,8 @@ export const CreateClient = () => {
 
     const res = await uploadClient(client);
 
+    console.log(res);
+
     dispatch(uiFinishLoading());
 
     if (res.status === 'OK') {
@@ -149,7 +151,7 @@ export const CreateClient = () => {
 
       if (isRepeated) {
         setEmptyFields([key]);
-        dispatch(setTempError(`Ya hay un cliente con el mismo ${dispName}`));
+        dispatch(setTempError(`Ya hay un cliente con el nombre ${dispName}`));
       }
     }
   };

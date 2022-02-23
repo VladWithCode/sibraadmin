@@ -14,9 +14,7 @@ export const historyGetLot = lotId => {
   return dispatch => {
     dispatch(uiStartLoading());
     fetch(url)
-      .then(resp => {
-        return resp.json();
-      })
+      .then(res => res.json())
       .then(data => {
         dispatch(uiFinishLoading());
 
@@ -96,8 +94,12 @@ export const historyPostUpdate = record => {
       },
       body: JSON.stringify(data),
     })
-      .then(async resp => {
-        if (resp.ok) {
+      .then(async res => res.json())
+      .then(data => {
+        dispatch(uiFinishLoading());
+        const { record, status, message, error } = data;
+
+        if (status === 'OK') {
           const modalInfo = {
             title: `Historial actualizado con éxito`,
             text: null,
@@ -107,10 +109,13 @@ export const historyPostUpdate = record => {
             type: redTypes.project,
           };
 
+          dispatch(historySetRecordInfo(data.record));
           dispatch(modalUpdate(modalInfo));
           dispatch(modalEnable());
-          dispatch(uiFinishLoading());
+          return;
         }
+
+        console.log(data);
       })
       .catch(err => console.log(err));
 

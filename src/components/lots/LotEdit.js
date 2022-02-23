@@ -229,35 +229,35 @@ export const LotEdit = () => {
           doc: data,
         }),
       })
-        .then(response => {
-          return response.json();
-        })
-        .then(data => {
-          console.log(data);
-          return data;
-        })
+        .then(res => res.json())
+        .then(data => data)
         .catch(err => {
+          console.log(err);
           return err;
         });
 
       dispatch(uiFinishLoading());
 
-      if (res.status === 'OK') {
-        const modalInfo = {
-          title: 'Lote actualizado',
-          text: 'Se ha actualizado con éxito',
-          link: `/proyectos/ver/${projectId}/lote/${lotId}`,
-          okMsg: 'Continuar',
-          closeMsg: null,
-          type: redTypes.projectCreate,
-        };
-
-        dispatch(modalUpdate(modalInfo));
-        dispatch(modalEnable());
-        dispatch(getLots(projectId));
-      } else {
-        dispatch(setTempError('Hubo un error al actualizar el lote'));
+      if (res.status !== 'OK') {
+        console.log(res);
+        dispatch(
+          setTempError(res.message || 'Hubo un error al actualizar el lote')
+        );
+        return;
       }
+
+      const modalInfo = {
+        title: 'Lote actualizado',
+        text: 'Se ha actualizado con éxito',
+        link: `/proyectos/ver/${projectId}/lote/${lotId}`,
+        okMsg: 'Continuar',
+        closeMsg: null,
+        type: redTypes.projectCreate,
+      };
+
+      dispatch(modalUpdate(modalInfo));
+      dispatch(modalEnable());
+      dispatch(getLots(projectId));
     }
   };
 
@@ -301,41 +301,20 @@ export const LotEdit = () => {
       method: 'PUT',
       body: newForm,
     })
-      .then(
-        response => {
-          console.log(response);
-          return response.json();
-        } // if the response is a JSON object
-      )
-      .then(
-        success => {
-          console.log(success);
-          dispatch(uiFinishLoading());
-          dispatch(setTempSuccessNotice(`Archivo ${name} agregado con éxito`));
+      .then(res => res.json())
+      .then(data => {
+        dispatch(uiFinishLoading());
+        dispatch(setTempSuccessNotice(`Archivo ${name} agregado con éxito`));
 
-          const url2 = `${staticURL}/lots/${lotId}`;
-
-          dispatch(uiStartLoading());
-          fetch(url2)
-            .then(resp => {
-              console.log(resp);
-              return resp.json();
-            })
-            .then(data => {
-              dispatch(uiFinishLoading());
-              console.log(data);
-              dispatch(setLot(data.lot));
-            })
-            .catch(err => console.log(err));
-
-          // fetch(`${staticURL}/lots/${id}`)
-          //     .then(response => response.json())
-          //     .then(data => {
-          //         dispatch(setLot(data.lot))
-          //     })
-          //     .catch(err => console.log(err))
-        } // Handle the success response object
-      )
+        dispatch(uiStartLoading());
+        fetch(`${staticURL}/lots/${lotId}`)
+          .then(res => res.json())
+          .then(data => {
+            dispatch(uiFinishLoading());
+            dispatch(setLot(data.lot));
+          })
+          .catch(err => console.log(err));
+      })
       .catch(
         error => {
           console.log(error);

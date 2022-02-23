@@ -35,7 +35,6 @@ import { Template } from '../components/templates/Template';
 
 export const AppRouter = () => {
   const { loading } = useSelector(state => state.ui);
-
   return (
     <Router>
       <>
