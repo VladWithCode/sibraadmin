@@ -8,6 +8,7 @@ import {
 } from '../../actions/historyActions';
 import { modalEnable, modalUpdate } from '../../actions/modal';
 import { redirectSet } from '../../actions/redirect';
+import generalHelpers from '../../helpers/generalHelpers';
 import { redTypes } from '../../types/reduxTypes';
 import { ClientShort } from '../clients/ClientShort';
 import { ExtraPaymentsEdit } from './ExtraPaymentsEdit';
@@ -20,7 +21,6 @@ export const UpdateRecord = () => {
   const { recordId } = useParams();
 
   const {
-    records,
     historyActions: { lot: currentLot, record },
     clients,
   } = useSelector(state => state);
@@ -31,8 +31,6 @@ export const UpdateRecord = () => {
     c => c._id === currentLot.record?.customer
   );
 
-  const currentRecord = records.find(r => r._id === recordId);
-
   const [emptyFields] = useState([]);
 
   const [formValues, setFormValues] = useState({
@@ -42,19 +40,14 @@ export const UpdateRecord = () => {
       lapseToPay: record.paymentInfo.lapseToPay,
       lapseType: record.paymentInfo.lapseType,
       paymentsDate: record.paymentInfo.paymentsDate,
+      minimumPaymentAmount: record.paymentInfo.minimumPaymentAmount,
     },
   });
 
   const {
     paymentInfo,
-    paymentInfo: { lapseToPay, lapseType, paymentsDate },
+    paymentInfo: { lapseToPay, lapseType, paymentsDate, minimumPaymentAmount },
   } = formValues;
-
-  const minimumPaymentAmount = (
-    (+currentRecord?.paymentInfo.lotPrice -
-      +currentRecord?.paymentInfo.depositAmount) /
-    +lapseToPay
-  ).toLocaleString();
 
   useEffect(() => {
     dispatch(floatingButtonSet('pencil', redTypes.projectCreate));
@@ -283,10 +276,14 @@ export const UpdateRecord = () => {
                 )}
               </div>
 
-              <div className='card__body__item'>
-                <span>cantidad por pago</span>
-                <p> ${minimumPaymentAmount} </p>
-              </div>
+              {minimumPaymentAmount ? (
+                <div className='card__body__item'>
+                  <span>cantidad por pago</span>
+                  <p> ${generalHelpers.priceToString(minimumPaymentAmount)} </p>
+                </div>
+              ) : (
+                ''
+              )}
             </div>
           </div>
         </div>

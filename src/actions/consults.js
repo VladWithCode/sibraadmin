@@ -12,8 +12,6 @@ import { modalEnable, modalUpdate } from './modal';
 import { projectSet } from './project';
 import makeServerRequest from '../helpers/makeServerRequest';
 
-// http://189.155.253.90:3000/api/proyects/
-
 export const getProjects = () => {
   const url = `${staticURL}/projects/`;
 

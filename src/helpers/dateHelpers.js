@@ -1,5 +1,5 @@
 export const dateToReadableString = date => {
-  if (Date(date).toString() === 'Invalid Date') return '';
+  if (!Date.parse(date)) return '';
 
   return Intl.DateTimeFormat('es-MX', {
     day: 'numeric',

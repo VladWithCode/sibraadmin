@@ -49,8 +49,6 @@ export const PayExtraCharge = () => {
 
   const { amount1, date, payer1, editTemplate, templates } = formValues;
 
-  // const currentTemplate = templates.find(t => t.type === (currentExtraCharges?.title.toLowerCase() === 'escrituras' ? 'ESCRITURAS' : 'CARGO'));
-
   const [currentTemplate, setCurrentTemplate] = useState(
     templates.find(
       t =>

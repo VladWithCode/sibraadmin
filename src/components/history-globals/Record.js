@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
   historyGetLot,
+  historySetLot,
   historySetRecordInfo,
 } from '../../actions/historyActions';
 import { setTempError, setTempSuccessNotice } from '../../actions/ui';
@@ -76,13 +77,13 @@ export const Record = ({ record, payment, key }) => {
   };
 
   const markAsDelivered = () => {
-    fetch(`${staticURL}/record/${_record._id}`, {
+    fetch(`${staticURL}/lot/${lot}`, {
       method: 'put',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        state: 'delivered',
+        doc: { state: 'delivered' },
       }),
     })
       .then(res => res.json())
@@ -96,11 +97,7 @@ export const Record = ({ record, payment, key }) => {
           );
         }
 
-        setRecordField('state', res.record.state);
-        updateLot();
         dispatch(setTempSuccessNotice('El lote se actualizo con exito'));
-        dispatch(historySetRecordInfo({ ..._record, state: res.record.state }));
-
         return updateLot();
       })
       .catch(err => {
@@ -215,11 +212,13 @@ export const Record = ({ record, payment, key }) => {
                   <p> {lapseToPay} </p>
                 </div>
 
-                {minimumPaymentAmount && (
+                {minimumPaymentAmount ? (
                   <div className='card__body__item'>
                     <span>cantidad por pago</span>
                     <p> ${minimumPaymentAmount.toLocaleString()} </p>
                   </div>
+                ) : (
+                  ''
                 )}
               </>
             )}

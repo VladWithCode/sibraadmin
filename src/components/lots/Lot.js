@@ -49,7 +49,7 @@ export const Lot = () => {
   const { name, availableServices } = currentProject;
 
   const stateName =
-    state === 'available'
+    tempLot.state === 'available'
       ? 'Disponible'
       : state === 'delivered'
       ? 'Entregado'
