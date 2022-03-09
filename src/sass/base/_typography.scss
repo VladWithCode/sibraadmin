@@ -2,4 +2,8 @@
   &-capitalize {
     text-transform: capitalize;
   }
+
+  &-danger {
+    color: $color-danger !important;
+  }
 }

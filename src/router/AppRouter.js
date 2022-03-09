@@ -32,6 +32,7 @@ import { CancelRecord } from '../components/history-globals/CancelRecord';
 import { UpdateRecord } from '../components/history-globals/UpdateRecord';
 import { Templates } from '../components/templates/Templates';
 import { Template } from '../components/templates/Template';
+import { RequestRefund } from '../components/history-globals/RequestRefund';
 
 export const AppRouter = () => {
   const { loading } = useSelector(state => state.ui);
@@ -114,7 +115,12 @@ export const AppRouter = () => {
 
             <Route
               exact
-              path='/historial/cancelar/:recordId'
+              path='/historial/solicitar-reembolso/:recordId'
+              component={RequestRefund}></Route>
+
+            <Route
+              exact
+              path='/historial/reembolsar/:recordId'
               component={CancelRecord}></Route>
 
             <Route

@@ -8,7 +8,7 @@ import {
 } from '../../actions/historyActions';
 import { modalEnable, modalUpdate } from '../../actions/modal';
 import { redirectSet } from '../../actions/redirect';
-import generalHelpers from '../../helpers/generalHelpers';
+import { priceToString } from '../../helpers/generalHelpers';
 import { redTypes } from '../../types/reduxTypes';
 import { ClientShort } from '../clients/ClientShort';
 import { ExtraPaymentsEdit } from './ExtraPaymentsEdit';
@@ -67,7 +67,7 @@ export const UpdateRecord = () => {
   const cancel = () => {
     const modalInfo = {
       title: 'Cancelar edición',
-      text: '¿Desea cancelar la edición del historial?',
+      text: '¿Desea cancelar la edición del expediente?',
       link: `/proyectos/ver/${record.project}/lote/${record.lot}`,
       okMsg: 'Sí',
       closeMsg: 'No',
@@ -112,7 +112,7 @@ export const UpdateRecord = () => {
     <div className='pb-5 project create'>
       <div className='project__header'>
         <div className='left'>
-          <h3> Editar historial </h3>
+          <h3>Editar expediente</h3>
         </div>
       </div>
 
@@ -168,7 +168,7 @@ export const UpdateRecord = () => {
 
       <div className='project__header'>
         <div className='left'>
-          <h3> Historial Editado </h3>
+          <h3>Expediente Editado</h3>
         </div>
       </div>
 
@@ -279,7 +279,7 @@ export const UpdateRecord = () => {
               {minimumPaymentAmount ? (
                 <div className='card__body__item'>
                   <span>cantidad por pago</span>
-                  <p> ${generalHelpers.priceToString(minimumPaymentAmount)} </p>
+                  <p> ${priceToString(minimumPaymentAmount)} </p>
                 </div>
               ) : (
                 ''

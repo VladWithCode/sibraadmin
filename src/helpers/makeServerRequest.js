@@ -12,15 +12,21 @@ export default async function makeServerRequest(
     method,
   };
 
-  if (body) fetchOpts['body'] = body;
-  if (headers) fetchOpts['headers'] = headers;
+  if (body) fetchOpts.body = transformBody(body);
+  if (headers) fetchOpts.headers = headers;
 
   try {
     const res = await fetch(staticURL + api, fetchOpts);
-    console.log(res);
+
     return await res.json();
   } catch (err) {
     console.log(err);
     return err;
+  }
+
+  function transformBody(o) {
+    if (typeof o !== 'object') return o;
+
+    return JSON.stringify(o);
   }
 }

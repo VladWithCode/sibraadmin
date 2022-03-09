@@ -228,7 +228,7 @@ export const getRecord = id => {
         if (data.status !== 'OK') {
           return dispatch(
             setTempError(
-              data.message || 'Ocurrio un error al recuperar el historial'
+              data.message || 'Ocurrio un error al recuperar el expediente'
             )
           );
         }

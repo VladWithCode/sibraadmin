@@ -358,7 +358,7 @@ export const Client = () => {
           <>
             <div className='project__header'>
               <div className='left'>
-                <h3> Historiales Activos </h3>
+                <h3>Expedientes Activos</h3>
               </div>
             </div>
             {activeRecords.map(record => (

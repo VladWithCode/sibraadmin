@@ -8,6 +8,7 @@ import {
 } from '../../actions/historyActions';
 import { setTempError, setTempSuccessNotice } from '../../actions/ui';
 import { staticURL, staticURLDocs } from '../../url';
+import CancelBtn from './CancelBtn';
 import { CommissionInfo } from './CommisionInfo';
 import { ExtraCharge } from './ExtraCharge';
 import { Payment } from './Payment';
@@ -120,6 +121,8 @@ export const Record = ({ record, payment, key }) => {
     );
   };
 
+  console.log(_record);
+
   return (
     <div className='card mb-3' key={key}>
       <div className='card__header'>
@@ -147,12 +150,11 @@ export const Record = ({ record, payment, key }) => {
                     Marcar como Entregado
                   </p>
                 )}
-                <Link
+                <CancelBtn
                   onClick={updateLot}
-                  to={`/historial/cancelar/${_record._id}`}
-                  className='danger'>
-                  cancelar venta
-                </Link>
+                  action={_record.hasPendingCancellation ? 'finish' : 'request'}
+                  recordId={_record._id}
+                />
               </>
             )}
           </div>
@@ -163,7 +165,7 @@ export const Record = ({ record, payment, key }) => {
       <div className='card__body'>
         <div className='right'>
           <div className='card__body__item'>
-            <span>Estado del historial</span>
+            <span>Estado del expediente</span>
             <p> {state} </p>
           </div>
           <div className='card__body__item'>

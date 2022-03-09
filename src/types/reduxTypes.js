@@ -88,7 +88,10 @@ export const redTypes = {
   lotReset: '[Lot] Reset',
 
   recordsSet: '[Records] Set',
+  recordsUnset: '[Records] Unset',
+
   recordSet: '[Record] Set',
+  recordUnset: '[Record] Unset',
 
   lotTypesSet: '[LotTypes] Set',
   lotTypesReset: '[LotTypes] Reset',

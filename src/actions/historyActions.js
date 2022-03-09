@@ -101,7 +101,7 @@ export const historyPostUpdate = record => {
 
         if (status === 'OK') {
           const modalInfo = {
-            title: `Historial actualizado con éxito`,
+            title: `Expediente actualizado con éxito`,
             text: null,
             link: `/proyectos/ver/${record.project}/lote/${record.lot}`,
             okMsg: 'Continuar',

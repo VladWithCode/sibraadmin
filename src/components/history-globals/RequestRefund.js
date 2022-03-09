@@ -10,21 +10,18 @@ import {
   uiFinishLoading,
   uiStartLoading,
 } from '../../actions/ui';
+import { dateToReadableString } from '../../helpers/dateHelpers';
+import makeServerRequest from '../../helpers/makeServerRequest';
 import { redTypes } from '../../types/reduxTypes';
-import { staticURL } from '../../url';
 import { ClientShort } from '../clients/ClientShort';
 import { Record } from './Record';
 
-export const CancelRecord = () => {
+export const RequestRefund = () => {
   const dispatch = useDispatch();
   const { recordId } = useParams();
+  const [loading, setLoading] = useState(true);
 
-  const {
-    historyActions: { lot: currentLot },
-    clients,
-  } = useSelector(state => state);
-
-  const { record } = currentLot;
+  const { clients, record } = useSelector(state => state);
 
   const currentClient = clients.find(c => c._id === record?.customer);
 
@@ -36,22 +33,17 @@ export const CancelRecord = () => {
   const [emptyFields, setEmptyFields] = useState([]);
 
   const [formValues, setFormValues] = useState({
-    purchaseDate: '',
-    purchasePrice: '',
     requestDate: '',
-    refundDate: '',
-    refundedAmount: '',
     reason: '',
   });
 
-  const {
-    purchaseDate,
-    purchasePrice,
-    requestDate,
-    refundDate,
-    refundedAmount,
-    reason,
-  } = formValues;
+  const { requestDate, reason } = formValues;
+
+  useEffect(() => {
+    if (record) setLoading(false);
+  }, [record]);
+
+  if (loading) return <>Cargando...</>;
 
   const inputChange = ({ target }) => {
     checkEmptyField({ target });
@@ -59,39 +51,14 @@ export const CancelRecord = () => {
   };
 
   const onSubmit = async () => {
-    if (+refundedAmount < 0) {
-      const tempEmptyFields = emptyFields;
-
-      if (tempEmptyFields.includes('refundedAmount')) {
-        const index = tempEmptyFields.indexOf('refundedAmount');
-
-        tempEmptyFields.splice(index, 1);
-      } else {
-        tempEmptyFields.push('refundedAmount');
-      }
-
-      setEmptyFields(tempEmptyFields);
-      dispatch(
-        setTempError(
-          'Debe ingresar una cantidad que se le reembolsó al cliente'
-        )
-      );
-
-      return;
-    }
-
     const data = {
-      purchaseDate,
-      purchasePrice,
       requestDate,
-      refundDate,
-      refundedAmount: +refundedAmount,
       reason: reason || null,
     };
 
     dispatch(uiStartLoading());
 
-    const res = await cancelRecord(data);
+    const res = await requestRefund(data);
 
     dispatch(uiFinishLoading());
 
@@ -109,32 +76,21 @@ export const CancelRecord = () => {
       dispatch(modalUpdate(modalInfo));
       dispatch(modalEnable());
     } else {
-      dispatch(setTempError('Hubo un problema con la base de datos'));
+      dispatch(
+        setTempError(res?.message || 'Hubo un problema con la base de datos')
+      );
 
       return;
     }
   };
 
-  const cancelRecord = data => {
-    const url = `${staticURL}/records/${recordId}/cancel`;
-
-    const res = fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then(response => {
-        return response.json();
-      })
-      .then(data => {
-        return data;
-      })
-      .catch(err => {
-        console.log(err);
-        dispatch(uiFinishLoading());
-      });
+  const requestRefund = async data => {
+    const res = await makeServerRequest(
+      `/records/${recordId}/request-refund`,
+      'POST',
+      { ...data },
+      { 'Content-Type': 'application/json' }
+    );
 
     return res;
   };
@@ -171,42 +127,47 @@ export const CancelRecord = () => {
     <div className='pb-5 project create'>
       <div className='project__header'>
         <div className='left'>
-          <h3>Cancelar expediente</h3>
+          <h3>Solicitud de cancelación</h3>
         </div>
       </div>
 
       <div className='card edit my-2'>
         <div className='card__header'>
           <img src='../assets/img/payment.png' alt='' />
-          <h4>Cancelación de expediente</h4>
+          <h4>Solicitar cancelación de expediente</h4>
         </div>
         <div className='card__body'>
           <div className='left'>
             <div className='card__body__item'>
-              <label htmlFor='refundDate'>Fecha de reembolso</label>
+              <label htmlFor='requestDate'>
+                Fecha de solicitud de cancelación
+              </label>
               <input
-                name='refundDate'
+                name='requestDate'
                 type='date'
                 autoComplete='off'
-                value={refundDate}
+                value={requestDate}
                 onChange={inputChange}
               />
             </div>
 
             <div className='card__body__item'>
-              <label htmlFor='refundedAmount'>
-                Cantidad devuelta al cliente
-              </label>
+              <label htmlFor='reason'>Razón</label>
               <input
-                name='refundedAmount'
-                type='number'
+                name='reason'
+                type='text'
                 autoComplete='off'
-                value={refundedAmount}
+                value={reason}
                 onChange={inputChange}
               />
             </div>
           </div>
-          <div className='left'></div>
+          {/* <div className='left'>
+            <div className='card__body__item'>
+              <span>Fecha de Compra</span>
+              <p>{dateToReadableString(record.paymentInfo.recordOpenedAt)}</p>
+            </div>
+          </div> */}
         </div>
       </div>
 
@@ -219,7 +180,7 @@ export const CancelRecord = () => {
           Cancelar
         </button>
         <button className='next' onClick={onSubmit}>
-          Confirmar Cancelación
+          Solicitar Cancelación
         </button>
       </div>
     </div>

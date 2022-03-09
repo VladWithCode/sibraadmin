@@ -62,7 +62,15 @@ export const BuyLot = () => {
 
   const [payments, setPayments] = useState(paymentInfo?.payments);
 
-  const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+  const days = [
+    'Lunes',
+    'Martes',
+    'Miércoles',
+    'Jueves',
+    'Viernes',
+    'Sábado',
+    'Domingo',
+  ];
 
   const [formFields, onInputChange] = useForm(initialForm);
 
@@ -102,12 +110,11 @@ export const BuyLot = () => {
   const addPayment = () => {
     const newPayment = {
       amount: '',
-      paymentDate: '',
+      ogPaymentDate: '',
       payedDate: '',
     };
 
     setPayments([...payments, newPayment]);
-    // dispatch(projectSet({ ...project, extraCharges: [...extraCharges, newPayment] }));
   };
 
   const deletePayment = index => {
@@ -175,63 +182,26 @@ export const BuyLot = () => {
             Lote {lot.lotNumber} - Manzana {lot.manzana}
           </p>
         </div>
-        {state !== 'preReserved' && (
-          <div className='options'>
-            {extraInfo.liquidate ? (
-              <input
-                type='radio'
-                value={true}
-                onClick={() =>
-                  onExtraInfoChange({
-                    history: false,
-                    preReserved: false,
-                    liquidate: true,
-                  })
-                }
-                id='liquidate'
-                name='action'
-                defaultChecked
-              />
-            ) : (
-              <input
-                type='radio'
-                value={true}
-                onClick={() =>
-                  onExtraInfoChange({
-                    history: false,
-                    preReserved: false,
-                    liquidate: true,
-                  })
-                }
-                id='liquidate'
-                name='action'
-              />
-            )}
+        <div className='options'>
+          <input
+            type='radio'
+            value={true}
+            onClick={() =>
+              onExtraInfoChange({
+                history: true,
+                preReserved: false,
+                liquidate: false,
+              })
+            }
+            id='history'
+            name='action'
+            defaultChecked
+          />
 
-            <label htmlFor='liquidate'>
-              <div className='option'>Liquidar</div>
-            </label>
-
-            <input
-              type='radio'
-              value={true}
-              onClick={() =>
-                onExtraInfoChange({
-                  history: true,
-                  preReserved: false,
-                  liquidate: false,
-                })
-              }
-              id='history'
-              name='action'
-              defaultChecked
-            />
-
-            <label htmlFor='history'>
-              <div className='option'>Registrar Historial</div>
-            </label>
-          </div>
-        )}
+          <label htmlFor='history'>
+            <div className='option'>Registrar expediente</div>
+          </label>
+        </div>
       </div>
       <div className='card edit mt-4'>
         <div className='card__header'>
@@ -254,204 +224,134 @@ export const BuyLot = () => {
                 value={lotPrice}
               />
             </div>
+            <div
+              className={`card__body__item ${
+                emptyFields.includes('depositAmount') && 'error'
+              }`}>
+              <label htmlFor='depositAmount'>Enganche</label>
+              <input
+                name='depositAmount'
+                type='number'
+                autoComplete='off'
+                onChange={onFieldChange}
+                value={depositAmount}
+              />
+            </div>
+            <div
+              className={`card__body__item ${
+                emptyFields.includes('recordOpenedAt') && 'error'
+              }`}>
+              <label htmlFor='recordOpenedAt'>Inicio de expediente</label>
+              <input
+                name='recordOpenedAt'
+                type='date'
+                autoComplete='off'
+                onChange={onFieldChange}
+                value={recordOpenedAt}
+              />
+            </div>
+            {/* <div
+              className={`card__body__item ${
+                emptyFields.includes('reservationDate') && 'error'
+              }`}>
+              <label htmlFor='reservationDate'>Fecha de apartado</label>
+              <input
+                name='reservationDate'
+                type='date'
+                autoComplete='off'
+                onChange={onFieldChange}
+                value={reservationDate}
+              />
+            </div> */}
+          </div>
+          <div className='left'>
+            <div
+              className={`card__body__item ${
+                emptyFields.includes('lapseType') && 'error'
+              }`}>
+              <label>Tipo de Pagos</label>
+              <div className='options'>
+                <input
+                  type='radio'
+                  name='lapseType'
+                  onClick={() => onExtraInfoChange({ lapseType: 'mensual' })}
+                  id='mensual'
+                  defaultChecked={true}
+                />
+                <label htmlFor='mensual'>Mensual</label>
 
-            {!extraInfo.liquidate ? (
-              <>
-                {!extraInfo.preReserved ? (
-                  <>
-                    <div
-                      className={`card__body__item ${
-                        emptyFields.includes('depositAmount') && 'error'
-                      }`}>
-                      <label htmlFor='depositAmount'>Enganche</label>
-                      <input
-                        name='depositAmount'
-                        type='number'
-                        autoComplete='off'
-                        onChange={onFieldChange}
-                        value={depositAmount}
-                      />
-                    </div>
-                    <div
-                      className={`card__body__item ${
-                        emptyFields.includes('recordOpenedAt') && 'error'
-                      }`}>
-                      <label htmlFor='recordOpenedAt'>
-                        Inicio de historial
-                      </label>
-                      <input
-                        name='recordOpenedAt'
-                        type='date'
-                        autoComplete='off'
-                        onChange={onFieldChange}
-                        value={recordOpenedAt}
-                      />
-                    </div>
-                    <div
-                      className={`card__body__item ${
-                        emptyFields.includes('reservationDate') && 'error'
-                      }`}>
-                      <label htmlFor='reservationDate'>Fecha de apartado</label>
-                      <input
-                        name='reservationDate'
-                        type='date'
-                        autoComplete='off'
-                        onChange={onFieldChange}
-                        value={reservationDate}
-                      />
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div
-                      className={`card__body__item ${
-                        emptyFields.includes('preReservationDate') && 'error'
-                      }`}>
-                      <label htmlFor='preReservationDate'>
-                        Fecha de preapartado
-                      </label>
-                      <input
-                        name='preReservationDate'
-                        type='date'
-                        autoComplete='off'
-                        onChange={onFieldChange}
-                        value={preReservationDate}
-                      />
-                    </div>
-                    <div
-                      className={`card__body__item ${
-                        emptyFields.includes('preReservationAmount') && 'error'
-                      }`}>
-                      <label htmlFor='preReservationAmount'>
-                        Cantidad de preapartado
-                      </label>
-                      <input
-                        name='preReservationAmount'
-                        type='number'
-                        autoComplete='off'
-                        onChange={onFieldChange}
-                        value={preReservationAmount}
-                      />
-                    </div>
-                  </>
-                )}
-              </>
-            ) : (
+                <input
+                  type='radio'
+                  name='lapseType'
+                  onClick={() => onExtraInfoChange({ lapseType: 'semanal' })}
+                  id='semanal'
+                />
+                <label htmlFor='semanal'>Semanal</label>
+              </div>
+            </div>
+
+            <div
+              className={`card__body__item ${
+                emptyFields.includes('paymentsDate') && 'error'
+              }`}>
+              <label htmlFor='payDay'>Día de pago</label>
+              {extraInfo.lapseType === 'semanal' ? (
+                <select
+                  onChange={e =>
+                    onExtraInfoChange({ paymentsDate: e.target.value })
+                  }
+                  name='payDay'
+                  id='payDay'>
+                  <option value=''></option>
+
+                  {days.map(day => (
+                    <option key={day} value={day}>
+                      {day}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  name='paymentsDay'
+                  type='number'
+                  autoComplete='off'
+                  onChange={e =>
+                    onExtraInfoChange({ paymentsDate: e.target.value })
+                  }
+                  value={extraInfo.paymentsDate}
+                />
+              )}
+            </div>
+
+            {extraInfo.lapseType.length > 2 && (
               <div
                 className={`card__body__item ${
-                  emptyFields.includes('reservationDate') && 'error'
+                  emptyFields.includes('lapseToPay') && 'error'
                 }`}>
-                <label htmlFor='reservationDate'>Fecha de compra</label>
+                <label htmlFor='lapseToPay'>Número de pagos</label>
                 <input
-                  name='reservationDate'
-                  type='date'
+                  name='lapseToPay'
+                  type='number'
                   autoComplete='off'
                   onChange={onFieldChange}
-                  value={reservationDate}
+                  value={lapseToPay}
                 />
               </div>
             )}
-          </div>
-          <div className='left'>
-            {!extraInfo.liquidate && (
-              <>
-                {!extraInfo.preReserved && (
-                  <>
-                    <div
-                      className={`card__body__item ${
-                        emptyFields.includes('lapseType') && 'error'
-                      }`}>
-                      <label>Tipo de Pagos</label>
-                      <div className='options'>
-                        <input
-                          type='radio'
-                          name='lapseType'
-                          onClick={() =>
-                            onExtraInfoChange({ lapseType: 'mensual' })
-                          }
-                          id='mensual'
-                          defaultChecked={true}
-                        />
-                        <label htmlFor='mensual'>Mensual</label>
 
-                        <input
-                          type='radio'
-                          name='lapseType'
-                          onClick={() =>
-                            onExtraInfoChange({ lapseType: 'semanal' })
-                          }
-                          id='semanal'
-                        />
-                        <label htmlFor='semanal'>Semanal</label>
-                      </div>
-                    </div>
+            {+lapseToPay > 0 && +depositAmount > 0 && (
+              <div className={`card__body__item`}>
+                <label htmlFor='lapseToPay'>Cantidad por pago</label>
+                <p>
+                  {(() => {
+                    const value = Math.round(
+                      (+lotPrice - depositAmount) / +lapseToPay
+                    );
 
-                    <div
-                      className={`card__body__item ${
-                        emptyFields.includes('paymentsDate') && 'error'
-                      }`}>
-                      <label htmlFor='payDay'>Día de pago</label>
-                      {extraInfo.lapseType === 'semanal' ? (
-                        <select
-                          onChange={e =>
-                            onExtraInfoChange({ paymentsDate: e.target.value })
-                          }
-                          name='payDay'
-                          id='payDay'>
-                          <option value=''></option>
-
-                          {days.map(day => (
-                            <option key={day} value={day}>
-                              {day}
-                            </option>
-                          ))}
-                        </select>
-                      ) : (
-                        <input
-                          name='paymentsDay'
-                          type='number'
-                          autoComplete='off'
-                          onChange={e =>
-                            onExtraInfoChange({ paymentsDate: e.target.value })
-                          }
-                          value={extraInfo.paymentsDate}
-                        />
-                      )}
-                    </div>
-
-                    {extraInfo.lapseType.length > 2 && (
-                      <div
-                        className={`card__body__item ${
-                          emptyFields.includes('lapseToPay') && 'error'
-                        }`}>
-                        <label htmlFor='lapseToPay'>Número de pagos</label>
-                        <input
-                          name='lapseToPay'
-                          type='number'
-                          autoComplete='off'
-                          onChange={onFieldChange}
-                          value={lapseToPay}
-                        />
-                      </div>
-                    )}
-
-                    {+lapseToPay > 0 && +depositAmount > 0 && (
-                      <div className={`card__body__item`}>
-                        <label htmlFor='lapseToPay'>Cantidad por pago</label>
-                        <p>
-                          {(() => {
-                            const value = Math.ceil(
-                              (+lotPrice - depositAmount) / +lapseToPay
-                            );
-
-                            return `$${value.toLocaleString()}`;
-                          })()}
-                        </p>
-                      </div>
-                    )}
-                  </>
-                )}
-              </>
+                    return `$${value.toLocaleString()}`;
+                  })()}
+                </p>
+              </div>
             )}
 
             <div
@@ -580,23 +480,19 @@ export const BuyLot = () => {
                   value={payment.amount}
                 />
               </div>
-              <div
-                className={`card__body__item ${
-                  emptyFields.includes(`paymentDate${index}`) && 'error'
-                }`}>
-                <label htmlFor={`paymentDate${index}`}>Fecha programada</label>
+              <div className='card__body__item'>
+                <label htmlFor={`ogPaymentDate${index}`}>
+                  Fecha programada
+                </label>
                 <input
-                  name={`paymentDate${index}`}
+                  name={`ogPaymentDate${index}`}
                   type='date'
                   autoComplete='off'
                   onChange={e => onPaymentChange(e, index, 'paymentDate')}
                   value={payment.paymentDate}
                 />
               </div>
-              <div
-                className={`card__body__item ${
-                  emptyFields.includes(`payedDate${index}`) && 'error'
-                }`}>
+              <div className='card__body__item'>
                 <label htmlFor={`payedDate${index}`}>
                   Fecha cuando fue pagado
                 </label>
@@ -608,10 +504,7 @@ export const BuyLot = () => {
                   value={payment.payedDate}
                 />
               </div>
-              <div
-                className={`card__body__item ${
-                  emptyFields.includes(`payer${index}`) && 'error'
-                }`}>
+              <div className='card__body__item'>
                 <label htmlFor={`payer${index}`}>Pagado por</label>
                 <input
                   name={`payer${index}`}
@@ -643,7 +536,7 @@ export const BuyLot = () => {
           onClick={() =>
             dispatch(
               submitPayment(
-                { ...paymentInfo, client: client._id },
+                { ...paymentInfo, payments: payments, client: client._id },
                 {
                   projectId,
                   lotId,

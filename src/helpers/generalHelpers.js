@@ -1,6 +1,6 @@
 const generalHelpers = {};
 
-generalHelpers.priceToString = p => {
+export const priceToString = p => {
   if (!p || !+p || typeof p !== 'number') return p;
 
   const [i, d] = (+p).toFixed(2).split('.');
@@ -8,4 +8,8 @@ generalHelpers.priceToString = p => {
   return `${(+i).toLocaleString()}.${d}`;
 };
 
-export default generalHelpers;
+export const safeRound = n => {
+  if (Number(n) === NaN) return n;
+
+  return Math.round(n * 100) / 100;
+};

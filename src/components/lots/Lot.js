@@ -265,7 +265,7 @@ export const Lot = () => {
           <>
             <div className='project__header'>
               <div className='left'>
-                <h3> Historiales </h3>
+                <h3>Expedientes</h3>
               </div>
             </div>
 
@@ -281,7 +281,7 @@ export const Lot = () => {
           <>
             <div className='project__header'>
               <div className='left'>
-                <h3> Historial de precios </h3>
+                <h3>Historial de precios</h3>
               </div>
             </div>
             <PriceHistory priceHistory={priceHistory} />

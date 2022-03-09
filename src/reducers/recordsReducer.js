@@ -19,6 +19,9 @@ export const recordReducer = (state = initialRecordState, action) => {
     case redTypes.recordSet:
       return action.payload;
 
+    case redTypes.recordUnset:
+      return {};
+
     default:
       return state;
   }
