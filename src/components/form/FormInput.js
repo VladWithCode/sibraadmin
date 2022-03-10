@@ -9,27 +9,29 @@ const FormInput = ({
   validationFn,
   classList,
   required,
-  extraAttributes
+  extraAttributes,
 }) => {
   const [valid, setValid] = useState(true);
-  
-  const onChangeWrapper = wrapOnChange ? (e) => {
-    setValid(validationFn(e.target));
 
-    return onChange(e);
-  } : null;
+  const onChangeWrapper = wrapOnChange
+    ? e => {
+        setValid(validationFn(e.target));
+
+        return onChange(e);
+      }
+    : null;
 
   return (
     <input
-        type={type}
-        className={...classList, valid ? '' : ' invalid'}
-        onChange={onChangeWrapper}
-        value={value}
-        name={name}
-        id={id}
-        {...extraAttributes}
-      />
-  )
-}
+      type={type}
+      className={[...classList, valid ? '' : ' invalid'].join(' ')}
+      onChange={onChangeWrapper}
+      value={value}
+      name={name}
+      id={id}
+      {...extraAttributes}
+    />
+  );
+};
 
 export default FormInput;

@@ -125,19 +125,22 @@ export const Cancellations = ({ cancellations }) => {
                   </div>
                 )}
 
-                {chargeAmountPayed && (
+                {chargeAmountPayed >= 0 ? (
                   <div className='card__body__item'>
                     <span>Cantidad pagada (Cargos Extra)</span>
                     <p className='price'>${priceToString(chargeAmountPayed)}</p>
                   </div>
+                ) : (
+                  ''
                 )}
 
-                {chargesPayed.map(xc => {
-                  <div className='card__body__item'>
-                    <span>Cantidad pagada ({xc.name})</span>
-                    <p className='price'>${priceToString(xc.amount)}</p>
-                  </div>;
-                })}
+                {chargeAmountPayed > 0 &&
+                  chargesPayed?.map(xc => (
+                    <div className='card__body__item'>
+                      <span>Cantidad pagada ({xc.name})</span>
+                      <p className='price'>${priceToString(xc.amount)}</p>
+                    </div>
+                  ))}
 
                 {hadCommission && (
                   <div className='card__body__item'>

@@ -13,9 +13,7 @@ export const getLot = id => {
   return dispatch => {
     dispatch(uiStartLoading());
     fetch(url)
-      .then(resp => {
-        return resp.json();
-      })
+      .then(res => res.json())
       .then(data => {
         dispatch(uiFinishLoading());
         return dispatch(setLot(data.lot));

@@ -384,6 +384,16 @@
       display: flex;
       top: 30%;
 
+      p,
+      a {
+        margin-right: 3rem;
+        border-bottom: 1px solid;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+
       & .danger,
       & .edit {
         border-bottom: 1px solid;
@@ -391,7 +401,6 @@
 
       & .edit {
         color: $color-ok;
-        margin-right: 3rem;
       }
 
       & .danger {
@@ -691,6 +700,17 @@
         font-size: 1.3rem;
         z-index: 2;
         cursor: default;
+      }
+
+      textarea {
+        display: block;
+        resize: none;
+        border: none;
+        outline: 0;
+        text-align: right;
+        font-size: 1.5rem;
+        height: 100%;
+        width: 100%;
       }
 
       & input {

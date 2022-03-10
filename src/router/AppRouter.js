@@ -33,6 +33,8 @@ import { UpdateRecord } from '../components/history-globals/UpdateRecord';
 import { Templates } from '../components/templates/Templates';
 import { Template } from '../components/templates/Template';
 import { RequestRefund } from '../components/history-globals/RequestRefund';
+import { RequestCession } from '../components/history-globals/RequestCession';
+import CompleteCession from '../components/history-globals/CompleteCession';
 
 export const AppRouter = () => {
   const { loading } = useSelector(state => state.ui);
@@ -122,6 +124,17 @@ export const AppRouter = () => {
               exact
               path='/historial/reembolsar/:recordId'
               component={CancelRecord}></Route>
+
+            <Route
+              exact
+              path='/historial/solicitar-cesion/:recordId'
+              component={RequestCession}></Route>
+
+            <Route
+              exact=''
+              path='/historial/ceder/:recordId'
+              component={CompleteCession}
+            />
 
             <Route
               exact

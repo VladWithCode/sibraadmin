@@ -7,13 +7,15 @@ import {
   historySetRecordInfo,
 } from '../../actions/historyActions';
 import { setTempError, setTempSuccessNotice } from '../../actions/ui';
+import { priceToString } from '../../helpers/generalHelpers';
 import { staticURL, staticURLDocs } from '../../url';
 import CancelBtn from './CancelBtn';
+import CessionBtn from './CessionBtn';
 import { CommissionInfo } from './CommisionInfo';
 import { ExtraCharge } from './ExtraCharge';
 import { Payment } from './Payment';
 
-export const Record = ({ record, payment, key }) => {
+export const Record = ({ record, payment }) => {
   const dispatch = useDispatch();
 
   const [_record, setRecord] = useState(record);
@@ -121,10 +123,8 @@ export const Record = ({ record, payment, key }) => {
     );
   };
 
-  console.log(_record);
-
   return (
-    <div className='card mb-3' key={key}>
+    <div className='card mb-3' key={record._id}>
       <div className='card__header'>
         <img src='../assets/img/info.png' alt='' />
         <h4>Lote en {projectName}</h4>
@@ -150,6 +150,11 @@ export const Record = ({ record, payment, key }) => {
                     Marcar como Entregado
                   </p>
                 )}
+                <CessionBtn
+                  onClick={updateLot}
+                  action={_record.activeCessionId ? 'finish' : 'request'}
+                  recordId={_record._id}
+                />
                 <CancelBtn
                   onClick={updateLot}
                   action={_record.hasPendingCancellation ? 'finish' : 'request'}
@@ -217,7 +222,7 @@ export const Record = ({ record, payment, key }) => {
                 {minimumPaymentAmount ? (
                   <div className='card__body__item'>
                     <span>cantidad por pago</span>
-                    <p> ${minimumPaymentAmount.toLocaleString()} </p>
+                    <p> ${priceToString(minimumPaymentAmount)} </p>
                   </div>
                 ) : (
                   ''

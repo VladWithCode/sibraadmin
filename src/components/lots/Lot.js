@@ -17,6 +17,7 @@ import { Record } from '../history-globals/Record';
 import { PriceHistory } from './PriceHistory';
 import { ClientShort } from '../clients/ClientShort';
 import { Cancellations } from '../history-globals/Cancellations';
+import Cessions from '../history-globals/Cessions';
 
 export const Lot = () => {
   const { lotId, projectId } = useParams();
@@ -40,6 +41,7 @@ export const Lot = () => {
     priceHistory,
     bindings,
     cancellations,
+    cessions,
   } = currentLot;
 
   const [currentClient, setCurrentClient] = useState(
@@ -292,12 +294,14 @@ export const Lot = () => {
           <>
             <div className='project__header'>
               <div className='left'>
-                <h3> Cancelaciones </h3>
+                <h3>Cancelaciones</h3>
               </div>
             </div>
             <Cancellations cancellations={cancellations} />
           </>
         )}
+
+        {cessions?.length > 0 ? <Cessions cessions={cessions} /> : ''}
       </div>
 
       {/* <FloatingButton type='lotAvailable' />

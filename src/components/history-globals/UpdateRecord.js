@@ -51,7 +51,7 @@ export const UpdateRecord = () => {
 
   useEffect(() => {
     dispatch(floatingButtonSet('pencil', redTypes.projectCreate));
-    dispatch(redirectSet(redTypes.history, `/historial/editar/${recordId}`));
+    // dispatch(redirectSet(redTypes.history, `/historial/editar/${recordId}`));
 
     setFormValues({
       payments: record.payments,

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getLots } from '../../actions/consults';
+import { getLots, setLot } from '../../actions/consults';
 import { floatingButtonSet } from '../../actions/floatingButton';
 import { modalEnable, modalUpdate } from '../../actions/modal';
 import { redirectSet } from '../../actions/redirect';
@@ -10,6 +10,7 @@ import {
   uiFinishLoading,
   uiStartLoading,
 } from '../../actions/ui';
+import makeServerRequest from '../../helpers/makeServerRequest';
 import { redTypes } from '../../types/reduxTypes';
 import { staticURL } from '../../url';
 import { ClientShort } from '../clients/ClientShort';
@@ -105,7 +106,11 @@ export const CancelRecord = () => {
         type: redTypes.project,
       };
 
-      dispatch(getLots(record.project));
+      const res = await makeServerRequest('/lots/' + record.lot);
+
+      if (res.status !== 'OK') console.log(res);
+
+      dispatch(setLot(res.lot));
       dispatch(modalUpdate(modalInfo));
       dispatch(modalEnable());
     } else {
