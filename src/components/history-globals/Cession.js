@@ -35,13 +35,15 @@ function Cession({ cession }) {
             <p>{assignee}</p>
           </div>
         </div>
-        <div className='left'>
-          <h4 className='mb-1'>Notas</h4>
-          <div className='card__body__item'>
-            <span>Nota</span>
-            <p>{notes}</p>
+        {notes?.length > 0 && (
+          <div className='left'>
+            <h4 className='mb-1'>Notas</h4>
+            <div className='card__body__item'>
+              <span>Nota</span>
+              <p>{notes}</p>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

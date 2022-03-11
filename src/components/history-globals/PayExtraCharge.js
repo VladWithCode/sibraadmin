@@ -14,6 +14,8 @@ import {
   uiFinishLoading,
   uiStartLoading,
 } from '../../actions/ui';
+import { dateToReadableString } from '../../helpers/dateHelpers';
+import { priceToString } from '../../helpers/generalHelpers';
 import { redTypes } from '../../types/reduxTypes';
 import { staticURL } from '../../url';
 import { ClientShort } from '../clients/ClientShort';
@@ -28,10 +30,12 @@ export const PayExtraCharge = () => {
     clients,
     projects,
     payments,
+    records,
   } = useSelector(state => state);
 
-  const { area, isCorner, lotNumber, measures, manzana, price, record } =
-    currentLot;
+  const { area, isCorner, lotNumber, measures, manzana, price } = currentLot;
+
+  const record = records.find(r => r._id === recordId);
 
   const currentClient = clients.find(c => c._id === record?.customer);
 
@@ -40,6 +44,8 @@ export const PayExtraCharge = () => {
   // const currentExtraCharges = extraCharges.find(e => e._id === extraChargeId);
 
   const [currentExtraCharges, setCurrentExtraCharges] = useState({});
+
+  const [xCharge, setXCharge] = useState({});
 
   // const { amount: extraAmount, title } = currentExtraCharges;
 
@@ -88,6 +94,7 @@ export const PayExtraCharge = () => {
             : 'CARGO')
       )
     );
+    setXCharge(record?.extraCharges.find(xc => xc._id === extraChargeId));
   }, [extraChargeId, projects, record?.project, templates]);
 
   const inputChange = e => {
@@ -291,6 +298,24 @@ export const PayExtraCharge = () => {
                 onChange={inputChange}
               />
             </div>
+          </div>
+          <div className='left'>
+            <div className='card__body__item'>
+              <span>Cantidad pagada</span>
+              <p className='payed'>${priceToString(xCharge.amountPayed)}</p>
+            </div>
+            <div className='card__body__item'>
+              <span>Cantidad restante</span>
+              <p className='debt'>${priceToString(xCharge.amountDue)}</p>
+            </div>
+            {xCharge.payBefore?.length > 0 && (
+              <div className='card__body__item'>
+                <span>Pagar antes del:</span>
+                <p className='text-capitalize'>
+                  {dateToReadableString(xCharge.payBefore)}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>

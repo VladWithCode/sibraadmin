@@ -101,18 +101,14 @@ export const Payment = ({
       </div>
       <div className='card__body__item'>
         <span>recibo generado</span>
-        {staticPath ? (
-          <p>Sí</p>
-        ) : (
-          <p
-            style={{
-              color: '#14E95F',
-              cursor: 'pointer',
-            }}
-            onClick={generateReceipt}>
-            Generar recibo
-          </p>
-        )}
+        <p
+          style={{
+            color: '#14E95F',
+            cursor: 'pointer',
+          }}
+          onClick={generateReceipt}>
+          {staticPath ? 'Regenerar' : 'Generar'}
+        </p>
       </div>
 
       {ogPaymentDate && (

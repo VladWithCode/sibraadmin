@@ -15,6 +15,8 @@ import {
   uiFinishLoading,
   uiStartLoading,
 } from '../../actions/ui';
+import { dateToReadableString } from '../../helpers/dateHelpers';
+import { priceToString } from '../../helpers/generalHelpers';
 import { redTypes } from '../../types/reduxTypes';
 import { staticURL } from '../../url';
 import { ClientShort } from '../clients/ClientShort';
@@ -37,9 +39,12 @@ export const Payment = () => {
     historyActions: { lot: currentLot },
     clients,
     payments,
+    records,
   } = useSelector(state => state);
 
-  const { record } = currentLot;
+  // const { record } = currentLot;
+
+  const record = records.find(r => r.lot === lotId);
 
   const currentClient = clients.find(c => c._id === record?.customer);
 
@@ -461,7 +466,38 @@ export const Payment = () => {
               </>
             )}
           </div>
-          <div className='left'></div>
+          <div className='left'>
+            <div className='card__body__item'>
+              <span>Cantidad pagada</span>
+              <p className='payed'>
+                ${priceToString(record.paymentInfo.lotAmountPayed)}
+              </p>
+            </div>
+            <div className='card__body__item'>
+              <span>Cantidad restante</span>
+              <p className='debt'>
+                ${priceToString(record.paymentInfo.lotAmountDue)}
+              </p>
+            </div>
+            <div className='card__body__item'>
+              <span>Fecha programada para proxima mensualidad</span>
+              <p style={{ textTransform: 'capitalize' }}>
+                {dateToReadableString(record.paymentInfo.nextPaymentDate)}
+              </p>
+            </div>
+            <div className='card__body__item'>
+              <span>Fecha del ultimo pago realizado</span>
+              <p style={{ textTransform: 'capitalize' }}>
+                {dateToReadableString(record.paymentInfo.lastPayed)}
+              </p>
+            </div>
+            <div className='card__body__item'>
+              <span>Cantidad minima de pago</span>
+              <p className='price'>
+                ${priceToString(record.paymentInfo.minimumPaymentAmount)}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
