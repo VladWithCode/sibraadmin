@@ -85,7 +85,7 @@ export const Client = () => {
   };
 
   const deleteCustomer = async () => {
-    const { customer, status, message, error } = makeServerRequest(
+    const { status, message, error } = makeServerRequest(
       '/customer/' + client._id,
       'DELETE'
     );

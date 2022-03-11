@@ -7,7 +7,6 @@ import {
   historySetRecordInfo,
 } from '../../actions/historyActions';
 import { modalEnable, modalUpdate } from '../../actions/modal';
-import { redirectSet } from '../../actions/redirect';
 import { priceToString } from '../../helpers/generalHelpers';
 import { redTypes } from '../../types/reduxTypes';
 import { ClientShort } from '../clients/ClientShort';

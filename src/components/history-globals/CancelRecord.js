@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getLots, setLot } from '../../actions/consults';
+import { setLot } from '../../actions/consults';
 import { floatingButtonSet } from '../../actions/floatingButton';
 import { modalEnable, modalUpdate } from '../../actions/modal';
 import { redirectSet } from '../../actions/redirect';
@@ -158,6 +158,36 @@ export const CancelRecord = () => {
     }
   };
 
+  const cancelRefund = async () => {
+    dispatch(uiStartLoading());
+    const res = await makeServerRequest(
+      `/records/${recordId}/cancel-refund`,
+      'DELETE'
+    );
+
+    dispatch(uiFinishLoading());
+
+    if (res.status !== 'OK') {
+      console.log(res);
+      return dispatch(
+        setTempError(res.message || 'Hubo un problema al cancelar el reembolso')
+      );
+    }
+
+    dispatch(setLot(res.lot));
+    dispatch(
+      modalUpdate({
+        title: 'Reembolso cancelado',
+        text: 'Se canceló el reembolso con exito',
+        link: `/proyectos/ver/${record.project}/lote/${record.lot}`,
+        okMsg: 'Continuar',
+        closeMsg: null,
+        type: redTypes.project,
+      })
+    );
+    dispatch(modalEnable());
+  };
+
   const cancel = () => {
     const modalInfo = {
       title: 'Abortar',
@@ -177,6 +207,11 @@ export const CancelRecord = () => {
       <div className='project__header'>
         <div className='left'>
           <h3>Cancelar expediente</h3>
+        </div>
+        <div className='left'>
+          <button className='cancel' onClick={cancelRefund}>
+            Cancelar Reembolso
+          </button>
         </div>
       </div>
 

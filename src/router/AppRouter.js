@@ -131,7 +131,7 @@ export const AppRouter = () => {
               component={RequestCession}></Route>
 
             <Route
-              exact=''
+              exact
               path='/historial/ceder/:recordId'
               component={CompleteCession}
             />

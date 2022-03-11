@@ -5,7 +5,6 @@ import { clientSet } from '../../actions/client';
 import { floatingButtonSet } from '../../actions/floatingButton';
 import { setLot } from '../../actions/lot';
 import { modalEnable, modalUpdate } from '../../actions/modal';
-import { recordUnset } from '../../actions/record';
 import {
   setTempError,
   uiFinishLoading,
@@ -44,7 +43,7 @@ export const RequestCession = () => {
 
       if (clientFound) dispatch(clientSet(clientFound));
     }
-  }, [record]);
+  }, [record, clients, dispatch]);
 
   if (loading) return <>Cargando...</>;
 
@@ -184,7 +183,7 @@ export const RequestCession = () => {
           Cancelar
         </button>
         <button className='next' onClick={onSubmit}>
-          Solicitar Cancelación
+          Solicitar Cesión
         </button>
       </div>
     </div>

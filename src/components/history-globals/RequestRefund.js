@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getLots, setLot } from '../../actions/consults';
+import { setLot } from '../../actions/consults';
 import { floatingButtonSet } from '../../actions/floatingButton';
 import { modalEnable, modalUpdate } from '../../actions/modal';
-import { recordUnset } from '../../actions/record';
 import { redirectSet } from '../../actions/redirect';
 import {
   setTempError,
   uiFinishLoading,
   uiStartLoading,
 } from '../../actions/ui';
-import { dateToReadableString } from '../../helpers/dateHelpers';
 import makeServerRequest from '../../helpers/makeServerRequest';
 import { redTypes } from '../../types/reduxTypes';
 import { ClientShort } from '../clients/ClientShort';

@@ -1,5 +1,3 @@
-const generalHelpers = {};
-
 export const priceToString = p => {
   if (!p || !+p || typeof p !== 'number') return p;
 
@@ -9,7 +7,7 @@ export const priceToString = p => {
 };
 
 export const safeRound = n => {
-  if (Number(n) === NaN) return n;
+  if (Number.isNaN(n)) return n;
 
   return Math.round(n * 100) / 100;
 };

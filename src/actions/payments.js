@@ -148,12 +148,6 @@ const isFormValid = paymentInfo => {
     reservationDate,
     preReservationAmount,
     preReservationDate,
-    history,
-    payments,
-    lapseToPay,
-    recordOpenedAt,
-    paymentsDate,
-    lapseType,
   } = paymentInfo;
 
   if (+depositAmount === 0) {
@@ -195,9 +189,6 @@ export const submitPayment = (paymentInfo, lotInfo) => {
         payedAt,
         amount,
         reservationDate,
-        preReservationAmount,
-        preReservationDate,
-        history,
         payments,
         lapseToPay,
         recordOpenedAt,

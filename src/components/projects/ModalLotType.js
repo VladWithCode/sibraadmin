@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   lotTypesCreate,
   lotTypesEdit,
   lotTypesModalDisable,
-} from "../../actions/lotTypes";
-import { setTempError, unSetError } from "../../actions/ui";
-import { useForm } from "../../hooks/useForm";
-import { redTypes } from "../../types/reduxTypes";
+} from '../../actions/lotTypes';
+import { setTempError, unSetError } from '../../actions/ui';
+import { useForm } from '../../hooks/useForm';
+import { redTypes } from '../../types/reduxTypes';
 
 export const ModalLotType = () => {
   const dispatch = useDispatch();
 
   const { active, beenClosed, lotTypes, modalConfirm } = useSelector(
-    (state) => state.types
+    state => state.types
   );
 
   const handleClose = () => {
@@ -21,12 +21,12 @@ export const ModalLotType = () => {
   };
 
   const initialForm = {
-    type: "",
+    type: '',
     sameArea: false,
-    pricePerM: "",
-    area: "",
-    front: "",
-    side: "",
+    pricePerM: '',
+    area: '',
+    front: '',
+    side: '',
   };
 
   const [formValues, handleInputChange, reset, , setValues] =
@@ -38,7 +38,7 @@ export const ModalLotType = () => {
 
   useEffect(() => {
     if (modalConfirm?.action === redTypes.edit) {
-      const newValues = lotTypes.find((lot) => lot.type === modalConfirm.type);
+      const newValues = lotTypes.find(lot => lot.type === modalConfirm.type);
       setValues(newValues);
       setsameArea(newValues.sameArea);
     } else {
@@ -82,14 +82,14 @@ export const ModalLotType = () => {
 
   const isFormValid = () => {
     if (type.trim().length === 0) {
-      dispatch(setTempError("El tipo de lote debe tener un nombre"));
+      dispatch(setTempError('El tipo de lote debe tener un nombre'));
 
       return false;
     }
 
     if (modalConfirm?.action !== redTypes.edit) {
       if (
-        lotTypes?.find((lot) => lot.type.toUpperCase() === type.toUpperCase())
+        lotTypes?.find(lot => lot.type.toUpperCase() === type.toUpperCase())
       ) {
         dispatch(
           setTempError(`El tipo "${type}" ya existe, intente otro nombre`)
@@ -100,7 +100,7 @@ export const ModalLotType = () => {
     }
 
     if ((sameArea && Number(pricePerM) === 0) || sameArea === undefined) {
-      dispatch(setTempError("Todos los campos son obligatorios"));
+      dispatch(setTempError('Todos los campos son obligatorios'));
 
       return false;
     }
@@ -114,12 +114,12 @@ export const ModalLotType = () => {
     if (sameArea) {
       if (area) {
         if (area.toString().trim().length === 0) {
-          dispatch(setTempError("Necesita agregar un área"));
+          dispatch(setTempError('Necesita agregar un área'));
 
           return false;
         }
       } else {
-        dispatch(setTempError("Necesita agregar un área"));
+        dispatch(setTempError('Necesita agregar un área'));
 
         return false;
       }
@@ -131,98 +131,98 @@ export const ModalLotType = () => {
 
   return (
     <div
-      className={` ${!active ? "modal-hidden" : "modal-bc"} ${
-        beenClosed && !active ? "modal-bc modal-animate-hide" : ""
-      }`}
-    >
-      <div className="modal">
-        <h3 className="modal__title mb-5">
+      className={` ${!active ? 'modal-hidden' : 'modal-bc'} ${
+        beenClosed && !active ? 'modal-bc modal-animate-hide' : ''
+      }`}>
+      <div className='modal'>
+        <h3 className='modal__title mb-5'>
           {modalConfirm?.action === redTypes.edit
             ? `Editar tipo de lotes "${modalConfirm.type}"`
-            : "Nuevo tipo de lotes"}
+            : 'Nuevo tipo de lotes'}
         </h3>
 
-        <div className="modal__input">
-          <div className="modal__input__field">
+        <div className='modal__input'>
+          <div className='modal__input__field'>
             <span>Nombre de tipo:</span>
             <input
-              type="text"
+              type='text'
               onChange={handleInputChange}
               value={type}
-              name="type"
+              name='type'
             />
           </div>
-          <div className="modal__input__field mt-3 mb-2">
+          <div className='modal__input__field mt-3 mb-2'>
             <span>Misma área:</span>
-            <div className="options">
-              <input type="radio" id="yes" name="sameArea" />
+            <div className='options'>
+              <input type='radio' id='yes' name='sameArea' />
 
-              <label onClick={() => setsameArea(true)} htmlFor="yes">
-                <div className="option">Sí</div>
+              <label onClick={() => setsameArea(true)} htmlFor='yes'>
+                <div className='option'>Sí</div>
               </label>
 
-              <input type="radio" id="no" name="sameArea" defaultChecked />
+              <input type='radio' id='no' name='sameArea' defaultChecked />
 
-              <label onClick={() => setsameArea(false)} htmlFor="no">
-                <div className="option">No</div>
+              <label onClick={() => setsameArea(false)} htmlFor='no'>
+                <div className='option'>No</div>
               </label>
             </div>
           </div>
           {sameArea && (
             <>
-              <div className="modal__input__field">
+              <div className='modal__input__field'>
                 <span>Precio:</span>
                 <input
-                  type="number"
+                  type='number'
                   onChange={handleInputChange}
                   value={pricePerM}
-                  name="pricePerM"
+                  name='pricePerM'
                 />
               </div>
-              <div className="modal__input__field">
-                <span>Área:</span>
+              <div className='modal__input__field'>
+                <span>
+                  Área (m<sup>2</sup>):
+                </span>
                 <input
-                  type="number"
+                  type='number'
                   onChange={handleInputChange}
                   value={area}
-                  name="area"
+                  name='area'
                 />
               </div>
-              <div className="modal__input__field">
-                <span>Medida frente:</span>
+              <div className='modal__input__field'>
+                <span>Medida frente (m):</span>
                 <input
-                  type="number"
+                  type='number'
                   onChange={handleInputChange}
                   value={front}
-                  name="front"
+                  name='front'
                 />
               </div>
-              <div className="modal__input__field">
-                <span>Medida fondo:</span>
+              <div className='modal__input__field'>
+                <span>Medida fondo (m):</span>
                 <input
-                  type="number"
+                  type='number'
                   onChange={handleInputChange}
                   value={side}
-                  name="side"
+                  name='side'
                 />
               </div>
             </>
           )}
         </div>
 
-        <div className="modal__btns">
+        <div className='modal__btns'>
           <p
             onClick={handleClose}
-            className="modal__btns__link btn btn-err mr-2"
-          >
+            className='modal__btns__link btn btn-err mr-2'>
             Cancelar
           </p>
           {modalConfirm?.action === redTypes.edit ? (
-            <p onClick={updateLotType} className="modal__btns__link btn btn-ok">
+            <p onClick={updateLotType} className='modal__btns__link btn btn-ok'>
               Actualizar
             </p>
           ) : (
-            <p onClick={addLotType} className="modal__btns__link btn btn-ok">
+            <p onClick={addLotType} className='modal__btns__link btn btn-ok'>
               Agregar
             </p>
           )}

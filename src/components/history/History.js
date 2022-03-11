@@ -7,7 +7,7 @@ export const History = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getRecords);
+    dispatch(getRecords());
   }, [dispatch]);
 
   return (

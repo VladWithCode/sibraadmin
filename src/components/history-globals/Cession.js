@@ -2,12 +2,14 @@ import React from 'react';
 import { dateToReadableString } from '../../helpers/dateHelpers';
 
 function Cession({ cession }) {
-  const { assignor, assignee, notes, requestDate, cessionDate } = cession;
+  const { assignor, assignee, notes, requestDate, cessionDate, completed } =
+    cession;
 
   return (
     <div className='card mb-3' key={cession._id}>
       <div className='card__header'>
         <h3 className='text-black'>Cesión de {assignor}</h3>
+        <span className='status'>{completed ? '' : 'Pendiente'}</span>
       </div>
 
       <div className='card__body'>

@@ -345,6 +345,15 @@
       text-transform: capitalize;
     }
 
+    .status {
+      margin: auto;
+      margin-right: 2rem;
+      font-size: 2rem;
+      color: $color-warning;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
     & .dropdown {
       font-weight: 700;
       font-size: 1.8rem;

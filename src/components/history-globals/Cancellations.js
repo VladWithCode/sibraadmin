@@ -2,13 +2,6 @@ import React from 'react';
 import { dateToReadableString } from '../../helpers/dateHelpers';
 import { priceToString } from '../../helpers/generalHelpers';
 
-const dateOptions = {
-  weekday: 'long',
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-};
-
 export const Cancellations = ({ cancellations }) => {
   return (
     <div className='card'>

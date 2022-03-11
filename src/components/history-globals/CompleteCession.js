@@ -31,7 +31,7 @@ const CompleteCession = () => {
     assignor: client?.fullName || '',
     assignee: '',
     notes:
-      lot?.cessions.find(c => c._id === record.activeCessionId).notes || '',
+      lot?.cessions.find(c => c._id === record.activeCessionId)?.notes || '',
   });
 
   const { cessionDate, notes } = formValues;
@@ -46,7 +46,7 @@ const CompleteCession = () => {
       if (clientFound) dispatch(clientSet(clientFound));
       if (lotFound) dispatch(setLot(lotFound));
     }
-  }, [record]);
+  }, [record, clients, lots, dispatch]);
 
   if (loading) return <>Cargando...</>;
 
@@ -99,6 +99,36 @@ const CompleteCession = () => {
     return res;
   };
 
+  const cancelCession = async () => {
+    dispatch(uiStartLoading());
+    const res = await makeServerRequest(
+      `/records/${recordId}/cancel-cession`,
+      'DELETE'
+    );
+
+    dispatch(uiFinishLoading());
+
+    if (res.status !== 'OK') {
+      console.log(res);
+      return dispatch(
+        setTempError(res.message || 'Hubo un problema al cancelar la cesión')
+      );
+    }
+
+    dispatch(setLot(res.lot));
+    dispatch(
+      modalUpdate({
+        title: 'Cesión cancelada',
+        text: 'Se canceló la cesión con exito',
+        link: `/proyectos/ver/${record.project}/lote/${record.lot}`,
+        okMsg: 'Continuar',
+        closeMsg: null,
+        type: redTypes.project,
+      })
+    );
+    dispatch(modalEnable());
+  };
+
   const cancel = () => {
     const modalInfo = {
       title: 'Abortar',
@@ -118,6 +148,11 @@ const CompleteCession = () => {
       <div className='project__header'>
         <div className='left'>
           <h3>Cesión de Derechos</h3>
+        </div>
+        <div className='left'>
+          <button onClick={cancelCession} className='cancel'>
+            Cancelar Cesión
+          </button>
         </div>
       </div>
 
@@ -162,7 +197,7 @@ const CompleteCession = () => {
           Cancelar
         </button>
         <button className='next' onClick={onSubmit}>
-          Solicitar Cancelación
+          Completar Cesión
         </button>
       </div>
     </div>

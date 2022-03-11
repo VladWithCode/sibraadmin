@@ -97,7 +97,7 @@ export const historyPostUpdate = record => {
       .then(async res => res.json())
       .then(data => {
         dispatch(uiFinishLoading());
-        const { record, status, message, error } = data;
+        const { record, status } = data;
 
         if (status === 'OK') {
           const modalInfo = {

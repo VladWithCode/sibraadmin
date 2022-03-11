@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
   historyGetLot,
-  historySetLot,
   historySetRecordInfo,
 } from '../../actions/historyActions';
 import { setTempError, setTempSuccessNotice } from '../../actions/ui';
@@ -18,13 +17,7 @@ import { Payment } from './Payment';
 export const Record = ({ record, payment }) => {
   const dispatch = useDispatch();
 
-  const [_record, setRecord] = useState(record);
-  const setRecordField = (f, v) => {
-    setRecord({
-      ..._record,
-      [f]: v,
-    });
-  };
+  const [_record] = useState(record);
 
   const {
     lotNumber,

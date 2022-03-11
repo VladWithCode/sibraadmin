@@ -1,15 +1,13 @@
-import React from "react";
-import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import { historyGetLot } from "../../actions/historyActions";
-import { getLot } from "../../actions/lot";
-import { paymentOpen } from "../../actions/payments";
-import { redirectSet } from "../../actions/redirect";
-import { redTypes } from "../../types/reduxTypes";
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { historyGetLot } from '../../actions/historyActions';
+import { getLot } from '../../actions/lot';
+import { paymentOpen } from '../../actions/payments';
+import { redirectSet } from '../../actions/redirect';
+import { redTypes } from '../../types/reduxTypes';
 
 export const CalendarEvent = ({ event }) => {
-  console.log(event);
-
   const { phoneNumber, title, projectId, lotId } = event;
 
   const dispatch = useDispatch();
@@ -27,8 +25,7 @@ export const CalendarEvent = ({ event }) => {
           )
         );
         dispatch(paymentOpen(projectId));
-      }}
-    >
+      }}>
       <h4>{title}</h4>
       <p>{phoneNumber}</p>
     </Link>
