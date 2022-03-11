@@ -15,3 +15,9 @@ export const sortByState = (lots, state) => {
     );
   });
 };
+
+export const getCessionInfo = lot => {
+  if (lot.cessions.length === 0) return false;
+
+  return lot.cessions[0];
+};

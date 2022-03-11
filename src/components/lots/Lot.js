@@ -18,6 +18,7 @@ import { PriceHistory } from './PriceHistory';
 import { ClientShort } from '../clients/ClientShort';
 import { Cancellations } from '../history-globals/Cancellations';
 import Cessions from '../history-globals/Cessions';
+import { getCessionInfo } from '../../helpers/lotHelpers';
 
 export const Lot = () => {
   const { lotId, projectId } = useParams();
@@ -58,6 +59,8 @@ export const Lot = () => {
       : state === 'reserved'
       ? 'Comprado'
       : 'Liquidado';
+
+  const cession = getCessionInfo(currentLot);
 
   const dispatch = useDispatch();
 
@@ -259,7 +262,7 @@ export const Lot = () => {
                 <h3> Cliente Comprador </h3>
               </div>
             </div>
-            <ClientShort client={currentClient} />
+            <ClientShort client={currentClient} cession={cession} />
           </>
         )}
 
