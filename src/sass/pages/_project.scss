@@ -531,6 +531,36 @@
     }
   }
 
+  &__center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__register-btn {
+    background-color: $color-btn-secondary;
+    color: #eee;
+    font-size: 1.6rem;
+    border-radius: 0.6rem;
+    transform: scale(1);
+    border: 0;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    &:active {
+      background-color: darken($color-btn-secondary, 5%);
+      transform: scale(1.01);
+    }
+
+    &.danger {
+      background-color: $color-danger;
+    }
+  }
+
   &__body {
     display: flex;
     justify-content: space-between;
@@ -577,6 +607,38 @@
             }
           }
         }
+      }
+    }
+
+    &.files {
+      margin-left: -2rem;
+      margin-right: -2rem;
+      margin-bottom: -2rem;
+      background-color: #e3e3e3;
+
+      .card__header {
+        .left {
+          display: flex;
+
+          h4 {
+            margin: auto;
+            margin-left: 2rem;
+            font-size: 2rem;
+          }
+        }
+
+        .btn-edit {
+          font-size: 1.4rem;
+          border: 0;
+          border-radius: 0.6rem;
+          background-color: $color-ok;
+          margin: auto;
+          margin-right: 2rem;
+        }
+      }
+
+      .card__body__list {
+        overflow-y: auto;
       }
     }
 

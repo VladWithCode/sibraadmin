@@ -25,6 +25,7 @@ export default async function makeServerRequest(
   }
 
   function transformBody(o) {
+    if (o instanceof FormData) return o;
     if (typeof o !== 'object') return o;
 
     return JSON.stringify(o);

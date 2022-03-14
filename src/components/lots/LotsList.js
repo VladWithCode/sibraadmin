@@ -2,7 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLot } from '../../actions/consults';
-import { sortByState, sortLotArray } from '../../helpers/lotHelpers';
+import { fetchLot, sortByState, sortLotArray } from '../../helpers/lotHelpers';
+import {
+  setTempError,
+  uiFinishLoading,
+  uiStartLoading,
+} from '../../actions/ui';
+import makeServerRequest from '../../helpers/makeServerRequest';
+import { recordSet } from '../../actions/record';
 
 export const LotsList = React.memo(({ projectId, searchParams }) => {
   const { lots } = useSelector(state => state);
@@ -66,8 +73,29 @@ export const LotsList = React.memo(({ projectId, searchParams }) => {
     setDisplayLots(tempDispLots);
   }, [lots, searchOrder, searchManzana, searchLot]);
 
-  const updateLot = _id => {
-    dispatch(setLot(lots.find(l => l._id === _id)));
+  const updateLot = async (_id, e) => {
+    const localLot = lots.find(l => l._id === _id);
+
+    dispatch(uiStartLoading());
+    const [dbLot, info] = await fetchLot(_id);
+
+    if (!dbLot) {
+      console.log(info.error);
+      dispatch(setTempError(info.message));
+      e.preventDefault();
+      return;
+    }
+
+    const recordId = dbLot.record?._id || localLot.record?._id;
+
+    if (recordId) {
+      const { record } = await makeServerRequest('/records/' + recordId);
+
+      if (record) dispatch(recordSet(record));
+    }
+
+    dispatch(setLot(dbLot || localLot));
+    dispatch(uiFinishLoading());
   };
 
   return (
@@ -100,7 +128,7 @@ export const LotsList = React.memo(({ projectId, searchParams }) => {
 
                 return (
                   <Link
-                    onClick={() => updateLot(_id)}
+                    onClick={e => updateLot(_id, e)}
                     key={_id}
                     className={`item ${state} ${gray && 'gray'}`}
                     to={`./${projectId}/lote/${_id}`}>

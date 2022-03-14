@@ -19,11 +19,19 @@ import { ClientShort } from '../clients/ClientShort';
 import { Cancellations } from '../history-globals/Cancellations';
 import Cessions from '../history-globals/Cessions';
 import { getCessionInfo } from '../../helpers/lotHelpers';
+import UnofficialManager from '../records/UnofficialManager';
+import { isEmptyObject } from '../../helpers/generalHelpers';
 
 export const Lot = () => {
   const { lotId, projectId } = useParams();
 
-  const { lots, projects, lot: tempLot, clients } = useSelector(state => state);
+  const {
+    lots,
+    projects,
+    lot: tempLot,
+    clients,
+    record,
+  } = useSelector(state => state);
 
   const currentProject = projects.find(p => p._id === projectId);
 
@@ -278,6 +286,21 @@ export const Lot = () => {
               key={currentLot?.record._id}
               record={currentLot?.record}
               lotId={lotId}
+            />
+          </>
+        )}
+
+        {record && !isEmptyObject(record) && (
+          <>
+            <div className='project__header'>
+              <div className='left'>
+                <h3>Gestor Oficioso</h3>
+              </div>
+            </div>
+            <UnofficialManager
+              unofficialManager={record.unofficialManager}
+              recordId={record._id}
+              lot={currentLot}
             />
           </>
         )}

@@ -35,6 +35,7 @@ import { Template } from '../components/templates/Template';
 import { RequestRefund } from '../components/history-globals/RequestRefund';
 import { RequestCession } from '../components/history-globals/RequestCession';
 import CompleteCession from '../components/history-globals/CompleteCession';
+import RegisterUM from '../components/records/RegisterUM';
 
 export const AppRouter = () => {
   const { loading } = useSelector(state => state.ui);
@@ -135,6 +136,11 @@ export const AppRouter = () => {
               path='/historial/ceder/:recordId'
               component={CompleteCession}
             />
+
+            <Route
+              exact
+              path='/historial/registar-gestor/:id'
+              component={RegisterUM}></Route>
 
             <Route
               exact

@@ -19,10 +19,18 @@
 
   .window {
     display: block;
+    min-width: 45%;
     @include center;
     background-color: $white;
-    // padding: 5rem 7rem;
     border-radius: 1rem;
     @include shadow;
+  }
+
+  .btn-submit {
+    background-color: $color-ok;
+    width: 10rem;
+    margin: auto;
+    margin-right: 0;
+    border-radius: 0.6rem;
   }
 }
