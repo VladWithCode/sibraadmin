@@ -7,6 +7,7 @@ import { floatingButtonSet } from '../../actions/floatingButton';
 import { getLot } from '../../actions/lot';
 import { modalEnable, modalUpdate } from '../../actions/modal';
 import { extraPaymentSetInfo, paymentSetInfo } from '../../actions/payments';
+import { recordSet } from '../../actions/record';
 import { redirectSet } from '../../actions/redirect';
 import {
   setTempError,
@@ -31,23 +32,16 @@ export const PayExtraCharge = () => {
     projects,
     payments,
     records,
+    record,
   } = useSelector(state => state);
 
   const { area, isCorner, lotNumber, measures, manzana, price } = currentLot;
 
-  const record = records.find(r => r._id === recordId);
-
   const currentClient = clients.find(c => c._id === record?.customer);
-
-  // const { extraCharges } = projects.find(p => p._id === record?.project);
-
-  // const currentExtraCharges = extraCharges.find(e => e._id === extraChargeId);
 
   const [currentExtraCharges, setCurrentExtraCharges] = useState({});
 
   const [xCharge, setXCharge] = useState({});
-
-  // const { amount: extraAmount, title } = currentExtraCharges;
 
   const [emptyFields, setEmptyFields] = useState([]);
 
@@ -95,7 +89,7 @@ export const PayExtraCharge = () => {
       )
     );
     setXCharge(record?.extraCharges.find(xc => xc._id === extraChargeId));
-  }, [extraChargeId, projects, record?.project, templates]);
+  }, [extraChargeId, projects, record, templates]);
 
   const inputChange = e => {
     checkEmptyField(e);
@@ -190,15 +184,20 @@ export const PayExtraCharge = () => {
     const res = await postPayment(data);
     dispatch(uiFinishLoading());
 
-    if (!res || res?.status !== 'OK') {
+    if (!res || res.status !== 'OK') {
       dispatch(
-        setTempError(res?.message || 'Ocurrio un error al registrar el pago')
+        setTempError(
+          res?.message ||
+            res?.error?.message ||
+            'Ocurrio un error al registrar el pago'
+        )
       );
 
       return;
     }
 
     dispatch(getLot(record.lot));
+    dispatch(recordSet(res.record));
     dispatch(
       modalUpdate({
         title: 'Pago exitoso',

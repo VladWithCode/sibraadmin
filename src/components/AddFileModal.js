@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { recordSet } from '../actions/record';
-import { uiFinishLoading, uiStartLoading } from '../actions/ui';
+import { setTempError, uiFinishLoading, uiStartLoading } from '../actions/ui';
 import makeServerRequest from '../helpers/makeServerRequest';
 
-function AddFileModal({ endpoint, setActiveFloating }) {
+function AddFileModal({ endpoint, setActiveFloating, stateUpdater }) {
   const dispatch = useDispatch();
   const [fileName, setFileName] = useState('');
   const [file, setFile] = useState(null);
@@ -17,19 +17,27 @@ function AddFileModal({ endpoint, setActiveFloating }) {
     formData.append('file', file);
     formData.append('fileName', fileName);
 
-    const { status, record, message, error } = await makeServerRequest(
-      endpoint,
-      'PUT',
-      formData
-    );
+    const res = await makeServerRequest(endpoint, 'PUT', formData);
 
     dispatch(uiFinishLoading());
-    dispatch(recordSet(record));
+
+    const { status, message, error } = res;
+
+    if (status !== 'OK') {
+      console.error(error);
+      dispatch(
+        setTempError(
+          message || error?.message || 'Hubo un error al subir el documento'
+        )
+      );
+      return;
+    }
+    stateUpdater(res);
     setActiveFloating(false);
   };
 
   return (
-    <div className='card'>
+    <div className='card file-modal'>
       <div className='card__header'>
         <div className='left'>
           <h3 className='text-black'>Añadir Documento</h3>

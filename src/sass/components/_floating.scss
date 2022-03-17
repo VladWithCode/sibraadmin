@@ -19,7 +19,7 @@
 
   .window {
     display: block;
-    min-width: 45%;
+    // min-width: 45%;
     @include center;
     background-color: $white;
     border-radius: 1rem;

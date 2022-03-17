@@ -78,6 +78,7 @@ export const RequestRefund = () => {
       dispatch(setLot(res.lot));
       dispatch(modalUpdate(modalInfo));
       dispatch(modalEnable());
+      return;
     } else {
       dispatch(
         setTempError(res?.message || 'Hubo un problema con la base de datos')

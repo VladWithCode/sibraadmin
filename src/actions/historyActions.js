@@ -1,6 +1,7 @@
 import { redTypes } from '../types/reduxTypes';
 import { staticURL } from '../url';
 import { modalEnable, modalUpdate } from './modal';
+import { recordSet } from './record';
 import { setTempError, uiFinishLoading, uiStartLoading } from './ui';
 
 export const historySetLot = lot => ({
@@ -109,7 +110,8 @@ export const historyPostUpdate = record => {
             type: redTypes.project,
           };
 
-          dispatch(historySetRecordInfo(data.record));
+          // dispatch(historySetRecordInfo(data.record));
+          dispatch(recordSet(record));
           dispatch(modalUpdate(modalInfo));
           dispatch(modalEnable());
           return;

@@ -346,9 +346,7 @@
     }
 
     .status {
-      margin: auto;
-      margin-right: 2rem;
-      font-size: 2rem;
+      font-size: 1.6rem;
       color: $color-warning;
       text-transform: uppercase;
       font-weight: 600;
@@ -615,6 +613,7 @@
       margin-right: -2rem;
       margin-bottom: -2rem;
       background-color: #e3e3e3;
+      box-shadow: inset 0px 7px 9px -7px rgba(#333, 0.4);
 
       .card__header {
         .left {

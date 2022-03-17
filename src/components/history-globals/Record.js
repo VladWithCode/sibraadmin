@@ -41,8 +41,6 @@ export const Record = ({ record, payment }) => {
   const state =
     _record.state === 'available'
       ? 'Disponible'
-      : _record.state === 'delivered'
-      ? 'Entregado'
       : _record.state === 'reserved'
       ? 'Pago de Lote Pendiente'
       : _record.state === 'lotpayed'

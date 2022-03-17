@@ -42,6 +42,7 @@ export const RequestCession = () => {
       const clientFound = clients.find(c => c._id === record.customer);
 
       if (clientFound) dispatch(clientSet(clientFound));
+      setFormValues({ ...formValues, assignor: client.fullName });
     }
   }, [record, clients, dispatch]);
 

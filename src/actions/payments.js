@@ -12,6 +12,7 @@ import { getLot } from './lot';
 import { modalEnable, modalUpdate } from './modal';
 import { setTempError, uiFinishLoading, uiStartLoading } from './ui';
 import { safeRound } from '../helpers/generalHelpers';
+import { recordSet } from './record';
 
 export const buyLotSet = payment => ({
   type: redTypes.buyLotSet,
@@ -281,8 +282,6 @@ const postData = (data, lotInfo) => {
     })
       .then(res => res.json())
       .then(data => {
-        console.log(data);
-
         if (data?.status === 'OK') {
           const modalInfo = {
             title: `Compra registrada con éxito con éxito`,
@@ -293,11 +292,18 @@ const postData = (data, lotInfo) => {
             type: redTypes.projectCreate,
           };
 
+          dispatch(recordSet(data.record));
           dispatch(modalUpdate(modalInfo));
           dispatch(modalEnable());
           return dispatch(getLot(lotId));
         } else {
-          dispatch(setTempError('Ha ocurrido un error en la base de datos'));
+          dispatch(
+            setTempError(
+              data.message ||
+                data.error?.message ||
+                'Ha ocurrido un error en la base de datos'
+            )
+          );
         }
       })
       .catch(err => {

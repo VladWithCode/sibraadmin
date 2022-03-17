@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { recordSet } from '../../actions/record';
 import { isEmptyObject } from '../../helpers/generalHelpers';
 import { staticURLDocs } from '../../url';
 import AddFileModal from '../AddFileModal';
 import { Floating } from '../Floating';
 
 function UnofficialManager({ unofficialManager, recordId }) {
+  const dispatch = useDispatch();
   const registerManager = e => {};
 
   const [activeModal, setActiveModal] = useState(false);
@@ -115,6 +118,7 @@ function UnofficialManager({ unofficialManager, recordId }) {
           <AddFileModal
             endpoint={`/record/${recordId}/manager/file`}
             setActiveFloating={setActiveModal}
+            stateUpdater={res => dispatch(recordSet(res.record))}
           />
         </Floating>
       )}
