@@ -1,0 +1,27 @@
+.ui-card {
+  &__header {
+    width: 100%;
+    display: flex;
+    padding: 0 2rem;
+    justify-content: space-between;
+  }
+
+  &__heading {
+    &,
+    &--main {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: $black;
+    }
+  }
+
+  &__body {
+    display: flex;
+    width: 100%;
+
+    &--scroll {
+      max-height: 15rem;
+      overflow-y: auto;
+    }
+  }
+}

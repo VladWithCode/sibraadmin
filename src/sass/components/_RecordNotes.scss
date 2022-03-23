@@ -1,0 +1,31 @@
+.recordNotes {
+  svg {
+    width: 1.8rem;
+    height: 1.8rem;
+    cursor: pointer;
+    transform: scale(1);
+    transition: transform 0.1s linear;
+
+    &:hover {
+      transform: scale(1.15);
+    }
+
+    &:active {
+      transform: scale(1.05);
+    }
+  }
+
+  .update {
+    margin: auto;
+    fill: $color-ok;
+  }
+
+  .delete {
+    fill: $color-danger;
+  }
+
+  .update,
+  .delete {
+    margin-right: 1rem;
+  }
+}

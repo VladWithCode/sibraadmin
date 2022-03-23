@@ -1,0 +1,13 @@
+.ui-list {
+  display: flex;
+  flex-direction: column;
+
+  &__item {
+    list-style: none;
+    padding-inline-start: 0;
+
+    &--flex {
+      display: flex;
+    }
+  }
+}

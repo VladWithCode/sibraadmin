@@ -8,6 +8,10 @@ import {
 import { setTempError, setTempSuccessNotice } from '../../actions/ui';
 import { priceToString } from '../../helpers/generalHelpers';
 import { staticURL, staticURLDocs } from '../../url';
+import RecordChecks from '../records/RecordChecks';
+import RecordNotes from '../records/RecordNotes';
+import CheckListItem from '../ui/CheckListItem';
+import List from '../ui/List';
 import CancelBtn from './CancelBtn';
 import CessionBtn from './CessionBtn';
 import { CommissionInfo } from './CommisionInfo';
@@ -17,7 +21,8 @@ import { Payment } from './Payment';
 export const Record = ({ record, payment }) => {
   const dispatch = useDispatch();
 
-  const [_record] = useState(record);
+  // const [_record] = useState(record);
+  const _record = useSelector(state => state.record);
 
   const {
     lotNumber,
@@ -116,6 +121,14 @@ export const Record = ({ record, payment }) => {
 
   return (
     <div className='card mb-3' key={record._id}>
+      <div className='card__body mb-2' style={{ position: 'initial' }}>
+        <div className='left'>
+          <RecordNotes notes={_record.notes} recordId={record._id} />
+        </div>
+        <div className='left'>
+          <RecordChecks checks={_record.checks}></RecordChecks>
+        </div>
+      </div>
       <div className='card__header'>
         <img src='../assets/img/info.png' alt='' />
         <h4>Lote en {projectName}</h4>

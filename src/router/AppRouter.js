@@ -39,15 +39,14 @@ import RegisterUM from '../components/records/RegisterUM';
 
 export const AppRouter = () => {
   const { loading } = useSelector(state => state.ui);
+
   return (
     <Router>
       <>
-        <>
-          <NavBar />
-          <FloatingButton />
-          <ModalConfirm />
-          <UiError />
-        </>
+        <NavBar />
+        <FloatingButton />
+        <ModalConfirm />
+        <UiError />
 
         <div className='app'>
           <Switch>

@@ -21,6 +21,9 @@ import Cessions from '../history-globals/Cessions';
 import { getCessionInfo } from '../../helpers/lotHelpers';
 import UnofficialManager from '../records/UnofficialManager';
 import { isEmptyObject } from '../../helpers/generalHelpers';
+import makeServerRequest from '../../helpers/makeServerRequest';
+import { setTempError } from '../../actions/ui';
+import { recordSet } from '../../actions/record';
 
 export const Lot = () => {
   const { lotId, projectId } = useParams();
@@ -123,6 +126,33 @@ export const Lot = () => {
   }, [dispatch, lotId, lotNumber, name, projectId, state]);
 
   useEffect(() => {
+    const setRecord = async () => {
+      if (!(typeof currentLot.record === 'string')) {
+        if (!currentLot.record?._id) return;
+
+        const { status, record, message, error } = await makeServerRequest(
+          '/records/' + currentLot.record._id
+        );
+
+        if (status) {
+          dispatch(
+            setTempError(
+              error?.message || message || 'Error al recuperar el expediente'
+            )
+          );
+          return;
+        }
+
+        dispatch(recordSet(record));
+      }
+    };
+
+    if (!record) {
+      setRecord();
+    }
+  }, [record]);
+
+  useEffect(() => {
     setCurrentClient(clients.find(c => c._id === currentLot.customer));
 
     setCurrentLot(tempLot._id ? tempLot : lots.find(lot => lot._id === lotId));
@@ -137,6 +167,8 @@ export const Lot = () => {
       'top=500,left=200,frame=true,nodeIntegration=no'
     );
   };
+
+  if (!record || Object.keys(record).length === 0) return <>loading...</>;
 
   return (
     <>

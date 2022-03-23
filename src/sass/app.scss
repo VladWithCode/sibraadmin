@@ -1,6 +1,7 @@
 @import './abstracts/variables';
 @import './abstracts/mixins';
 
+@import './components//addNote';
 @import './components/breadcrumbs';
 @import './components/calendar';
 @import './components//cession';
@@ -14,8 +15,15 @@
 @import './components/manzana-lots';
 @import './components/modalConfirm';
 @import './components/nav';
+@import './components/RecordNotes';
 @import './components/QuickRegister';
 @import './components/uiError';
+@import './components/ui-button';
+@import './components/ui-card';
+@import './components/ui-checkitem';
+@import './components/ui-list';
+@import './components/ui-listinput';
+@import './components/ui-placeholder';
 
 @import './pages/clients';
 @import './pages/createPages';
@@ -27,3 +35,4 @@
 @import './base/animations';
 @import './base/base';
 @import './base/typography';
+@import './base/utils';

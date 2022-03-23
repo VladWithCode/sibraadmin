@@ -21,6 +21,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    fill: $white;
     @include transition;
   }
 
