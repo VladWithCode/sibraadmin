@@ -36,6 +36,7 @@ import { RequestRefund } from '../components/history-globals/RequestRefund';
 import { RequestCession } from '../components/history-globals/RequestCession';
 import CompleteCession from '../components/history-globals/CompleteCession';
 import RegisterUM from '../components/records/RegisterUM';
+import Stats from '../components/stats/Stats';
 
 export const AppRouter = () => {
   const { loading } = useSelector(state => state.ui);
@@ -154,6 +155,8 @@ export const AppRouter = () => {
               exact
               path='/plantillas/:projectId'
               component={Template}></Route>
+
+            <Route exact path='/stats' component={Stats}></Route>
 
             <Redirect to='/proyectos'></Redirect>
           </Switch>

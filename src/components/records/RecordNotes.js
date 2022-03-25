@@ -18,7 +18,7 @@ import ListItem from '../ui/ListItem';
 import AddNote from './AddNote';
 import EditNote from './EditNote';
 
-function RecordNotes({ notes, recordId }) {
+function RecordNotes({ notes, recordId, editable }) {
   const dispatch = useDispatch();
   const [activeAddNote, setActiveAddNote] = useState(false);
   const [activeEditNote, setActiveEditNote] = useState(false);
@@ -55,12 +55,14 @@ function RecordNotes({ notes, recordId }) {
     <div className='recordNotes'>
       <Card>
         <CardHeader content={'Notas'}>
-          <div className='ui-card__controls'>
-            <Button
-              onClick={() => setActiveAddNote(true)}
-              children={'Añadir nota'}
-            />
-          </div>
+          {editable && (
+            <div className='ui-card__controls'>
+              <Button
+                onClick={() => setActiveAddNote(true)}
+                children={'Añadir nota'}
+              />
+            </div>
+          )}
         </CardHeader>
         <CardBody classList={['ui-card__body--scroll']}>
           <List classList={['w-100p', 'mt-2']}>
@@ -73,16 +75,24 @@ function RecordNotes({ notes, recordId }) {
                   i > 0 ? 'mt-1' : '',
                 ]}>
                 <div className='content text-black'>{n}</div>
-                <div className='update' onClick={() => handleUpdateClick(n)}>
-                  <svg>
-                    <use href='../assets/svg/pencil.svg#pencil'></use>
-                  </svg>
-                </div>
-                <div className='delete' onClick={() => handleDeleteClick(n)}>
-                  <svg viewBox='0 0 32 32'>
-                    <use href='../assets/svg/bin.svg#bin'></use>
-                  </svg>
-                </div>
+                {editable && (
+                  <>
+                    <div
+                      className='update'
+                      onClick={() => handleUpdateClick(n)}>
+                      <svg>
+                        <use href='../assets/svg/pencil.svg#pencil'></use>
+                      </svg>
+                    </div>
+                    <div
+                      className='delete'
+                      onClick={() => handleDeleteClick(n)}>
+                      <svg viewBox='0 0 32 32'>
+                        <use href='../assets/svg/bin.svg#bin'></use>
+                      </svg>
+                    </div>
+                  </>
+                )}
               </ListItem>
             ))}
           </List>

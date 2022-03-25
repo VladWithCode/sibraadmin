@@ -16,6 +16,7 @@
 @import './components/modalConfirm';
 @import './components/nav';
 @import './components/RecordNotes';
+@import './components/RecordSummary';
 @import './components/QuickRegister';
 @import './components/uiError';
 @import './components/ui-button';
@@ -24,6 +25,7 @@
 @import './components/ui-list';
 @import './components/ui-listinput';
 @import './components/ui-placeholder';
+@import './components/ui-screen';
 
 @import './pages/clients';
 @import './pages/createPages';
@@ -31,6 +33,7 @@
 @import './pages/lot';
 @import './pages/project';
 @import './pages/projects';
+@import './pages/stats';
 
 @import './base/animations';
 @import './base/base';

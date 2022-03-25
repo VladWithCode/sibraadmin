@@ -12,6 +12,7 @@ import { setTempError, setTempSuccessNotice } from '../../actions/ui';
 import { staticURLDocs } from '../../url';
 import { Record } from '../history-globals/Record';
 import makeServerRequest from '../../helpers/makeServerRequest';
+import RecordSummary from '../records/RecordSummary';
 
 export const Client = () => {
   const { clientId } = useParams();
@@ -361,9 +362,18 @@ export const Client = () => {
                 <h3>Expedientes Activos</h3>
               </div>
             </div>
-            {activeRecords.map(record => (
+            {/* {activeRecords.map(record => (
               <Record key={record._id} record={record} lotId={record.lot} />
-            ))}
+            ))} */}
+            {activeRecords.map((record, i) => {
+              return (
+                <RecordSummary
+                  classList={i < activeRecords.length - 1 ? ['mb-2'] : []}
+                  key={record._id}
+                  record={record}
+                />
+              );
+            })}
           </>
         )}
       </div>

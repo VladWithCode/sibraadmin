@@ -1,0 +1,48 @@
+.Stats {
+  &-card {
+    padding: 1.5rem 2rem;
+
+    &__header {
+      margin-bottom: 1rem;
+    }
+
+    &__body {
+      flex-wrap: wrap;
+      column-gap: 1%;
+    }
+
+    &__section {
+      width: 33%;
+      margin-bottom: 0.2rem;
+      padding: 0.2rem 0.4rem;
+      background-color: #eee;
+
+      ul {
+        width: 100%;
+      }
+
+      li {
+        font-size: 1.7rem;
+        color: #3e3e3e;
+        display: flex;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid rgba(#3e3e3e, 35%);
+
+        .stat-name,
+        .stat-value {
+          display: block;
+          width: 50%;
+        }
+
+        .stat-name {
+          text-align: left;
+        }
+
+        .stat-value {
+          font-weight: 600;
+          text-align: right;
+        }
+      }
+    }
+  }
+}

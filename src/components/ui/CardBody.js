@@ -1,8 +1,8 @@
 import React from 'react';
 
-function CardBody(props) {
-  const { children, classList } = props;
-  const className = ['ui-card__body', classList?.map(c => c)];
+function CardBody({ children, classList }) {
+  const className = ['ui-card__body'];
+  classList && className.push(...classList);
 
   return <div className={className.join(' ')}>{children}</div>;
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
@@ -20,9 +20,13 @@ import { Payment } from './Payment';
 
 export const Record = ({ record, payment }) => {
   const dispatch = useDispatch();
+  const stateRecord = useSelector(state => state.record);
 
-  // const [_record] = useState(record);
-  const _record = useSelector(state => state.record);
+  const [_record, setRecord] = useState(record);
+
+  useEffect(() => {
+    if (!record && Object.keys(stateRecord).length > 0) setRecord(stateRecord);
+  }, [record, stateRecord]);
 
   const {
     lotNumber,
@@ -123,10 +127,17 @@ export const Record = ({ record, payment }) => {
     <div className='card mb-3' key={record._id}>
       <div className='card__body mb-2' style={{ position: 'initial' }}>
         <div className='left'>
-          <RecordNotes notes={_record.notes} recordId={record._id} />
+          <RecordNotes
+            notes={_record.notes}
+            recordId={_record._id}
+            editable={true}
+          />
         </div>
         <div className='left'>
-          <RecordChecks checks={_record.checks}></RecordChecks>
+          <RecordChecks
+            checks={_record.checks}
+            record={_record}
+            editable={true}></RecordChecks>
         </div>
       </div>
       <div className='card__header'>
