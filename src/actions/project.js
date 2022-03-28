@@ -1,8 +1,8 @@
-import { redTypes } from "../types/reduxTypes";
-import { uiStartLoading, uiFinishLoading } from "./ui";
-import { staticURL } from "../url";
+import { redTypes } from '../types/reduxTypes';
+import { uiStartLoading, uiFinishLoading } from './ui';
+import { staticURL } from '../url';
 
-export const projectCreate = (project) => {
+export const projectCreate = project => {
   return {
     type: redTypes.projectCreate,
     payload: {
@@ -31,26 +31,26 @@ export const projectReset = () => ({
   type: redTypes.projectReset,
 });
 
-export const projectSet = (project) => ({
+export const projectSet = project => ({
   type: redTypes.projectSet,
   payload: project,
 });
 
-export const projectDeleteService = (service) => ({
+export const projectDeleteService = service => ({
   type: redTypes.projectDeleteService,
   payload: {
     service,
   },
 });
 
-export const projectAddService = (service) => ({
+export const projectAddService = service => ({
   type: redTypes.projectAddService,
   payload: {
     service,
   },
 });
 
-export const projectSetServices = (services) => ({
+export const projectSetServices = services => ({
   type: redTypes.projectSetServices,
   payload: services,
 });
@@ -63,7 +63,7 @@ export const projectDisableSvcModal = () => ({
   type: redTypes.projectDisableSvcModal,
 });
 
-export const projectUpdateSvcModal = (modal) => {
+export const projectUpdateSvcModal = modal => {
   return {
     type: redTypes.projectUpdateSvcModal,
     payload: {
@@ -78,8 +78,8 @@ export const projectUpdateSvcModal = (modal) => {
   };
 };
 
-export const projectSetPage = (page) => {
-  if (typeof page === "number") {
+export const projectSetPage = page => {
+  if (typeof page === 'number') {
     return {
       type: redTypes.projectSetPage,
       payload: {
@@ -90,8 +90,8 @@ export const projectSetPage = (page) => {
 };
 
 export const uploadProjectDocument = (projectDocument, lots) => {
-  return (dispatch) => {
-    console.log("Subiendo Proyecto");
+  return dispatch => {
+    console.log('Subiendo Proyecto');
 
     const url = `${staticURL}/project/`;
 
@@ -105,22 +105,27 @@ export const uploadProjectDocument = (projectDocument, lots) => {
     dispatch(uiStartLoading());
 
     fetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     })
-      .then((response) => {
+      .then(response => {
         dispatch(uiFinishLoading());
         return response.json();
       })
-      .then((data) => {
+      .then(data => {
         console.log(data);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
         dispatch(uiFinishLoading());
       });
   };
 };
+
+export const setProjects = projects => ({
+  type: redTypes.projectsSet,
+  payload: projects,
+});

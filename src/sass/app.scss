@@ -1,10 +1,11 @@
+@import './base/animations';
 @import './abstracts/variables';
 @import './abstracts/mixins';
 
-@import './components//addNote';
+@import './components/addNote';
 @import './components/breadcrumbs';
 @import './components/calendar';
-@import './components//cession';
+@import './components/cession';
 @import './components/fileModal';
 @import './components/floating';
 @import './components/floatingBtn';
@@ -17,6 +18,7 @@
 @import './components/nav';
 @import './components/RecordNotes';
 @import './components/RecordSummary';
+@import './components/searchSelect';
 @import './components/QuickRegister';
 @import './components/uiError';
 @import './components/ui-button';
@@ -35,7 +37,6 @@
 @import './pages/projects';
 @import './pages/stats';
 
-@import './base/animations';
 @import './base/base';
 @import './base/typography';
 @import './base/utils';

@@ -99,6 +99,28 @@
   }
 }
 
+@keyframes shakeRotate {
+  0% {
+    transform: rotate(0);
+  }
+
+  25% {
+    transform: rotate(22.5deg);
+  }
+
+  50% {
+    transform: rotate(0);
+  }
+
+  75% {
+    transform: rotate(-22.5deg);
+  }
+
+  100% {
+    transform: rotate(0);
+  }
+}
+
 // [data-aos="moveInLeft"] {
 //     opacity: 0;
 //     @include animation(.8s, moveInLeft, 1s);

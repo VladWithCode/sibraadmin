@@ -18,6 +18,8 @@ export const redTypes = {
 
   projectSet: '[Project] Set',
 
+  projectsSet: '[Projects] Set',
+
   getProjects: '[GET] Projects',
   getLots: '[GET] Lots',
   getClients: '[GET] Clients',
@@ -92,6 +94,8 @@ export const redTypes = {
 
   recordSet: '[Record] Set',
   recordUnset: '[Record] Unset',
+
+  statsSet: '[Stats] Set',
 
   lotTypesSet: '[LotTypes] Set',
   lotTypesReset: '[LotTypes] Reset',

@@ -1,0 +1,120 @@
+.searchSelect {
+  --border-radius: 0.7rem;
+  --box-shadow: 0 5px 10px -8px #333;
+
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 90;
+
+  &__display {
+    height: 3.4rem;
+    width: 20rem;
+    background-color: #fff;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+
+    &:hover > .icon {
+      animation-name: shakeRotate;
+      animation-duration: 0.57s;
+      animation-timing-function: linear;
+    }
+
+    .value {
+      font-size: 1.6rem;
+      font-weight: 400;
+      margin: auto;
+      margin-right: 0.5rem;
+    }
+
+    .icon {
+      width: 1.8rem;
+      height: 1.8rem;
+      color: #333;
+      margin: auto;
+      margin-left: 0.5rem;
+    }
+  }
+
+  &.active > &__display {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  &__search-bar,
+  &__options {
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: var(--box-shadow);
+    position: absolute;
+  }
+
+  &.active > &__search-bar,
+  &.active > &__options {
+    opacity: 1;
+    pointer-events: all;
+    width: 20rem;
+  }
+
+  &__search-bar {
+    display: block;
+    padding: 0 0.5rem;
+    font-size: 1.2rem;
+    color: #000;
+    text-align: center;
+    border: 0;
+    top: 100%;
+    transition: opacity 0.2s linear;
+
+    &:focus {
+      outline: none;
+      box-shadow: inset 0 0 4px -2px #333;
+    }
+
+    border-top: 1px solid #3333;
+    border-bottom: 1px solid #3333;
+  }
+
+  &.active > &__search-bar {
+    height: 2.5rem;
+  }
+
+  &__options {
+    top: calc(100% + 2.5rem);
+    border-bottom-left-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+    transition: height 0.3s linear, opacity 0.15s linear;
+    overflow-x: auto;
+  }
+
+  &.active > &__options {
+    height: 10rem;
+    background-color: #fff;
+  }
+
+  &__option {
+    display: none;
+    width: 100%;
+    height: 3rem;
+    font-size: 1.25rem;
+    line-height: 3rem;
+    padding: 0 1rem;
+
+    &:not(.no-select) {
+      cursor: pointer;
+
+      &:hover {
+        background-color: #efefef;
+      }
+    }
+  }
+
+  &.active &__option {
+    display: block;
+  }
+}

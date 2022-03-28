@@ -1,8 +1,11 @@
-import { redTypes } from "../types/reduxTypes";
+import { redTypes } from '../types/reduxTypes';
 
 export const consultingReducer = (state = [], action) => {
   switch (action.type) {
     case redTypes.getProjects:
+      return action.payload;
+
+    case redTypes.projectsSet:
       return action.payload;
 
     default:

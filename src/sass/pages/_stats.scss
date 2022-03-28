@@ -1,4 +1,21 @@
 .Stats {
+  height: 100vh;
+
+  &__filters {
+    display: flex;
+    width: 100%;
+    column-gap: 4rem;
+  }
+
+  &__filter {
+    .title {
+      font-size: 1.6rem;
+      font-weight: 400;
+      padding-left: 1rem;
+      margin-bottom: 0.5rem;
+    }
+  }
+
   &-card {
     padding: 1.5rem 2rem;
 
