@@ -1,6 +1,21 @@
 .ui-listinput {
   display: flex;
   width: 100%;
+  margin: 0.8rem 0;
+
+  &--col {
+    flex-direction: column;
+
+    input.ui-listinput__control,
+    label.ui-listinput__label {
+      margin: 0 auto;
+      width: 80%;
+    }
+
+    label.ui-listinput__label {
+      margin-bottom: 0.6rem;
+    }
+  }
 
   &__label {
     display: block;
@@ -15,10 +30,15 @@
     display: block;
     margin: auto;
     margin-right: 0.4rem;
-    border: 1px solid #8e8e8e;
-    border-radius: 0.3rem;
+    border: 2px solid transparent;
+    border-bottom-color: #8e8e8e;
     font-size: 1.4rem;
     color: $black;
     padding: 0.35rem 1rem;
+    outline: none;
+
+    &:focus {
+      border-bottom-color: $color-ok;
+    }
   }
 }

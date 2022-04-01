@@ -7,8 +7,8 @@ export default async function makeServerRequest(
   headers
 ) {
   const fetchOpts = {
-    // credentials: 'include',
-    // mode: 'cors',
+    credentials: 'include',
+    mode: 'cors',
     method,
   };
 
@@ -21,7 +21,7 @@ export default async function makeServerRequest(
     return await res.json();
   } catch (err) {
     console.log(err);
-    return err;
+    return { error: err };
   }
 
   function transformBody(o) {

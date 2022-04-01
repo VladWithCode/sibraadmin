@@ -1,0 +1,27 @@
+.SignIn {
+  &__form {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    width: 37rem;
+    height: 30rem;
+    box-shadow: 0 4px 10px -5px #3338;
+
+    button {
+      margin: 0.8rem auto;
+      margin-right: 2rem;
+    }
+
+    .ui-card {
+      height: 100%;
+
+      &__body {
+        flex: 1;
+      }
+    }
+
+    .mt-auto {
+      margin-top: auto;
+    }
+  }
+}

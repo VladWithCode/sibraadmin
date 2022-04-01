@@ -39,13 +39,13 @@ export const LateRecords = ({ lateRecords }) => {
 };
 
 // lotId: record.lot,
-//                         projectId: record.project,
-//                         title: record.customer.fullName,
-//                         start: eventdate,
-//                         end: eventdate,
-//                         bgcolor: '#fafafa',
-//                         isLate: record.paymentInfo.isLate,
-//                         hasProrogation: record.paymentInfo.hasProrogation,
-//                         allDay: true,
-//                         phoneNumber: record.customer.phoneNumber,
-//                         event: 'Pago del lote'
+// projectId: record.project,
+// title: record.customer.fullName,
+// start: eventdate,
+// end: eventdate,
+// bgcolor: '#fafafa',
+// isLate: record.paymentInfo.isLate,
+// hasProrogation: record.paymentInfo.hasProrogation,
+// allDay: true,
+// phoneNumber: record.customer.phoneNumber,
+// event: 'Pago del lote'

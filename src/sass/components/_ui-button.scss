@@ -2,4 +2,32 @@
   display: block;
   background-color: #333;
   border-radius: 0.6rem;
+
+  &:hover {
+    background-color: darken(#333, 5%);
+  }
+
+  &--danger {
+    background-color: $color-danger;
+
+    &:hover {
+      background-color: darken($color-danger, 10%);
+    }
+  }
+
+  &--edit {
+    background-color: $color-ok;
+
+    &:hover {
+      background-color: darken($color-ok, 10%);
+    }
+  }
+
+  &--submit {
+    background-color: $color-primary;
+
+    &:hover {
+      background-color: darken($color-primary, 10%);
+    }
+  }
 }

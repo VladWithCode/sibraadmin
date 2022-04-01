@@ -1,13 +1,43 @@
 .ui-list {
   display: flex;
   flex-direction: column;
+  width: 100%;
 
   &__item {
+    display: flex;
+    flex: 1;
     list-style: none;
     padding-inline-start: 0;
+    margin: 0.4rem 0;
+    font-size: 1.6rem;
 
-    &--flex {
-      display: flex;
+    &--right {
+      justify-content: flex-end;
+    }
+
+    .item-label {
+      flex: 0 1;
+      color: $black;
+
+      & + .item-content {
+        text-align: right;
+      }
+    }
+
+    .item-content {
+      flex: 1 0;
+
+      &--action {
+        cursor: pointer;
+        color: $color-ok;
+        font-weight: 600;
+      }
+    }
+  }
+
+  &__controls {
+    button {
+      margin-left: 1.5rem;
     }
   }
 }

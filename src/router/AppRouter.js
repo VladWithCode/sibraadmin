@@ -37,6 +37,8 @@ import { RequestCession } from '../components/history-globals/RequestCession';
 import CompleteCession from '../components/history-globals/CompleteCession';
 import RegisterUM from '../components/records/RegisterUM';
 import Stats from '../components/stats/Stats';
+import Profile from '../components/user/Profile';
+import SignIn from '../components/user/SignIn';
 
 export const AppRouter = () => {
   const { loading } = useSelector(state => state.ui);
@@ -157,6 +159,10 @@ export const AppRouter = () => {
               component={Template}></Route>
 
             <Route exact path='/stats' component={Stats}></Route>
+
+            <Route exact path='/usuario' component={Profile}></Route>
+
+            <Route exact path='/iniciar' component={SignIn}></Route>
 
             <Redirect to='/proyectos'></Redirect>
           </Switch>

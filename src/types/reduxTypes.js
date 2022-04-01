@@ -1,4 +1,9 @@
 export const redTypes = {
+  // Auth
+  authSet: '[AUTH] Authentication Set',
+  userSet: '[AUTH] User Set',
+  roleSet: '[AUTH] Role Set',
+
   projectCreate: '[Project] Create',
   projectEdit: '[Project] Edit',
   projectAddService: '[Project] AddService',

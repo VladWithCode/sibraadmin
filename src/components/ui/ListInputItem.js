@@ -13,6 +13,7 @@ function ListInputItem({ label, name, classList, onChange, value, type }) {
         type={type || 'text'}
         onChange={onChange}
         value={value}
+        name={name}
         className='ui-listinput__control'
       />
     </div>

@@ -1,0 +1,14 @@
+.Profile {
+  &-body {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 27rem);
+    column-gap: 5rem;
+    row-gap: 2rem;
+  }
+
+  &-user {
+    grid-row: span 1;
+    grid-column: span 1;
+  }
+}

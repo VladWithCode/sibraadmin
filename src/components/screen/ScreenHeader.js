@@ -6,7 +6,7 @@ function ScreenHeader({ children, classList, heading, subheading }) {
   classList && className.push(...classList);
 
   return (
-    <div className={className}>
+    <div className={className.join(' ')}>
       <ScreenHeading heading={heading} subheading={subheading} />
       {children}
     </div>

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 export const NavBar = () => {
   const [navExpanded, setNavExpanded] = useState(false);
@@ -14,6 +15,7 @@ export const NavBar = () => {
   };
 
   const {
+    auth: { isAuth, role },
     redirect: { projects, clients, history, templates },
   } = useSelector(state => state);
 
@@ -56,12 +58,24 @@ export const NavBar = () => {
           </svg>
           <span>Plantillas</span>
         </NavLink>
-        <NavLink to='/stats' activeClassName='active' className='link'>
+        {isAuth && (role === 'ADMIN' || role === 'DEV') && (
+          <NavLink to={'/stats'} activeClassName='active' className='link'>
+            <svg>
+              <use href='../assets/svg/stats.svg#stats'></use>
+            </svg>
+            <span>Estadisticas</span>
+          </NavLink>
+        )}
+        <NavLink
+          to={isAuth ? '/usuario' : '/iniciar'}
+          activeClassName='active'
+          className='link bot'>
           <svg>
-            <use href='../assets/svg/stats.svg#stats'></use>
+            <use href='../assets/svg/user.svg#user'></use>
           </svg>
-          <span>Estadisticas</span>
+          <span>{isAuth ? 'Ver Perfil' : 'Iniciar Sesion'}</span>
         </NavLink>
+
         {/* <NavLink to="/ajustes" activeClassName="active" className="link settings">
                     <svg><use href="/../assets/svg/cog.svg#cog" ></use></svg>
                     <span>Ajustes</span>

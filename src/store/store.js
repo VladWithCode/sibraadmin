@@ -27,6 +27,7 @@ import { recordReducer, recordsReducer } from '../reducers/recordsReducer';
 import { historyActionsReducer } from '../reducers/historyActionReducer';
 import { templatesReducer } from '../reducers/templatesReducer';
 import { payments } from '../reducers/payments';
+import { authReducer } from '../reducers/authReducer';
 
 const composeEnhancers =
   (typeof window !== 'undefined' &&
@@ -34,6 +35,7 @@ const composeEnhancers =
   compose;
 
 const reducers = combineReducers({
+  auth: authReducer,
   project: projectReducer,
   services: servicesReducer,
   lot: lotReducer,
