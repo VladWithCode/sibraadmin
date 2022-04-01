@@ -3,7 +3,7 @@ import ListItem from '../ui/ListItem';
 import PassChangeForm from './PassChangeForm';
 
 function PassItem({ user }) {
-  const [activeForm, setActiveForm] = useState(true);
+  const [activeForm, setActiveForm] = useState(false);
 
   return (
     <ListItem>
