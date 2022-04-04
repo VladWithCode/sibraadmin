@@ -72,7 +72,7 @@
     "productName": "Sibra",
     "win": {
       "target": "nsis",
-      "icon": "setup/favicon.ico"
+      "icon": "build/favicon.ico"
     },
     "files": [
       "build/**/*",
@@ -82,8 +82,8 @@
       "package.json"
     ],
     "nsis": {
-      "installerIcon": "setup/favicon.ico",
-      "uninstallerIcon": "setup/favicon.ico",
+      "installerIcon": "build/favicon.ico",
+      "uninstallerIcon": "build/favicon.ico",
       "uninstallDisplayName": "Sibra",
       "oneClick": false,
       "perMachine": true,
