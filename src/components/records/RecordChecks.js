@@ -91,7 +91,7 @@ function RecordChecks({ checks, record, editable }) {
             </div>
           )}
         </CardHeader>
-        <CardBody>
+        <CardBody classList={['ui-card__body--scroll']}>
           <List classList={['w-100p', 'mt-2']}>
             {checks?.map(c => {
               console.log(c);

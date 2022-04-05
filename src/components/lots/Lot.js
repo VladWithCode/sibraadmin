@@ -26,6 +26,7 @@ import { setTempError } from '../../actions/ui';
 import { recordSet } from '../../actions/record';
 
 export const Lot = () => {
+  const dispatch = useDispatch();
   const { lotId, projectId } = useParams();
 
   const {
@@ -36,28 +37,19 @@ export const Lot = () => {
     record,
   } = useSelector(state => state);
 
-  const currentProject = projects.find(p => p._id === projectId);
+  const currentProject = projects.find(p => {
+    console.log(p._id === projectId);
+    return p._id === projectId;
+  });
 
-  const [currentLot, setCurrentLot] = useState(
-    tempLot._id ? tempLot : lots.find(lot => lot._id === lotId)
-  );
+  const [currentLot, setCurrentLot] = useState({});
 
-  const {
-    area,
-    isCorner,
-    lotNumber,
-    measures,
-    state,
-    manzana,
-    files,
-    priceHistory,
-    bindings,
-    cancellations,
-    cessions,
-  } = currentLot;
+  useEffect(() => {
+    if (tempLot && Object.keys(tempLot).length > 0) setCurrentLot(tempLot);
+  }, [tempLot]);
 
   const [currentClient, setCurrentClient] = useState(
-    clients.find(c => c._id === currentLot.record)
+    clients.find(c => c._id === currentLot?.record)
   );
 
   const { name, availableServices } = currentProject;
@@ -65,20 +57,18 @@ export const Lot = () => {
   const stateName =
     tempLot.state === 'available'
       ? 'Disponible'
-      : state === 'delivered'
+      : tempLot.state === 'delivered'
       ? 'Entregado'
-      : state === 'reserved'
+      : tempLot.state === 'reserved'
       ? 'Comprado'
       : 'Liquidado';
 
   const cession = getCessionInfo(currentLot);
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
     const modalInfo = {
       title: 'Editar lote',
-      text: `¿Desea editar el lote ${lotNumber}?`,
+      text: `¿Desea editar el lote ${currentLot?.lotNumber}?`,
       link: `/proyectos/edit/${projectId}/lote/${lotId}`,
       okMsg: 'Sí',
       closeMsg: 'No',
@@ -96,7 +86,7 @@ export const Lot = () => {
         link: `/proyectos/ver/${projectId}`,
       },
       {
-        dispName: `Lote ${lotNumber}`,
+        dispName: `Lote ${currentLot.lotNumber}`,
         link: `/proyectos/ver/${projectId}/lote/${lotId}`,
       },
     ];
@@ -113,17 +103,24 @@ export const Lot = () => {
     dispatch(
       secondaryFloatingButtonSet(
         'bill',
-        state === 'reserved' ||
-          state === 'delivered' ||
-          state === 'payed' ||
-          state === 'liquidated'
+        currentLot?.state === 'reserved' ||
+          currentLot?.state === 'delivered' ||
+          currentLot?.state === 'payed' ||
+          currentLot?.state === 'liquidated'
           ? redTypes.lotReserved
           : null,
         projectId,
         lotId
       )
     );
-  }, [dispatch, lotId, lotNumber, name, projectId, state]);
+  }, [
+    dispatch,
+    lotId,
+    currentLot?.lotNumber,
+    name,
+    projectId,
+    currentLot?.state,
+  ]);
 
   useEffect(() => {
     const setRecord = async () => {
@@ -131,7 +128,7 @@ export const Lot = () => {
         if (!currentLot.record?._id) return;
 
         const { status, record, message, error } = await makeServerRequest(
-          '/records/' + currentLot.record._id
+          '/records/' + currentLot?.record._id
         );
 
         if (status) {
@@ -153,10 +150,10 @@ export const Lot = () => {
   }, [record]);
 
   useEffect(() => {
-    setCurrentClient(clients.find(c => c._id === currentLot.customer));
+    setCurrentClient(clients.find(c => c._id === currentLot?.customer));
 
     setCurrentLot(tempLot._id ? tempLot : lots.find(lot => lot._id === lotId));
-  }, [clients, currentLot.customer, lotId, lots, tempLot]);
+  }, [clients, currentLot?.customer, lotId, lots, tempLot]);
 
   const handleOpen = path => {
     const url = `${staticURLDocs}${path}`;
@@ -168,7 +165,26 @@ export const Lot = () => {
     );
   };
 
-  if (!record || Object.keys(record).length === 0) return <>loading...</>;
+  if (
+    !currentLot ||
+    isEmptyObject(currentLot) ||
+    (currentLot.record && (!record || Object.keys(record).length === 0))
+  )
+    return <>loading...</>;
+
+  const {
+    area,
+    isCorner,
+    lotNumber,
+    measures,
+    state,
+    manzana,
+    files,
+    priceHistory,
+    bindings,
+    cancellations,
+    cessions,
+  } = currentLot;
 
   return (
     <>
@@ -232,7 +248,7 @@ export const Lot = () => {
               <div className='card__header'>
                 <h4>Medidas</h4>
               </div>
-              {measures.length > 0 &&
+              {measures?.length > 0 &&
                 measures.map(measure => (
                   <div key={measure._id} className='card__body__item'>
                     <span>{measure.title}</span>
@@ -242,7 +258,7 @@ export const Lot = () => {
                   </div>
                 ))}
 
-              {bindings.length > 0 && (
+              {bindings?.length > 0 && (
                 <>
                   <div className='card__header mt-3'>
                     <h4>Colinancias</h4>
@@ -267,7 +283,7 @@ export const Lot = () => {
               <h4>Servicios Disponibles</h4>
             </div>
             <div className='card__body__list'>
-              {availableServices.map(
+              {availableServices?.map(
                 service =>
                   service.length > 0 && (
                     <div key={service} className='card__body__list__item'>
@@ -306,7 +322,7 @@ export const Lot = () => {
           </>
         )}
 
-        {currentLot?.record && typeof currentLot.record !== 'string' && (
+        {record && !isEmptyObject(record) && (
           <>
             <div className='project__header'>
               <div className='left'>
@@ -314,11 +330,7 @@ export const Lot = () => {
               </div>
             </div>
 
-            <Record
-              key={currentLot?.record._id}
-              record={currentLot?.record}
-              lotId={lotId}
-            />
+            <Record key={record._id} record={record} lotId={lotId} />
           </>
         )}
 
@@ -348,7 +360,7 @@ export const Lot = () => {
           </>
         )}
 
-        {cancellations && cancellations.length > 0 && (
+        {cancellations?.length > 0 && (
           <>
             <div className='project__header'>
               <div className='left'>

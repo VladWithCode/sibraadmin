@@ -74,6 +74,25 @@
     &--scroll {
       max-height: 15rem;
       overflow-y: auto;
+
+      &::-webkit-scrollbar {
+        width: 7px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background-color: #e3e3e3;
+        border-radius: 4px;
+        width: 2rem;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: lighten($color-ok, 20);
+        border-radius: 4px;
+
+        &:hover {
+          background-color: $color-ok;
+        }
+      }
     }
   }
 }

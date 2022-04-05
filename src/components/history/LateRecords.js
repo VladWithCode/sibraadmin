@@ -2,18 +2,20 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getLot } from '../../actions/lot';
+import { recordSet } from '../../actions/record';
 import { redirectSet } from '../../actions/redirect';
 import { redTypes } from '../../types/reduxTypes';
 
 export const LateRecords = ({ lateRecords }) => {
   const dispatch = useDispatch();
 
-  const goToLot = (projectId, lotId) => {
-    dispatch(getLot(lotId));
+  const goToLot = record => {
+    dispatch(recordSet(record));
+    dispatch(getLot(record.lot));
     dispatch(
       redirectSet(
         redTypes.projects,
-        `/proyectos/ver/${projectId}/lote/${lotId}`
+        `/proyectos/ver/${record.project}/lote/${record.lot}`
       )
     );
   };
@@ -24,7 +26,7 @@ export const LateRecords = ({ lateRecords }) => {
         {lateRecords.map(record => {
           return (
             <Link
-              onClick={() => goToLot}
+              onClick={() => goToLot(record)}
               to={`/proyectos/ver/${record.project}/lote/${record.lot}`}
               className='card__body__item late'
               key={record._id}>

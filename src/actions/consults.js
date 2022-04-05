@@ -210,7 +210,7 @@ export const getRecords = () => {
   return async dispatch => {
     dispatch(uiStartLoading());
 
-    const res = await makeServerRequest('/record');
+    const res = await makeServerRequest('/records');
     dispatch(uiFinishLoading());
     if (res.status !== 'OK') return null;
     return dispatch(loadRecords(res.records));

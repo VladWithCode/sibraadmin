@@ -25,7 +25,8 @@ export const Record = ({ record, payment }) => {
   const [_record, setRecord] = useState(record);
 
   useEffect(() => {
-    if (!record && Object.keys(stateRecord).length > 0) setRecord(stateRecord);
+    if (!stateRecord && Object.keys(record).length > 0) setRecord(record);
+    else setRecord(stateRecord);
   }, [record, stateRecord]);
 
   const {

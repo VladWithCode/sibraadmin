@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { Calendar, momentLocalizer } from "react-big-calendar";
-import moment from "moment";
-import "moment/locale/es-mx";
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import { messages } from "../../helpers/calendarSetup";
-import { CalendarEvent } from "./CalendarEvent";
-import { useSelector } from "react-redux";
-import { LateRecords } from "./LateRecords";
+import React, { useEffect, useState } from 'react';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import moment from 'moment';
+import 'moment/locale/es-mx';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { messages } from '../../helpers/calendarSetup';
+import { CalendarEvent } from './CalendarEvent';
+import { useSelector } from 'react-redux';
+import { LateRecords } from './LateRecords';
 
-moment.locale("es-mx");
+moment.locale('es-mx');
 
 const localizer = momentLocalizer(moment); // or globalizeLocalizer
 
 export const CalendarComponent = () => {
   const [lastView, setLastView] = useState(
-    localStorage.getItem("lastView") || "month"
+    localStorage.getItem('lastView') || 'month'
   );
 
-  const { records } = useSelector((state) => state);
+  const { records } = useSelector(state => state);
 
   const [events, setEvents] = useState([]);
 
@@ -27,15 +27,18 @@ export const CalendarComponent = () => {
     const lateRecords = [];
 
     setEvents(
-      records.map((record) => {
-        if (record.state === "reserved" || record.state === "prereserved") {
+      records.map(record => {
+        if (record.state === 'reserved' || record.state === 'prereserved') {
           const eventdate = moment(
             record.paymentInfo.hasProrogation
               ? record.paymentInfo.prorogatedTo
               : record.paymentInfo.nextPaymentDate
           ).toDate();
 
-          if (record.paymentInfo.isLate) {
+          if (
+            record.paymentInfo.lotAmountDue > 0 &&
+            record.paymentInfo.isLate
+          ) {
             lateRecords.push(record);
           }
 
@@ -45,12 +48,12 @@ export const CalendarComponent = () => {
             title: record.customer.fullName,
             start: eventdate,
             end: eventdate,
-            bgcolor: "#fafafa",
+            bgcolor: '#fafafa',
             isLate: record.paymentInfo.isLate,
             hasProrogation: record.paymentInfo.hasProrogation,
             allDay: true,
             phoneNumber: record.customer.phoneNumber,
-            event: "Pago del lote",
+            event: 'Pago del lote',
           };
         }
         return null;
@@ -63,41 +66,41 @@ export const CalendarComponent = () => {
   const eventStyleGetter = ({ event, isLate, hasProrogation, isSelected }) => {
     const style = {
       backgroundColor: isLate
-        ? "tomato"
+        ? 'tomato'
         : hasProrogation
-        ? "#FF9800"
-        : "#448AFF",
-      color: "white",
+        ? '#FF9800'
+        : '#448AFF',
+      color: 'white',
     };
 
     return { style };
   };
 
-  const onDoubleClick = (e) => {
+  const onDoubleClick = e => {
     console.log(e);
   };
 
   const onSelectEvent = ({ lotId, projectId }) => {
-    console.log("holi");
+    console.log('holi');
   };
 
-  const onViewChanged = (e) => {
+  const onViewChanged = e => {
     setLastView(e);
-    localStorage.setItem("lastView", e);
+    localStorage.setItem('lastView', e);
   };
 
   return (
-    <div className="app-screen projects-screen">
-      <div className="app-screen__title projects-screen-top">
-        <h1 className="app-screen__title">Calendario de Pagos</h1>
+    <div className='app-screen projects-screen'>
+      <div className='app-screen__title projects-screen-top'>
+        <h1 className='app-screen__title'>Calendario de Pagos</h1>
       </div>
-      <div className="history project">
-        <div className="card calendar">
+      <div className='history project'>
+        <div className='card calendar'>
           <Calendar
             localizer={localizer}
             events={events}
-            startAccessor="start"
-            endAccessor="end"
+            startAccessor='start'
+            endAccessor='end'
             messages={messages}
             eventPropGetter={eventStyleGetter}
             onDoubleClickEvent={onDoubleClick}
@@ -112,7 +115,7 @@ export const CalendarComponent = () => {
 
         {late.length > 0 && (
           <>
-            <div className="project__header">
+            <div className='project__header'>
               <h3>Pagos retrasados</h3>
             </div>
             <LateRecords lateRecords={late} />

@@ -1,3 +1,4 @@
+import { isEmptyObject } from './generalHelpers';
 import makeServerRequest from './makeServerRequest';
 
 export const sortLotArray = lots => {
@@ -19,7 +20,8 @@ export const sortByState = (lots, state) => {
 };
 
 export const getCessionInfo = lot => {
-  if (!lot.cessions || lot.cessions.length === 0) return false;
+  if (!lot || isEmptyObject(lot) || !lot.cessions || lot.cessions.length === 0)
+    return false;
 
   return lot.cessions[0];
 };

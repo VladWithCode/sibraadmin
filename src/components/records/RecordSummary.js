@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { setLot } from '../../actions/consults';
 import { recordSet } from '../../actions/record';
 import { priceToString } from '../../helpers/generalHelpers';
 import { useRecordDependencies } from '../../hooks/useRecordDependencies';
@@ -35,8 +36,6 @@ function RecordSummary({ record, classList }) {
     );
   };
 
-  console.log(record.paymentInfo);
-
   return (
     <div className='card mb-3'>
       <div className='card__header'>
@@ -44,7 +43,10 @@ function RecordSummary({ record, classList }) {
         <h4>
           <Link
             to={`/proyectos/ver/${project._id}/lote/${lot._id}`}
-            onClick={() => dispatch(recordSet(record))}>
+            onClick={() => {
+              dispatch(setLot(lot));
+              dispatch(recordSet(record));
+            }}>
             <span className='main text-black'>
               Expediente del lote {record.lotNumber} en la manzana{' '}
               {record.manzana}
