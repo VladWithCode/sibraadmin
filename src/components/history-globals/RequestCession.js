@@ -76,10 +76,6 @@ export const RequestCession = () => {
         type: redTypes.project,
       };
 
-      const res = await makeServerRequest('/lots/' + record.lot);
-
-      if (res.status !== 'OK') console.log(res);
-
       dispatch(setLot(res.lot));
       dispatch(modalUpdate(modalInfo));
       dispatch(modalEnable());
@@ -96,7 +92,7 @@ export const RequestCession = () => {
     const res = await makeServerRequest(
       `/records/${recordId}/request-cession`,
       'POST',
-      { ...data },
+      data,
       { 'Content-Type': 'application/json' }
     );
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { isEmptyObject } from '../../helpers/generalHelpers';
 
-function SearchSelect({ id, classList, options }) {
+function SearchSelect({ id, classList, options, onChange, value }) {
   const [selectedOption, setSelectedOption] = useState(null);
   const [activeSelect, setActiveSelect] = useState(false);
   const [search, setSearch] = useState('');
@@ -23,14 +24,24 @@ function SearchSelect({ id, classList, options }) {
           filteredOptions.push(option);
       }
     } else {
-      filteredOptions.push(...options);
+      options?.length && filteredOptions.push(...options);
     }
 
     setVisibleOptions(filteredOptions);
   }, [options, search]);
 
+  useEffect(() => {
+    if (
+      value &&
+      (isEmptyObject(selectedOption) || value !== selectedOption.value)
+    )
+      setSelectedOption(options.find(o => o.value === value));
+  }, [value]);
+
   const handleOptionClick = option => {
     setSelectedOption(option);
+
+    onChange(option, setActiveSelect);
   };
 
   const handleDisplayClick = e => {
@@ -79,7 +90,7 @@ function SearchSelect({ id, classList, options }) {
         name='search'
         value={search}
         onChange={handleSearchChange}
-        placeholder='Buscar Proyecto'
+        placeholder='Buscar'
       />
       <div className='searchSelect__options'>
         {visibleOptions && visibleOptions.length > 0 ? (

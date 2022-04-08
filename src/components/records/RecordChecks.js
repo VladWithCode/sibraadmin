@@ -93,36 +93,33 @@ function RecordChecks({ checks, record, editable }) {
         </CardHeader>
         <CardBody classList={['ui-card__body--scroll']}>
           <List classList={['w-100p', 'mt-2']}>
-            {checks?.map(c => {
-              console.log(c);
-              return (
-                <CheckListItem
-                  content={c.content}
-                  checked={c.checked}
-                  key={c._id}
-                  classList={['ui-list__item--flex', 'pl-2']}
-                  handleCheckboxClick={() => handleCheckboxClick(c)}>
-                  {editable && (
-                    <>
-                      <div
-                        className='update'
-                        onClick={() => handleUpdateClick(c)}>
-                        <svg>
-                          <use href='../assets/svg/pencil.svg#pencil'></use>
-                        </svg>
-                      </div>
-                      <div
-                        className='delete'
-                        onClick={() => handleDeleteClick(c)}>
-                        <svg viewBox='0 0 32 32'>
-                          <use href='../assets/svg/bin.svg#bin'></use>
-                        </svg>
-                      </div>
-                    </>
-                  )}
-                </CheckListItem>
-              );
-            })}
+            {checks?.map(c => (
+              <CheckListItem
+                content={c.content}
+                checked={c.checked}
+                key={c._id}
+                classList={['ui-list__item--flex', 'pl-2']}
+                handleCheckboxClick={() => handleCheckboxClick(c)}>
+                {editable && (
+                  <>
+                    <div
+                      className='update'
+                      onClick={() => handleUpdateClick(c)}>
+                      <svg>
+                        <use href='../assets/svg/pencil.svg#pencil'></use>
+                      </svg>
+                    </div>
+                    <div
+                      className='delete'
+                      onClick={() => handleDeleteClick(c)}>
+                      <svg viewBox='0 0 32 32'>
+                        <use href='../assets/svg/bin.svg#bin'></use>
+                      </svg>
+                    </div>
+                  </>
+                )}
+              </CheckListItem>
+            ))}
           </List>
         </CardBody>
       </Card>

@@ -11,6 +11,8 @@ import { buyLotSet, submitPayment } from '../../actions/payments';
 import { BuyExtraCharges } from './BuyExtraCharges';
 import { Floating } from '../Floating';
 import { QuickRegister } from '../clients/QuickRegister';
+import SearchSelect from '../ui/SearchSelect';
+import { isEmptyObject } from '../../helpers/generalHelpers';
 
 export const BuyLot = () => {
   const dispatch = useDispatch();
@@ -203,7 +205,7 @@ export const BuyLot = () => {
           </label>
         </div>
       </div>
-      <div className='card edit mt-4'>
+      <div className='card card--ovf-v edit mt-4'>
         <div className='card__header'>
           <img src='../assets/img/payment.png' alt='' />
           <h4>Información del pago</h4>
@@ -354,7 +356,33 @@ export const BuyLot = () => {
               </div>
             )}
 
-            <div
+            <div className='card__body__item'>
+              <label htmlFor='buyer'>Cliente</label>
+              <SearchSelect
+                id='buyer'
+                value={isEmptyObject(client) ? null : client._id}
+                options={[
+                  { key: 'addOpt', value: 'add', name: 'Cliente Nuevo' },
+                  ...clients.map(c => ({
+                    key: c._id,
+                    value: c._id,
+                    name: c.fullName,
+                  })),
+                ]}
+                onChange={(option, setActiveSelect) => {
+                  if (option.value === 'add') {
+                    setActiveFloating(true);
+                    setActiveSelect(false);
+                    return;
+                  }
+
+                  setClient(clients.find(c => c._id === option.value));
+                  setActiveSelect(false);
+                  return;
+                }}></SearchSelect>
+            </div>
+
+            {/* <div
               className={`card__body__item ${
                 emptyFields.includes('client') && 'error'
               }`}>
@@ -396,7 +424,7 @@ export const BuyLot = () => {
                   </option>
                 )}
               </select>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

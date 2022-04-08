@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { getClients } from '../../actions/consults';
 import {
   setTempError,
   uiFinishLoading,
@@ -62,6 +63,7 @@ export const QuickRegister = ({
     setNewCustomer(customer);
     setClient(customer);
     setActiveFloating(false);
+    dispatch(getClients());
   };
 
   return (

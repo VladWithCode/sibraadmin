@@ -92,7 +92,7 @@ const CompleteCession = () => {
     const res = await makeServerRequest(
       `/records/${recordId}/complete-cession`,
       'POST',
-      { ...data },
+      data,
       { 'Content-Type': 'application/json' }
     );
 

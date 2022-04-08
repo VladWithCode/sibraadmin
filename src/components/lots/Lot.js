@@ -37,15 +37,15 @@ export const Lot = () => {
     record,
   } = useSelector(state => state);
 
-  const currentProject = projects.find(p => {
-    console.log(p._id === projectId);
-    return p._id === projectId;
-  });
+  const currentProject = projects.find(p => p._id === projectId);
 
   const [currentLot, setCurrentLot] = useState({});
 
   useEffect(() => {
     if (tempLot && Object.keys(tempLot).length > 0) setCurrentLot(tempLot);
+
+    if (!tempLot.record || isEmptyObject(tempLot.record))
+      dispatch(recordSet(null));
   }, [tempLot]);
 
   const [currentClient, setCurrentClient] = useState(

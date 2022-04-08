@@ -91,11 +91,12 @@ export const Client = () => {
       'DELETE'
     );
 
-    if (error || status !== 'OK') {
+    if (status !== 'OK') {
+      console.log(error);
       dispatch(
         setTempError(
-          error?.message ||
-            message ||
+          message ||
+            error?.message ||
             'Hubo un error al comunicarse con el servidor'
         )
       );

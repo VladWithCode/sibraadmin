@@ -211,6 +211,10 @@
   padding: 2rem;
   position: relative;
 
+  &--ovf-v {
+    overflow: visible;
+  }
+
   &.template {
     min-height: 70rem;
   }
@@ -793,7 +797,7 @@
         width: 100%;
       }
 
-      & input {
+      & input:not(.searchSelect__search-bar) {
         position: absolute;
         background-color: transparent;
         width: 100%;

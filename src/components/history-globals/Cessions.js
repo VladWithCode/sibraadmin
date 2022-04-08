@@ -9,7 +9,7 @@ function Cessions({ cessions }) {
           <h3>Cesiónes</h3>
         </div>
       </div>
-      {cessions.map(c => (
+      {cessions?.map(c => (
         <Cession cession={c} key={c._id} />
       ))}
     </>

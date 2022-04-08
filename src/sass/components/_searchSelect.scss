@@ -49,6 +49,7 @@
   &__search-bar,
   &__options {
     height: 0;
+    width: 20rem;
     opacity: 0;
     pointer-events: none;
     box-shadow: var(--box-shadow);
@@ -59,7 +60,6 @@
   &.active > &__options {
     opacity: 1;
     pointer-events: all;
-    width: 20rem;
   }
 
   &__search-bar {
@@ -94,7 +94,7 @@
   }
 
   &.active > &__options {
-    height: 10rem;
+    height: 12rem;
     background-color: #fff;
   }
 
@@ -105,6 +105,9 @@
     font-size: 1.25rem;
     line-height: 3rem;
     padding: 0 1rem;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    overflow: hidden;
 
     &:not(.no-select) {
       cursor: pointer;

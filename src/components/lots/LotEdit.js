@@ -27,7 +27,7 @@ export const LotEdit = () => {
   const { lotId, projectId } = useParams();
   const { lots, projects, lot } = useSelector(state => state);
 
-  const currentLot = lots.find(lot => lot._id === lotId);
+  const currentLot = lot ? lot : lots.find(lot => lot._id === lotId);
   const currentProject = projects.find(p => p._id === projectId);
 
   const { lotNumber, manzana } = currentLot;
