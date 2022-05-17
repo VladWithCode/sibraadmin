@@ -5,6 +5,7 @@ import { clientSet } from '../../actions/client';
 import { floatingButtonSet } from '../../actions/floatingButton';
 import { setLot } from '../../actions/lot';
 import { modalEnable, modalUpdate } from '../../actions/modal';
+import { recordSet } from '../../actions/record';
 import {
   setTempError,
   uiFinishLoading,
@@ -69,7 +70,7 @@ export const RequestCession = () => {
     if (res?.status === 'OK') {
       const modalInfo = {
         title: 'Solicitud realizada con exito',
-        text: 'Se ha generado la solicitud de cancelacion correctamente',
+        text: 'Se ha generado la solicitud de cesión correctamente',
         link: `/proyectos/ver/${record.project}/lote/${record.lot}`,
         okMsg: 'Continuar',
         closeMsg: null,
@@ -77,6 +78,7 @@ export const RequestCession = () => {
       };
 
       dispatch(setLot(res.lot));
+      dispatch(recordSet(res.record));
       dispatch(modalUpdate(modalInfo));
       dispatch(modalEnable());
     } else {
@@ -102,7 +104,7 @@ export const RequestCession = () => {
   const cancel = () => {
     const modalInfo = {
       title: 'Abortar',
-      text: '¿Desea abortar la cancelación del expediente?',
+      text: '¿Desea cancelar la solicitud de cesión de lote?',
       link: `/proyectos/ver/${record.project}/lote/${record.lot}`,
       okMsg: 'Sí',
       closeMsg: 'No',

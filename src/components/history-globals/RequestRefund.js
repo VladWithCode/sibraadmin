@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { setLot } from '../../actions/consults';
 import { floatingButtonSet } from '../../actions/floatingButton';
 import { modalEnable, modalUpdate } from '../../actions/modal';
+import { recordSet } from '../../actions/record';
 import { redirectSet } from '../../actions/redirect';
 import {
   setTempError,
@@ -64,7 +65,7 @@ export const RequestRefund = () => {
     if (res?.status === 'OK') {
       const modalInfo = {
         title: 'Solicitud realizada con exito',
-        text: 'Se ha generado la solicitud de cancelacion correctamente',
+        text: 'Se ha generado la solicitud de reembolso correctamente',
         link: `/proyectos/ver/${record.project}/lote/${record.lot}`,
         okMsg: 'Continuar',
         closeMsg: null,
@@ -76,6 +77,7 @@ export const RequestRefund = () => {
       if (res.status !== 'OK') console.log(res);
 
       dispatch(setLot(res.lot));
+      dispatch(recordSet(res.record));
       dispatch(modalUpdate(modalInfo));
       dispatch(modalEnable());
       return;
@@ -116,7 +118,7 @@ export const RequestRefund = () => {
   const cancel = () => {
     const modalInfo = {
       title: 'Abortar',
-      text: '¿Desea abortar la cancelación del expediente?',
+      text: '¿Desea detener la solicitud de reembolso?',
       link: `/proyectos/ver/${record.project}/lote/${record.lot}`,
       okMsg: 'Sí',
       closeMsg: 'No',

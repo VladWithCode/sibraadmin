@@ -91,6 +91,7 @@ function SearchSelect({ id, classList, options, onChange, value }) {
         value={search}
         onChange={handleSearchChange}
         placeholder='Buscar'
+        autoComplete='off'
       />
       <div className='searchSelect__options'>
         {visibleOptions && visibleOptions.length > 0 ? (

@@ -286,7 +286,7 @@ export const LotEdit = () => {
     setFilesDoc({ ...filesDoc, [type]: e.target.files[0] });
   };
 
-  const uploadFile = async (file, name) => {
+  const uploadFile = (file, name) => {
     dispatch(uiStartLoading());
 
     const newForm = new FormData();
@@ -296,7 +296,7 @@ export const LotEdit = () => {
 
     const url = `${staticURL}/lots/${lotId}/file`;
 
-    await fetch(url, {
+    fetch(url, {
       // Your POST endpoint
       method: 'PUT',
       body: newForm,
