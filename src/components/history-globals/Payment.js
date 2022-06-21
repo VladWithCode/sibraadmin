@@ -107,7 +107,7 @@ export const Payment = ({
             cursor: 'pointer',
           }}
           onClick={generateReceipt}>
-          {staticPath ? 'Regenerar' : 'Generar'}
+          {staticPath ? 'Volver a generar' : 'Generar'}
         </p>
       </div>
 
