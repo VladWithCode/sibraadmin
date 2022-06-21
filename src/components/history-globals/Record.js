@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import {
   historyGetLot,
   historySetRecordInfo,
@@ -10,8 +10,6 @@ import { priceToString } from '../../helpers/generalHelpers';
 import { staticURL, staticURLDocs } from '../../url';
 import RecordChecks from '../records/RecordChecks';
 import RecordNotes from '../records/RecordNotes';
-import CheckListItem from '../ui/CheckListItem';
-import List from '../ui/List';
 import CancelBtn from './CancelBtn';
 import CessionBtn from './CessionBtn';
 import { CommissionInfo } from './CommisionInfo';
@@ -20,13 +18,21 @@ import { Payment } from './Payment';
 
 export const Record = ({ record, payment }) => {
   const dispatch = useDispatch();
-  const stateRecord = useSelector(state => state.record);
+  const { record: stateRecord, records } = useSelector(state => state);
+  const { lotId } = useParams();
 
   const [_record, setRecord] = useState(record);
 
   useEffect(() => {
     if (!stateRecord && Object.keys(record).length > 0) setRecord(record);
-    else setRecord(stateRecord);
+    else if (stateRecord) setRecord(stateRecord);
+    else {
+      const record = records.find(r => r.lot === lotId);
+
+      if (!record) console.log('El record no existe');
+
+      setRecord(record);
+    }
   }, [record, stateRecord]);
 
   const {
@@ -207,11 +213,11 @@ export const Record = ({ record, payment }) => {
         <div className='left'>
           <div className='card__body__item'>
             <span>precio del lote</span>
-            <p className='price'> ${lotPrice.toLocaleString()} </p>
+            <p className='price'> ${priceToString(lotPrice)} </p>
           </div>
           <div className='card__body__item'>
             <span>pagado</span>
-            <p className='payed'> ${lotAmountPayed.toLocaleString()} </p>
+            <p className='payed'> ${priceToString(lotAmountPayed)} </p>
           </div>
           {_record.state !== 'delivered' &&
             _record.state !== 'lotpayed' &&
@@ -219,11 +225,11 @@ export const Record = ({ record, payment }) => {
               <>
                 <div className='card__body__item'>
                   <span>deuda restante</span>
-                  <p className='debt'> ${lotAmountDue.toLocaleString()} </p>
+                  <p className='debt'> ${priceToString(lotAmountDue)} </p>
                 </div>
                 <div className='card__body__item'>
                   <span>pagos restantes</span>
-                  <p> {lapseLeft} </p>
+                  <p> {Math.ceil(lapseLeft)} </p>
                 </div>
                 <div className='card__body__item'>
                   <span>tipo de pagos</span>
@@ -232,7 +238,7 @@ export const Record = ({ record, payment }) => {
 
                 <div className='card__body__item'>
                   <span>número de pagos</span>
-                  <p> {lapseToPay} </p>
+                  <p> {Math.ceil(lapseToPay)} </p>
                 </div>
 
                 {minimumPaymentAmount ? (
