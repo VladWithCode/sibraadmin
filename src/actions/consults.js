@@ -22,10 +22,12 @@ export const getProjects = () => {
         return resp.json();
       })
       .then(data => {
-        dispatch(uiFinishLoading());
         dispatch(loadProjects(data.projects ? data.projects : []));
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
+      .finally(() => {
+        dispatch(uiFinishLoading());
+      });
   };
 };
 
@@ -39,10 +41,12 @@ export const getProject = id => {
         return resp.json();
       })
       .then(data => {
-        dispatch(uiFinishLoading());
         dispatch(projectSet(data.project));
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
+      .finally(() => {
+        dispatch(uiFinishLoading());
+      });
   };
 };
 
@@ -54,10 +58,12 @@ export const getClients = () => {
     fetch(url)
       .then(resp => resp.json())
       .then(data => {
-        dispatch(uiFinishLoading());
         dispatch(loadClients(data.customers));
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
+      .finally(() => {
+        dispatch(uiFinishLoading());
+      });
   };
 };
 
@@ -76,10 +82,10 @@ export const createClient = data => {
       .then(res => res.json())
       .then(({ status, customer, error }) => {
         if (status !== 'OK' || !customer) return;
-
-        dispatch(uiFinishLoading());
-
         return customer;
+      })
+      .finally(() => {
+        dispatch(uiFinishLoading());
       });
   };
 };
@@ -94,10 +100,12 @@ export const getLots = projectId => {
         return resp.json();
       })
       .then(data => {
-        dispatch(uiFinishLoading());
         dispatch(loadLots(data.lots));
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
+      .finally(() => {
+        dispatch(uiFinishLoading());
+      });
   };
 };
 
@@ -109,10 +117,12 @@ export const getClient = _id => {
     fetch(url)
       .then(resp => resp.json())
       .then(data => {
-        dispatch(uiFinishLoading());
         dispatch(clientSet(data.customer));
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
+      .finally(() => {
+        dispatch(uiFinishLoading());
+      });
   };
 };
 
@@ -160,10 +170,12 @@ export const deleteFile = (fileName, type, id, refId, projectId) => {
       })
       .catch(err => {
         console.log(err);
-        dispatch(uiFinishLoading());
         dispatch(
           setTempError('No se pudo eliminar el documento, intente más tarde')
         );
+      })
+      .finally(() => {
+        dispatch(uiFinishLoading());
       });
   };
 };
@@ -182,7 +194,6 @@ export const deleteClient = (id, name) => {
         return response.json();
       })
       .then(data => {
-        dispatch(uiFinishLoading());
         dispatch(redirectSet(redTypes.clients, '/clientes'));
         const modalInfo = {
           title: `Cliente eliminado con éxito`,
@@ -198,10 +209,12 @@ export const deleteClient = (id, name) => {
       })
       .catch(err => {
         console.log(err);
-        dispatch(uiFinishLoading());
         dispatch(
           setTempError('No se pudo eliminar el documento, intente más tarde')
         );
+      })
+      .finally(() => {
+        dispatch(uiFinishLoading());
       });
   };
 };
@@ -223,8 +236,6 @@ export const getRecord = id => {
     fetch(staticURL + '/record/' + id)
       .then(res => res.json())
       .then(data => {
-        dispatch(uiFinishLoading());
-
         if (data.status !== 'OK') {
           return dispatch(
             setTempError(
@@ -234,6 +245,9 @@ export const getRecord = id => {
         }
 
         return dispatch(loadRecord(data.record));
+      })
+      .finally(() => {
+        dispatch(uiFinishLoading());
       });
   };
 };
